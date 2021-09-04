@@ -104,18 +104,12 @@ venv.bak/
 .mypy_cache/
 
 # user-defined stuff
-backend/data/*
-backend/*.sh
-backend/*.bat
 */.ht*
 frontend/*.csv
 frontend/*.json
 frontend/index.php
 frontend/data/*
 frontend/data_bak/*
-sandbox/*
-svg/*
-old/
 .vscode
 
 angular-animate.min.js
@@ -130,15 +124,4 @@ new_stuff.js
 angular-material.min.css
 bootstrap.min.css
 fonttawesome.all.css
-backend/.vscode/launch.json
-data_test
-data_old/
-backend/config.yml
-shots_info.txt
-backend/create_facts_templates.py
-backend/get_facts.py
-backend/get_h2h_from_txt.py
-backend/get_pre_season_data.py
-backend/update_coaches.py
-
-backend/*.example.yml
+data/*

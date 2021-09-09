@@ -125,3 +125,4 @@ angular-material.min.css
 bootstrap.min.css
 fonttawesome.all.css
 data/*
+*.ics

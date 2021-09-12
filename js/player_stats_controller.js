@@ -1,4 +1,4 @@
-app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, svc) {
+app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, svc, $timeout) {
 
     $scope.svc = svc;
     var ctrl = this;
@@ -35,22 +35,27 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
     // for some reason the previous way to load all players doesn't work with 2020 data
     // some problem with asynchronous loading I don't clearly understand
     // that is why we have to wait explicitly for the data being loaded by using a list of promises
-    if ($scope.season == 2020) {
-        var promises = [];
-        promises.push(getPlayers());
-        $q.all(promises).then(function (results) {
-            $scope.all_players = results[0].data;
-        });
-        function getPlayers() {
-            return $http.get('data/del_players.json');
-        }
-    } else {
-        // old way to load all players
-        // loading all players from external json file
-        $http.get('data/del_players.json').then(function (res) {
-            $scope.all_players = res.data;
-        });
-    }
+    // if ($scope.season == 2020) {
+    //     var promises = [];
+    //     promises.push(getPlayers());
+    //     $q.all(promises).then(function (results) {
+    //         $scope.all_players = results[0].data;
+    //     });
+    //     function getPlayers() {
+    //         return $http.get('data/del_players.json');
+    //     }
+    // } else {
+    //     // old way to load all players
+    //     // loading all players from external json file
+    //     $http.get('data/del_players.json').then(function (res) {
+    //         $scope.all_players = res.data;
+    //     });
+    // }
+
+    // loading all players from external json file
+    $http.get('data/del_players.json').then(function (res) {
+        $scope.all_players = res.data;
+    });
 
     // retrieving column headers (and abbreviations + explanations)
     $http.get('./js/player_stats_columns.json').then(function (res) {
@@ -118,7 +123,10 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
     // loading goalie stats from external json file
     $http.get('data/' + $scope.season + '/del_goalie_game_stats.json').then(function (res) {
         $scope.goalie_games = res.data;
-        $scope.filtered_goalie_stats = $scope.filterGoalieStats($scope.goalie_games);
+        // temporary hack to delay filtering goalie stats for a minuscule while until all player data is loaded
+        // somehow we're always having problems at the beginning of seasons
+        $timeout(function(){$scope.filtered_goalie_stats = $scope.filterGoalieStats($scope.goalie_games);}, 1);
+        // $scope.filtered_goalie_stats = $scope.filterGoalieStats($scope.goalie_games);
     });
 
     // loading strictly defined player scoring streaks from external json file

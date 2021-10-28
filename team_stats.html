@@ -122,7 +122,7 @@
                     <span class="input-group-text">von</span>
                 </div>
                 <select class="form-control" id="from_round_select" data-ng-model="fromRoundSelect">
-                    <option data-ng-option data-ng-repeat="round in svc.range(1, maxRoundPlayed)" value="{{round}}">Spieltag {{round}}</option>
+                    <option data-ng-option data-ng-repeat="round in roundsPlayed" value="{{round}}">Spieltag {{round}}</option>
                 </select>
             </div>
             <div class="input-group col-2 pl-0">
@@ -130,7 +130,7 @@
                     <span class="input-group-text">bis</span>
                 </div>
                 <select class="form-control" id="to_round_select" data-ng-model="toRoundSelect">
-                    <option data-ng-option data-ng-repeat="round in svc.range(1, maxRoundPlayed)" value="{{round}}">Spieltag {{round}}</option>
+                    <option data-ng-option data-ng-repeat="round in roundsPlayed" value="{{round}}">Spieltag {{round}}</option>
                 </select>
             </div>
         </div>

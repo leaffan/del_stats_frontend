@@ -118,6 +118,16 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
     $http.get('data/' + $scope.season + '/del_player_personal_data.json').then(function (res) {
         $scope.last_modified = res.data[0];
         $scope.personal_data = res.data[1];
+        // retrieving countries of players
+        $http.get('js/iso_countries.json').then(function (res) {
+            country_mapping = res.data;
+            countries_in_player_games = [...new Set($scope.personal_data.map(item => item.iso_country))].sort();
+            $scope.display_countries = []
+            countries_in_player_games.forEach(iso_country => {
+                $scope.display_countries.push({'iso_country': iso_country, 'country': country_mapping[iso_country]})
+            });
+            $scope.display_countries.sort((a, b)=> (a.country > b.country ? 1 : -1))
+        });
     });
 
     // loading goalie stats from external json file
@@ -198,14 +208,14 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                 return player_game;
             }, {})
         });
-        // retrieving maximum round played
-        $scope.maxRoundPlayed = Math.max.apply(Math, $scope.player_games.map(function(o) { return o.round; })).toString();
         // retrieving all weekdays a game was played
         $scope.weekdaysPlayed = [...new Set($scope.player_games.map(item => item.weekday))].sort();
         // retrieving all months a game was played by the current team
         $scope.monthsPlayed = [...new Set($scope.player_games.map(item => moment(item.game_date).month()))];
-        // setting to round selection to maximum round played
-        $scope.toRoundSelect = $scope.maxRoundPlayed;
+        // retrieving rounds played
+        $scope.roundsPlayed = [...new Set($scope.player_games.map(item => svc.parseInt(item.round)))].sort(function(a, b) {return a - b;});
+        // retrieving maximum round played and setting round to selection to it
+        $scope.toRoundSelect = Math.max.apply(Math, $scope.roundsPlayed).toString();
 
         // preparing player games for later filtering, i.e. retrieving personal data etc.
         $scope.prep_player_games = {};

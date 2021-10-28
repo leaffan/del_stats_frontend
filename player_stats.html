@@ -129,7 +129,7 @@
                     <label class="input-group-text w-100 justify-content-center">von</label>
                 </div>
                 <select class="form-control" data-ng-model="$parent.fromRoundSelect">
-                    <option data-ng-option data-ng-repeat="round in svc.range(1, maxRoundPlayed)" value="{{round}}">Spieltag {{round}}</option>
+                    <option data-ng-option data-ng-repeat="round in roundsPlayed" value="{{round}}">Spieltag {{round}}</option>
                 </select>
             </div>
             <div class="input-group col-3 pl-0">
@@ -138,7 +138,7 @@
                     <!-- <span class="input-group-text">bis</i></span> -->
                 </div>
                 <select class="form-control" data-ng-model="$parent.toRoundSelect">
-                    <option data-ng-option data-ng-repeat="round in svc.range(1, maxRoundPlayed)" value="{{round}}">Spieltag {{round}}</option>
+                    <option data-ng-option data-ng-repeat="round in roundsPlayed" value="{{round}}">Spieltag {{round}}</option>
                 </select>
             </div>
         </div>
@@ -194,21 +194,7 @@
             <div class="input-group col-2 pl-0">
                 <select class="form-control" id="countrySelect" data-ng-model="countryFilter">
                     <option data-ng-option value selected="selected">alle Länder</option>
-                    <option data-ng-option value="de">Deutschland</option>
-                    <option data-ng-option value="ca">Kanada</option>
-                    <option data-ng-option value="us">USA</option>
-                    <option data-ng-option value="se">Schweden</option>
-                    <option data-ng-option value="fi">Finnland</option>
-                    <option data-ng-option value="sk">Slowakische Republik</option>
-                    <option data-ng-option value="ru">Russland</option>
-                    <option data-ng-option value="si">Slowenien</option>
-                    <option data-ng-option value="hr">Kroatien</option>
-                    <option data-ng-option value="no">Norwegen</option>
-                    <option data-ng-option value="dk">Dänemark</option>
-                    <option data-ng-option value="lv">Lettland</option>
-                    <option data-ng-option value="fr">Frankreich</option>
-                    <option data-ng-option value="it">Italien</option>
-                    <option data-ng-option value="hu">Ungarn</option>
+                    <option data-ng-option data-ng-repeat="country in display_countries" value="{{country['iso_country']}}">{{country['country']}}</option>                    
                 </select>
             </div>
             <div class="input-group col-2 pl-0">

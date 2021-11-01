@@ -74,7 +74,7 @@
         {"data_key": "opp_ppg_4v3", "col_header": "GA3v4", "expl_de": "zugelassene Überzahltore im 3-gegen-4", "expl_en": "3v4 Powerplay Goals Against"},
         {"data_key": "pk_3v4_pctg", "col_header": "%3v4", "expl_de": "Unterzahlquote im 3-gegen-4", "expl_en": "3v4 Penalty Killing Percentage"}
     ],
-    "goal_stats": [
+    "goals_by_period": [
         {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
         {"data_key": "goals_diff", "col_header": "GDiff", "expl_de": "Tordifferenz in regulärer Spielzeit", "expl_en": "Goal Differential"},
         {"data_key": "goals_1", "col_header": "GF1", "expl_de": "Tore im ersten Drittel", "expl_en": "Goals For in 1st Period"},
@@ -86,6 +86,22 @@
         {"data_key": "goals_3", "col_header": "GF3", "expl_de": "Tore im dritten Drittel", "expl_en": "Goals For in 3rd Period"},
         {"data_key": "opp_goals_3", "col_header": "GA3", "expl_de": "Gegentore im dritten Drittel", "expl_en": "Goals Against in 3rd Period"},
         {"data_key": "goals_diff_3", "col_header": "GDiff3", "expl_de": "Tordifferenz im dritten Drittel", "expl_en": "Goal Differential in 3rd Period"}
+    ],
+    "goal_stats": [
+        {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
+        {"data_key": "games_played", "col_header": "GP", "expl_de": "Absolvierte Spiele", "expl_en": "Games Played"},
+        {"data_key": "goals", "col_header": "GF", "expl_de": "Tore", "expl_en": "Goals For"},
+        {"data_key": "goals_per_game", "col_header": "GF/G", "expl_de": "Tore pro Spiel", "expl_en": "Goals For per Game"},
+        {"data_key": "opp_goals", "col_header": "GA", "expl_de": "Gegentore", "expl_en": "Goals Against"},
+        {"data_key": "opp_goals_per_game", "col_header": "GA/G", "expl_de": "Gegentore pro Spiel", "expl_en": "Goals Against per Game"},
+        {"data_key": "goals_5v5", "col_header": "GF 5v5", "expl_de": "Tore im 5-gegen-5", "expl_en": "Goals For in 5-on-5"},
+        {"data_key": "goals_5v5_per_game", "col_header": "GF 5v5/G", "expl_de": "Tore im 5-gegen-5 pro Spiel", "expl_en": "5-on-5 Goals For per Game"},
+        {"data_key": "opp_goals_5v5", "col_header": "GA 5v5", "expl_de": "Gegentore im 5-gegen-5", "expl_en": "Goals Against in 5-on-5"},
+        {"data_key": "opp_goals_5v5_per_game", "col_header": "GA 5v5/G", "expl_de": "Gegentore im 5-gegen-5 pro Spiel", "expl_en": "5-on-5 Goals Against per Game"},
+        {"data_key": "pp_goals", "col_header": "GF PP", "expl_de": "Tore in Überzahl", "expl_en": "Powerplay Goals For"},
+        {"data_key": "pp_goals_per_game", "col_header": "GF PP/G", "expl_de": "Tore in Überzahl pro Spiel", "expl_en": "Powerplay Goals For per Game"},
+        {"data_key": "opp_pp_goals", "col_header": "GA PP", "expl_de": "Gegentore in Unterzahl", "expl_en": "Powerplay Goals Against"},
+        {"data_key": "opp_pp_goals_per_game", "col_header": "GA PP/G", "expl_de": "Gegentore in Unterzahl pro Spiel", "expl_en": "Powerplay Goals Against per Game"}
     ],
     "shot_save_rates": [
         {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},

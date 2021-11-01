@@ -303,6 +303,13 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
             // calculating powerplays per powerplay goal
             element['full_pps_per_pp_goal'] = svc.calculateRate(element['pp_time_per_pp_goal'], 120);
             element['full_pks_per_opp_pp_goal'] = svc.calculateRate(element['pk_time_per_opp_pp_goal'], 120);
+            // calculating goals per game
+            element['goals_per_game'] = svc.calculateRate(element['goals'], element['games_played']);
+            element['opp_goals_per_game'] = svc.calculateRate(element['opp_goals'], element['games_played']);
+            element['goals_5v5_per_game'] = svc.calculateRate(element['goals_5v5'], element['games_played']);
+            element['opp_goals_5v5_per_game'] = svc.calculateRate(element['opp_goals_5v5'], element['games_played']);
+            element['pp_goals_per_game'] = svc.calculateRate(element['pp_goals'], element['games_played']);
+            element['opp_pp_goals_per_game'] = svc.calculateRate(element['opp_pp_goals'], element['games_played']);
         });
         
         return filtered_team_stats;

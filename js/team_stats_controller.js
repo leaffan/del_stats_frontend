@@ -306,8 +306,8 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
             // calculating goals per game
             element['goals_per_game'] = svc.calculateRate(element['goals'], element['games_played']);
             element['opp_goals_per_game'] = svc.calculateRate(element['opp_goals'], element['games_played']);
-            element['goals_5v5_per_game'] = svc.calculateRate(element['goals_5v5'], element['games_played']);
-            element['opp_goals_5v5_per_game'] = svc.calculateRate(element['opp_goals_5v5'], element['games_played']);
+            element['ev_goals_per_game'] = svc.calculateRate(element['ev_goals'], element['games_played']);
+            element['opp_ev_goals_per_game'] = svc.calculateRate(element['opp_ev_goals'], element['games_played']);
             element['pp_goals_per_game'] = svc.calculateRate(element['pp_goals'], element['games_played']);
             element['opp_pp_goals_per_game'] = svc.calculateRate(element['opp_pp_goals'], element['games_played']);
         });

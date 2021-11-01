@@ -292,16 +292,16 @@
         <tbody>
             <tr class="{{season == 2020 && seasonTypeSelect == 'MSC' && (stat.team === 'SWW' || stat.team == 'EBB') ? 'table-danger' : ''}}" data-ng-repeat="stat in filtered_team_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
                 <td class="w-03 text-right">{{ $index + 1 }}</td>
-                <td class="w-11"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
+                <td class="w-13"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
                 <td class="w-06 text-right">{{ stat.games_played }}</td>
                 <td class="w-06 text-right">{{ stat.goals }}</td>
                 <td class="w-07 text-right">{{ stat.goals_per_game.toFixed(2) }}</td>
                 <td class="w-06 text-right">{{ stat.opp_goals }}</td>
                 <td class="w-07 text-right">{{ stat.opp_goals_per_game.toFixed(2) }}</td>
-                <td class="w-06 text-right">{{ stat.goals_5v5 }}</td>
-                <td class="w-08 text-right">{{ stat.goals_5v5_per_game.toFixed(2) }}</td>
-                <td class="w-06 text-right">{{ stat.opp_goals_5v5 }}</td>
-                <td class="w-08 text-right">{{ stat.opp_goals_5v5_per_game.toFixed(2) }}</td>
+                <td class="w-06 text-right">{{ stat.ev_goals }}</td>
+                <td class="w-07 text-right">{{ stat.ev_goals_per_game.toFixed(2) }}</td>
+                <td class="w-06 text-right">{{ stat.opp_ev_goals }}</td>
+                <td class="w-07 text-right">{{ stat.opp_ev_goals_per_game.toFixed(2) }}</td>
                 <td class="w-06 text-right">{{ stat.pp_goals }}</td>
                 <td class="w-07 text-right">{{ stat.pp_goals_per_game.toFixed(2) }}</td>
                 <td class="w-06 text-right">{{ stat.opp_pp_goals }}</td>

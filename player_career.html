@@ -27,14 +27,14 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">von:</span>
                     </div>
-                    <select class="form-control" data-ng-model="from_season" data-ng-options="(season.toString() + '/' + svc.pad((season + 1 - 2000), 2)) for season in svc.range(min_season, max_season)">
+                    <select class="form-control" data-ng-model="from_season" data-ng-options="(season.toString() + '/' + svc.pad((season + 1 - 1900) % 100, 2)) for season in svc.range(min_season, max_season)">
                     </select>                
                 </div>
                 <div class="input-group col-3 pl-0">
                     <div class="input-group-prepend">
                         <span class="input-group-text">bis:</span>
                     </div>
-                    <select class="form-control" data-ng-model="to_season" data-ng-options="(season.toString() + '/' + svc.pad((season + 1 - 2000), 2)) for season in svc.range(min_season, max_season)">
+                    <select class="form-control" data-ng-model="to_season" data-ng-options="(season.toString() + '/' + svc.pad((season + 1 - 1900) % 100, 2)) for season in svc.range(min_season, max_season)">
                     </select>
                 </div>
             </div>
@@ -88,7 +88,7 @@
         </thead>
         <tbody>
             <tr class="{{season.season_type === 'RS'? 'table-info' : 'table-warning'}}" data-ng-repeat="season in filtered_seasons | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
-                <td class="w-10">{{ season.season }}/{{ svc.pad(season.season + 1 - 2000, 2) }}</td>
+                <td class="w-10">{{ season.season }}/{{ svc.pad((season.season + 1 - 1900) % 100, 2) }}</td>
                 <td data-ng-if="season.season < 2018" class="w-10">{{ season.team }}</td>
                 <td data-ng-if="season.season > 2017" class="w-10"><b><a href="#!/player_profile/{{season.season}}/{{season.team}}/{{player_id}}">{{ season.team }}</a></b></td>
                 <td class="w-10">{{ season.season_type }}</td>

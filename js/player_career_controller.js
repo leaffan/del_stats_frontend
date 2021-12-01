@@ -31,7 +31,7 @@ app.controller('plrCareerController', function ($scope, $http, $routeParams, svc
         $scope.player_stats = res.data;
         $scope.player_first_name = res.data.first_name;
         $scope.player_last_name = res.data.last_name;
-        if (res.data.position == 'GK') {
+        if (res.data.position.startsWith('G')) {
             $scope.table_select = 'goalie_career_stats';
         }
         $scope.seasons = res.data.seasons;

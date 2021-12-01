@@ -5,11 +5,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
     $scope.season = $routeParams.season;
     // setting default table selection and sort keys and criteria/order
     $scope.tableSelect = 'standings';
-    if ($scope.season == 2020) {
-        $scope.seasonTypeSelect = 'PO';
-    } else {
-        $scope.seasonTypeSelect = 'RS';
-    }
+    $scope.seasonTypeSelect = 'RS';
     // initially setting indicators which view we're currently in
     $scope.isStandingsView = true;
     $scope.sortConfig = {
@@ -26,23 +22,10 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         $scope.stats_cols = res.data;
     });
 
-    // for some reason the previous way to load all players doesn't work with 2020 data
-    // some problem with asynchronous loading I don't clearly understand
-    // that is why we have to wait explicitly for the data being loaded by using a list of promises
-    var promises = [];
-    promises.push(getDatesAttendances());
-    $q.all(promises).then(function (results) {
-        $scope.dcup_date = moment(results[0].data['dates']['dcup_date']);
-        $scope.reunification_date = moment(results[0].data['dates']['reunification_date']);
-        $scope.avg_attendance_last_season = results[0].data['avg_attendance_last_season'];
-    });
-    function getDatesAttendances() {
-        return $http.get('./data/' + $scope.season + '/dates_attendance.json');
-    }
-
     // retrieving significant dates and previous year's attendance from external file
     $http.get('./data/' + $scope.season + '/dates_attendance.json').then(function (res) {
         $scope.dcup_date = moment(res.data['dates']['dcup_date']);
+        $scope.reunification_date = moment(res.data['dates']['reunification_date']);
         $scope.avg_attendance_last_season = res.data['avg_attendance_last_season'];
     });
 
@@ -90,6 +73,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         $scope.teams.forEach(team => {
             abbr = team['abbr'];
             if (!filtered_team_stats[abbr]) {
+                // skipping teams not applicable for currently displayed season phase
                 if ($scope.seasonTypeSelect == 'MSC' && !team['msc_2020']) {
                     return;
                 }
@@ -108,6 +92,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
                     }
                     filtered_team_stats[abbr]['division'] = team['division'][$scope.season][seasonType];
                 }
+                // setting initial values for all team stats to be aggregated to zero
                 $scope.svc.stats_to_aggregate().forEach(category => {
                     filtered_team_stats[abbr][category] = 0;
                 });
@@ -198,6 +183,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         });
         filtered_team_stats = Object.values(filtered_team_stats);
 
+        // finally calculating differentials, rates, and percentages
         filtered_team_stats.forEach(element => {
             // calculating score and goal differentials
             element['score_diff'] = element['score'] - element['opp_score'];
@@ -465,6 +451,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         }
     }
 
+    // adjusting displayed data according to selected timespan
     $scope.changeTimespan = function() {
         if (!$scope.timespanSelect) {
             ctrl.fromDate = null;
@@ -473,20 +460,25 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         }
         if ($scope.timespanSelect === '-----------')
             return;
+        // games played before Deutschland Cup
         if ($scope.timespanSelect == 'pre_dcup')
         {
             ctrl.fromDate = moment($scope.season + '-09-01');
             ctrl.toDate = $scope.dcup_date;
+        // games played after Deutschland Cup
         } else if ($scope.timespanSelect == 'post_dcup') {
             ctrl.fromDate = $scope.dcup_date;
             var nextSeason = parseFloat($scope.season) + 1;
             ctrl.toDate = moment(nextSeason + '-05-01');
+        // games played before reunification of divisions (in special season 2020/21)
         } else if ($scope.timespanSelect == 'pre_reunification') {
             ctrl.fromDate = moment($scope.season + '-12-16');
             ctrl.toDate = $scope.reunification_date;
+        // games played after reunification of divisions (in special season 2020/21)
         } else if ($scope.timespanSelect == 'post_reunification') {
             ctrl.fromDate = $scope.reunification_date;
             ctrl.toDate = moment('2021-04-19');
+        // games played in selected month
         } else {
             timespanSelect = parseInt($scope.timespanSelect) + 1;
             if (timespanSelect < 9) {

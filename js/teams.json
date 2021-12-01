@@ -503,6 +503,17 @@
         },
         "valid_from": 1994,
         "valid_to": 2016
-    
+    },
+    {
+    "abbr": "RLO",
+    "url_name": "",
+    "full_name": "Revier Löwen Oberhausen",
+    "location": "Oberhausen",
+    "id": 0,
+    "archive_id": 21,
+    "valid_from": 1997,
+    "valid_to": 2016
     }
 ]
+
+

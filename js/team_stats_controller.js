@@ -6,6 +6,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
     // setting default table selection and sort keys and criteria/order
     $scope.tableSelect = 'standings';
     $scope.seasonTypeSelect = 'RS';
+    $scope.gamesBackSelect = '';
     // initially setting indicators which view we're currently in
     $scope.isStandingsView = true;
     $scope.sortConfig = {
@@ -42,7 +43,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
 
     // starting to watch filter selection lists
     $scope.$watchGroup([
-            'situationSelect', 'homeAwaySelect', 'seasonTypeSelect',
+            'situationSelect', 'homeAwaySelect', 'seasonTypeSelect', 'gamesBackSelect',
             'fromRoundSelect', 'toRoundSelect', 'weekdaySelect', 'timespanSelect'
         ], function() {
         if ($scope.team_stats) {
@@ -109,10 +110,18 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
             is_selected_weekday = false;
             is_equal_past_from_round = false;
             is_prior_equal_to_round = false;
+            is_selected_games_back = false;
 
             // retrieving game date as moment structure
             date_to_test = moment(element.game_date);
 
+            if ($scope.gamesBackSelect) {
+                if (element.games_back <= $scope.gamesBackSelect) {
+                    is_selected_games_back = true;
+                }
+            } else {
+                is_selected_games_back = true;
+            }
             if (ctrl.fromDate) {
                 if (date_to_test >= ctrl.fromDate.startOf('day'))
                     is_equal_past_from_date = true;
@@ -169,7 +178,8 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
                 is_equal_past_from_date && is_prior_equal_to_date &&
                 is_selected_home_away_type && is_selected_game_situation &&
                 is_selected_season_type && is_selected_weekday &&
-                is_equal_past_from_round && is_prior_equal_to_round
+                is_equal_past_from_round && is_prior_equal_to_round &&
+                is_selected_games_back
             ) {
                 $scope.svc.stats_to_aggregate().forEach(category => {
                     // skipping categories that possibly don't exist, e.g. for shootout-related data
@@ -453,6 +463,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
 
     // adjusting displayed data according to selected timespan
     $scope.changeTimespan = function() {
+        $scope.gamesBackSelect = '';
         if (!$scope.timespanSelect) {
             ctrl.fromDate = null;
             ctrl.toDate = null;
@@ -478,6 +489,11 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         } else if ($scope.timespanSelect == 'post_reunification') {
             ctrl.fromDate = $scope.reunification_date;
             ctrl.toDate = moment('2021-04-19');
+        // last 5, 10, 15, ... games played
+        } else if ($scope.timespanSelect.startsWith('last')) {
+            ctrl.fromDate = null;
+            ctrl.toDate = null;
+            $scope.gamesBackSelect = $scope.timespanSelect.split('_')[1];
         // games played in selected month
         } else {
             timespanSelect = parseInt($scope.timespanSelect) + 1;

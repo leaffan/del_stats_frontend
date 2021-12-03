@@ -152,6 +152,12 @@
                     <option data-ng-if="season != 2020" data-ng-option value="post_dcup">Nach Deutschland Cup</option>
                     <option data-ng-if="season == 2020" data-ng-option value="pre_reunification">Vor Wiedervereinigung</option>
                     <option data-ng-if="season == 2020" data-ng-option value="post_reunification">Nach Wiedervereinigung</option>
+                    <option data-ng-option>-----------</option>
+                    <option data-ng-if="season == 2021 && roundsPlayed.length - 10 >= 5" data-ng-option value="last_5_games">In letzten 5 Spielen</option>
+                    <option data-ng-if="season == 2021 && roundsPlayed.length - 10 >= 10" data-ng-option value="last_10_games">In letzten 10 Spielen</option>
+                    <option data-ng-if="season == 2021 && roundsPlayed.length - 10 >= 15" data-ng-option value="last_15_games">In letzten 15 Spielen</option>
+                    <option data-ng-if="season == 2021 && roundsPlayed.length - 10 >= 20" data-ng-option value="last_20_games">In letzten 20 Spielen</option>
+                    <option data-ng-if="season == 2021 && roundsPlayed.length - 10 >= 25" data-ng-option value="last_25_games">In letzten 25 Spielen</option>
                 </select>
             </div>
 

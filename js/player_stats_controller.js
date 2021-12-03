@@ -31,6 +31,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
     // default filter values
     $scope.nameFilter = ''; // empty name filter
     $scope.teamSelect = ''; // empty name filter
+    $scope.gamesBackSelect = '';
 
     // for some reason the previous way to load all players doesn't work with 2020 data
     // some problem with asynchronous loading I don't clearly understand
@@ -97,7 +98,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
 
     // starting to watch filter selection lists
     $scope.$watchGroup([
-        'homeAwaySelect', 'seasonTypeSelect', 'fromRoundSelect', 'toRoundSelect', 'weekdaySelect'
+        'homeAwaySelect', 'seasonTypeSelect', 'fromRoundSelect', 'toRoundSelect', 'weekdaySelect', 'gamesBackSelect'
     ], function (newValue, oldValue) {
         if ($scope.player_games && !$scope.tableSelect.includes('goalie')) {
             $scope.filtered_player_stats = $scope.filterStats($scope.player_games);
@@ -425,10 +426,18 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         is_selected_weekday = false;
         is_equal_past_from_round = false;
         is_prior_equal_to_round = false;
+        is_selected_games_back = false;
 
         // retrieving game date as moment structure
         date_to_test = moment(element.game_date);
 
+        if ($scope.gamesBackSelect) {
+            if (element.games_back <= $scope.gamesBackSelect) {
+                is_selected_games_back = true;
+            }
+        } else {
+            is_selected_games_back = true;
+        }
         // testing selected from date
         if (ctrl.fromDate) {
             if (date_to_test >= ctrl.fromDate.startOf('day'))
@@ -493,7 +502,8 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
             is_equal_past_from_date && is_prior_equal_to_date &&
             is_selected_home_away_type && is_selected_game_situation &&
             is_selected_season_type && is_selected_weekday &&
-            is_equal_past_from_round && is_prior_equal_to_round
+            is_equal_past_from_round && is_prior_equal_to_round &&
+            is_selected_games_back
         ) {
             return true;
         } else {
@@ -929,6 +939,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
     };
 
     $scope.changeTimespan = function() {
+        $scope.gamesBackSelect = '';
         if (!$scope.timespanSelect) {
             ctrl.fromDate = null;
             ctrl.toDate = null;
@@ -950,6 +961,11 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         } else if ($scope.timespanSelect == 'post_reunification') {
             ctrl.fromDate = $scope.reunification_date;
             ctrl.toDate = moment('2021-04-19');
+        // last 5, 10, 15, ... games played
+        } else if ($scope.timespanSelect.startsWith('last')) {
+            ctrl.fromDate = null;
+            ctrl.toDate = null;
+            $scope.gamesBackSelect = parseInt($scope.timespanSelect.split('_')[1]);
         } else {
             timespanSelect = parseInt($scope.timespanSelect) + 1;
             if (timespanSelect < 9) {

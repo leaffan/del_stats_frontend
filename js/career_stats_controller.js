@@ -65,7 +65,7 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
         $scope.player_stats.forEach(player => {
             // setting up filtered cumulated stat line for current player
             filtered_stat_line = {
-                'player_id': player['player_id'],
+                'player_id': player['c_player_id'],
                 'first_name': player['first_name'],
                 'last_name': player['last_name'],
                 'position': player['position'],

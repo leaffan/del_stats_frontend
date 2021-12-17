@@ -561,28 +561,31 @@
                 <td class="w-04 text-right">
                     {{ homeRoadFilter || oppFilter ? '--' : getStandingsPositionThroughDate(game.game_date) }}
                 </td>
-                <td class="w-09 text-right">
+                <td class="w-08 text-right">
                     {{ svc.getFilteredAccumulatedTotal(filtered_game_log, 'points', game_log, game.game_date) }}
                 </td>
-                <td class="w-09 text-right">
+                <td class="w-08 text-right">
+                    {{ (svc.getFilteredAccumulatedTotal(filtered_game_log, 'points', game_log, game.game_date) / svc.getFilteredAccumulatedTotal(filtered_game_log, 'games_played', game_log, game.game_date)).toFixed(3) }}
+                </td>
+                <td class="w-08 text-right">
                     {{ ((svc.getFilteredAccumulatedTotal(filtered_game_log, 'pp_goals', game_log, game.game_date) / svc.getFilteredAccumulatedTotal(filtered_game_log, 'pp_opps', game_log, game.game_date)) * 100).toFixed(2) }} %
                 </td>
-                <td class="w-09 text-right">
+                <td class="w-08 text-right">
                     {{ ((1 - svc.getFilteredAccumulatedTotal(filtered_game_log, 'opp_pp_goals', game_log, game.game_date) / svc.getFilteredAccumulatedTotal(filtered_game_log, 'sh_opps', game_log, game.game_date)) * 100).toFixed(2) }} %
                 </td>
-                <td class="w-09 text-right">
+                <td class="w-08 text-right">
                     {{ shot_pctg = (svc.getFilteredAccumulatedTotal(filtered_game_log, 'goals', game_log, game.game_date) / svc.getFilteredAccumulatedTotal(filtered_game_log, 'shots_on_goal', game_log, game.game_date) * 100).toFixed(2) }} %
                 </td>
-                <td class="w-09 text-right">
+                <td class="w-08 text-right">
                     {{ save_pctg = ((1 - svc.getFilteredAccumulatedTotal(filtered_game_log, 'opp_goals', game_log, game.game_date) / svc.getFilteredAccumulatedTotal(filtered_game_log, 'opp_shots_on_goal', game_log, game.game_date)) * 100).toFixed(2)  }} %
                 </td>
-                <td class="w-09 text-right">
+                <td class="w-08 text-right">
                     {{ (svc.parseFloat(shot_pctg) + svc.parseFloat(save_pctg)).toFixed(1) }}
                 </td>
-                <td class="w-09 text-right">
+                <td class="w-08 text-right">
                     {{ svc.getFilteredAccumulatedTotal(filtered_game_log, 'score', game_log, game.game_date) }}
                 </td>
-                <td class="w-09 text-right">
+                <td class="w-08 text-right">
                     {{ svc.getFilteredAccumulatedTotal(filtered_game_log, 'opp_score', game_log, game.game_date) }}
                 </td>
             </tr>

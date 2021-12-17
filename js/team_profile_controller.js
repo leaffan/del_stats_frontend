@@ -85,23 +85,19 @@ app.controller('teamProfileController', function($scope, $http, $routeParams, $l
 
         // creating associative array to contain teams' points, goal difference and goals scored
         var team_points_log = $scope.teams.reduce(
-            (o, key) => Object.assign(o, {[key.abbr]: {'team_id': key.id, 'team_abbr': key.abbr, 'pts': 0, 'gdiff': 0, 'gf': 0}}), {});
+            (o, key) => Object.assign(o, {[key.abbr]: {'team_id': key.id, 'team_abbr': key.abbr, 'games': 0, 'pts': 0, 'gdiff': 0, 'gf': 0, 'pts_per_game': 0}}), {});
+        // filtering team stats to only contain games played not later than the specified cutoff date
+        var team_stats_pre_cutoff = $scope.team_stats.filter(team_game => moment(team_game['game_date']) <= cutoff_date);
 
-        // looking at each item containing team game stats
-        for (var i = 0; i < $scope.team_stats.length; i++)
-        {
-            game_date = moment($scope.team_stats[i]['game_date']);
-            // bailing out if current game date is beyond specified cutoff date
-            if (game_date > cutoff_date)
-            {
-                break;
-            }
-            // TODO: check whether current game date is in date fiter interval
-            // aggregating points, goal difference and goals scored
-            team_points_log[$scope.team_stats[i]['team']]['pts'] += $scope.team_stats[i]['points'];
-            team_points_log[$scope.team_stats[i]['team']]['gf'] += $scope.team_stats[i]['goals'];
-            team_points_log[$scope.team_stats[i]['team']]['gdiff'] += ($scope.team_stats[i]['goals'] - $scope.team_stats[i]['opp_goals']);
-        }
+        // collesting team stats through cutoff date
+        team_stats_pre_cutoff.forEach(team_game => {
+            var team = team_game['team'];
+            team_points_log[team]['games'] += 1;
+            team_points_log[team]['pts'] += team_game['points'];
+            team_points_log[team]['gf'] += team_game['goals'];
+            team_points_log[team]['gdiff'] += (team_game['goals'] - team_game['opp_goals']);
+            team_points_log[team]['pts_per_game'] = team_points_log[team]['pts'] / team_points_log[team]['games'];
+        });
 
         // converting team points log to an actual array
         team_table = Object.keys(team_points_log).map(function(key) {
@@ -110,21 +106,36 @@ app.controller('teamProfileController', function($scope, $http, $routeParams, $l
                 'team': key,
                 'pts': team_points_log[key].pts,
                 'gdiff': team_points_log[key].gdiff,
-                'gf': team_points_log[key].gf};
+                'gf': team_points_log[key].gf,
+                'pts_per_game': team_points_log[key].pts_per_game}
         });
 
-        // sorting team table
+        // sorting team table by main category points or points per game (dependant on season)
         team_table.sort(function(b, a){
-            if (a.pts == b.pts)
-            {
-                if (a.gdiff == b.gdiff)
+            if ($scope.season == 2020 || $scope.season == 2021) {
+                if (a.pts_per_game == b.pts_per_game)
                 {
-                    return a.gf - b.gf;
+                    if (a.gdiff == b.gdiff)
+                    {
+                        return a.gf - b.gf;
+                    }
+                    return a.gdiff - b.gdiff;
                 }
-                return a.gdiff - b.gdiff;
-            }
+    
+                return a.pts_per_game - b.pts_per_game;
 
-            return a.pts - b.pts;
+            } else {
+                if (a.pts == b.pts)
+                {
+                    if (a.gdiff == b.gdiff)
+                    {
+                        return a.gf - b.gf;
+                    }
+                    return a.gdiff - b.gdiff;
+                }
+    
+                return a.pts - b.pts;
+            }
         });
 
         // returning actual table position of current team in sorted rankings

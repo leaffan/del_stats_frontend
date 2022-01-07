@@ -221,6 +221,16 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
             element['lf_og_p'] = svc.calculatePercentage(element['lf_og'], element['shots_on_goal']);
             element['rg_og_p'] = svc.calculatePercentage(element['rg_og'], element['shots_on_goal']);
             element['bl_og_p'] = svc.calculatePercentage(element['bl_og'], element['shots_on_goal']);
+            // calculating shooting percentages for different zones
+            element['sl_sh_pctg'] = svc.calculatePercentage(element['sl_g'], element['sl_og']);
+            element['lf_sh_pctg'] = svc.calculatePercentage(element['lf_g'], element['lf_og']);
+            element['rg_sh_pctg'] = svc.calculatePercentage(element['rg_g'], element['rg_og']);
+            element['bl_sh_pctg'] = svc.calculatePercentage(element['bl_g'], element['bl_og']);
+            // calculating shooting percentages against for different zones
+            element['sl_sh_pctg_a'] = svc.calculatePercentage(element['sl_g_a'], element['sl_og_a']);
+            element['lf_sh_pctg_a'] = svc.calculatePercentage(element['lf_g_a'], element['lf_og_a']);
+            element['rg_sh_pctg_a'] = svc.calculatePercentage(element['rg_g_a'], element['rg_og_a']);
+            element['bl_sh_pctg_a'] = svc.calculatePercentage(element['bl_g_a'], element['bl_og_a']);
             // calculating shooting and save percentages for shots on goal in 5-on-5 play
             element['shot_pctg_5v5'] = svc.calculatePercentage(element['goals_5v5'], element['shots_on_goal_5v5']);
             element['opp_save_pctg_5v5'] = svc.calculatePercentage(element['shots_on_goal_5v5'] - element['goals_5v5'], element['shots_on_goal_5v5']);

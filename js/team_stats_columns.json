@@ -217,6 +217,32 @@
         {"data_key": "bl_og", "col_header": "Point", "expl_de": "Torschüsse von der blauen Linie", "expl_en": "Point Shots On Goal"},
         {"data_key": "bl_og_p", "col_header": "Point%", "expl_de": "Anteil der Torschüsse von der blauen Linie", "expl_en": "Point Shot On Goal Percentage"}
     ],
+    "shot_on_goal_zones_near": [
+        {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
+        {"data_key": "games_played", "col_header": "GP", "expl_de": "Absolvierte Spiele", "expl_en": "Games Played"},
+        {"data_key": "shots_on_goal", "col_header": "SOG", "expl_de": "Torschüsse", "expl_en": "Shots On Goal"},
+        {"data_key": "sl_og", "col_header": "Slot", "expl_de": "Torschüsse aus dem Slot", "expl_en": "Slot Shots On Goal"},
+        {"data_key": "sl_og_p", "col_header": "Slot%", "expl_de": "Anteil der Torschüsse aus dem Slot", "expl_en": "Slot Shot On Goal Percentage"},
+        {"data_key": "sl_g", "col_header": "Slot GF", "expl_de": "Tore aus dem Slot", "expl_en": "Slot Goals"},
+        {"data_key": "sl_sh_pctg", "col_header": "Slot SH%", "expl_de": "Schussquote aus dem Slot", "expl_en": "Shooting Percentage from Slot"},
+        {"data_key": "lf_og", "col_header": "Left", "expl_de": "Torschüsse von links", "expl_en": "Shots On Goal from Left"},
+        {"data_key": "lf_og_p", "col_header": "Left%", "expl_de": "Anteil der Torschüsse von links", "expl_en": "Shots On Goal from Left Percentage"},
+        {"data_key": "lf_g", "col_header": "Left GF", "expl_de": "Tore von links", "expl_en": "Goals from Left"},
+        {"data_key": "lf_sh_pctg", "col_header": "Left SH%", "expl_de": "Schussquote von links", "expl_en": "Shooting Percentage from Left"},
+        {"data_key": "rg_og", "col_header": "Right", "expl_de": "Torschüsse von rechts", "expl_en": "Shots On Goal from Right"},
+        {"data_key": "rg_og_p", "col_header": "Right%", "expl_de": "Anteil der Torschüsse von rechts", "expl_en": "Shots On Goal from Right Percentage"},
+        {"data_key": "rg_g", "col_header": "Right GF", "expl_de": "Tore von rechts", "expl_en": "Goals from Right"},
+        {"data_key": "rg_sh_pctg", "col_header": "Right SH%", "expl_de": "Schussquote von rechts", "expl_en": "Shooting Percentage from Right"}
+    ],
+    "shot_on_goal_zones_far": [
+        {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
+        {"data_key": "games_played", "col_header": "GP", "expl_de": "Absolvierte Spiele", "expl_en": "Games Played"},
+        {"data_key": "shots_on_goal", "col_header": "SOG", "expl_de": "Torschüsse", "expl_en": "Shots On Goal"},
+        {"data_key": "bl_og", "col_header": "Point", "expl_de": "Torschüsse von der blauen Linie", "expl_en": "Point Shots On Goal"},
+        {"data_key": "bl_og_p", "col_header": "Point%", "expl_de": "Anteil der Torschüsse von der blauen Linie", "expl_en": "Point Shot On Goal Percentage"},
+        {"data_key": "bl_g", "col_header": "Point GF", "expl_de": "Tore von der blauen Linie", "expl_en": "Goals from Point Shots"},
+        {"data_key": "bl_sh_pctg", "col_header": "Point SH%", "expl_de": "Schussquote von der blauen Linie", "expl_en": "Shooting Percentage from Point"}
+    ],
     "shot_zones_against": [
         {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
         {"data_key": "games_played", "col_header": "GP", "expl_de": "Absolvierte Spiele", "expl_en": "Games Played"},
@@ -242,6 +268,32 @@
         {"data_key": "rg_og_p_a", "col_header": "Right%", "expl_de": "Anteil der gegnerischen Torschüsse von rechts", "expl_en": "Shots On Goal From Right Against Percentage"},
         {"data_key": "bl_og_a", "col_header": "Point", "expl_de": "Gegnerische Torschüsse von der blauen Linie", "expl_en": "Point Shots On Goal Against"},
         {"data_key": "bl_og_p_a", "col_header": "Point%", "expl_de": "Anteil der gegnerischen Torschüsse von der blauen Linie", "expl_en": "Point Shot On Goal Against Percentage"}
+    ],
+    "shot_on_goal_zones_against_near": [
+        {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
+        {"data_key": "games_played", "col_header": "GP", "expl_de": "Absolvierte Spiele", "expl_en": "Games Played"},
+        {"data_key": "opp_shots_on_goal", "col_header": "SOGA", "expl_de": "Gegnerische Torschüsse", "expl_en": "Shots On Goal Against"},
+        {"data_key": "sl_og_a", "col_header": "Slot", "expl_de": "Gegnerische Torschüsse aus dem Slot", "expl_en": "Slot Shots On Goal Against"},
+        {"data_key": "sl_og_p_a", "col_header": "Slot%", "expl_de": "Anteil der gegnerischen Torschüsse aus dem Slot", "expl_en": "Slot Shot On Goal Against Percentage"},
+        {"data_key": "sl_g_a", "col_header": "Slot GA", "expl_de": "Gegentore aus dem Slot", "expl_en": "Slot Goals Against"},
+        {"data_key": "sl_sh_pctg_a", "col_header": "Slot SH%A", "expl_de": "Gegnerische Schussquote aus dem Slot", "expl_en": "Shooting Percentage Against from Slot"},
+        {"data_key": "lf_og_a", "col_header": "Left", "expl_de": "Gegnerische Torschüsse von links", "expl_en": "Shots On Goal From Left Against"},
+        {"data_key": "lf_og_p_a", "col_header": "Left%", "expl_de": "Anteil der gegnerischen Torschüsse von links", "expl_en": "Shots On Goal From Left Against Percentage"},
+        {"data_key": "lf_g_a", "col_header": "LGA", "expl_de": "Gegentore von links", "expl_en": "Goals Against from Left"},
+        {"data_key": "lf_sh_pctg_a", "col_header": "LSH%A", "expl_de": "Gegnerische Schussquote von links", "expl_en": "Shooting Percentage Against from Left"},
+        {"data_key": "rg_og_a", "col_header": "Right", "expl_de": "Gegnerische Torschüsse von rechts", "expl_en": "Shots On Goal From Right Against"},
+        {"data_key": "rg_og_p_a", "col_header": "Right%", "expl_de": "Anteil der gegnerischen Torschüsse von rechts", "expl_en": "Shots On Goal From Right Against Percentage"},
+        {"data_key": "rg_g_a", "col_header": "RGA", "expl_de": "Gegentore von rechts", "expl_en": "Goals Against from Right"},
+        {"data_key": "rg_sh_pctg_a", "col_header": "RSH%A", "expl_de": "Gegnerische Schussquote von rechts", "expl_en": "Shooting Percentage Against from Right"}
+    ],
+    "shot_on_goal_zones_against_far": [
+        {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
+        {"data_key": "games_played", "col_header": "GP", "expl_de": "Absolvierte Spiele", "expl_en": "Games Played"},
+        {"data_key": "opp_shots_on_goal", "col_header": "SOGA", "expl_de": "Gegnerische Torschüsse", "expl_en": "Shots On Goal Against"},
+        {"data_key": "bl_og_a", "col_header": "Point", "expl_de": "Gegnerische Torschüsse von der blauen Linie", "expl_en": "Point Shots On Goal Against"},
+        {"data_key": "bl_og_p_a", "col_header": "Point%", "expl_de": "Anteil der gegnerischen Torschüsse von der blauen Linie", "expl_en": "Point Shot On Goal Against Percentage"},
+        {"data_key": "bl_g_a", "col_header": "Point GA", "expl_de": "Gegentore von der blauen Linie", "expl_en": "Point Goals Against"},
+        {"data_key": "bl_sh_pctg_a", "col_header": "Point SH%A", "expl_de": "Gegnerische Schussquote von der blauen Linie", "expl_en": "Shooting Percentage Against from Point"}
     ],
     "score_state_stats": [
         {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},

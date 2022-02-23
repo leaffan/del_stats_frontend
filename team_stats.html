@@ -89,6 +89,8 @@
                     <option data-ng-option value="rest_2">Spiele nach zwei Tagen Pause</option>
                     <option data-ng-option value="rest_3">Spiele nach drei oder mehr Tagen Pause</option>
                     <option data-ng-option value="b2b">In Back-to-Back Spielen</option>
+                    <option data-ng-if="season == 2021" data-ng-option value="decimated">Mit reduziertem Kader</option>
+                    <option data-ng-if="season == 2021" data-ng-option value="opp_decimated">Gegen reduzierten Kader</option>
                 </select>   
             </div>
         </div>

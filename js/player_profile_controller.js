@@ -45,7 +45,7 @@ app.controller('plrProfileController', function($scope, $http, $routeParams, $lo
         // setting to round selection to maximum round played
         $scope.toRoundSelect = $scope.maxRoundPlayed;
         // retrieving all numbers a player used
-        $scope.numbersWorn = [...new Set($scope.player_stats.map(item => item.no))].sort();
+        $scope.numbersWorn = [...new Set($scope.player_stats.map(item => item.no))];
         // retrieving indication whether player took part in a shootout
         $scope.shootoutParticipationGames = $scope.player_stats.filter(item => item.so_attempts);
         if ($scope.shootoutParticipationGames.length > 0) {

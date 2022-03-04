@@ -780,8 +780,8 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
     // criteria for tie breaking
     $scope.sortCriteria = {
         "last_name": ['last_name', 'team'],
-        "points": ['points', '-games_played', 'goals', 'primary_points'],
-        "points_5v5": ['points_5v5', '-games_played', 'goals_5v5_from_events', 'primary_points_5v5'],
+        "points": ['points', 'goals', '-games_played', 'primary_points'],
+        "points_5v5": ['points_5v5', 'goals_5v5_from_events', '-games_played', 'primary_points_5v5'],
         "assists": ['assists', '-games_played', 'primary_assists'],
         "goals": ['goals', '-games_played', 'points'],
         "games_played": ['games_played', '-team'],

@@ -24,7 +24,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
     // setting default sort configuration
     $scope.sortConfig = {
         'sortKey': 'points',
-        'sortCriteria': ['points', '-games_played', 'goals', 'primary_points'],
+        'sortCriteria': ['points', 'goals', '-games_played', 'primary_points'],
         'sortDescending': true
     }
     $scope.fromRoundSelect = '1';

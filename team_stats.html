@@ -978,7 +978,7 @@
                 <td class="w-27"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
                 <td class="w-10 text-right">{{ stat.games_played }}</td>
                 <td class="w-10 text-right">{{ stat.pim }}</td>
-                <td class="w-10 text-right">{{ stat.pim_per_game.toFixed(2) }}</td>
+                <td class="w-10 text-right">{{ svc.formatTime(stat.pim_per_game * 60) }}</td>
                 <td class="w-10 text-right">{{ stat.penalty_2 }}</td>
                 <td class="w-10 text-right">{{ stat.penalty_5 }}</td>
                 <td class="w-10 text-right">{{ stat.penalty_10 }}</td>

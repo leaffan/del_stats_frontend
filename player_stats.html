@@ -324,7 +324,7 @@
                 </td>
                 <td class="w-07 text-right">{{ stat.games_played }}</td>
                 <td class="w-06 text-right">{{ stat.pim_from_events }}</td>
-                <td class="w-06 text-right">{{ stat.pim_per_game.toFixed(2) }}</td>
+                <td class="w-06 text-right">{{ svc.formatTime(stat.pim_per_game * 60) }}</td>
                 <td class="w-06 text-right">{{ stat._2min }}</td>
                 <td class="w-06 text-right">{{ stat._5min }}</td>
                 <td class="w-06 text-right">{{ stat._10min }}</td>

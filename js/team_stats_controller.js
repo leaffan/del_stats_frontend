@@ -263,6 +263,9 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
             element['so_pctg'] = svc.calculatePercentage(element['so_g'], element['so_a']);
             element['opp_so_pctg'] = svc.calculatePercentage(element['opp_so_g'], element['opp_so_a']);
             element['so_sv_pctg'] = svc.calculatePercentage(element['opp_so_a'] - element['opp_so_g'], element['opp_so_a']);
+            // calculating shooting percentage per position group
+            element['d_spctg'] = svc.calculatePercentage(element['d_goals'], element['d_sog']);
+            element['f_spctg'] = svc.calculatePercentage(element['f_goals'], element['f_sog']);
             // calculating PDO
             element['pdo'] = element['shot_pctg'] + element['save_pctg'];
             element['opp_pdo'] = element['opp_shot_pctg'] + element['opp_save_pctg'];
@@ -352,6 +355,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         'additional_stats': 'faceoff_pctg',
         'shootout_stats': 'so_pctg',
         'penalty_stats': 'pim_per_game',
+        'position_stats': 'd_points',
         'score_state_stats': 'leading_pctg',
         'attendance_stats': 'util_capacity_pctg',
         'power_play_details': 'pp_5v4_pctg',
@@ -401,7 +405,8 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         "leading_pctg": ['leading_pctg', 'leading'],
         'pp_time_per_pp_goal': ['pp_time_per_pp_goal', 'pp_goals'],
         'pp_5v4_pctg': ['pp_5v4_pctg', 'pp_goals'],
-        'pk_4v5_pctg': ['pk_4v5_pctg', '-opp_pp_goals']
+        'pk_4v5_pctg': ['pk_4v5_pctg', '-opp_pp_goals'],
+        "d_points": ['d_points', '-games_played']
     };
 
     // colums that by default are sorted in ascending order

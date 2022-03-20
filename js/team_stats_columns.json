@@ -181,6 +181,20 @@
         {"data_key": "avg_attendance_last_season", "col_header": "Schnitt Vorsaison", "expl_de": null, "expl_en": null},
         {"data_key": "avg_attendance_delta", "col_header": "Veränderung", "expl_de": null, "expl_en": null}
     ],
+    "position_stats": [
+        {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
+        {"data_key": "games_played", "col_header": "GP", "expl_de": "Absolvierte Spiele", "expl_en": "Games Played"},
+        {"data_key": "d_goals", "col_header": "D G", "expl_de": "Verteidigertore", "expl_en": "Defense Goals"},
+        {"data_key": "d_assists", "col_header": "D A", "expl_de": "Verteidigervorlagen", "expl_en": "Defense Assists"},
+        {"data_key": "d_points", "col_header": "D P", "expl_de": "Verteidigerpunkte", "expl_en": "Defense Points"},
+        {"data_key": "d_sog", "col_header": "D SOG", "expl_de": "Verteidigertorschüsse", "expl_en": "Defense Shots on Goal"},
+        {"data_key": "d_spctg", "col_header": "D S%", "expl_de": "Verteidigerschussquote", "expl_en": "Defense Shooting Percentage"},
+        {"data_key": "f_goals", "col_header": "F G", "expl_de": "Stürmertore", "expl_en": "Forward Goals"},
+        {"data_key": "f_assists", "col_header": "F A", "expl_de": "Stürmervorlagen", "expl_en": "Forward Assists"},
+        {"data_key": "f_points", "col_header": "F P", "expl_de": "Stürmerpunkte", "expl_en": "Forward Points"},
+        {"data_key": "f_sog", "col_header": "F SOG", "expl_de": "Stürmertorschüsse", "expl_en": "Forward Shots on Goal"},
+        {"data_key": "f_spctg", "col_header": "F S%", "expl_de": "Stürmerschussquote", "expl_en": "Forward Shooting Percentage"}
+    ],
     "penalty_stats": [
         {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
         {"data_key": "games_played", "col_header": "GP", "expl_de": "Absolvierte Spiele", "expl_en": "Games Played"},

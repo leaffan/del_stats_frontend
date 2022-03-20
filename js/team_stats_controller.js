@@ -141,6 +141,19 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
                 is_selected_home_away_type = true;
             }
             if ($scope.situationSelect) {
+                if ($scope.situationSelect == 'max_lead_1' && element['max_lead'] == 1)
+                    is_selected_game_situation = true;
+                if ($scope.situationSelect == 'max_lead_2' && element['max_lead'] == 2)
+                    is_selected_game_situation = true;
+                if ($scope.situationSelect == 'max_lead_gt_2' && element['max_lead'] > 2)
+                    is_selected_game_situation = true;
+                if ($scope.situationSelect == 'max_deficit_1' && element['max_deficit'] == -1)
+                    is_selected_game_situation = true;
+                if ($scope.situationSelect == 'max_deficit_2' && element['max_deficit'] == -2)
+                    is_selected_game_situation = true;
+                if ($scope.situationSelect == 'max_deficit_gt_2' && element['max_deficit'] < -2)
+                    is_selected_game_situation = true;
+                
                 if (element[$scope.situationSelect])
                     is_selected_game_situation = true;
             } else {
@@ -400,6 +413,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
 
     // changing sorting criteria according to table selected for display
     $scope.changeTable = function() {
+        console.log($scope.situationSelect);
         // retrieving sort key for current table from list of default table
         // sort criteria
         sortKey = $scope.tableSortCriteria[$scope.tableSelect];

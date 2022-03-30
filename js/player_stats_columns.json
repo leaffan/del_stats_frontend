@@ -309,6 +309,18 @@
         {"data_key": "pp_points", "col_header": "PPP", "expl_de": "Punkte in Überzahl", "expl_en": "Powerplay Points"},
         {"data_key": "pp_points_per_60", "col_header": "PPP/60", "expl_de": "Punkte in Überzahl pro 60 Minuten Eiszeit", "expl_en": "Powerplay Points/60"}
     ],
+    "shorthanded_stats": [
+        {"data_key": "last_name", "col_header": "Name", "expl_de": null, "expl_en": null},
+        {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
+        {"data_key": "games_played", "col_header": "GP", "expl_de": "Absolvierte Spiele", "expl_en": "Games Played"},
+        {"data_key": "time_on_ice_sh", "col_header": "TOI SH", "expl_de": "Eiszeit in Unterzahl", "expl_en": "Shorthanded Time On Ice"},
+        {"data_key": "goals", "col_header": "G", "expl_de": "Tore", "expl_en": "Goals"},
+        {"data_key": "sh_goals", "col_header": "SHG", "expl_de": "Tore in Unterzahl", "expl_en": "Shorthanded Goals"},
+        {"data_key": "assists", "col_header": "A", "expl_de": "Vorlagen", "expl_en": "Assists"},
+        {"data_key": "sh_assists", "col_header": "SHA", "expl_de": "Vorlagen in Unterzahl", "expl_en": "Shorthanded Assists"},
+        {"data_key": "points", "col_header": "P", "expl_de": "Punkte", "expl_en": "Points"},
+        {"data_key": "sh_points", "col_header": "SHP", "expl_de": "Punkte in Unterzahl", "expl_en": "Shorthanded Points"}
+    ],
     "player_information": [
         {"data_key": "last_name", "col_header": "Name", "expl_de": null, "expl_en": null},
         {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},

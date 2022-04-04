@@ -41,6 +41,7 @@
                     <option data-ng-option value="shot_shares_5v5">Schussanteile (5-gegen-5)</option>
                     <option data-ng-option value="shot_zones">Schusszonen (alle Schüsse)</option>
                     <option data-ng-option value="position_stats">Scoring nach Mannschaftsteil</option>
+                    <option data-ng-option value="u23_stats">U23-Statistiken</option>
                     <!-- <option data-ng-option value="shot_on_goal_zones">Schusszonen (Torschüsse)</option> -->
                     <option data-ng-option value="shot_on_goal_zones_near">Schusszonen (Torschüsse, nah)</option>
                     <option data-ng-option value="shot_on_goal_zones_far">Schusszonen (Torschüsse, fern)</option>
@@ -1025,6 +1026,39 @@
                 <td class="w-07 text-right">{{ stat.f_points }}</td>
                 <td class="w-07 text-right">{{ stat.f_sog }}</td>
                 <td class="w-07 text-right">{{ stat.f_spctg.toFixed(2) }} %</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table id="u23_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow"  data-ng-if="tableSelect == 'u23_stats'">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col" class="text-center"><span class="rank">#</span></th>
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                    <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
+                        <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
+                        <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
+                        <span data-ng-show="$parent.sortConfig['sortKey'] == col.data_key && $parent.sortConfig['sortDescending']" class="fa fa-caret-down"></span>
+                        <span data-ng-show="$parent.sortConfig['sortKey'] == col.data_key && !$parent.sortConfig['sortDescending']" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="{{season == 2020 && seasonTypeSelect == 'MSC' && (stat.team === 'SWW' || stat.team == 'EBB') ? 'table-danger' : ''}}" data-ng-repeat="stat in filtered_team_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
+                <td class="w-03 text-right">{{ $index + 1 }}</td>
+                <td class="w-12"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
+                <td class="w-06 text-right">{{ stat.u23_plrs }}</td>
+                <td class="w-07 text-right">{{ stat.u23_gp }}</td>
+                <td class="w-06 text-right">{{ stat.u23_g }}</td>
+                <td class="w-06 text-right">{{ stat.u23_a }}</td>
+                <td class="w-06 text-right">{{ stat.u23_pts }}</td>
+                <td class="w-07 text-right">{{ stat.u23_shifts }}</td>
+                <td class="w-07 text-right">{{ stat.u23_shifts_per_game.toFixed(1) }}</td>
+                <td class="w-09 text-right">{{ svc.formatTime(stat.u23_toi) }}</td>
+                <td class="w-11 text-right">{{ svc.formatTime(stat.u23_toi_per_game) }}</td>
+                <td class="w-09 text-right">{{ svc.formatTime(stat.u23_toi_pp_sh) }}</td>
+                <td class="w-11 text-right">{{ svc.formatTime(stat.u23_toi_pp_sh_per_game) }}</td>
             </tr>
         </tbody>
     </table>

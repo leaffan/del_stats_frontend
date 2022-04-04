@@ -195,6 +195,20 @@
         {"data_key": "f_sog", "col_header": "F SOG", "expl_de": "Stürmertorschüsse", "expl_en": "Forward Shots on Goal"},
         {"data_key": "f_spctg", "col_header": "F S%", "expl_de": "Stürmerschussquote", "expl_en": "Forward Shooting Percentage"}
     ],
+    "u23_stats": [
+        {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
+        {"data_key": "u23_plrs", "col_header": "U23 PL", "expl_de": "U23-Spieler", "expl_en": "U23 Players"},
+        {"data_key": "u23_gp", "col_header": "U23 GP", "expl_de": "Absolvierte Spiele von U23-Spielern", "expl_en": "U23 Games Played"},
+        {"data_key": "u23_g", "col_header": "U23 G", "expl_de": "Tore von U23-Spielern", "expl_en": "U23 Goals"},
+        {"data_key": "u23_a", "col_header": "U23 A", "expl_de": "Vorlagen von U23-Spielern", "expl_en": "U23 Assists"},
+        {"data_key": "u23_pts", "col_header": "U23 P", "expl_de": "Punkte von U23-Spielern", "expl_en": "U23 Points"},
+        {"data_key": "u23_shifts", "col_header": "U23 S", "expl_de": "Wechsel von U23-Spielern", "expl_en": "U23 Shifts"},
+        {"data_key": "u23_shifts_per_game", "col_header": "U23 S/G", "expl_de": "Wechsel von U23-Spielern/Spiel", "expl_en": "U23 Shifts per Game"},
+        {"data_key": "u23_toi", "col_header": "U23 TOI", "expl_de": "Eiszeit von U23-Spielern", "expl_en": "U23 Time on Ice"},
+        {"data_key": "u23_toi_per_game", "col_header": "U23 TOI/G", "expl_de": "Eiszeit/Spiel von U23-Spielern", "expl_en": "U23 Time on Ice per Game"},
+        {"data_key": "u23_toi_pp_sh", "col_header": "U23 TOI SPT", "expl_de": "Eiszeit von U23-Spielern in Über- und Unterzahl", "expl_en": "U23 Powerplay and Shorthanded Time on Ice"},
+        {"data_key": "u23_toi_pp_sh_per_game", "col_header": "U23 TOI SPT/G", "expl_de": "Eiszeit/Spiel von U23-Spielern in Über- und Unterzahl", "expl_en": "U23 Powerplay and Shorthanded Time on Ice per Game"}
+    ],
     "penalty_stats": [
         {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
         {"data_key": "games_played", "col_header": "GP", "expl_de": "Absolvierte Spiele", "expl_en": "Games Played"},

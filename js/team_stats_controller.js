@@ -97,6 +97,8 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
                 $scope.svc.stats_to_aggregate().forEach(category => {
                     filtered_team_stats[abbr][category] = 0;
                 });
+                // preparing set to hold U23 player ids
+                filtered_team_stats[abbr]['u23_plrs'] = new Set()
             }
         });
 
@@ -202,12 +204,19 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
                         filtered_team_stats[team][category] += element[category];
                     }
                 })
+                // registering U23 player ids from current game in corresponding set
+                element['u23_plrs'].forEach(item => filtered_team_stats[team]['u23_plrs'].add(item))
             }
         });
         filtered_team_stats = Object.values(filtered_team_stats);
 
         // finally calculating differentials, rates, and percentages
         filtered_team_stats.forEach(element => {
+            // calcualting U23 team stats
+            element['u23_plrs'] = element['u23_plrs'].size;
+            element['u23_shifts_per_game'] = svc.calculateRate(element['u23_shifts'], element['u23_plrs']);
+            element['u23_toi_per_game'] = svc.calculateRate(element['u23_toi'], element['u23_gp']);
+            element['u23_toi_pp_sh_per_game'] = svc.calculateRate(element['u23_toi_pp_sh'], element['u23_gp']);
             // calculating score and goal differentials
             element['score_diff'] = element['score'] - element['opp_score'];
             element['goals_diff'] = element['goals'] - element['opp_goals'];
@@ -360,7 +369,8 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         'attendance_stats': 'util_capacity_pctg',
         'power_play_details': 'pp_5v4_pctg',
         'penalty_kill_details': 'pk_4v5_pctg',
-        'special_team_times': 'pp_time_per_pp_goal'
+        'special_team_times': 'pp_time_per_pp_goal',
+        'u23_stats': 'u23_toi_per_game'
     }
 
     // hierarchical sorting criteria for specified sort key
@@ -406,7 +416,8 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         'pp_time_per_pp_goal': ['pp_time_per_pp_goal', 'pp_goals'],
         'pp_5v4_pctg': ['pp_5v4_pctg', 'pp_goals'],
         'pk_4v5_pctg': ['pk_4v5_pctg', '-opp_pp_goals'],
-        "d_points": ['d_points', '-games_played']
+        'd_points': ['d_points', '-games_played'],
+        'u23_toi_per_game': ['u23_toi_per_game', 'u23_gp']
     };
 
     // colums that by default are sorted in ascending order

@@ -252,7 +252,7 @@ app.factory('svc', function() {
                 'opp_pp_5v4', 'opp_ppg_5v4', 'opp_pp_5v3', 'opp_ppg_5v3', 'opp_pp_4v3', 'opp_ppg_4v3',
                 'ppt_5v4', 'opp_ppt_5v4', 'ppt_5v3', 'opp_ppt_5v3', 'ppt_4v3', 'opp_ppt_4v3',
                 'ev_goals', 'opp_ev_goals', 'f_goals', 'f_assists', 'f_points', 'f_sog', 'd_goals', 'd_assists',
-                'd_points', 'd_sog'
+                'd_points', 'd_sog', 'u23_gp', 'u23_g', 'u23_a', 'u23_pts', 'u23_shifts', 'u23_toi', 'u23_toi_pp_sh'
             ];    
         },
         player_stats_to_aggregate: function() {

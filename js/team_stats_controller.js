@@ -429,7 +429,6 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
 
     // changing sorting criteria according to table selected for display
     $scope.changeTable = function() {
-        console.log($scope.situationSelect);
         // retrieving sort key for current table from list of default table
         // sort criteria
         sortKey = $scope.tableSortCriteria[$scope.tableSelect];

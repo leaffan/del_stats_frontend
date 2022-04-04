@@ -66,6 +66,7 @@
                         <option data-ng-option value="game_additional_stats">Zusätzliche Statistiken</option>
                         <option data-ng-option value="score_states">Zeiten pro Spielstand</option>
                         <option data-ng-option value="shootout_stats">Penaltyschießen</option>
+                        <option data-ng-option value="penalty_stats">Strafen</option>
                         <option data-ng-option value="game_refs">Schieds-/Linienrichter</option>
                         <option data-ng-option value="development">Entwicklung im Saisonverlauf</option>
                     </select>
@@ -535,6 +536,53 @@
                 <td class="text-right"><b>{{ total_opp_pp_goals = svc.getFilteredTotal(filtered_game_log, 'opp_pp_goals', 'game_log') }}</b></td>
                 <td class="text-right"><b>{{ (100 - total_opp_pp_goals / total_opp_pp_opps * 100).toFixed(1) }} %</b></td>
                 <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_game_log, 'sh_goals', 'game_log') }}</b></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table id="penalty_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'penalty_stats'">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                    <a href="" data-ng-click="$parent.statsSortDescending = $parent.setSortOrder(col.data_key, $parent.sortCriterion, $parent.statsSortDescending); $parent.sortCriterion = col.data_key">
+                        <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
+                        <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
+                        <span data-ng-show="$parent.sortCriterion == col.data_key && $parent.statsSortDescending" class="fa fa-caret-down"></span>
+                        <span data-ng-show="$parent.sortCriterion == col.data_key && !$parent.statsSortDescending" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="{{game.home_road === 'home'? 'table-info' : 'table-warning'}}" data-ng-repeat="game in filtered_game_log = (game_log | orderBy:sortCriterion:statsSortDescending | filter: {home_road: homeRoadFilter} | filter:dayFilter | filter:fromRoundFilter | filter:toRoundFilter | filter:weekdayFilter | filter: {opp_team: oppFilter} | filter: {season_type: seasonTypeFilter})">
+                <td class="w-07 text-center"><a href="https://www.del.org/spielplan/{{game.game_date}}#schedule">{{ game.game_date }}</a></td>
+                <td class="w-07 text-right">{{ game.round }}</td>
+                <td class="w-16 {{ svc.setTextColor(game.score, game.opp_score) }}">
+                    <b>{{game.score}}:{{game.opp_score}}</b>
+                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
+                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
+                    </a>
+                </td>
+                <td class="w-10 text-right">{{ game.pim }}</td>
+                <td class="w-10 text-right">{{ game.penalty_2 }}</td>
+                <td class="w-10 text-right">{{ game.penalty_5 }}</td>
+                <td class="w-10 text-right">{{ game.penalty_10 }}</td>
+                <td class="w-10 text-right">{{ game.penalty_20 }}</td>
+                <td class="w-10 text-right">{{ game.penalty_25 }}</td>
+                <td class="w-10 text-right">{{ svc.formatTime(game.opp_pp_time) }}</td>
+            </tr>
+
+            <tr class="table-secondary">
+                <td></td>
+                <td>Gesamt:</td>
+                <td><b>{{ filtered_game_log.length }} Spiel{{ filtered_game_log.length == 1 ? '' : 'e'}}</b></td>
+                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_game_log, 'pim', 'game_log') }}</b></td>
+                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_game_log, 'penalty_2', 'game_log') }}</b></td>
+                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_game_log, 'penalty_5', 'game_log') }}</b></td>
+                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_game_log, 'penalty_10', 'game_log') }}</b></td>
+                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_game_log, 'penalty_20', 'game_log') }}</b></td>
+                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_game_log, 'penalty_25', 'game_log') }}</b></td>
+                <td class="text-right"><b>{{ svc.formatTime(svc.getFilteredTotal(filtered_game_log, 'opp_pp_time', 'game_log')) }}</b></td>
             </tr>
         </tbody>
     </table>

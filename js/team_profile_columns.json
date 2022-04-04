@@ -144,6 +144,18 @@
         {"data_key": "bl_og_a", "col_header": "Point", "expl_de": "Gegnerische Torschüsse von der blauen Linie", "expl_en": "Point Shots On Goal Against"},
         {"data_key": "bl_og_p_a", "col_header": "Point%", "expl_de": "Anteil der gegnerischen Torschüsse von der blauen Linie", "expl_en": "Point Shot On Goal Against Percentage"}
     ],
+    "penalty_stats": [
+        {"data_key": "date", "col_header": "Datum", "expl_de": null, "expl_en": null},
+        {"data_key": "round", "col_header": "Spieltag", "expl_de": null, "expl_en": null},
+        {"data_key": "opp_team", "col_header": "Gegner", "expl_de": null, "expl_en": null},
+        {"data_key": "pim", "col_header": "PIM", "expl_de": "Strafminuten", "expl_en": "Penalties in Minutes"},
+        {"data_key": "penalty_2", "col_header": "2 Min.", "expl_de": "Zwei-Minuten-Strafen", "expl_en": "Two-minute penalties"},
+        {"data_key": "penalty_5", "col_header": "5 Min.", "expl_de": "Fünf-Minuten-Strafen", "expl_en": "Five-minute penalties"},
+        {"data_key": "penalty_10", "col_header": "10 Min.", "expl_de": "Zehn-Minuten-Strafen", "expl_en": "Ten-minute penalties"},
+        {"data_key": "penalty_20", "col_header": "20 Min.", "expl_de": "Zwanzig-Minuten-Strafen", "expl_en": "Twenty-minute penalties"},
+        {"data_key": "penalty_25", "col_header": "5 + Match", "expl_de": "5-plus-Spieldauer-Strafen", "expl_en": "5 plus match penalties"},
+        {"data_key": "opp_pp_time", "col_header": "SHT", "expl_de": "Zeit in Unterzahl", "expl_en": "Shorthanded Time"}
+    ],
     "score_states": [
         {"data_key": "date", "col_header": "Datum", "expl_de": null, "expl_en": null},
         {"data_key": "round", "col_header": "Spieltag", "expl_de": null, "expl_en": null},

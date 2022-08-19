@@ -126,3 +126,5 @@ bootstrap.min.css
 fonttawesome.all.css
 data/*
 *.ics
+
+po/*

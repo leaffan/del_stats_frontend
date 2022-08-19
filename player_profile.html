@@ -8,28 +8,31 @@
             <span data-ng-if="player_stats[0].u20"><img class="test" height="20px" src="img/u20.png" /></span>
             <span data-ng-if="player_stats[0].rookie"><img class="test" height="20px" src="img/rookie.png" /></span>
         </div>
-        <div class="row">
-            <div class="col-md-1 w-10">
+        <div class="inline-headers row ml-1">
+            <div data-ng-if="hasPortrait" class="col-md-1 p-0 ml-0 mr-2">
+                <span><img height="90px" width="90px" src="po/{{player_id}}.png" alt="{{player_name}} - Mit freundlicher Genehmigung der City-Press GmbH Bildagentur" title="{{player_name}} - Mit freundlicher Genehmigung der City-Press GmbH Bildagentur"/></span>
+            </div>
+            <div class="col-md-5 ml-0 p-0">
+                <ul class="list-group list-group-horizontal my-1">
+                    <li class="col-6 list-group-item border-0 bg-transparent p-0"><b>Geburtsdatum:</b> {{ player_stats[0].date_of_birth | date: 'dd.MM.yyyy' }}</li>
+                    <li data-ng-if="season == 2021" class="col-6 list-group-item border-0 bg-transparent p-0"><b>Alter:</b> {{ players[player_id].age.toFixed(3) }}</li>
+                    <li data-ng-if="season < 2021" class="col-6 list-group-item border-0 bg-transparent p-0"><b>Alter:</b> {{ svc.parseFloat(season) - svc.parseFloat(player_stats[0].date_of_birth | date: 'yyyy') }}</li>
+                </ul>
+                <ul class="list-group list-group-horizontal my-1">
+                    <li class="col-6 list-group-item border-0 bg-transparent p-0"><b>Größe:</b> {{player_stats[0].height }} cm</li>
+                    <li class="col-6 list-group-item border-0 bg-transparent p-0"><b>Gewicht:</b> {{player_stats[0].weight }} kg</li>
+                </ul>
+                <ul class="list-group list-group-horizontal my-1">
+                    <li class="col-6 list-group-item border-0 bg-transparent p-0"><b>Position:</b> {{player_stats[0].position === 'FO' ? 'Stürmer' : player_stats[0].position === 'DE' ? 'Verteidiger' : player_stats[0].position === 'GK' ? 'Torhüter' : ''}}</li>
+                    <li class="col-6 list-group-item border-0 bg-transparent p-0"><b>Stockhand:</b> {{player_stats[0].shoots === 'left' ? 'links' : player_stats[0].shoots === 'right' ? 'rechts' : ''}}</li>
+                </ul>
+            </div>
+            <div class="col-md-1">
                 <svg data-ng-if="player_id != null" svg class="mt-1" viewbox="0 0 60 80">
                     <rect x="0" y="0" height="80" width="60" stroke-width="0" fill="{{ colors[0] }}"></rect>
                     <rect x="7" y="7" height="66" width="46" stroke-width="0" fill="{{ colors[1] }}"></rect>
                     <text class="jersey" x="50%" y="50" height="40" fill="{{ colors[2] }}" font-size="3em" text-anchor="middle">{{ numbersWorn[numbersWorn.length - 1] }}</text>
                 </svg>
-            </div>
-            <div class="col-md-11">
-                <ul class="list-group list-group-horizontal my-1">
-                    <li class="col-4 list-group-item border-0 bg-transparent p-0"><b>Geburtsdatum:</b> {{ player_stats[0].date_of_birth | date: 'dd.MM.yyyy' }}</li>
-                    <li data-ng-if="season == 2021" class="col-4 list-group-item border-0 bg-transparent p-0"><b>Alter:</b> {{ players[player_id].age.toFixed(3) }}</li>
-                    <li data-ng-if="season < 2021" class="col-4 list-group-item border-0 bg-transparent p-0"><b>Alter:</b> {{ svc.parseFloat(season) - svc.parseFloat(player_stats[0].date_of_birth | date: 'yyyy') }}</li>
-                </ul>
-                <ul class="list-group list-group-horizontal my-1">
-                    <li class="col-4 list-group-item border-0 bg-transparent p-0"><b>Größe:</b> {{player_stats[0].height }} cm</li>
-                    <li class="col-4 list-group-item border-0 bg-transparent p-0"><b>Gewicht:</b> {{player_stats[0].weight }} kg</li>
-                </ul>
-                <ul class="list-group list-group-horizontal my-1">
-                    <li class="col-4 list-group-item border-0 bg-transparent p-0"><b>Position:</b> {{player_stats[0].position === 'FO' ? 'Stürmer' : player_stats[0].position === 'DE' ? 'Verteidiger' : player_stats[0].position === 'GK' ? 'Torhüter' : ''}}</li>
-                    <li class="col-4 list-group-item border-0 bg-transparent p-0"><b>Stockhand:</b> {{player_stats[0].shoots === 'left' ? 'links' : player_stats[0].shoots === 'right' ? 'rechts' : ''}}</li>
-                </ul>
             </div>
         </div>        
     

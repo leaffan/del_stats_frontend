@@ -19,6 +19,12 @@ app.controller('plrProfileController', function($scope, $http, $routeParams, $lo
         $scope.players = res.data;
     });
 
+    // loading player ids with portraits
+    $http.get('./data/portraits.json').then(function (res) {
+        $scope.portraits = res.data;
+        $scope.hasPortrait = $scope.portraits.includes($scope.player_id);
+    });
+
     // retrieving current season's teams as well currently selected team and its colors
     $http.get('./js/teams.json').then(function (res) {
         $scope.all_teams = res.data.filter(team => team.valid_from <= $scope.season && team.valid_to >= $scope.season);

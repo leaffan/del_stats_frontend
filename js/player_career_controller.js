@@ -5,14 +5,15 @@ app.controller('plrCareerController', function ($scope, $http, $routeParams, svc
     $scope.season_type = 'ALL';
     $scope.sortConfig = {
         'sortKey': 'season',
-        'sortCriteria': ['-season', 'season_type'],
+        'sortCriteria': ['-season', 'season_type', '-order'],
         'sortDescending': true
     }
     $scope.sortCriteria = {
         "gp": ['gp', 'pts', 'g'],
         "g": ['g', '-gp'],
         "sog": ['sog', '-gp'],
-        "season_type": ['season_type', '-season']
+        "season_type": ['season_type', '-season'],
+        "season": ['-season', 'season_type', '-order']
     };
 
     // retrieving column headers (and abbreviations + explanations)
@@ -45,6 +46,8 @@ app.controller('plrCareerController', function ($scope, $http, $routeParams, svc
         $scope.max_season = Math.max(...all_seasons);
         $scope.from_season = $scope.min_season;
         $scope.to_season = $scope.max_season;
+        $scope.first_season = res.data.first_season ? res.data.first_season : $scope.from_season;
+        $scope.last_season = res.data.last_season ? res.data.last_season : $scope.to_season;
         $scope.all_teams = [...all_teams];
     });
 
@@ -83,6 +86,9 @@ app.controller('plrCareerController', function ($scope, $http, $routeParams, svc
                 }
             }
         });
+        $scope.min_filtered_regular_season = Math.min(...unique_filtered_regular_seasons);
+        $scope.min_filtered_playoff_season = Math.min(...unique_filtered_playoff_seasons);
+        $scope.min_filtered_season = Math.min(...unique_filtered_seasons);
         $scope.number_of_seasons = unique_filtered_seasons.size;
         $scope.number_of_regular_seasons = unique_filtered_regular_seasons.size;
         $scope.number_of_playoff_seasons = unique_filtered_playoff_seasons.size;
@@ -91,6 +97,15 @@ app.controller('plrCareerController', function ($scope, $http, $routeParams, svc
         $scope.number_of_playoff_season_teams = unique_filtered_playoff_season_teams.size;
         $scope.filtered_playoff_seasons = filtered_playoff_seasons;
         $scope.filtered_regular_seasons = filtered_regular_seasons;
+        if ($scope.player_stats.position.startsWith('G')) {
+            $scope.toi_post_1998 = filtered_seasons.filter(season => season.season > 1998).reduce((sum_toi_post_1998, season) => {return sum_toi_post_1998 + season.toi;}, 0);
+            $scope.regular_toi_post_1998 = filtered_regular_seasons.filter(season => season.season > 1998).reduce((sum_toi_post_1998, season) => {return sum_toi_post_1998 + season.toi;}, 0);
+            $scope.playoff_toi_post_1998 = filtered_playoff_seasons.filter(season => season.season > 1998).reduce((sum_toi_post_1998, season) => {return sum_toi_post_1998 + season.toi;}, 0);
+        } else {
+            $scope.goals_post_1998 = filtered_seasons.filter(season => season.season > 1998).reduce((sum_goals_post_1998, season) => {return sum_goals_post_1998 + season.g;}, 0);
+            $scope.regular_goals_post_1998 = filtered_regular_seasons.filter(season => season.season > 1998).reduce((sum_goals_post_1998, season) => {return sum_goals_post_1998 + season.g;}, 0);
+            $scope.playoff_goals_post_1998 = filtered_playoff_seasons.filter(season => season.season > 1998).reduce((sum_goals_post_1998, season) => {return sum_goals_post_1998 + season.g;}, 0);
+        }
         return filtered_seasons;
     };
 

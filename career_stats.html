@@ -1,15 +1,11 @@
 <div class="container" data-ng-app="delStatsApp">
     <div class="alert alert-info main-bg shadow mb-2">
+        <a href="#!"><b>Startseite</b></a>
+    </div>
+
+    <div class="alert alert-info main-bg shadow mb-2">
         <h3 class="d-md-none mb-0">DEL-Karrierestatistiken</h3>
         <h1 class="d-none d-md-block mb-0">DEL-Karrierestatistiken</h1>
-    </div>
-
-    <div class="alert alert-info main-bg shadow mb-2">
-        Karrierestatistiken für aktive DEL-Spieler.
-    </div>
-
-    <div class="alert alert-info main-bg shadow mb-2">
-        <a href="#!"><b>Startseite</b></a>
     </div>
 
     <form>
@@ -42,14 +38,14 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">von:</span>
                     </div>
-                    <select class="form-control" data-ng-model="from_season" data-ng-options="(season.toString() + '/' + svc.pad((season + 1 - 2000), 2)) for season in svc.range(min_season, max_season)">
+                    <select class="form-control" data-ng-model="from_season" data-ng-options="(season.toString() + '/' + (season + 1).toString().substr(-2)) for season in svc.range(min_season, to_season)">
                     </select>                
                 </div>
                 <div class="input-group col-6 pl-0">
                     <div class="input-group-prepend">
                         <span class="input-group-text">bis:</span>
                     </div>
-                    <select class="form-control" data-ng-model="to_season" data-ng-options="(season.toString() + '/' + svc.pad((season + 1 - 2000), 2)) for season in svc.range(min_season, max_season)">
+                    <select class="form-control" data-ng-model="to_season" data-ng-options="(season.toString() + '/' + (season + 1).toString().substr(-2)) for season in svc.range(from_season, max_season)">
                     </select>
                 </div>
             </div>
@@ -65,7 +61,7 @@
         </div>
 
         <div class="d-none d-md-block">
-            <div class="form-row mb-3">
+            <div class="form-row mb-1">
                 <div class="input-group col-2">
                     <select class="form-control" data-ng-model="position">
                         <option data-ng-option value selected="selected">alle Positionen</option>
@@ -83,14 +79,14 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">von:</span>
                     </div>
-                    <select class="form-control" data-ng-model="from_season" data-ng-options="(season.toString() + '/' + svc.pad((season + 1 - 2000), 2)) for season in svc.range(min_season, max_season)">
+                    <select class="form-control" data-ng-model="from_season" data-ng-options="(season.toString() + '/' + (season + 1).toString().substr(-2)) for season in svc.range(min_season, to_season)">
                     </select>                
                 </div>
                 <div class="input-group col-2 pl-0">
                     <div class="input-group-prepend">
                         <span class="input-group-text">bis:</span>
                     </div>
-                    <select class="form-control" data-ng-model="to_season" data-ng-options="(season.toString() + '/' + svc.pad((season + 1 - 2000), 2)) for season in svc.range(min_season, max_season)">
+                    <select class="form-control" data-ng-model="to_season" data-ng-options="(season.toString() + '/' + (season + 1).toString().substr(-2)) for season in svc.range(from_season, max_season)">
                     </select>
                 </div>
                 <div class="input-group col-3 pl-0">
@@ -102,6 +98,17 @@
                 </div>
             </div>
         </div>
+
+        <div class="mt-0 mb-3">
+            <div class="border-0">
+                    <label for="show_only_active">
+                    <input type="checkbox" id="show_only_active" data-ng-model="show_only_active" value="">
+                    <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                    Nur aktive Spieler anzeigen
+                </label>
+            </div>
+        </div>
+
     </form>
 
     <table id="career_stats_skaters" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="position != 'GK'">
@@ -120,23 +127,23 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_season_player_stats | filter:nameFilter | filter: {position: '!GK'} | filter:greaterThanFilter('gp', 0) | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
+            <tr data-ng-repeat="stat in filtered_season_player_stats | filter:nameFilter | filter:greaterThanFilter('gp', 0) | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
                 <td class="w-05 text-right">{{ $index + 1 }}</td>
                 <td class="w-17 d-md-none pr-0"><a href="#!/player_career/{{stat.player_id}}">{{svc.shortenName(stat.first_name + ' ' + stat.last_name)}}</a></td>
                 <td class="w-08 d-md-none pr-0">{{ stat.teams_cnt == 1 ? stat.teams[0] : stat.teams_cnt + ' Tms' }}</td>
 
-                <td class="w-17 d-none d-md-table-cell"><a href="#!/player_career/{{stat.player_id}}">{{ stat.first_name }} {{ stat.last_name }}</a></td>
+                <td class="w-17 d-none d-md-table-cell"><a data-ng-style="stat.last_season == 2021 && {'font-weight':'bold'}" href="#!/player_career/{{stat.player_id}}">{{ stat.first_name }} {{ stat.last_name }}</b></td>
                 <td class="w-08 d-none d-md-table-cell">{{ stat.teams_cnt == 1 ? stat.teams[0] : stat.teams_cnt + ' Teams' }}</td>
-                <td class="w-07 text-right">{{ stat.gp }}</td>
-                <td class="w-07 text-right">{{ stat.g }}</td>
-                <td class="w-07 text-right">{{ stat.a }}</td>
-                <td class="w-07 text-right">{{ stat.pts }}</td>
-                <td class="w-07 text-right">{{ stat.pim }}</td>
-                <td class="w-07 text-right">{{ stat.ppg }}</td>
-                <td class="w-07 text-right">{{ stat.shg }}</td>
-                <td class="w-07 text-right">{{ stat.sog }}</td>
-                <td class="w-07 text-right d-none d-md-table-cell">{{ stat.sh_pctg.toFixed(1) }} %</td>
-                <td class="w-07 text-right d-md-none px-0">{{ stat.sh_pctg.toFixed(1) }} %</td>
+                <td class="w-06 text-right">{{ stat.gp }}</td>
+                <td class="w-06 text-right">{{ stat.g }}</td>
+                <td class="w-06 text-right">{{ stat.a }}</td>
+                <td class="w-06 text-right">{{ stat.pts }}</td>
+                <td class="w-06 text-right">{{ stat.pim }}</td>
+                <td class="w-06 text-right">{{ stat.ppg }}<span data-ng-if="$parent.from_season < 1998 && stat.first_season < 1998" title="Ohne Daten vor 1998/1999.">*</span></td>
+                <td class="w-06 text-right">{{ stat.shg }}<span data-ng-if="$parent.from_season < 1998 && stat.first_season < 1998" title="Ohne Daten vor 1998/1999.">*</span></td>
+                <td class="w-07 text-right">{{ stat.sog }}<span data-ng-if="$parent.from_season < 1999 && stat.first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></td>
+                <td class="w-07 text-right">{{ stat.sh_pctg.toFixed(1) + ' %' }}<span data-ng-if="$parent.from_season < 1999 && stat.first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></td>
+                <td class="w-07 text-right">{{ stat.gpg.toFixed(2) }}</td>
                 <td class="w-07 text-right">{{ stat.ptspg.toFixed(2) }}</td>
             </tr>
         </tbody>
@@ -157,18 +164,18 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_season_player_stats | filter:nameFilter | filter: {position: 'GK'} | filter:greaterThanFilter('gp', 0) | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
+            <tr data-ng-repeat="stat in filtered_season_player_stats | filter:nameFilter | filter:greaterThanFilter('gp', 0) | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
                 <td class="w-05 text-right">{{ $index + 1 }}</td>
-                <td class="w-17"><a href="#!/player_career/{{stat.player_id}}">{{ stat.first_name }} {{ stat.last_name }}</a></td>
-                <td class="w-06 text-right">{{ stat.teams_cnt == 1 ? stat.teams[0] : stat.teams_cnt + ' Teams' }}</td>
+                <td class="w-16"><a data-ng-style="stat.last_season == 2021 && {'font-weight':'bold'}" href="#!/player_career/{{stat.player_id}}">{{ stat.first_name }} {{ stat.last_name }}</a></td>
+                <td class="w-07 text-right">{{ stat.teams_cnt == 1 ? stat.teams[0] : stat.teams_cnt + ' Teams' }}</td>
                 <td class="w-08 text-right">{{ stat.gp }}</td>
                 <td class="w-08 text-right">{{ svc.formatTime(stat.toi) }}</td>
-                <td class="w-08 text-right">{{ stat.w }}</td>
-                <td class="w-08 text-right">{{ stat.l }}</td>
-                <td class="w-08 text-right">{{ stat.sa }}</td>
-                <td class="w-08 text-right">{{ stat.ga }}</td>
-                <td class="w-08 text-right">{{ stat.sv_pctg.toFixed(1) }} %</td>
-                <td class="w-08 text-right">{{ stat.gaa.toFixed(2) }} </td>
+                <td class="w-08 text-right">{{ stat.w }}<span data-ng-if="$parent.from_season < 2007 && stat.first_season < 2007" title="Ohne Daten vor 2007/2008.">*</span></td>
+                <td class="w-08 text-right">{{ stat.l }}<span data-ng-if="$parent.from_season < 2007 && stat.first_season < 2007" title="Ohne Daten vor 2007/2008.">*</span></td>
+                <td class="w-08 text-right">{{ stat.sa }}<span data-ng-if="$parent.from_season < 1999 && stat.first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></td>
+                <td class="w-08 text-right">{{ stat.ga }}<span data-ng-if="$parent.from_season < 1999 && stat.first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></td>
+                <td class="w-08 text-right">{{ stat.sv_pctg.toFixed(1) + ' %'}}<span data-ng-if="$parent.from_season < 1999 && stat.first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></td>
+                <td class="w-08 text-right">{{ stat.gaa.toFixed(2) }}<span data-ng-if="$parent.from_season < 1999 && stat.first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></td>
                 <td class="w-08 text-right">{{ stat.so }}</td>
             </tr>
         </tbody>

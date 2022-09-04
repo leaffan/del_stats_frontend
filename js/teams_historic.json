@@ -1,0 +1,282 @@
+[{
+        "abbr": "SCB",
+        "url_name": "bietigheim-steelers",
+        "full_name": "SC Bietigheim Steelers",
+        "location": "Bietigheim",
+        "active": true,
+        "id": 22
+    },
+    {
+        "abbr": "AEV",
+        "url_name": "augsburger-panther",
+        "full_name": "Augsburger Panther",
+        "location": "Augsburg",
+        "active": true,
+        "id": 13
+    },
+    {
+        "abbr": "EBB",
+        "url_name": "eisbaeren-berlin",
+        "full_name": "Eisbären Berlin",
+        "location": "Berlin",
+        "active": true,
+        "id": 3
+    },
+    {
+        "abbr": "BHV",
+        "url_name": "pinguins-bremerhaven",
+        "full_name": "Pinguins Bremerhaven",
+        "location": "Bremerhaven",
+        "active": true,
+        "id": 9
+    },
+    {
+        "abbr": "DEG",
+        "url_name": "duesseldorfer-eg",
+        "full_name": "Düsseldorfer EG",
+        "location": "Düsseldorf",
+        "active": true,
+        "id": 4
+    },
+    {
+        "abbr": "ING",
+        "url_name": "erc-ingolstadt",
+        "full_name": "ERC Ingolstadt",
+        "location": "Ingolstadt",
+        "active": true,
+        "id": 1
+    },
+    {
+        "abbr": "IEC",
+        "url_name": "iserlohn-roosters",
+        "full_name": "Iserlohn Roosters",
+        "location": "Iserlohn",
+        "active": true,
+        "id": 7
+    },
+    {
+        "abbr": "KEC",
+        "url_name": "koelner-haie",
+        "full_name": "Kölner Haie",
+        "location": "Köln",
+        "active": true,
+        "id": 11
+    },
+    {
+        "abbr": "KEV",
+        "url_name": "krefeld-pinguine",
+        "full_name": "Krefeld Pinguine",
+        "location": "Krefeld",
+        "active": false,
+        "id": 5
+    },
+    {
+        "abbr": "MAN",
+        "url_name": "adler-mannheim",
+        "full_name": "Adler Mannheim",
+        "location": "Mannheim",
+        "active": true,
+        "id": 2
+    },
+    {
+        "abbr": "RBM",
+        "url_name": "ehc-red-bull-muenchen",
+        "full_name": "EHC Red Bull München",
+        "location": "München",
+        "active": true,
+        "id": 12
+    },
+    {
+        "abbr": "NIT",
+        "url_name": "nuernberg-ice-tigers",
+        "full_name": "Nürnberg Ice Tigers",
+        "location": "Nürnberg",
+        "active": true,
+        "id": 13
+    },
+    {
+        "abbr": "SWW",
+        "url_name": "schwenninger-wild-wings",
+        "full_name": "Schwenninger Wild Wings",
+        "location": "Schwenningen",
+        "active": true,
+        "id": 15
+    },
+    {
+        "abbr": "STR",
+        "url_name": "straubing-tigers",
+        "full_name": "Straubing Tigers",
+        "location": "Straubing",
+        "active": true,
+        "id": 6
+    },
+    {
+        "abbr": "WOB",
+        "url_name": "grizzlys-wolfsburg",
+        "full_name": "Grizzlys Wolfsburg",
+        "location": "Wolfsburg",
+        "active": true,
+        "id": 8
+    },
+    {
+        "abbr": "FRA",
+        "url_name": "",
+        "full_name": "Löwen Frankfurt",
+        "location": "Frankfurt",
+        "active": true,
+        "id": 44,
+        "archive_id": 18
+    },
+    {
+        "abbr": "HAN",
+        "url_name": "",
+        "full_name": "Hannover Scorpions",
+        "location": "Hannover",
+        "active": false,
+        "archive_id": 15
+    },
+    {
+        "abbr": "HHF",
+        "url_name": "",
+        "full_name": "Hamburg Freezers",
+        "location": "Hamburg",
+        "active": false,
+        "archive_id": 3
+    },
+    {
+        "abbr": "KAS",
+        "url_name": "",
+        "full_name": "Kassel Huskies",
+        "location": "Kassel",
+        "active": false,
+        "archive_id": 17
+    },
+    {
+        "abbr": "WFR",
+        "url_name": "",
+        "full_name": "Wölfe Freiburg",
+        "location": "Freiburg",
+        "active": false,
+        "archive_id": 24
+    },
+    {
+        "abbr": "DUI",
+        "url_name": "",
+        "full_name": "Füchse Duisburg",
+        "location": "Duisburg",
+        "active": false,
+        "archive_id": 34
+    },
+    {
+        "abbr": "RLO",
+        "url_name": "",
+        "full_name": "Revier Löwen Oberhausen",
+        "location": "Oberhausen",
+        "active": false,
+        "archive_id": 21
+    },
+    {
+        "abbr": "ECH",
+        "url_name": "",
+        "full_name": "EC Hannover",
+        "location": "Hannover",
+        "active": false,
+        "archive_id": 25
+    },
+    {
+        "abbr": "CAP",
+        "url_name": "",
+        "full_name": "Berlin Capitals",
+        "location": "Berlin",
+        "active": false,
+        "archive_id": 20
+    },
+    {
+        "abbr": "SBR",
+        "url_name": "",
+        "full_name": "Starbulls Rosenheim",
+        "location": "Rosenheim",
+        "active": false,
+        "archive_id": 16
+    },
+    {
+        "abbr": "MUC",
+        "url_name": "",
+        "full_name": "München Barons",
+        "location": "München",
+        "active": false,
+        "archive_id": 19
+    },
+    {
+        "abbr": "MOS",
+        "url_name": "",
+        "full_name": "Moskitos Essen",
+        "location": "Essen",
+        "active": false,
+        "archive_id": 22
+    },
+    {
+        "abbr": "ESV",
+        "url_name": "",
+        "full_name": "Kaufbeurer Adler",
+        "location": "Kaufbeuren",
+        "active": false,
+        "archive_id": 26
+    },
+    {
+        "abbr": "EVL",
+        "url_name": "",
+        "full_name": "EV Landshut",
+        "location": "Landshut",
+        "active": false,
+        "archive_id": 27
+    },
+    {
+        "abbr": "MAD",
+        "url_name": "",
+        "full_name": "Maddogs München",
+        "location": "München",
+        "active": false,
+        "archive_id": 28
+    },
+    {
+        "abbr": "ECR",
+        "url_name": "",
+        "full_name": "Ratinger Löwen",
+        "location": "Ratingen",
+        "active": false,
+        "archive_id": 29
+    },
+    {
+        "abbr": "ESG",
+        "url_name": "",
+        "full_name": "ESG Füchse Sachsen Weißwasser",
+        "location": "Weißwasser",
+        "active": false,
+        "archive_id": 30
+    },
+    {
+        "abbr": "SCR",
+        "url_name": "",
+        "full_name": "SC Riessersee",
+        "location": "Riessersee",
+        "active": false,
+        "archive_id": 31
+    },
+    {
+        "abbr": "ERD",
+        "url_name": "",
+        "full_name": "Erding Jets",
+        "location": "Erding",
+        "active": false,
+        "archive_id": 32
+    },
+    {
+        "abbr": "NEU",
+        "url_name": "",
+        "full_name": "EHC Neuwied",
+        "location": "Neuwied",
+        "active": false,
+        "archive_id": 33
+    }
+]

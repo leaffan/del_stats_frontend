@@ -1,6 +1,11 @@
 <div class="container" data-ng-app="delStatsApp">
+
     <div class="alert alert-info main-bg shadow">
-        <h1>DEL-Teamstatistiken für {{ season }}/{{ svc.parseFloat(season) + 1 - 2000 }}</h1>
+        <a href="#!"><b>Startseite</b></a> | <a href="#!/del_stats/{{ season }}"><b>Spielerstatistiken</b></a>
+    </div>
+
+    <div class="alert alert-info main-bg shadow">
+        <h2>DEL-Teamstatistiken für {{ season }}/{{ svc.parseFloat(season) + 1 - 2000 }}</h2>
     </div>
 
     <div class="alert alert-info main-bg shadow">
@@ -16,10 +21,6 @@
             <li class="list-group-item flex-fill border-0 bg-transparent p-1"><i class="fab fa-twitter" aria-hidden="true"></i><b>Twitter:</b> <a href="https://twitter.com/le_affan">@le_affan</a></li>
             <li class="list-group-item flex-fill border-0 bg-transparent p-1"><i class="fab fa-github" aria-hidden="true"></i><b>GitHub:</b> <a href="https://github.com/leaffan/del_stats">leaffan/del_stats</a></li>
         </ul>
-    </div>
-
-    <div class="alert alert-info main-bg shadow">
-        <a href="#!/del_stats/{{ season }}"><b>Spielerstatistiken</b></a> | <a href="#!"><b>Startseite</b></a>
     </div>
 
     <form>

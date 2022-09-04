@@ -1,12 +1,18 @@
 <div class="container" data-ng-app="delStatsApp">
+
     <div class="alert alert-info main-bg shadow">
-        <div class="inline-headers mb-2">
-            <h2 data-ng-if="player_name"><a href="https://www.eliteprospects.com/player/{{players[player_id].ep_id}}">{{ player_name}}</a> ({{ model.team }}) {{ season }}/{{ svc.parseFloat(season) + 1 - 2000 }}&#160;</h2>
-            <span><span class="flag-icon flag-icon-{{ players[player_id].iso_country }}"></span></span>
-            <span><a href="https://www.eliteprospects.com/player/{{players[player_id].ep_id}}"><img height="20px" src="img/ep_icon.png" /></a></span>
-            <span data-ng-if="player_stats[0].u23"><img class="test" height="20px" src="img/u23.png" /></span>
-            <span data-ng-if="player_stats[0].u20"><img class="test" height="20px" src="img/u20.png" /></span>
-            <span data-ng-if="player_stats[0].rookie"><img class="test" height="20px" src="img/rookie.png" /></span>
+        <a href="#!"><b>Startseite</b></a>  | <a href="#!/team_stats/{{season}}"><b>Teamstatistiken</b></a> | <a href="#!/del_stats/{{season}}"><b>Spielerstatistiken</b></a> | <a href="#!/player_career/{{player_id}}"><b>Karriereverlauf</b></a> 
+    </div>
+
+    <div class="alert alert-info main-bg shadow">
+        <div class="row align-items-center ml-1">
+            <h2 data-ng-if="player_name"><b><a href="https://www.eliteprospects.com/player/{{players[player_id].ep_id}}">{{ player_name}}</a></b> ({{ model.team }}) {{ season }}/{{ svc.parseFloat(season) + 1 - 2000 }}&#160;</h2>
+            <span class="ml-2"><span class="flag-icon flag-icon-{{ players[player_id].iso_country }}"></span></span>
+            <span class="ml-2"><a href="https://www.eliteprospects.com/player/{{players[player_id].ep_id}}"><img height="20px" src="img/ep_icon.png" /></a></span>
+            <span class="ml-2" data-ng-if="season == 2021"><a href="https://www.penny-del.org/spielerprofil/{{team_id_lookup[currentTeam[0].abbr]}}/{{player_id}}"><img height="20px" src="img/penny-del-logo_small.png" /></a></span>
+            <span class="ml-2" data-ng-if="player_stats[0].u23"><img class="test" height="20px" src="img/u23.png" /></span>
+            <span class="ml-2" data-ng-if="player_stats[0].u20"><img class="test" height="20px" src="img/u20.png" /></span>
+            <span class="ml-2" data-ng-if="player_stats[0].rookie"><img class="test" height="20px" src="img/rookie.png" /></span>
         </div>
         <div class="inline-headers row ml-1">
             <div data-ng-if="hasPortrait" class="col-md-1 p-0 ml-0 mr-2">
@@ -36,10 +42,6 @@
             </div>
         </div>        
     
-    </div>
-
-    <div class="alert alert-info main-bg shadow">
-        <a href="#!/player_career/{{player_id}}"><b>Karriereverlauf</b></a> | <a href="#!/del_stats/{{season}}"><b>Spielerstatistiken</b></a> | <a href="#!/team_stats/{{season}}"><b>Teamstatistiken</b></a> | <a href="#!"><b>Startseite</b></a>
     </div>
 
     <div class="alert alert-info main-bg shadow">

@@ -21,7 +21,7 @@ app.controller('plrCareerController', function ($scope, $http, $routeParams, svc
         $scope.stats_cols = res.data;
     });
 
-    $http.get('./js/teams.json').then(function (res) {
+    $http.get('./js/teams_historic.json').then(function (res) {
         // only retaining teams that are valid for current season
         $scope.teams = res.data;
         $scope.team_full_name_lookup = $scope.teams.reduce((o, key) => Object.assign(o, {[key.abbr]: key.full_name}), {});

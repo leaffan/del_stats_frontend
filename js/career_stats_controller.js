@@ -31,10 +31,15 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
         $scope.stats_cols = res.data;
     });
 
-    $http.get('./js/teams.json').then(function (res) {
-        // only retaining teams that are valid for current season
-        $scope.teams = res.data;
-        $scope.team_full_name_lookup = $scope.teams.reduce((o, key) => Object.assign(o, {[key.abbr]: key.full_name}), {});
+    $http.get('./js/teams_historic.json').then(function (res) {
+        orig_teams = res.data;
+        // setting teams that are valid for current season as active ones
+        active_teams = orig_teams.filter(team => team.active).sort((a, b)=> (a.location > b.location ? 1 : -1)).map(team => team.abbr);
+        // setting teams that are not valid for current season as inactive ones
+        inactive_teams = orig_teams.filter(team => !team.active).sort((a, b)=> (a.location > b.location ? 1 : -1)).map(team => team.abbr);
+        $scope.all_teams = active_teams.concat(inactive_teams);
+        // setting up lookup dictionary for full team names
+        $scope.team_full_name_lookup = orig_teams.reduce((o, key) => Object.assign(o, {[key.abbr]: key.full_name}), {});
     });
 
     // loading player information from external file
@@ -43,22 +48,18 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
     });
 
     // loading stats from external json file
-    $http.get('data/career_stats/all_career_stats_new.json').then(function (res) {
+    $http.get('data/career_stats/all_career_stats.json').then(function (res) {
         $scope.player_stats = res.data;
         var all_seasons = new Set();
-        var all_teams = new Set()
         $scope.player_stats.forEach(element => {
             element['seasons'].forEach(season_stat_line => {
                 all_seasons.add(season_stat_line['season']);
-                if (!['ERD', 'NEU'].includes(season_stat_line['team']))
-                    all_teams.add(season_stat_line['team']);
             })
         });
         $scope.min_season = Math.min(...all_seasons);
         $scope.max_season = Math.max(...all_seasons);
         $scope.from_season = $scope.min_season;
         $scope.to_season = $scope.max_season;
-        $scope.all_teams = [...all_teams].sort();
     });
 
     $scope.$watchGroup(['position', 'from_season', 'to_season', 'season_type', 'team', 'show_only_active'], function(new_values, old_values) {
@@ -75,7 +76,7 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
     }, true);
 
     $scope.to_aggregate = [
-        'gp', 'g', 'a', 'pts', 'plus_minus', 'pim', 'ppg', 'shg', 'gwg', 'sog', 'toi', 'w', 'l', 'sa', 'ga', 'so'];
+        'gp', 'g', 'a', 'plus_minus', 'pim', 'ppg', 'shg', 'gwg', 'sog', 'toi', 'w', 'l', 'sa', 'ga', 'so'];
 
     $scope.filterCareerStats = function() {
         filtered_career_stats = [];
@@ -91,10 +92,10 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
                 'position': player_data['position'],
                 'first_season': player_data['first_season'],
                 'last_season': player_data['last_season'],
+                'pts': 0,
                 'sh_pctg': 0.0,
                 'sv_pctg': 0.0,
                 'gpg': 0.0,
-                // 'apg': 0.0,
                 'ptspg': 0.0,
                 'teams': new Set()
             };
@@ -160,12 +161,15 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
                 if (in_season_range && in_season_types && is_selected_team && is_selected_position) {
                     filtered_stat_line['teams'].add(season_stat_line['team']);
                     $scope.to_aggregate.forEach(category => {
-                        filtered_stat_line[category] += season_stat_line[category];
+                        if (season_stat_line[category])
+                            filtered_stat_line[category] += season_stat_line[category];
                     });
                     if (season_stat_line['season'] > 1998)
-                        filtered_stat_line['g_post_98'] += season_stat_line['g'];
+                        if (season_stat_line['g'])    
+                            filtered_stat_line['g_post_98'] += season_stat_line['g'];
                 }
             });
+            filtered_stat_line['pts'] = filtered_stat_line['g'] + filtered_stat_line['a']
             // calculating shooting percentage (only using goal totals after 1998/99 season to do so)
             if (filtered_stat_line['sog'])
                 filtered_stat_line['sh_pctg'] = filtered_stat_line['g_post_98'] / filtered_stat_line['sog'] * 100.;

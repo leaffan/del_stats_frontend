@@ -1,4 +1,5 @@
-[{
+[
+    {
         "abbr": "SCB",
         "url_name": "bietigheim-steelers",
         "full_name": "SC Bietigheim Steelers",
@@ -17,7 +18,7 @@
             }
         },
         "valid_from": 2021,
-        "valid_to": 2021,
+        "valid_to": 2022,
         "colors": [
             "#A6A8A8", "#008953", "#FFFFFF"
         ],
@@ -42,7 +43,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2021,
+        "valid_to": 2022,
         "colors": [
             "#C00D1E", "#32553B", "#FFFFFF"
         ],
@@ -68,7 +69,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2021,
+        "valid_to": 2022,
         "colors": [
             "#D61825", "#1C2B64", "#FFFFFF"
         ],
@@ -94,7 +95,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2021,
+        "valid_to": 2022,
         "colors": [
             "#C00D0E", "#FFFFFF", "#C00D0E"
         ],
@@ -120,7 +121,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2021,
+        "valid_to": 2022,
         "colors": [
             "#E1051B", "#F9B800", "#E1051B"
         ],
@@ -145,7 +146,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2021,
+        "valid_to": 2022,
         "colors": [
             "#27A6C4", "#0D2C5D", "#FFFFFF"
         ],
@@ -170,7 +171,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2021,
+        "valid_to": 2022,
         "colors": [
             "#1A3C85", "#FFFFFF", "#1A3C85"
         ],
@@ -195,7 +196,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2021,
+        "valid_to": 2022,
         "colors": [
             "#000000", "#E30613", "#FFFFFF"
         ],
@@ -221,7 +222,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2021,
+        "valid_to": 2022,
         "colors": [
             "#000000", "#FFEC00", "#000000"
         ],
@@ -247,7 +248,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2021,
+        "valid_to": 2022,
         "colors": [
             "#F0192D", "#004289", "#FFFFFF"
         ],
@@ -273,7 +274,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2021,
+        "valid_to": 2022,
         "colors": [
             "#BB0508", "#1A2E56", "#FFFFFF"
         ],
@@ -298,7 +299,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2021,
+        "valid_to": 2022,
         "colors": [
             "#FFFFFF", "#000000", "#FFFFFF"
         ],
@@ -324,7 +325,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2021,
+        "valid_to": 2022,
         "colors": [
             "#1756AD", "#FFFFFF", "#1756AD"
         ],
@@ -349,7 +350,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2021,
+        "valid_to": 2022,
         "colors": [
             "#0055A4", "#FFFFFF", "#0055A4"
         ],
@@ -375,7 +376,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2021,
+        "valid_to": 2022,
         "colors": [
             "#000000", "#EB6911", "#000000"
         ],
@@ -383,10 +384,10 @@
     },
     {
         "abbr": "FRA",
-        "url_name": "",
-        "full_name": "Frankfurt Lions",
+        "url_name": "loewen-frankfurt",
+        "full_name": "Löwen Frankfurt",
         "location": "Frankfurt",
-        "id": 0,
+        "id": 44,
         "archive_id": 18,
         "po": {
             "2017": false,
@@ -396,236 +397,9 @@
             "2021": false
         },
         "valid_from": 1994,
-        "valid_to": 2016
-
-    },
-    {
-        "abbr": "HAN",
-        "url_name": "",
-        "full_name": "Hannover Scorpions",
-        "location": "Hannover",
-        "id": 0,
-        "archive_id": 15,
-        "po": {
-            "2017": false,
-            "2018": false,
-            "2019": false,
-            "2020": false,
-            "2021": false
-        },
-        "valid_from": 1994,
-        "valid_to": 2016
-
-    },
-    {
-        "abbr": "HHF",
-        "url_name": "",
-        "full_name": "Hamburg Freezers",
-        "location": "Hamburg",
-        "id": 0,
-        "archive_id": 3,
-        "po": {
-            "2017": false,
-            "2018": false,
-            "2019": false,
-            "2020": false,
-            "2021": false
-        },
-        "valid_from": 2002,
-        "valid_to": 2016
-
-    },
-    {
-        "abbr": "KAS",
-        "url_name": "",
-        "full_name": "Kassel Huskies",
-        "location": "Kassel",
-        "id": 0,
-        "archive_id": 17,
-        "po": {
-            "2017": false,
-            "2018": false,
-            "2019": false,
-            "2020": false,
-            "2021": false
-        },
-        "valid_from": 1994,
-        "valid_to": 2016
-
-    },
-    {
-        "abbr": "WFR",
-        "url_name": "",
-        "full_name": "Wölfe Freiburg",
-        "location": "Freiburg",
-        "id": 0,
-        "archive_id": 24,
-        "po": {
-            "2017": false,
-            "2018": false,
-            "2019": false,
-            "2020": false,
-            "2021": false
-        },
-        "valid_from": 2003,
-        "valid_to": 2016
-
-    },
-    {
-        "abbr": "DUI",
-        "url_name": "",
-        "full_name": "Füchse Duisburg",
-        "location": "Duisburg",
-        "id": 0,
-        "archive_id": 34,
-        "po": {
-            "2017": false,
-            "2018": false,
-            "2019": false,
-            "2020": false,
-            "2021": false
-        },
-        "valid_from": 2005,
-        "valid_to": 2016
-    },
-    {
-        "abbr": "RLO",
-        "url_name": "",
-        "full_name": "Revier Löwen Oberhausen",
-        "location": "Oberhausen",
-        "id": 0,
-        "archive_id": 21,
-        "valid_from": 1997,
-        "valid_to": 2016
-    },
-    {
-        "abbr": "ECH",
-        "url_name": "",
-        "full_name": "EC Hannover",
-        "location": "Hannover",
-        "id": 0,
-        "archive_id": 25,
-        "valid_from": 1994,
-        "valid_to": 2016
-    },
-    {
-        "abbr": "CAP",
-        "url_name": "",
-        "full_name": "Berlin Capitals",
-        "location": "Berlin",
-        "id": 0,
-        "archive_id": 20,
-        "valid_from": 1994,
-        "valid_to": 2016
-    },
-    {
-        "abbr": "SBR",
-        "url_name": "",
-        "full_name": "Starbulls Rosenheim",
-        "location": "Rosenheim",
-        "id": 0,
-        "archive_id": 16,
-        "valid_from": 1994,
-        "valid_to": 2016
-    },
-    {
-        "abbr": "MUC",
-        "url_name": "",
-        "full_name": "München Barons",
-        "location": "München",
-        "id": 0,
-        "archive_id": 19,
-        "valid_from": 1994,
-        "valid_to": 2016
-    },
-    {
-        "abbr": "MOS",
-        "url_name": "",
-        "full_name": "Moskitos Essen",
-        "location": "Essen",
-        "id": 0,
-        "archive_id": 22,
-        "valid_from": 1999,
-        "valid_to": 2016
-    },
-    {
-        "abbr": "ESV",
-        "url_name": "",
-        "full_name": "Kaufbeurer Adler",
-        "location": "Kaufbeuren",
-        "id": 0,
-        "archive_id": 26,
-        "valid_from": 1994,
-        "valid_to": 2016
-    },
-    {
-        "abbr": "EVL",
-        "url_name": "",
-        "full_name": "EV Landshut",
-        "location": "Landshut",
-        "id": 0,
-        "archive_id": 27,
-        "valid_from": 1994,
-        "valid_to": 2016
-    },
-    {
-        "abbr": "MAD",
-        "url_name": "",
-        "full_name": "Maddogs München",
-        "location": "München",
-        "id": 0,
-        "archive_id": 28,
-        "valid_from": 1994,
-        "valid_to": 2016
-    },
-    {
-        "abbr": "ECR",
-        "url_name": "",
-        "full_name": "Ratinger Löwen",
-        "location": "Ratingen",
-        "id": 0,
-        "archive_id": 29,
-        "valid_from": 1994,
-        "valid_to": 2016
-    },
-    {
-        "abbr": "ESG",
-        "url_name": "",
-        "full_name": "ESG Füchse Sachsen Weißwasser",
-        "location": "Weißwasser",
-        "id": 0,
-        "archive_id": 30,
-        "valid_from": 1994,
-        "valid_to": 2016
-    },
-    {
-        "abbr": "SCR",
-        "url_name": "",
-        "full_name": "SC Riessersee",
-        "location": "Riessersee",
-        "id": 0,
-        "archive_id": 31,
-        "valid_from": 1994,
-        "valid_to": 2016
-    },
-    {
-        "abbr": "ERD",
-        "url_name": "",
-        "full_name": "Erding",
-        "location": "Erding",
-        "id": 0,
-        "archive_id": 32,
-        "valid_from": 1994,
-        "valid_to": 2016
-    },
-    {
-        "abbr": "NEU",
-        "url_name": "",
-        "full_name": "EHC Neuwied",
-        "location": "Neuwied",
-        "id": 0,
-        "archive_id": 33,
-        "valid_from": 1994,
-        "valid_to": 2016
+        "valid_to": 2022,
+        "colors": [
+            "#000000", "#A5ACAF", "#FA4D09"
+        ]
     }
 ]

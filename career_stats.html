@@ -4,8 +4,21 @@
     </div>
 
     <div class="alert alert-info main-bg shadow mb-2">
-        <h3 class="d-md-none mb-0">DEL-Karrierestatistiken</h3>
-        <h1 class="d-none d-md-block mb-0">DEL-Karrierestatistiken</h1>
+        <h1 class="mb-0">DEL-Karrierestatistiken</h1>
+    </div>
+
+    <div class="alert alert-info main-bg shadow">
+        <span ng-click="toggle=!toggle"><b>Anmerkungen&#32;&#32;<span ng-show="toggle" class="fa fa-minus"></span><span ng-show="!toggle" class="fa fa-plus"></span></b></span>
+            <div data-ng-show="toggle" class="row mt-2 mx-2 mb-0">
+                <div data-ng-if="position != 'GK'">
+                    <p class="mb-1">Mit der Erfassung von Über- und Unterzahltoren wurde in der DEL erst im Verlauf der Saison 1998/99 begonnen. Davon betroffene Gesamtzahlen sind mit <b>*</b> gekennzeichnet.</p>
+                    <p class="mb-0">Die Erfassung von Torschüssen begann mit der Saison 1999/2000, vorher sind keine Daten dieser Form vorhanden. Davon betroffene Gesamtzahlen sind mit <b>**</b> gekennzeichnet.</p>
+                </div>
+                <div data-ng-if="position == 'GK'">
+                    <p class="mb-1">Mit der Erfassung von Siegen und Niederlagen bei Torhütern wurde in der DEL erst in der Saison 2007/08 begonnen. Davon betroffene Gesamtzahlen sind mit <b>*</b> gekennzeichnet.</p>
+                    <p class="mb-0">Die Erfassung von Torschüssen sowie von zugelassenen Treffern bei Torhütern begann mit der Saison 1999/2000, vorher sind keine Daten dieser Form vorhanden. Entsprechend ist auch eine Berechnung von Fangquoten und Gegentorschnitten vor diesem Zeitpunkt nicht möglich. Davon betroffene Gesamtzahlen sind mit <b>**</b> gekennzeichnet.</p>
+                </div>
+            </div>
     </div>
 
     <form>

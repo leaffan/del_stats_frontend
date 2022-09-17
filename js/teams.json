@@ -396,6 +396,12 @@
             "2020": false,
             "2021": false
         },
+        "division": {
+            "2020": {
+                "MSC": "A",
+                "RS": "Nord"
+            }
+        },
         "valid_from": 1994,
         "valid_to": 2022,
         "colors": [

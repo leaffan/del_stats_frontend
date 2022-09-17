@@ -222,7 +222,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2022,
+        "valid_to": 2021,
         "colors": [
             "#000000", "#FFEC00", "#000000"
         ],
@@ -402,7 +402,7 @@
                 "RS": "Nord"
             }
         },
-        "valid_from": 1994,
+        "valid_from": 2022,
         "valid_to": 2022,
         "colors": [
             "#000000", "#A5ACAF", "#FA4D09"

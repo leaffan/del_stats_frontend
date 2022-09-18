@@ -43,12 +43,12 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
     });
 
     // loading player information from external file
-    $http.get('data/career_stats/all_players.json').then(function (res) {
+    $http.get('data/career_stats/upd_all_players.json').then(function (res) {
         $scope.players = res.data;
     });
 
     // loading stats from external json file
-    $http.get('data/career_stats/all_career_stats.json').then(function (res) {
+    $http.get('data/career_stats/upd_full_career_stats_stripped.json').then(function (res) {
         $scope.player_stats = res.data;
         var all_seasons = new Set();
         $scope.player_stats.forEach(element => {
@@ -83,10 +83,20 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
         if ($scope.player_stats === undefined)
             return filtered_career_stats;
         $scope.player_stats.forEach(player => {
-            player_data = $scope.players.filter(orig_player => orig_player.g_id == player.g_id)[0];
+            player_data = $scope.players.filter(function(orig_player) {
+                if (orig_player.c_player_id && orig_player.c_player_id == player.id) {
+                    return true;
+                } else if (orig_player.c_id && orig_player.c_id == player.id) {
+                    return true;
+                } else if (orig_player.g_id && orig_player.g_id == player.id) {
+                    return true;
+                }
+                return false;
+            });
+            player_data = player_data[0];
             // setting up filtered cumulated stat line for current player
             filtered_stat_line = {
-                'player_id': player_data['c_id'] && player_data['last_season'] == 2021 ? player_data['c_id'] : 'g' + player_data['g_id'],
+                'player_id': player_data['c_player_id'] ? player_data['c_player_id'] : player_data['c_id'] ? player_data['c_id'] : 'g' + player_data['g_id'],
                 'first_name': player_data['first_name'],
                 'last_name': player_data['last_name'],
                 'position': player_data['position'],
@@ -107,7 +117,7 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
 
             // checking if current player is an active player
             is_active = false;
-            if (player_data['last_season'] == 2021)
+            if (player_data['last_season'] == 2022)
                 is_active = true;
                 
             if ($scope.show_only_active && !is_active)

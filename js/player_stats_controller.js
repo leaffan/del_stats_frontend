@@ -225,6 +225,8 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
             plr_id = element['player_id'];
             team = element['team'];
             key = [plr_id, team]
+            if (!$scope.all_players[plr_id])
+                return;
             if (!$scope.prep_player_games[key]) {
                 $scope.prep_player_games[key] = {};
                 $scope.prep_player_games[key]['player_id'] = plr_id;

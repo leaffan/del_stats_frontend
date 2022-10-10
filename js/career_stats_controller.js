@@ -135,9 +135,9 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
             } else {
                     if ($scope.position == 'GK' && player_data['position'].startsWith('G')) {
                     is_selected_position = true;
-                } else if ($scope.position == 'DE' && player_data['position'].startsWith('D')) {
+                } else if ($scope.position == 'DE' && player_data['position'].includes('D')) {
                     is_selected_position = true;
-                } else if ($scope.position == 'FO' && !player_data['position'].startsWith('G') && !player_data['position'].startsWith('D')) {
+                } else if ($scope.position == 'FO' && !player_data['position'].startsWith('G') && !player_data['position'].includes('D')) {
                     is_selected_position = true;
                 }
             }

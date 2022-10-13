@@ -3,13 +3,18 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
     $scope.svc = svc;
     var ctrl = this;
     $scope.season = $routeParams.season;
+    // setting reference season for attendance stats display
+    $scope.referenceSeasonSelect = ($scope.season - 1).toString();
+    if ($scope.referenceSeasonSelect == '2020')
+        $scope.referenceSeasonSelect = '2019';
     // setting default table selection and sort keys and criteria/order
     $scope.tableSelect = 'standings';
-    if ($scope.season == 2021) {
-        $scope.seasonTypeSelect = 'PO';
-    } else {
-        $scope.seasonTypeSelect = 'RS';
-    }
+    // if ($scope.season == 2022) {
+    //     $scope.seasonTypeSelect = 'PO';
+    // } else {
+    //     $scope.seasonTypeSelect = 'RS';
+    // }
+    $scope.seasonTypeSelect = 'RS';
     $scope.gamesBackSelect = '';
     // initially setting indicators which view we're currently in
     $scope.isStandingsView = true;
@@ -31,7 +36,11 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
     $http.get('./data/' + $scope.season + '/dates_attendance.json').then(function (res) {
         $scope.dcup_date = moment(res.data['dates']['dcup_date']);
         $scope.reunification_date = moment(res.data['dates']['reunification_date']);
-        $scope.avg_attendance_last_season = res.data['avg_attendance_last_season'];
+    });
+
+    // retrieving attendance data from external file
+    $http.get('./data/attendance.json').then(function (res) {
+        $scope.avg_attendances = res.data;
     });
 
     // retrieving teams
@@ -48,7 +57,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
     // starting to watch filter selection lists
     $scope.$watchGroup([
             'situationSelect', 'homeAwaySelect', 'seasonTypeSelect', 'gamesBackSelect',
-            'fromRoundSelect', 'toRoundSelect', 'weekdaySelect', 'timespanSelect'
+            'fromRoundSelect', 'toRoundSelect', 'weekdaySelect', 'timespanSelect', 'referenceSeasonSelect'
         ], function() {
         if ($scope.team_stats) {
             $scope.filtered_team_stats = $scope.filterStats($scope.team_stats);
@@ -309,9 +318,9 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
             element['pim_per_game'] =  svc.calculateRate(element['pim'], element['games_played']);
             // calculating average attendance
             element['avg_attendance'] = svc.calculateRate(element['attendance'], element['games_played']);
-            // retrieving last year's average attendance
-            element['avg_attendance_last_season'] = $scope.avg_attendance_last_season[element['team']];
-            element['avg_attendance_delta'] = element['avg_attendance'] - element['avg_attendance_last_season']; 
+            // retrieving reference season's average attendance
+            element['avg_attendance_ref_season'] = $scope.avg_attendances[$scope.referenceSeasonSelect][element['team']];
+            element['avg_attendance_delta'] = element['avg_attendance'] - element['avg_attendance_ref_season']; 
             // calculating utilized attendance capacity
             element['util_capacity_pctg'] = svc.calculatePercentage(element['attendance'], element['capacity']);
             // calculating score state percentages

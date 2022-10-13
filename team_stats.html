@@ -105,7 +105,7 @@
                 </select>   
             </div>
         </div>
-        <div class="form-row mb-3">
+        <div class="{{tableSelect != 'attendance_stats' ? 'form-row mb-3' : 'form-row mb-1'}}">
             <div class="input-group col-4">
                 <select class="form-control" id="time_span_select" data-ng-model="timespanSelect" data-ng-change="changeTimespan()">
                     <option data-ng-option value selected="selected">alle Zeiträume</option>
@@ -137,10 +137,6 @@
                 <input class="form-control" placeholder="Enddatum" moment-picker="ctrl.stringToDate" format="DD.MM.YYYY"
                 data-ng-model="ctrl.toDate" data-ng-model-options="{ updateOn: 'blur' }" change="changeDate()">
             </div>
-                <!-- <select class="form-control mr-1" id="week_day_select" data-ng-model="weekdaySelect">
-                    <option data-ng-option value selected="selected">alle Tage</option>
-                    <option data-ng-option data-ng-repeat="weekday in weekdaysPlayed" value="{{weekday}}">{{svc.germanDays()[weekday]}}</option>
-                </select> -->
             <div class="input-group col-2 pl-0">
                 <div class="input-group-prepend">
                     <span class="input-group-text">von</span>
@@ -158,6 +154,31 @@
                 </select>
             </div>
         </div>
+
+        <div data-ng-if="tableSelect == 'attendance_stats'" class="form-row mb-3">
+            <div class="input-group col-6">
+                <div class="input-group-prepend w-30">
+                    <label class="input-group-text w-100 justify-content-center">Wochentag:</label>
+                </div>
+                <select class="form-control" id="week_day_select" data-ng-model="$parent.weekdaySelect">
+                    <option data-ng-option value selected="selected">alle Tage</option>
+                    <option data-ng-option data-ng-repeat="weekday in weekdaysPlayed" value="{{weekday}}">{{svc.germanDays()[weekday]}}</option>
+                </select>
+            </div>
+            <div class="input-group col-6 pl-0">
+                <div class="input-group-prepend w-30">
+                    <label class="input-group-text w-100 justify-content-center">Vergleichssaison:</label>
+                </div>
+                <select class="form-control mr-1" id="reference_season_select" data-ng-model="$parent.referenceSeasonSelect">
+                    <option data-ng-if="season != 2021" data-ng-option value="2021">2021/22</option>
+                    <option data-ng-if="season != 2019" data-ng-option value="2019">2019/20</option>
+                    <option data-ng-if="season != 2018" data-ng-option value="2018">2018/19</option>
+                    <option data-ng-if="season != 2017" data-ng-option value="2017">2017/18</option>
+                    <option data-ng-if="season != 2016" data-ng-option value="2016">2016/17</option>
+                </select>
+            </div>
+        </div>
+
     </form>
 
     <table id="standings" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'standings'">
@@ -958,12 +979,12 @@
         <tbody>
             <tr class="{{season == 2020 && seasonTypeSelect == 'MSC' && (stat.team === 'SWW' || stat.team == 'EBB') ? 'table-danger' : ''}}" data-ng-repeat="stat in filtered_team_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
                 <td class="w-03 text-right">{{ $index + 1 }}</td>
-                <td class="w-25"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
-                <td class="w-12 text-right">{{ stat.games_played }}</td>
-                <td class="w-12 text-right">{{ stat.attendance }}</td>
-                <td class="w-12 text-right">{{ stat.avg_attendance.toFixed(0) }}</td>
+                <td class="w-17"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
+                <td class="w-08 text-right">{{ stat.games_played }}</td>
+                <td class="w-16 text-right">{{ stat.attendance }}</td>
+                <td class="w-16 text-right">{{ stat.avg_attendance.toFixed(0) }}</td>
                 <td class="w-12 text-right">{{ stat.util_capacity_pctg.toFixed(1) }} %</td>
-                <td class="w-12 text-right">{{ homeAwaySelect == 'home' ? stat.avg_attendance_last_season : ''}}</td>
+                <td class="w-16 text-right">{{ homeAwaySelect == 'home' ? stat.avg_attendance_ref_season : ''}}</td>
                 <td class="w-12 text-right">{{ homeAwaySelect == 'home' ? stat.avg_attendance_delta.toFixed(0) : '' }}</td>
             </tr>
         </tbody>

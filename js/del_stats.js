@@ -247,6 +247,7 @@ app.factory('svc', function() {
                 'capacity', 'sl_g', 'lf_g', 'rg_g', 'bl_g', 'sl_g_a', 'lf_g_a', 'rg_g_a', 'bl_g_a',
                 'tied', 'leading', 'trailing', 'time_played',
                 'shots_5v5', 'opp_shots_5v5', 'shots_unblocked_5v5', 'opp_shots_unblocked_5v5',
+                'shots_pp', 'shots_unblocked_pp', 'shots_on_goal_pp',
                 'so_rounds', 'so_a', 'so_g', 'opp_so_a', 'opp_so_g', 'hit_post', 'opp_hit_post',
                 'pp_5v4', 'ppg_5v4', 'pp_5v3', 'ppg_5v3', 'pp_4v3', 'ppg_4v3',
                 'opp_pp_5v4', 'opp_ppg_5v4', 'opp_pp_5v3', 'opp_ppg_5v3', 'opp_pp_4v3', 'opp_ppg_4v3',
@@ -350,6 +351,13 @@ app.factory('svc', function() {
         calculatePer60: function(value, toi_seconds) {
             if (toi_seconds) {
                 return value / (toi_seconds / 60) * 60;
+            } else {
+                return 0;
+            }
+        },
+        calculatePer2Minutes: function(value, toi_seconds) {
+            if (toi_seconds) {
+                return (value / toi_seconds) * 120;
             } else {
                 return 0;
             }

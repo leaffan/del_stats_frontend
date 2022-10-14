@@ -36,6 +36,7 @@
                     <option data-ng-option value="goals_by_period">Tore pro Drittel</option>
                     <option data-ng-option value="goal_stats">Torstatistiken</option>
                     <option data-ng-option value="shot_stats">Schussstatistiken</option>
+                    <option data-ng-option value="shot_stats_power_play">Schussstatistiken (Überzahl)</option>
                     <option data-ng-option value="shot_save_rates">Schuss- und Fangquoten</option>
                     <option data-ng-option value="shot_save_rates_5v5">Schuss- und Fangquoten (5-gegen-5)</option>
                     <option data-ng-option value="shot_shares">Schussanteile</option>
@@ -899,6 +900,39 @@
                 <td class="w-07 text-right">{{ stat.opp_shots_missed }}</td>
                 <td class="w-07 text-right">{{ stat.opp_shots_blocked }}</td>
                 <td class="w-07 text-right">{{ stat.opp_hit_post }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table id="shot_stats_power_play" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'shot_stats_power_play'">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col" class="text-center"><span class="rank">#</span></th>
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                    <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
+                        <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
+                        <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
+                        <span data-ng-show="$parent.sortConfig['sortKey'] == col.data_key && $parent.sortConfig['sortDescending']" class="fa fa-caret-down"></span>
+                        <span data-ng-show="$parent.sortConfig['sortKey'] == col.data_key && !$parent.sortConfig['sortDescending']" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="{{season == 2020 && seasonTypeSelect == 'MSC' && (stat.team === 'SWW' || stat.team == 'EBB') ? 'table-danger' : ''}}" data-ng-repeat="stat in filtered_team_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
+                <td class="w-03 text-right">{{ $index + 1 }}</td>
+                <td class="w-12"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
+                <td class="w-05 text-right">{{ stat.games_played }}</td>
+                <td class="w-08 text-right">{{ stat.pp_pctg.toFixed(2) }} %</td>
+                <td class="w-08 text-right">{{ svc.formatTime(stat.pp_time) }}</td>
+                <td class="w-07 text-right">{{ stat.shots_pp }}</td>
+                <td class="w-09 text-right">{{ stat.shots_pp_2min.toFixed(2) }}</td>
+                <td class="w-07 text-right">{{ stat.shots_unblocked_pp }}</td>
+                <td class="w-09 text-right">{{ stat.shots_unblocked_pp_2min.toFixed(2) }}</td>
+                <td class="w-07 text-right">{{ stat.shots_on_goal_pp }}</td>
+                <td class="w-09 text-right">{{ stat.shots_on_goal_pp_2min.toFixed(2) }}</td>
+                <td class="w-07 text-right">{{ stat.pp_goals }}</td>
+                <td class="w-09 text-right">{{ stat.shot_pctg_pp.toFixed(2) }} %</td>
             </tr>
         </tbody>
     </table>

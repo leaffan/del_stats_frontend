@@ -307,6 +307,11 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
             element['opp_corsi_for_pctg'] = svc.calculatePercentage(element['opp_shots'], element['shots'] + element['opp_shots']);
             // calculating power play percentage
             element['pp_pctg'] = svc.calculatePercentage(element['pp_goals'], element['pp_opps']);
+            // calculating shots per 2 minutes of power play time on ice
+            element['shots_pp_2min'] = svc.calculatePer2Minutes(element['shots_pp'], element['pp_time']);
+            element['shots_unblocked_pp_2min'] = svc.calculatePer2Minutes(element['shots_unblocked_pp'], element['pp_time']);
+            element['shots_on_goal_pp_2min'] = svc.calculatePer2Minutes(element['shots_on_goal_pp'], element['pp_time']);
+            element['shot_pctg_pp'] = svc.calculatePercentage(element['pp_goals'], element['shots_on_goal_pp']);
             // calculating penalty killing percentage
             element['pk_pctg'] = 100 - svc.calculatePercentage(element['opp_pp_goals'], element['sh_opps']);
             // calculating special teams goal differential and combined special team percentages

@@ -165,6 +165,20 @@
         {"data_key": "opp_shots_blocked", "col_header": "BSA", "expl_de": "Aktiv geblockte Schüsse", "expl_en": "Blocked Shots Against"},
         {"data_key": "opp_hit_post", "col_header": "PT/CBA", "expl_de": "Gegnerische Schüsse an Pfosten oder Latte", "expl_en": "Shots Hitting Post or Crossbar Against"}
     ],
+    "shot_stats_power_play": [
+        {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
+        {"data_key": "games_played", "col_header": "GP", "expl_de": "Absolvierte Spiele", "expl_en": "Games Played"},
+        {"data_key": "pp_pctg", "col_header": "PP%", "expl_de": "Überzahlquote", "expl_en": "Powerplay Percentage"},
+        {"data_key": "pp_time", "col_header": "PP Time", "expl_de": "Zeit in Überzahl", "expl_en": "Powerplay Time"},
+        {"data_key": "shots_pp", "col_header": "PP SH", "expl_de": "Schüsse in Überzahl", "expl_en": "Powerplay Shots"},
+        {"data_key": "shots_pp_2min", "col_header": "PP SH/2M", "expl_de": "Schüsse pro 2 Minuten Überzahlzeit", "expl_en": "Powerplay Shots per 2 Minutes Powerplay Time"},
+        {"data_key": "shots_unblocked_pp", "col_header": "PP USH", "expl_de": "Ungeblockte Schüsse in Überzahl", "expl_en": "Unblocked Powerplay Shots"},
+        {"data_key": "shots_unblocked_pp_2min", "col_header": "PP USH/2M", "expl_de": "Ungeblockte Schüsse pro 2 Minuten Überzahlzeit", "expl_en": "Unblocked Powerplay Shots per 2 Minutes Powerplay Time"},
+        {"data_key": "shots_on_goal_pp", "col_header": "PP SOG", "expl_de": "Torschüsse in Überzahl", "expl_en": "Powerplay Shots on Goal"},
+        {"data_key": "shots_on_goal_pp_2min", "col_header": "PP SOG/2M", "expl_de": "Torschüsse pro 2 Minuten Überzahlzeit", "expl_en": "Powerplay Shots per 2 Minutes Powerplay Time"},
+        {"data_key": "pp_goals", "col_header": "PPG", "expl_de": "Überzahltore", "expl_en": "Powerplay Goals"},
+        {"data_key": "shot_pctg_pp", "col_header": "PP SH%", "expl_de": "Schussquote", "expl_en": "Powerplay Shooting Percentage"}
+    ],
     "additional_stats": [
         {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
         {"data_key": "games_played", "col_header": "GP", "expl_de": "Absolvierte Spiele", "expl_en": "Games Played"},

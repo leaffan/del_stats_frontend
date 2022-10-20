@@ -242,7 +242,7 @@ app.factory('svc', function() {
                 'faceoffs_won', 'faceoffs_lost', 'faceoffs', 'sl_sh', 'lf_sh', 'rg_sh',
                 'bl_sh', 'sl_og', 'lf_og', 'rg_og', 'bl_og', 'sl_sh_a', 'lf_sh_a',
                 'rg_sh_a', 'bl_sh_a', 'sl_og_a', 'lf_og_a', 'rg_og_a', 'bl_og_a',
-                'attendance', 'penalty_2', 'penalty_5', 'penalty_10', 'penalty_20',
+                'attendance', 'penalty_2', 'penalty_5', 'penalty_10', 'penalty_20', 'penalty_25',
                 'shots_on_goal_5v5', 'goals_5v5', 'opp_shots_on_goal_5v5', 'opp_goals_5v5',
                 'capacity', 'sl_g', 'lf_g', 'rg_g', 'bl_g', 'sl_g_a', 'lf_g_a', 'rg_g_a', 'bl_g_a',
                 'tied', 'leading', 'trailing', 'time_played',

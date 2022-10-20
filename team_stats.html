@@ -1041,14 +1041,16 @@
         <tbody>
             <tr class="{{season == 2020 && seasonTypeSelect == 'MSC' && (stat.team === 'SWW' || stat.team == 'EBB') ? 'table-danger' : ''}}" data-ng-repeat="stat in filtered_team_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
                 <td class="w-03 text-right">{{ $index + 1 }}</td>
-                <td class="w-27"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
-                <td class="w-10 text-right">{{ stat.games_played }}</td>
-                <td class="w-10 text-right">{{ stat.pim }}</td>
-                <td class="w-10 text-right">{{ svc.formatTime(stat.pim_per_game * 60) }}</td>
-                <td class="w-10 text-right">{{ stat.penalty_2 }}</td>
-                <td class="w-10 text-right">{{ stat.penalty_5 }}</td>
-                <td class="w-10 text-right">{{ stat.penalty_10 }}</td>
-                <td class="w-10 text-right">{{ stat.penalty_20 }}</td>
+                <td class="w-25"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
+                <td class="w-08 text-right">{{ stat.games_played }}</td>
+                <td class="w-08 text-right">{{ stat.pim }}</td>
+                <td class="w-08 text-right">{{ svc.formatTime(stat.pim_per_game * 60) }}</td>
+                <td class="w-08 text-right">{{ stat.penalty_2 }}</td>
+                <td class="w-08 text-right">{{ stat.penalty_5 }}</td>
+                <td class="w-08 text-right">{{ stat.penalty_10 }}</td>
+                <td class="w-08 text-right">{{ stat.penalty_20 }}</td>
+                <td class="w-08 text-right">{{ stat.penalty_25 }}</td>
+                <td class="w-08 text-right">{{ svc.formatTime(stat.opp_pp_time) }}</td>
             </tr>
         </tbody>
     </table>

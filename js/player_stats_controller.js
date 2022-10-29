@@ -821,7 +821,8 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         'right_side_faceoff_pctg': ['right_side_faceoff_pctg', 'right_side_faceoffs'],
         'nzone_faceoff_pctg': ['nzone_faceoff_pctg', 'nzone_faceoffs'],
         'ozone_faceoff_pctg': ['ozone_faceoff_pctg', 'ozone_faceoffs'],
-        'dzone_faceoff_pctg': ['dzone_faceoff_pctg', 'dzone_faceoffs']
+        'dzone_faceoff_pctg': ['dzone_faceoff_pctg', 'dzone_faceoffs'],
+        'multi_season': ['multi_season', 'length', 'from_date']
     };
 
     $scope.change5v5Check = function() {
@@ -938,8 +939,10 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
     $scope.changeStreakType = function() {
         if ($scope.showStrictStreaks) {
             $scope.streaks = $scope.strict_streaks;
+            $scope.slumps = $scope.strict_slumps;
         } else {
             $scope.streaks = $scope.loose_streaks;
+            $scope.slumps = $scope.loose_slumps;
         }
     };
 
@@ -1008,6 +1011,18 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                 } else {
                     return false;
                 }
+            }
+        } else {
+            return true;
+        }
+    };
+
+    $scope.streakSlumpTeamFilter = function(a) {
+        if ($scope.teamSelect) {
+            if (a.team.includes($scope.teamSelect)) {
+                return true;
+            } else {
+                return false;
             }
         } else {
             return true;

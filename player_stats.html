@@ -1572,17 +1572,33 @@
         </thead>
 
         <tbody>
-            <tr data-ng-repeat="streak in streaks | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:longestStreakFilter | filter:currentStreakFilter | filter:{type: scoringStreakTypeFilter} | filter:{full_name: nameFilter} | filter:teamFilter | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:{iso_country: countryFilter} | filter:{position: positionFilter}">
-                <td class="w-04 text-right">{{ $index + 1 }}</td>
-                <td class="w-21"><a href="#!/player_profile/{{season}}/{{streak.team}}/{{streak.player_id}}">{{ streak.full_name }}</a></td>
-                <td class="w-05"><a href="#!/team_profile/{{season}}/{{ streak.team }}">{{ streak.team }}</a></td>
-                <td class="w-10">{{ streak.type == 'points' ? 'Punkte' : streak.type == 'goals' ? 'Tore' : 'Vorlagen' }}</td>
-                <td class="w-10 text-right">{{ streak.length }}</td>
-                <td class="w-10 text-right">{{ streak.from_date }}</td>
-                <td class="w-10 text-right">{{ streak.to_date }}</td>
-                <td class="w-10 text-right">{{ streak.goals }}</td>
-                <td class="w-10 text-right">{{ streak.assists }}</td>
-                <td class="w-10 text-right">{{ streak.points }}</td>
+            <tr data-ng-repeat="streak in streaks | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:longestStreakFilter | filter:currentStreakFilter | filter:{type: scoringStreakTypeFilter} | filter:{full_name: nameFilter} | filter:streakSlumpTeamFilter | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:{iso_country: countryFilter} | filter:{position: positionFilter}">
+                <td class="w-03 text-right">{{ $index + 1 }}</td>
+                <td class="w-25">
+                    <a data-ng-if="!streak.sub_streaks" href="#!/player_profile/{{season}}/{{streak.display_team}}/{{streak.player_id}}">{{ streak.full_name }}</a>
+                    <span data-ng-if="streak.sub_streaks">
+                        {{ streak.full_name }}
+                        (<span data-ng-repeat="sub in streak.sub_streaks">
+                            <a href="#!/player_profile/{{sub[1]}}/{{sub[0]}}/{{streak.player_id}}">{{sub[1].toString().substr(-2) + '/' + (sub[1] + 1).toString().substr(-2)}}</a>{{$last ? '' : ' | '}}
+                        </span>)
+                    </span>
+                </td>
+                <td class="w-10">
+                    <a data-ng-if="!streak.sub_streaks" href="#!/team_profile/{{season}}/{{streak.display_team}}">{{ streak.display_team }}</a>
+                    <span data-ng-if="streak.sub_streaks">
+                        <span data-ng-repeat="sub in streak.sub_streaks">
+                            <a href="#!/team_profile/{{sub[1]}}/{{sub[0]}}">{{ sub[0] }}</a> {{$last ? '' : ' | '}}
+                        </span>
+                    </span>
+                </td>
+                <td class="w-09">{{ streak.type == 'points' ? 'Punkte' : streak.type == 'goals' ? 'Tore' : 'Vorlagen' }}</td>
+                <td class="w-08 text-right">{{ streak.length }}</td>
+                <td class="w-09 text-right">{{ streak.multi_season ? 'X' : '' }}</td>
+                <td class="w-09 text-right">{{ streak.from_date }}</td>
+                <td class="w-09 text-right">{{ streak.to_date }}</td>
+                <td class="w-06 text-right">{{ streak.goals }}</td>
+                <td class="w-06 text-right">{{ streak.assists }}</td>
+                <td class="w-06 text-right">{{ streak.points }}</td>
             </tr>
         </tbody>
     </table>
@@ -1602,14 +1618,30 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="slump in slumps | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:longestStreakFilter | filter:currentStreakFilter | filter:{type: scoringStreakTypeFilter} | filter:{full_name: nameFilter} | filter:teamFilter | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:{iso_country: countryFilter} | filter:{position: positionFilter}">
+            <tr data-ng-repeat="slump in slumps | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:longestStreakFilter | filter:currentStreakFilter | filter:{type: scoringStreakTypeFilter} | filter:{full_name: nameFilter} | filter:streakSlumpTeamFilter | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:{iso_country: countryFilter} | filter:{position: positionFilter}">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
-                <td class="w-31"><a href="#!/player_profile/{{season}}/{{slump.team}}/{{slump.player_id}}">{{ slump.full_name }}</a></td>
-                <td class="w-05"><a href="#!/team_profile/{{season}}/{{ slump.team }}">{{ slump.team }}</a></td>
-                <td class="w-10">{{ slump.type == 'points' ? 'Punkte' : slump.type == 'goals' ? 'Tore' : 'Vorlagen' }}</td>
-                <td class="w-10 text-right">{{ slump.length }}</td>
-                <td class="w-20 text-right">{{ slump.from_date }}</td>
-                <td class="w-20 text-right">{{ slump.to_date }}</td>
+                <td class="w-32">
+                    <a data-ng-if="!slump.sub_streaks" href="#!/player_profile/{{season}}/{{slump.display_team}}/{{slump.player_id}}">{{ slump.full_name }}</a>
+                    <span data-ng-if="slump.sub_streaks">
+                        {{ slump.full_name }}
+                        (<span data-ng-repeat="sub in slump.sub_streaks">
+                            <a href="#!/player_profile/{{sub[1]}}/{{sub[0]}}/{{slump.player_id}}">{{sub[1].toString().substr(-2) + '/' + (sub[1] + 1).toString().substr(-2)}}</a>{{$last ? '' : ' | '}}
+                        </span>)
+                    </span>
+                </td>
+                <td class="w-19">
+                    <a data-ng-if="!slump.sub_streaks" href="#!/team_profile/{{season}}/{{slump.display_team}}">{{ slump.display_team }}</a>
+                    <span data-ng-if="slump.sub_streaks">
+                        <span data-ng-repeat="sub in slump.sub_streaks">
+                            <a href="#!/team_profile/{{sub[1]}}/{{sub[0]}}">{{ sub[0] }}</a> {{$last ? '' : ' | '}}
+                        </span>
+                    </span>
+                </td>
+                <td class="w-09">{{ slump.type == 'points' ? 'Punkte' : slump.type == 'goals' ? 'Tore' : 'Vorlagen' }}</td>
+                <td class="w-09 text-right">{{ slump.length }}</td>
+                <td class="w-09 text-right">{{ slump.multi_season ? 'X' : '' }}</td>
+                <td class="w-09 text-right">{{ slump.from_date }}</td>
+                <td class="w-09 text-right">{{ slump.to_date }}</td>
             </tr>
         </tbody>
     </table>

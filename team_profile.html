@@ -1,6 +1,10 @@
 <div class="container" data-ng-app="delStatsApp">
     <div class="alert alert-info main-bg shadow">
-        <div class="inline-headers">
+        <a href="#!/team_stats/{{::season}}"><b>Teamstatistiken</b></a> | <a href="#!/del_stats/{{::season}}"><b>Spielerstatistiken</b></a> | <a href="#!"><b>Startseite</b></a>
+    </div>
+
+    <div class="alert alert-info main-bg shadow">
+        <div class="inline-headers mb-2">
             <div class="d-none d-md-block">
                 <span><img class="img-fluid" src="https://www.del.org/assets/img/teams/team_{{::current_team}}.png" alt="Team logo" width="40" height="40"/></span>
                     <h2 class="ml-3">{{ ::team_full_name_lookup[current_team] }} {{ ::season }}/{{ ::svc.parseFloat(season) + 1 - 2000 }}</h2>
@@ -10,12 +14,29 @@
                 <b>{{ ::season }}/{{ ::svc.parseFloat(season) + 1 - 2000 }}</b>
             </div>
         </div>
-    </div>
+    <!-- </div> -->
         
-    <div class="alert alert-info main-bg shadow">
-        <a href="#!/team_stats/{{::season}}"><b>Teamstatistiken</b></a> | <a href="#!/del_stats/{{::season}}"><b>Spielerstatistiken</b></a> | <a href="#!"><b>Startseite</b></a>
+    <!-- <div class="alert alert-info main-bg mb-2 shadow"> -->
+        <!-- <div class="p-0" style="border: 1px solid red;"> -->
+            <ul class="list-group list-group-horizontal">
+                <li class="col-6 list-group-item border-0 p-0 bg-transparent text-left">
+                    <!-- <a data-ng-if="season - 1 >= 2017 && current_team_data.valid_from <= season - 1 && current_team_data.valid_to <= season - 1" data-ng-href="#!/team_profile/{{season - 1}}/{{::current_team}}"> -->
+                    <a data-ng-if="(season - 1) >= 2018 && current_team_data.valid_from <= (season - 1) && current_team_data.valid_to >= (season - 1)" data-ng-href="#!/team_profile/{{season - 1}}/{{::current_team}}">
+                        <i class="fas fa-arrow-left" aria-hidden="true" style="vertical-align: center;"></i>
+                        <b>Saison {{ (season - 1) + '/' + season }}</b>
+                    </a>
+                </li>
+                <li class="col-6 list-group-item border-0 p-0 bg-transparent text-right">
+                    <a data-ng-if="(svc.parseFloat(season)) + 1 <= 2022 && current_team_data.valid_from <= (svc.parseFloat(season) + 1) && current_team_data.valid_to >= (svc.parseFloat(season) + 1)" data-ng-href="#!/team_profile/{{svc.parseFloat(season) + 1}}/{{::current_team}}">
+                        <b>Saison {{ svc.parseFloat(season) + 1 + '/' + (svc.parseFloat(season) + 2) }}</b>
+                        <i class="fas fa-arrow-right" aria-hidden="true" style="vertical-align: center;"></i>
+                    </a>
+                </li>
+            </ul>
+        <!-- </div> -->
     </div>
     
+
     <div class="alert alert-info main-bg shadow">
         <span data-ng-click="toggle=!toggle"><b>Abkürzungsverzeichnis&#32;&#32;<span data-ng-show="toggle" class="fa fa-minus"></span><span data-ng-show="!toggle" class="fa fa-plus"></span></b></span>
             <dl data-ng-show="toggle" class="row mx-2">

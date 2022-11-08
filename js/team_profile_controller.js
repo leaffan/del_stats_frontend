@@ -20,7 +20,7 @@ app.controller('teamProfileController', function($scope, $http, $routeParams, $l
         $scope.game_log = $scope.team_stats.filter(function(value, index, arr) {
             return value['team'] == $scope.current_team;
         });
-        // retrieving special game with shootout games only
+        // retrieving special game log with shootout games only
         $scope.so_game_log = $scope.game_log.filter(game => game.sw == 1 || game.sl == 1);
         // retrieving maximum round played
         $scope.maxRoundPlayed = Math.max.apply(Math, $scope.game_log.map(function(o) { return o.round; })).toString();
@@ -55,6 +55,8 @@ app.controller('teamProfileController', function($scope, $http, $routeParams, $l
         $scope.team_location_lookup = $scope.teams.reduce((o, key) => Object.assign(o, {[key.abbr]: key.location}), {});
         // ...for playoff participation indicator
         $scope.team_playoff_lookup = $scope.teams.reduce((o, key) => Object.assign(o, {[key.abbr]: key.po}), {});
+        // retrieving current team's data
+        $scope.current_team_data = $scope.teams.filter(team => team.abbr == $scope.current_team)[0];
     });
 
     $scope.model = {
@@ -112,7 +114,7 @@ app.controller('teamProfileController', function($scope, $http, $routeParams, $l
 
         // sorting team table by main category points or points per game (dependant on season)
         team_table.sort(function(b, a){
-            if ($scope.season == 2020 || $scope.season == 2021) {
+            if ($scope.season == 2020 || $scope.season == 2021 || $scope.season == 2022) {
                 if (a.pts_per_game == b.pts_per_game)
                 {
                     if (a.gdiff == b.gdiff)

@@ -630,6 +630,8 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
             element['time_on_ice_per_game'] = svc.calculateRate(element['time_on_ice'], element['games_played']);
             element['time_on_ice_pp_per_game'] = svc.calculateRate(element['time_on_ice_pp'], element['games_played']);
             element['time_on_ice_sh_per_game'] = svc.calculateRate(element['time_on_ice_sh'], element['games_played']);
+            element['time_on_ice_special'] = element['time_on_ice_pp'] + element['time_on_ice_sh'];
+            element['time_on_ice_special_per_game'] = svc.calculateRate(element['time_on_ice_special'], element['games_played']);
             element['shifts_per_game'] = svc.calculateRate(element['shifts'], element['games_played']);
             element['game_score_per_game'] = svc.calculateRate(element['game_score'], element['games_played']);
             // calculating goals, assists, points, shots, shots on goal per 60 minutes of time on ice

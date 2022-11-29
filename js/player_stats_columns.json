@@ -59,10 +59,12 @@
         {"data_key": "time_on_ice", "col_header": "TOI", "expl_de": "Eiszeit insgesamt", "expl_en": "Time On Ice"},
         {"data_key": "time_on_ice_pp", "col_header": "TOI PP", "expl_de": "Eiszeit in Überzahl", "expl_en": "Powerplay Time On Ice"},
         {"data_key": "time_on_ice_sh", "col_header": "TOI SH", "expl_de": "Eiszeit in Unterzahl", "expl_en": "Shorthanded Time On Ice"},
+        {"data_key": "time_on_ice_special", "col_header": "TOI ST", "expl_de": "Eiszeit in Über- und Unterzahl", "expl_en": "Special Teams Time On Ice"},
         {"data_key": "shifts", "col_header": "SHF", "expl_de": "Wechsel", "expl_en": "Shifts"},
         {"data_key": "time_on_ice_per_game", "col_header": "TOI/G", "expl_de": "Eiszeit/Spiel", "expl_en": "Time On Ice/Game"},
         {"data_key": "time_on_ice_pp_per_game", "col_header": "TOI PP/G", "expl_de": "Eiszeit in Überzahl/Spiel", "expl_en": "Powerplay Time On Ice/Game"},
         {"data_key": "time_on_ice_sh_per_game", "col_header": "TOI SH/G", "expl_de": "Eiszeit in Unterzahl/Spiel", "expl_en": "Shorthanded Time On Ice/Game"},
+        {"data_key": "time_on_ice_special_per_game", "col_header": "TOI ST/G", "expl_de": "Eiszeit in Über- und Unterzahl/Spiel", "expl_en": "Special Teams Time On Ice/Game"},
         {"data_key": "shifts_per_game", "col_header": "SHF/G", "expl_de": "Wechsel/Spiel", "expl_en": "Shifts/Game"},
         {"data_key": "time_on_ice_per_shift", "col_header": "TOI/SHF", "expl_de": "Eiszeit/Wechsel", "expl_en": "Time On Ice/Shift"}
     ],

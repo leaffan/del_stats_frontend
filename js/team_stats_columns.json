@@ -12,7 +12,8 @@
         {"data_key": "pts_per_game", "col_header": "Pts/G", "expl_de": "Punkquotient", "expl_en": "Punkte pro Spiel"},
         {"data_key": "pt_pctg", "col_header": "Pt%", "expl_de": "Anteil an den maximal erzielbaren Punkten", "expl_en": "Points Percentage"},
         {"data_key": "score", "col_header": "GF", "expl_de": "Erzielte Tore", "expl_en": "Goals For"},
-        {"data_key": "opp_score", "col_header": "GA", "expl_de": "Zugelassene Tore", "expl_en": "Goals Against"}
+        {"data_key": "opp_score", "col_header": "GA", "expl_de": "Zugelassene Tore", "expl_en": "Goals Against"},
+        {"data_key": "streak", "col_header": "STRK", "expl_de": "Laufende Serie", "expl_en": "Current Streak"}
     ],
     "special_team_stats": [
         {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},

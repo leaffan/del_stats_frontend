@@ -199,19 +199,20 @@
         <tbody>
             <tr class="{{season == 2020 && seasonTypeSelect == 'MSC' && (stat.team === 'SWW' || stat.team == 'EBB') ? 'table-danger' : ''}}" data-ng-repeat="stat in filtered_team_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
                 <td class="w-03 text-right">{{ $index + 1 }}</td>
-                <td class="w-20"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
+                <td class="w-19"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
                 <td class="w-07 text-right">{{ stat.games_played }}</td>
-                <td class="w-06 text-right">{{ stat.rw }}</td>
-                <td class="w-06 text-right">{{ stat.ow }}</td>
-                <td class="w-06 text-right">{{ stat.sw }}</td>
-                <td class="w-06 text-right">{{ stat.ol }}</td>
-                <td class="w-06 text-right">{{ stat.sl }}</td>
-                <td class="w-06 text-right">{{ stat.rl }}</td>
+                <td class="w-05 text-right">{{ stat.rw }}</td>
+                <td class="w-05 text-right">{{ stat.ow }}</td>
+                <td class="w-05 text-right">{{ stat.sw }}</td>
+                <td class="w-05 text-right">{{ stat.ol }}</td>
+                <td class="w-05 text-right">{{ stat.sl }}</td>
+                <td class="w-05 text-right">{{ stat.rl }}</td>
                 <td class="w-07 text-right">{{ stat.points }}</td>
                 <td class="w-06 text-right">{{ stat.pts_per_game.toFixed(3) }}</td>
                 <td class="w-07 text-right">{{ stat.pt_pctg.toFixed(2) }} %</td>
                 <td class="w-07 text-right">{{ stat.score }}</td>
                 <td class="w-07 text-right">{{ stat.opp_score }}</td>
+                <td class="w-07 text-center {{ stat.streak_value > 0 ? 'green' : 'red'}}">{{ stat.streak }}</td>
             </tr>
         </tbody>
     </table>
@@ -235,19 +236,20 @@
             <tbody>
                 <tr class="{{season == 2020 && seasonTypeSelect == 'MSC' && (stat.team === 'SWW' || stat.team == 'EBB') ? 'table-danger' : ''}}" data-ng-repeat="stat in filtered_team_stats | filter:{division: divisions[0]} | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
                     <td class="w-03 text-right">{{ $index + 1 }}</td>
-                    <td class="w-20"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
+                    <td class="w-19"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
                     <td class="w-07 text-right">{{ stat.games_played }}</td>
-                    <td class="w-06 text-right">{{ stat.rw }}</td>
-                    <td class="w-06 text-right">{{ stat.ow }}</td>
-                    <td class="w-06 text-right">{{ stat.sw }}</td>
-                    <td class="w-06 text-right">{{ stat.ol }}</td>
-                    <td class="w-06 text-right">{{ stat.sl }}</td>
-                    <td class="w-06 text-right">{{ stat.rl }}</td>
+                    <td class="w-05 text-right">{{ stat.rw }}</td>
+                    <td class="w-05 text-right">{{ stat.ow }}</td>
+                    <td class="w-05 text-right">{{ stat.sw }}</td>
+                    <td class="w-05 text-right">{{ stat.ol }}</td>
+                    <td class="w-05 text-right">{{ stat.sl }}</td>
+                    <td class="w-05 text-right">{{ stat.rl }}</td>
                     <td class="w-07 text-right">{{ stat.points }}</td>
                     <td class="w-06 text-right">{{ stat.pts_per_game.toFixed(3) }}</td>
                     <td class="w-07 text-right">{{ stat.pt_pctg.toFixed(2) }} %</td>
                     <td class="w-07 text-right">{{ stat.score }}</td>
                     <td class="w-07 text-right">{{ stat.opp_score }}</td>
+                    <td class="w-07 text-center {{ stat.streak_value > 0 ? 'green' : 'red'}}">{{ stat.streak }}</td>
                 </tr>
             </tbody>
         </table>
@@ -270,19 +272,20 @@
             <tbody>
                 <tr class="{{season == 2020 && seasonTypeSelect == 'MSC' && (stat.team === 'SWW' || stat.team == 'EBB') ? 'table-danger' : ''}}" data-ng-repeat="stat in filtered_team_stats | filter:{division: divisions[1]} | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
                     <td class="w-03 text-right">{{ $index + 1 }}</td>
-                    <td class="w-20"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
+                    <td class="w-19"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
                     <td class="w-07 text-right">{{ stat.games_played }}</td>
-                    <td class="w-06 text-right">{{ stat.rw }}</td>
-                    <td class="w-06 text-right">{{ stat.ow }}</td>
-                    <td class="w-06 text-right">{{ stat.sw }}</td>
-                    <td class="w-06 text-right">{{ stat.ol }}</td>
-                    <td class="w-06 text-right">{{ stat.sl }}</td>
-                    <td class="w-06 text-right">{{ stat.rl }}</td>
+                    <td class="w-05 text-right">{{ stat.rw }}</td>
+                    <td class="w-05 text-right">{{ stat.ow }}</td>
+                    <td class="w-05 text-right">{{ stat.sw }}</td>
+                    <td class="w-05 text-right">{{ stat.ol }}</td>
+                    <td class="w-05 text-right">{{ stat.sl }}</td>
+                    <td class="w-05 text-right">{{ stat.rl }}</td>
                     <td class="w-07 text-right">{{ stat.points }}</td>
                     <td class="w-06 text-right">{{ stat.pts_per_game.toFixed(3) }}</td>
                     <td class="w-07 text-right">{{ stat.pt_pctg.toFixed(2) }} %</td>
                     <td class="w-07 text-right">{{ stat.score }}</td>
                     <td class="w-07 text-right">{{ stat.opp_score }}</td>
+                    <td class="w-07 text-center {{ stat.streak_value > 0 ? 'green' : 'red'}}">{{ stat.streak }}</td>
                 </tr>
             </tbody>
         </table>

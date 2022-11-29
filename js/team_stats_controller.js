@@ -76,12 +76,13 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         $scope.roundsPlayed = [...new Set($scope.team_stats.map(item => svc.parseInt(item.round)))].sort(function(a, b) {return a - b;});
         // retrieving maximum round played and setting round to selection to it
         $scope.toRoundSelect = Math.max.apply(Math, $scope.roundsPlayed).toString();
-        $scope.filtered_team_stats = $scope.filterStats($scope.team_stats);
+        // $scope.filtered_team_stats = $scope.filterStats($scope.team_stats);
     });
 
     // TODO: move to out-of-controller location
     $scope.filterStats = function (stats) {
         filtered_team_stats = {};
+        streaks = {};
         if ($scope.team_stats === undefined)
             return filtered_team_stats;
         $scope.teams.forEach(team => {
@@ -112,6 +113,10 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
                 });
                 // preparing set to hold U23 player ids
                 filtered_team_stats[abbr]['u23_plrs'] = new Set()
+                // preparing object to hold streaks
+                streaks[abbr] = {};
+                streaks[abbr]['type'] = '';
+                streaks[abbr]['length'] = 0;
             }
         });
 
@@ -218,7 +223,17 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
                     }
                 })
                 // registering U23 player ids from current game in corresponding set
-                element['u23_plrs'].forEach(item => filtered_team_stats[team]['u23_plrs'].add(item))
+                element['u23_plrs'].forEach(item => filtered_team_stats[team]['u23_plrs'].add(item));
+
+                if (element['w'] && streaks[team]['type'] != 'w') {
+                    streaks[team]['type'] = 'w';
+                    streaks[team]['length'] = 0;
+                }
+                if (element['l'] && streaks[team]['type'] != 'l') {
+                    streaks[team]['type'] = 'l';
+                    streaks[team]['length'] = 0;
+                }
+                streaks[team]['length'] += 1;
             }
         });
         filtered_team_stats = Object.values(filtered_team_stats);
@@ -359,6 +374,10 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
             element['opp_ev_goals_per_game'] = svc.calculateRate(element['opp_ev_goals'], element['games_played']);
             element['pp_goals_per_game'] = svc.calculateRate(element['pp_goals'], element['games_played']);
             element['opp_pp_goals_per_game'] = svc.calculateRate(element['opp_pp_goals'], element['games_played']);
+            element['streak_type'] = streaks[element['team']]['type'];
+            element['streak_length'] = streaks[element['team']]['length'];
+            element['streak_value'] = element['streak_type'] == 'l' ? (-1) * element['streak_length'] : element['streak_length'];
+            element['streak'] = element['streak_type'].toUpperCase() + element['streak_length'];
         });
         
         return filtered_team_stats;
@@ -399,6 +418,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         "pt_pctg": ['pt_pctg', 'points', 'score_diff', 'score'],
         "pts_per_game": ['pts_per_game', 'pt_pctg', 'points', 'score_diff', 'score'],
         "games_played": ['games_played', '-team'],
+        "streak": ['streak_value'],
         // goal stats
         "goals_diff": ['goals_diff', 'goals'],
         "goals_diff_1": ['goals_diff_1', 'goals_1'],

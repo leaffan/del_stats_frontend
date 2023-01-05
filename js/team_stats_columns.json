@@ -104,6 +104,16 @@
         {"data_key": "opp_pp_goals", "col_header": "GA PP", "expl_de": "Gegentore in Unterzahl", "expl_en": "Powerplay Goals Against"},
         {"data_key": "opp_pp_goals_per_game", "col_header": "GA PP/G", "expl_de": "Gegentore in Unterzahl pro Spiel", "expl_en": "Powerplay Goals Against per Game"}
     ],
+    "goal_categories": [
+        {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
+        {"data_key": "games_played", "col_header": "GP", "expl_de": "Absolvierte Spiele", "expl_en": "Games Played"},
+        {"data_key": "goals", "col_header": "GF", "expl_de": "Tore", "expl_en": "Goals For"},
+        {"data_key": "opp_goals", "col_header": "GA", "expl_de": "Gegentore", "expl_en": "Goals Against"},
+        {"data_key": "en_goals", "col_header": "ENG", "expl_de": "Treffer ins leere Tor", "expl_en": "Empty Net Goals"},
+        {"data_key": "opp_en_goals", "col_header": "ENGA", "expl_de": "Gegentreffer ins leere Tor", "expl_en": "Empty Net Goals Against"},
+        {"data_key": "ea_goals", "col_header": "EAG", "expl_de": "Treffer bei eigenem leeren Tor mit zusätzlichem Feldspieler", "expl_en": "Extra Attacker Goals"},
+        {"data_key": "opp_ea_goals", "col_header": "EAGA", "expl_de": "Gegentreffer bei gegnerischem leeren Tor mit zusätzlichem gegnerischen Feldspieler", "expl_en": "Extra Attacker Goals Against"}
+    ],
     "shot_save_rates": [
         {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
         {"data_key": "games_played", "col_header": "GP", "expl_de": "Absolvierte Spiele", "expl_en": "Games Played"},

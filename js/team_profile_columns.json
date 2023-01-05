@@ -181,5 +181,14 @@
         {"data_key": "so_sv_pctg", "col_header": "ShoSv%", "expl_de": "Fangqoute im Penaltyschießen", "expl_en": "Shootout Save Percentage"},
         {"data_key": "sw", "col_header": "SW", "expl_de": "Siege im Penaltyschießen", "expl_en": "Shootout Wins"},
         {"data_key": "sl", "col_header": "SL", "expl_de": "Niederlagen im Penaltyschießen", "expl_en": "Shootout Losses"}
+    ],
+    "goal_categories": [
+        {"data_key": "date", "col_header": "Datum", "expl_de": null, "expl_en": null},
+        {"data_key": "round", "col_header": "Spieltag", "expl_de": null, "expl_en": null},
+        {"data_key": "opp_team", "col_header": "Gegner", "expl_de": null, "expl_en": null},
+        {"data_key": "en_goals", "col_header": "ENG", "expl_de": "Treffer ins leere Tor", "expl_en": "Empty Net Goals"},
+        {"data_key": "opp_en_goals", "col_header": "ENGA", "expl_de": "Gegentreffer ins leere Tor", "expl_en": "Empty Net Goals Against"},
+        {"data_key": "ea_goals", "col_header": "EAG", "expl_de": "Treffer bei eigenem leeren Tor mit zusätzlichem Feldspieler", "expl_en": "Extra Attacker Goals"},
+        {"data_key": "opp_ea_goals", "col_header": "EAGA", "expl_de": "Gegentreffer bei gegnerischem leeren Tor mit zusätzlichem gegnerischen Feldspieler", "expl_en": "Extra Attacker Goals Against"}
     ]
 }

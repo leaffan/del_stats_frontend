@@ -408,7 +408,8 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         'power_play_details': 'pp_5v4_pctg',
         'penalty_kill_details': 'pk_4v5_pctg',
         'special_team_times': 'pp_time_per_pp_goal',
-        'u23_stats': 'u23_toi_per_game'
+        'u23_stats': 'u23_toi_per_game',
+        'goal_categories': 'goals'
     }
 
     // hierarchical sorting criteria for specified sort key
@@ -457,7 +458,8 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         'pp_5v4_pctg': ['pp_5v4_pctg', 'pp_goals'],
         'pk_4v5_pctg': ['pk_4v5_pctg', '-opp_pp_goals'],
         'd_points': ['d_points', '-games_played'],
-        'u23_toi_per_game': ['u23_toi_per_game', 'u23_gp']
+        'u23_toi_per_game': ['u23_toi_per_game', 'u23_gp'],
+        'goals': ['goals', '-opp_goals']
     };
 
     // colums that by default are sorted in ascending order

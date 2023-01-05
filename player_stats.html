@@ -439,17 +439,18 @@
                     <a data-ng-if="stat.single_team" href="#!/team_profile/{{season}}/{{ stat.team }}">{{ stat.team }}</a>
                     <span data-ng-if="!stat.single_team">{{ stat.team }}</span>
                 </td>
-                <td class="w-06 text-right">{{ stat.games_played }}</td>
+                <td class="w-05 text-right">{{ stat.games_played }}</td>
                 <td class="w-06 text-right">{{ stat.goals }}</td>
-                <td class="w-06 text-right">{{ stat.gw_goals }}</td>
-                <td class="w-06 text-right">{{ stat.first_goals }}</td>
-                <td class="w-06 text-right">{{ stat.go_ahead_g }}</td>
-                <td class="w-06 text-right">{{ stat.tying_g }}</td>
-                <td class="w-06 text-right">{{ stat.clutch_g }}</td>
+                <td class="w-05 text-right">{{ stat.gw_goals }}</td>
+                <td class="w-05 text-right">{{ stat.first_goals }}</td>
+                <td class="w-05 text-right">{{ stat.go_ahead_g }}</td>
+                <td class="w-05 text-right">{{ stat.tying_g }}</td>
+                <td class="w-05 text-right">{{ stat.clutch_g }}</td>
                 <td class="w-06 text-right">{{ stat.blowout_g }}</td>
                 <td class="w-06 text-right">{{ stat.w_winning_g }}</td>
                 <td class="w-06 text-right">{{ stat.w_losing_g }}</td>
                 <td class="w-06 text-right">{{ stat.empty_net_goals }}</td>
+                <td class="w-06 text-right">{{ stat.extra_attacker_goals }}</td>
                 <td class="w-06 text-right">{{ stat.so_gw_goals }}</td>
             </tr>
         </tbody>

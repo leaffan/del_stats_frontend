@@ -282,7 +282,7 @@ app.factory('svc', function() {
                 'right_side_faceoffs', 'right_side_faceoffs_won', 'right_side_faceoffs_lost',
                 'so_games_played', 'so_attempts', 'so_goals', 'so_gw_goals',
                 'go_ahead_g', 'tying_g', 'clutch_g', 'blowout_g', 'w_winning_g', 'w_losing_g', 'hit_post',
-                'empty_net_goals'
+                'empty_net_goals', 'extra_attacker_goals'
             ];
         },
         player_float_stats_to_aggregate: function() {

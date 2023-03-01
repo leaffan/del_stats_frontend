@@ -43,6 +43,11 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         $scope.avg_attendances = res.data;
     });
 
+    // retrieving attendance data from external file
+    $http.get('./data/clinched_data.json').then(function (res) {
+        $scope.clinched_data = res.data;
+    });
+
     // retrieving teams
     $http.get('./js/teams.json').then(function (res) {
         // only retaining teams that are valid for current season

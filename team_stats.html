@@ -199,8 +199,21 @@
         </thead>
         <tbody>
             <tr class="{{season == 2020 && seasonTypeSelect == 'MSC' && (stat.team === 'SWW' || stat.team == 'EBB') ? 'table-danger' : ''}}" data-ng-repeat="stat in filtered_team_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
+
                 <td class="w-03 text-right">{{ $index + 1 }}</td>
-                <td class="w-19"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
+                <td class="w-19">
+                    <a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a>
+                    {{
+                        season == 2022 ?
+                            (
+                                clinched_data[stat.team]['clinched_top_spot'] ? 'M' :
+                                clinched_data[stat.team]['clinched_quarters'] ? 'V' :
+                                clinched_data[stat.team]['clinched_playoffs'] ? 'P' :
+                                clinched_data[stat.team]['relegated'] ? 'A' :
+                                clinched_data[stat.team]['no_playoffs'] ? 'X' : ''
+                            ) : '' 
+                    }}
+                </td>
                 <td class="w-07 text-right">{{ stat.games_played }}</td>
                 <td class="w-05 text-right">{{ stat.rw }}</td>
                 <td class="w-05 text-right">{{ stat.ow }}</td>

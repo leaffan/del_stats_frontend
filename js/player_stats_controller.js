@@ -745,6 +745,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         'basic_stats_5v5': 'points_5v5',
         'on_goal_shot_zones': 'shots_on_goal',
         'goal_categories': 'gw_goals',
+        'goals_per_period': 'goals',
         'shot_zones': 'shots',
         'per_game_stats': 'points_per_game',
         'time_on_ice_shift_stats': 'time_on_ice',
@@ -1023,6 +1024,20 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         if ($scope.teamSelect) {
             if (a.team.includes($scope.teamSelect)) {
                 return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    };
+
+    $scope.countryFilter = function(a) {
+        if ($scope.countrySelect) {
+            if ($scope.countrySelect == 'non_de' && a.iso_country != 'de') {
+                return true
+            } else if ($scope.countrySelect == a.iso_country) {
+                return true
             } else {
                 return false;
             }

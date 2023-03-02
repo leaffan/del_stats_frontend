@@ -247,6 +247,16 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                 svc.player_float_stats_to_aggregate().forEach(category => {
                     $scope.prep_player_games[key][category] = 0.0;
                 });
+                $scope.prep_player_games[key]['three_goal_games'] = 0;
+                $scope.prep_player_games[key]['two_goal_games'] = 0;
+                $scope.prep_player_games[key]['goal_games'] = 0;
+                $scope.prep_player_games[key]['multi_point_games'] = 0;
+                $scope.prep_player_games[key]['point_games'] = 0;
+                $scope.prep_player_games[key]['penalty_games'] = 0;
+                $scope.prep_player_games[key]['toi_25_min'] = 0;
+                $scope.prep_player_games[key]['toi_20_min'] = 0;
+                $scope.prep_player_games[key]['game_score_plus_1'] = 0;
+                $scope.prep_player_games[key]['game_score_minus_1'] = 0;
             };
         });
         // deactivated since initial filtering will be triggered after change of maximum round played
@@ -536,6 +546,16 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                 svc.player_float_stats_to_aggregate().forEach(category => {
                     multiTeamPlayerStats[category] = 0.0;
                 });
+                multiTeamPlayerStats['three_goal_games'] = 0;
+                multiTeamPlayerStats['two_goal_games'] = 0;
+                multiTeamPlayerStats['goal_games'] = 0;
+                multiTeamPlayerStats['multi_point_games'] = 0;
+                multiTeamPlayerStats['point_games'] = 0;
+                multiTeamPlayerStats['penalty_games'] = 0;
+                multiTeamPlayerStats['toi_25_min'] = 0;
+                multiTeamPlayerStats['toi_20_min'] = 0;
+                multiTeamPlayerStats['game_score_plus_1'] = 0;
+                multiTeamPlayerStats['game_score_minus_1'] = 0;
             }
             // aggregating numeric attributes
             teams.forEach(team => {
@@ -551,7 +571,17 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                     svc.player_float_stats_to_aggregate().forEach(category => {
                         multiTeamPlayerStats[category] += plr_team_stats[category];
                     });
-                }
+                    multiTeamPlayerStats['three_goal_games'] += plr_team_stats['three_goal_games'];
+                    multiTeamPlayerStats['two_goal_games'] += plr_team_stats['two_goal_games'];
+                    multiTeamPlayerStats['goal_games'] += plr_team_stats['goal_games'];
+                    multiTeamPlayerStats['multi_point_games'] += plr_team_stats['multi_point_games'];
+                    multiTeamPlayerStats['point_games'] += plr_team_stats['point_games'];
+                    multiTeamPlayerStats['penalty_games'] += plr_team_stats['penalty_games'];
+                    multiTeamPlayerStats['toi_25_min'] += plr_team_stats['toi_25_min'];
+                    multiTeamPlayerStats['toi_20_min'] += plr_team_stats['toi_20_min'];
+                    multiTeamPlayerStats['game_score_plus_1'] += plr_team_stats['game_score_plus_1'];
+                    multiTeamPlayerStats['game_score_minus_1'] += plr_team_stats['game_score_minus_1'];
+                    }
             });
             // finally setting non-numeric attributes
             multiTeamPlayerStats['team'] = teams.size + " Tms";
@@ -593,6 +623,26 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                 $scope.svc.player_float_stats_to_aggregate().forEach(category => {
                     filtered_player_stats[key][category] += parseFloat(element[category]);
                 });
+                if (element['goals'] >= 3)
+                    filtered_player_stats[key]['three_goal_games'] += 1;
+                if (element['goals'] >= 2)
+                    filtered_player_stats[key]['two_goal_games'] += 1;
+                if (element['goals'] >= 1)
+                    filtered_player_stats[key]['goal_games'] += 1;
+                if (element['points'] >= 2)
+                    filtered_player_stats[key]['multi_point_games'] += 1;
+                if (element['points'] >= 1)
+                    filtered_player_stats[key]['point_games'] += 1;
+                if (element['pim_from_events'] > 0)
+                    filtered_player_stats[key]['penalty_games'] += 1;
+                if (element['time_on_ice'] >= 1500)
+                    filtered_player_stats[key]['toi_25_min'] += 1;
+                if (element['time_on_ice'] >= 1200)
+                    filtered_player_stats[key]['toi_20_min'] += 1;
+                if (element['game_score'] >= 1.)
+                    filtered_player_stats[key]['game_score_plus_1'] += 1;
+                if (element['game_score'] <= -1.)
+                    filtered_player_stats[key]['game_score_minus_1'] += 1;
                 // registering player's team
                 if (!player_teams[plr_id]) {
                     player_teams[plr_id] = new Set();
@@ -773,7 +823,8 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         'goalie_shootout_stats': 'so_sv_pctg',
         'game_score_stats': 'game_score',
         'top_game_scores_per_game': 'single_game_score',
-        'bottom_game_scores_per_game': 'b_single_game_score'
+        'bottom_game_scores_per_game': 'b_single_game_score',
+        'game_categories': 'multi_point_games'
     }
 
     // sorting attributes to be used in ascending order
@@ -825,7 +876,8 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         'nzone_faceoff_pctg': ['nzone_faceoff_pctg', 'nzone_faceoffs'],
         'ozone_faceoff_pctg': ['ozone_faceoff_pctg', 'ozone_faceoffs'],
         'dzone_faceoff_pctg': ['dzone_faceoff_pctg', 'dzone_faceoffs'],
-        'multi_season': ['multi_season', 'length', 'from_date']
+        'multi_season': ['multi_season', 'length', 'from_date'],
+        'multi_point_games': ['multi_point_games', '-games_played']
     };
 
     $scope.change5v5Check = function() {

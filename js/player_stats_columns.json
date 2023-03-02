@@ -85,6 +85,35 @@
         {"data_key": "extra_attacker_goals", "col_header": "EAG", "expl_de": "Treffer bei eigenem leeren Tor mit zusätzlichem Feldspieler", "expl_en": "Extra Attacker Goals"},
         {"data_key": "so_gw_goals", "col_header": "SOWG", "expl_de": "Siegtore im Penaltyschießen", "expl_en": "Shootout Winning Goals"}
     ],
+    "game_categories": [
+        {"data_key": "last_name", "col_header": "Name", "expl_de": null, "expl_en": null},
+        {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
+        {"data_key": "games_played", "col_header": "GP", "expl_de": "Absolvierte Spiele", "expl_en": "Games Played"},
+        {"data_key": "goal_games", "col_header": "1+G", "expl_de": "Spiele mit mindestens einem Tor", "expl_en": "Games with one or more Goals"},
+        {"data_key": "two_goal_games", "col_header": "2+G", "expl_de": "Spiele mit mindestens zwei Toren", "expl_en": "Games with two or more Goals"},
+        {"data_key": "three_goal_games", "col_header": "3+G", "expl_de": "Spiele mit mindestens drei Toren (Hat-Tricks)", "expl_en": "Games with three or more Goals"},
+        {"data_key": "point_games", "col_header": "1+P", "expl_de": "Spiele mit mindestens einem Punkt", "expl_en": "Games with one or more Points"},
+        {"data_key": "multi_point_games", "col_header": "2+P", "expl_de": "Spiele mit mindestens zwei Punkten", "expl_en": "Games with two or more Points"},
+        {"data_key": "penalty_games", "col_header": "PIMG", "expl_de": "Spiele mit mindestens einer Strafe", "expl_en": "Games with one or more Penalties Taken"},
+        {"data_key": "toi_25_min", "col_header": "25+Min", "expl_de": "Spiele mit mindestens 25:00 Eiszeit", "expl_en": "Games with Time on Ice of at least 25 Minutes"},
+        {"data_key": "toi_20_min", "col_header": "20+Min", "expl_de": "Spiele mit mindestens 20:00 Eiszeit", "expl_en": "Games with Time on Ice of at least 20 Minutes"},
+        {"data_key": "game_score_plus_1", "col_header": "GS+1", "expl_de": "Spiele mit einem Game Score von mindestens 1", "expl_en": "Games with Game Score of 1 and more"},
+        {"data_key": "game_score_minus_1", "col_header": "GS-1", "expl_de": "Spiele mit einem Game Score von höchstens -1", "expl_en": "Games with Game Score of -1 and less"}
+    ],
+    "goals_per_period": [
+        {"data_key": "last_name", "col_header": "Name", "expl_de": null, "expl_en": null},
+        {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
+        {"data_key": "games_played", "col_header": "GP", "expl_de": "Absolvierte Spiele", "expl_en": "Games Played"},
+        {"data_key": "goals", "col_header": "G", "expl_de": "Tore", "expl_en": "Goals"},
+        {"data_key": "period_1_goals", "col_header": "G1", "expl_de": "Tore im 1. Drittel", "expl_en": "1st Period Goals"},
+        {"data_key": "goals_1_pctg", "col_header": "G1%", "expl_de": "Anteil der Tore im 1. Drittel an allen Toren", "expl_en": "1st Period Goals Percentage"},
+        {"data_key": "period_2_goals", "col_header": "G2", "expl_de": "Tore im 2. Drittel", "expl_en": "2nd Period Goals"},
+        {"data_key": "goals_2_pctg", "col_header": "G2%", "expl_de": "Anteil der Tore im 2. Drittel an allen Toren", "expl_en": "2nd Period Goals Percentage"},
+        {"data_key": "period_3_goals", "col_header": "G3", "expl_de": "Tore im 3. Drittel", "expl_en": "3rd Period Goals"},
+        {"data_key": "goals_3_pctg", "col_header": "G3%", "expl_de": "Anteil der Tore im 3. Drittel an allen Toren", "expl_en": "3rd Period Goals Percentage"},
+        {"data_key": "period_ot_goals", "col_header": "GOT", "expl_de": "Tore in Verlängerung", "expl_en": "Overtime Goals"},
+        {"data_key": "goals_ot_pctg", "col_header": "GOT%", "expl_de": "Anteil der Tore in Verlängerung an allen Toren", "expl_en": "Overtime Goals Percentage"}
+    ],
     "penalty_stats": [
         {"data_key": "last_name", "col_header": "Name", "expl_de": null, "expl_en": null},
         {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},

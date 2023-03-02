@@ -745,6 +745,11 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
             element['sog_pctg'] = svc.calculatePercentage(element['shots_on_goal'], element['shots']);
             element['ms_pctg'] = svc.calculatePercentage(element['shots_missed'], element['shots']);
             element['bs_pctg'] = svc.calculatePercentage(element['shots_blocked'], element['shots']);
+            // calculating goals per period percentages
+            element['goals_1_pctg'] = svc.calculatePercentage(element['period_1_goals'], element['goals']);
+            element['goals_2_pctg'] = svc.calculatePercentage(element['period_2_goals'], element['goals']);
+            element['goals_3_pctg'] = svc.calculatePercentage(element['period_3_goals'], element['goals']);
+            element['goals_ot_pctg'] = svc.calculatePercentage(element['period_ot_goals'], element['goals']);
         });
 
         // retrieving maximum number of games played from filtered player stats

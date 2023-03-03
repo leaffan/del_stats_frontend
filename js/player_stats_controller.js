@@ -864,7 +864,8 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         'game_score_stats': 'game_score',
         'top_game_scores_per_game': 'single_game_score',
         'bottom_game_scores_per_game': 'b_single_game_score',
-        'game_categories': 'two_point_games'
+        'game_categories': 'two_point_games',
+        'game_minutes': 'time_on_ice'
     }
 
     // sorting attributes to be used in ascending order

@@ -255,8 +255,13 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                 $scope.prep_player_games[key]['two_point_games'] = 0;
                 $scope.prep_player_games[key]['point_games'] = 0;
                 $scope.prep_player_games[key]['penalty_games'] = 0;
+                $scope.prep_player_games[key]['toi_30_min'] = 0;
                 $scope.prep_player_games[key]['toi_25_min'] = 0;
                 $scope.prep_player_games[key]['toi_20_min'] = 0;
+                $scope.prep_player_games[key]['toi_10_min'] = 0;
+                $scope.prep_player_games[key]['toi_5_min'] = 0;
+                $scope.prep_player_games[key]['toi_pp_2_min'] = 0;
+                $scope.prep_player_games[key]['toi_pk_2_min'] = 0;
                 $scope.prep_player_games[key]['game_score_plus_1'] = 0;
                 $scope.prep_player_games[key]['game_score_minus_1'] = 0;
             };
@@ -556,8 +561,13 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                 multiTeamPlayerStats['two_point_games'] = 0;
                 multiTeamPlayerStats['point_games'] = 0;
                 multiTeamPlayerStats['penalty_games'] = 0;
+                multiTeamPlayerStats['toi_30_min'] = 0;
                 multiTeamPlayerStats['toi_25_min'] = 0;
                 multiTeamPlayerStats['toi_20_min'] = 0;
+                multiTeamPlayerStats['toi_10_min'] = 0;
+                multiTeamPlayerStats['toi_5_min'] = 0;
+                multiTeamPlayerStats['toi_pp_2_min'] = 0;
+                multiTeamPlayerStats['toi_pk_2_min'] = 0;
                 multiTeamPlayerStats['game_score_plus_1'] = 0;
                 multiTeamPlayerStats['game_score_minus_1'] = 0;
             }
@@ -583,8 +593,13 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                     multiTeamPlayerStats['two_point_games'] += plr_team_stats['two_point_games'];
                     multiTeamPlayerStats['point_games'] += plr_team_stats['point_games'];
                     multiTeamPlayerStats['penalty_games'] += plr_team_stats['penalty_games'];
+                    multiTeamPlayerStats['toi_30_min'] += plr_team_stats['toi_30_min'];
                     multiTeamPlayerStats['toi_25_min'] += plr_team_stats['toi_25_min'];
                     multiTeamPlayerStats['toi_20_min'] += plr_team_stats['toi_20_min'];
+                    multiTeamPlayerStats['toi_10_min'] += plr_team_stats['toi_10_min'];
+                    multiTeamPlayerStats['toi_5_min'] += plr_team_stats['toi_5_min'];
+                    multiTeamPlayerStats['toi_pp_2_min'] += plr_team_stats['toi_pp_2_min'];
+                    multiTeamPlayerStats['toi_pk_2_min'] += plr_team_stats['toi_pk_2_min'];
                     multiTeamPlayerStats['game_score_plus_1'] += plr_team_stats['game_score_plus_1'];
                     multiTeamPlayerStats['game_score_minus_1'] += plr_team_stats['game_score_minus_1'];
                     }
@@ -645,10 +660,20 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                     filtered_player_stats[key]['point_games'] += 1;
                 if (element['pim_from_events'] > 0)
                     filtered_player_stats[key]['penalty_games'] += 1;
+                if (element['time_on_ice'] >= 1800)
+                    filtered_player_stats[key]['toi_30_min'] += 1;
                 if (element['time_on_ice'] >= 1500)
                     filtered_player_stats[key]['toi_25_min'] += 1;
                 if (element['time_on_ice'] >= 1200)
                     filtered_player_stats[key]['toi_20_min'] += 1;
+                if (element['time_on_ice'] <= 600)
+                    filtered_player_stats[key]['toi_10_min'] += 1;
+                if (element['time_on_ice'] <= 300)
+                    filtered_player_stats[key]['toi_5_min'] += 1;
+                if (element['time_on_ice_pp'] >= 120)
+                    filtered_player_stats[key]['toi_pp_2_min'] += 1;
+                if (element['time_on_ice_sh'] >= 120)
+                    filtered_player_stats[key]['toi_pk_2_min'] += 1;
                 if (element['game_score'] >= 1.)
                     filtered_player_stats[key]['game_score_plus_1'] += 1;
                 if (element['game_score'] <= -1.)

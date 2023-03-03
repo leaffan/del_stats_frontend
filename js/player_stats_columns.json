@@ -97,10 +97,22 @@
         {"data_key": "three_point_games", "col_header": "3+P", "expl_de": "Spiele mit mindestens drei Punkten", "expl_en": "Games with three or more Points"},
         {"data_key": "four_point_games", "col_header": "4+P", "expl_de": "Spiele mit mindestens vier Punkten", "expl_en": "Games with four or more Points"},
         {"data_key": "penalty_games", "col_header": "PIMG", "expl_de": "Spiele mit mindestens einer Strafe", "expl_en": "Games with one or more Penalties Taken"},
-        {"data_key": "toi_25_min", "col_header": "25+M", "expl_de": "Spiele mit mindestens 25:00 Eiszeit", "expl_en": "Games with Time on Ice of at least 25 Minutes"},
-        {"data_key": "toi_20_min", "col_header": "20+M", "expl_de": "Spiele mit mindestens 20:00 Eiszeit", "expl_en": "Games with Time on Ice of at least 20 Minutes"},
         {"data_key": "game_score_plus_1", "col_header": "GS+1", "expl_de": "Spiele mit einem Game Score von mindestens 1", "expl_en": "Games with Game Score of 1 and more"},
         {"data_key": "game_score_minus_1", "col_header": "GS-1", "expl_de": "Spiele mit einem Game Score von höchstens -1", "expl_en": "Games with Game Score of -1 and less"}
+    ],
+    "game_minutes": [
+        {"data_key": "last_name", "col_header": "Name", "expl_de": null, "expl_en": null},
+        {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
+        {"data_key": "games_played", "col_header": "GP", "expl_de": "Absolvierte Spiele", "expl_en": "Games Played"},
+        {"data_key": "time_on_ice", "col_header": "TOI", "expl_de": "Eiszeit insgesamt", "expl_en": "Time On Ice"},
+        {"data_key": "time_on_ice_per_game", "col_header": "TOI/G", "expl_de": "Eiszeit/Spiel", "expl_en": "Time On Ice/Game"},
+        {"data_key": "toi_30_min", "col_header": "30+M", "expl_de": "Spiele mit mindestens 30:00 Eiszeit", "expl_en": "Games with Time on Ice of at least 30 Minutes"},
+        {"data_key": "toi_25_min", "col_header": "25+M", "expl_de": "Spiele mit mindestens 25:00 Eiszeit", "expl_en": "Games with Time on Ice of at least 25 Minutes"},
+        {"data_key": "toi_20_min", "col_header": "20+M", "expl_de": "Spiele mit mindestens 20:00 Eiszeit", "expl_en": "Games with Time on Ice of at least 20 Minutes"},
+        {"data_key": "toi_10_min", "col_header": "10-M", "expl_de": "Spiele mit höchstens 10:00 Eiszeit", "expl_en": "Games with Time on Ice of at most 10 Minutes"},
+        {"data_key": "toi_5_min", "col_header": "5-M", "expl_de": "Spiele mit höchstens 5:00 Eiszeit", "expl_en": "Games with Time on Ice of at most 5 Minutes"},
+        {"data_key": "toi_pp_2_min", "col_header": "2+PPM", "expl_de": "Spiele mit mindestens 2:00 Eiszeit in Überzahl", "expl_en": "Games with Powerplay Time on Ice of at least 2 Minutes"},
+        {"data_key": "toi_pk_2_min", "col_header": "2+PKM", "expl_de": "Spiele mit mindesntes 2:00 Eiszeit in Unterzahl", "expl_en": "Games with Shorthanded Time on Ice of at least 2 Minutes"}
     ],
     "goals_per_period": [
         {"data_key": "last_name", "col_header": "Name", "expl_de": null, "expl_en": null},

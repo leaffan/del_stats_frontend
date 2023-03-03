@@ -250,7 +250,9 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                 $scope.prep_player_games[key]['three_goal_games'] = 0;
                 $scope.prep_player_games[key]['two_goal_games'] = 0;
                 $scope.prep_player_games[key]['goal_games'] = 0;
-                $scope.prep_player_games[key]['multi_point_games'] = 0;
+                $scope.prep_player_games[key]['four_point_games'] = 0;
+                $scope.prep_player_games[key]['three_point_games'] = 0;
+                $scope.prep_player_games[key]['two_point_games'] = 0;
                 $scope.prep_player_games[key]['point_games'] = 0;
                 $scope.prep_player_games[key]['penalty_games'] = 0;
                 $scope.prep_player_games[key]['toi_25_min'] = 0;
@@ -549,7 +551,9 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                 multiTeamPlayerStats['three_goal_games'] = 0;
                 multiTeamPlayerStats['two_goal_games'] = 0;
                 multiTeamPlayerStats['goal_games'] = 0;
-                multiTeamPlayerStats['multi_point_games'] = 0;
+                multiTeamPlayerStats['four_point_games'] = 0;
+                multiTeamPlayerStats['three_point_games'] = 0;
+                multiTeamPlayerStats['two_point_games'] = 0;
                 multiTeamPlayerStats['point_games'] = 0;
                 multiTeamPlayerStats['penalty_games'] = 0;
                 multiTeamPlayerStats['toi_25_min'] = 0;
@@ -574,7 +578,9 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                     multiTeamPlayerStats['three_goal_games'] += plr_team_stats['three_goal_games'];
                     multiTeamPlayerStats['two_goal_games'] += plr_team_stats['two_goal_games'];
                     multiTeamPlayerStats['goal_games'] += plr_team_stats['goal_games'];
-                    multiTeamPlayerStats['multi_point_games'] += plr_team_stats['multi_point_games'];
+                    multiTeamPlayerStats['four_point_games'] += plr_team_stats['four_point_games'];
+                    multiTeamPlayerStats['three_point_games'] += plr_team_stats['three_point_games'];
+                    multiTeamPlayerStats['two_point_games'] += plr_team_stats['two_point_games'];
                     multiTeamPlayerStats['point_games'] += plr_team_stats['point_games'];
                     multiTeamPlayerStats['penalty_games'] += plr_team_stats['penalty_games'];
                     multiTeamPlayerStats['toi_25_min'] += plr_team_stats['toi_25_min'];
@@ -629,8 +635,12 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                     filtered_player_stats[key]['two_goal_games'] += 1;
                 if (element['goals'] >= 1)
                     filtered_player_stats[key]['goal_games'] += 1;
+                if (element['points'] >= 4)
+                    filtered_player_stats[key]['four_point_games'] += 1;
+                if (element['points'] >= 3)
+                    filtered_player_stats[key]['three_point_games'] += 1;
                 if (element['points'] >= 2)
-                    filtered_player_stats[key]['multi_point_games'] += 1;
+                    filtered_player_stats[key]['two_point_games'] += 1;
                 if (element['points'] >= 1)
                     filtered_player_stats[key]['point_games'] += 1;
                 if (element['pim_from_events'] > 0)
@@ -829,7 +839,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         'game_score_stats': 'game_score',
         'top_game_scores_per_game': 'single_game_score',
         'bottom_game_scores_per_game': 'b_single_game_score',
-        'game_categories': 'multi_point_games'
+        'game_categories': 'two_point_games'
     }
 
     // sorting attributes to be used in ascending order
@@ -882,7 +892,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         'ozone_faceoff_pctg': ['ozone_faceoff_pctg', 'ozone_faceoffs'],
         'dzone_faceoff_pctg': ['dzone_faceoff_pctg', 'dzone_faceoffs'],
         'multi_season': ['multi_season', 'length', 'from_date'],
-        'multi_point_games': ['multi_point_games', '-games_played']
+        'two_point_games': ['two_point_games', '-games_played']
     };
 
     $scope.change5v5Check = function() {

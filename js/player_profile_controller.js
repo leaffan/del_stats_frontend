@@ -52,6 +52,17 @@ app.controller('plrProfileController', function($scope, $http, $routeParams, $lo
         $scope.toRoundSelect = $scope.maxRoundPlayed;
         // retrieving all numbers a player used
         $scope.numbersWorn = [...new Set($scope.player_stats.map(item => item.no))];
+        numberFrequencies = $scope.player_stats.reduce(function(obj, v) {
+            // increment or set the property
+            // `(obj[v.status] || 0)` returns the property value if defined
+            // or 0 ( since `undefined` is a falsy value
+            obj[v.no] = (obj[v.no] || 0) + 1;
+            // return the updated object
+            return obj;
+            // set the initial value as an object
+          }, {});
+        $scope.mainNumber = parseInt(Object.entries(numberFrequencies).sort(([,a],[,b]) => b-a)[0][0]);
+        console.log($scope.numbersWorn[$scope.numbersWorn.length - 1]);
         // retrieving indication whether player took part in a shootout
         $scope.shootoutParticipationGames = $scope.player_stats.filter(item => item.so_attempts);
         if ($scope.shootoutParticipationGames.length > 0) {

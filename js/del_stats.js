@@ -10,6 +10,12 @@ app.config(['$routeProvider', function($routeProvider){
             controller: 'homeController as ctrl',
             reloadOnSearch: false
         })
+        .when('/schedules/:season', {
+            title: 'Spielpläne',
+            templateUrl: 'schedules.html',
+            controller: 'schedulesController as ctrl',
+            reloadOnSearch: false
+        })
         .when('/del_stats/:season', {
             title: 'Spielerstatistiken',
             templateUrl: 'player_stats.html',
@@ -125,6 +131,10 @@ app.factory('svc', function() {
                     }
                 }
             }
+        },
+        // gets season identifier in the form of 2022/23 for 2022 season
+        getSeasonIdentifier: function(season) {
+            return season + "/" + (parseInt(season) + 1).toString().slice(-2);
         },
         // formats time (in seconds) as mm:ss
         formatTime: function(timeInSeconds) {

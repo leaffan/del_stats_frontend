@@ -9,11 +9,10 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         $scope.referenceSeasonSelect = '2019';
     // setting default table selection and sort keys and criteria/order
     $scope.tableSelect = 'standings';
-    if ($scope.season == 2022) {
-        $scope.seasonTypeSelect = 'PO';
-    } else {
-        $scope.seasonTypeSelect = 'RS';
-    }
+    $scope.seasonTypeSelect = 'RS';
+    // if ($scope.season == 2022) {
+    //     $scope.seasonTypeSelect = 'PO';
+    // }
     $scope.gamesBackSelect = '';
     // initially setting indicators which view we're currently in
     $scope.isStandingsView = true;

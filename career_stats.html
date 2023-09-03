@@ -142,7 +142,7 @@
         <tbody>
             <tr data-ng-repeat="stat in filtered_season_player_stats | filter:nameFilter | filter:greaterThanFilter('gp', 0) | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
                 <td class="w-05 text-right">{{ $index + 1 }}</td>
-                <td class="w-17"><a data-ng-style="stat.last_season == 2022 && {'font-weight':'bold'}" href="#!/player_career/{{stat.player_id}}">{{ stat.first_name }} {{ stat.last_name }}</b></td>
+                <td class="w-17"><a data-ng-style="stat.last_season == 2023 && {'font-weight':'bold'}" href="#!/player_career/{{stat.player_id}}">{{ stat.first_name }} {{ stat.last_name }}</b></td>
                 <td class="w-08">{{ stat.teams_cnt == 1 ? stat.teams[0] : stat.teams_cnt + ' Teams' }}</td>
                 <td class="w-06 text-right">{{ stat.gp }}</td>
                 <td class="w-06 text-right">{{ stat.g }}</td>
@@ -176,7 +176,7 @@
         <tbody>
             <tr data-ng-repeat="stat in filtered_season_player_stats | filter:nameFilter | filter:greaterThanFilter('gp', 0) | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
                 <td class="w-05 text-right">{{ $index + 1 }}</td>
-                <td class="w-16"><a data-ng-style="stat.last_season == 2022 && {'font-weight':'bold'}" href="#!/player_career/{{stat.player_id}}">{{ stat.first_name }} {{ stat.last_name }}</a></td>
+                <td class="w-16"><a data-ng-style="stat.last_season == 2023 && {'font-weight':'bold'}" href="#!/player_career/{{stat.player_id}}">{{ stat.first_name }} {{ stat.last_name }}</a></td>
                 <td class="w-07 text-right">{{ stat.teams_cnt == 1 ? stat.teams[0] : stat.teams_cnt + ' Teams' }}</td>
                 <td class="w-08 text-right">{{ stat.gp }}</td>
                 <td class="w-08 text-right">{{ svc.formatTime(stat.toi) }}</td>

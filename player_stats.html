@@ -5,7 +5,7 @@
     </div>
 
     <div class="alert alert-info main-bg shadow">
-        <h2>DEL-Spielerstatistiken für {{ season }}/{{ svc.parseFloat(season) + 1 - 2000 }}</h2>
+        <h2>DEL-Spielerstatistiken für {{ svc.getSeasonIdentifier(season) }}</h2>
     </div>
 
     <div class="alert alert-info main-bg shadow">
@@ -157,12 +157,12 @@
                     <option data-ng-if="season != 2020" data-ng-option value="post_dcup">Nach Deutschland Cup</option>
                     <option data-ng-if="season == 2020" data-ng-option value="pre_reunification">Vor Wiedervereinigung</option>
                     <option data-ng-if="season == 2020" data-ng-option value="post_reunification">Nach Wiedervereinigung</option>
-                    <option data-ng-if="season == 2022 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 5" data-ng-option>-----------</option>
-                    <option data-ng-if="season == 2022 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 5" data-ng-option value="last_5_games">In letzten 5 Spielen</option>
-                    <option data-ng-if="season == 2022 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 10" data-ng-option value="last_10_games">In letzten 10 Spielen</option>
-                    <option data-ng-if="season == 2022 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 15" data-ng-option value="last_15_games">In letzten 15 Spielen</option>
-                    <option data-ng-if="season == 2022 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 20" data-ng-option value="last_20_games">In letzten 20 Spielen</option>
-                    <option data-ng-if="season == 2022 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 25" data-ng-option value="last_25_games">In letzten 25 Spielen</option>
+                    <option data-ng-if="season == 2023 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 5" data-ng-option>-----------</option>
+                    <option data-ng-if="season == 2023 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 5" data-ng-option value="last_5_games">In letzten 5 Spielen</option>
+                    <option data-ng-if="season == 2023 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 10" data-ng-option value="last_10_games">In letzten 10 Spielen</option>
+                    <option data-ng-if="season == 2023 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 15" data-ng-option value="last_15_games">In letzten 15 Spielen</option>
+                    <option data-ng-if="season == 2023 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 20" data-ng-option value="last_20_games">In letzten 20 Spielen</option>
+                    <option data-ng-if="season == 2023 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 25" data-ng-option value="last_25_games">In letzten 25 Spielen</option>
                 </select>
             </div>
 

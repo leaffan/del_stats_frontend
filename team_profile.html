@@ -7,11 +7,11 @@
         <div class="inline-headers mb-2">
             <div class="d-none d-md-block">
                 <span><img class="img-fluid" src="https://www.del.org/assets/img/teams/team_{{::current_team}}.png" alt="Team logo" width="40" height="40"/></span>
-                    <h2 class="ml-3">{{ ::team_full_name_lookup[current_team] }} {{ ::season }}/{{ ::svc.parseFloat(season) + 1 - 2000 }}</h2>
+                    <h2 class="ml-3">{{ ::team_full_name_lookup[current_team] }} {{ svc.getSeasonIdentifier(season) }}</h2>
             </div>
             <div class="d-md-none">
                 <h3 class="medium">{{ ::team_full_name_lookup[current_team] }}</h3>
-                <b>{{ ::season }}/{{ ::svc.parseFloat(season) + 1 - 2000 }}</b>
+                <b>{{ svc.getSeasonIdentifier(season) }}</b>
             </div>
         </div>
     <!-- </div> -->
@@ -23,12 +23,12 @@
                     <!-- <a data-ng-if="season - 1 >= 2017 && current_team_data.valid_from <= season - 1 && current_team_data.valid_to <= season - 1" data-ng-href="#!/team_profile/{{season - 1}}/{{::current_team}}"> -->
                     <a data-ng-if="(season - 1) >= 2018 && current_team_data.valid_from <= (season - 1) && current_team_data.valid_to >= (season - 1)" data-ng-href="#!/team_profile/{{season - 1}}/{{::current_team}}">
                         <i class="fas fa-arrow-left" aria-hidden="true" style="vertical-align: center;"></i>
-                        <b>Saison {{ (season - 1) + '/' + season }}</b>
+                        <b>Saison {{ svc.getSeasonIdentifier(svc.parseInt(season) - 1) }}</b>
                     </a>
                 </li>
                 <li class="col-6 list-group-item border-0 p-0 bg-transparent text-right">
-                    <a data-ng-if="(svc.parseFloat(season)) + 1 <= 2022 && current_team_data.valid_from <= (svc.parseFloat(season) + 1) && current_team_data.valid_to >= (svc.parseFloat(season) + 1)" data-ng-href="#!/team_profile/{{svc.parseFloat(season) + 1}}/{{::current_team}}">
-                        <b>Saison {{ svc.parseFloat(season) + 1 + '/' + (svc.parseFloat(season) + 2) }}</b>
+                    <a data-ng-if="(svc.parseFloat(season)) + 1 <= 2023 && current_team_data.valid_from <= (svc.parseFloat(season) + 1) && current_team_data.valid_to >= (svc.parseFloat(season) + 1)" data-ng-href="#!/team_profile/{{svc.parseFloat(season) + 1}}/{{::current_team}}">
+                        <b>Saison {{ svc.getSeasonIdentifier(svc.parseInt(season) + 1) }}</b>
                         <i class="fas fa-arrow-right" aria-hidden="true" style="vertical-align: center;"></i>
                     </a>
                 </li>

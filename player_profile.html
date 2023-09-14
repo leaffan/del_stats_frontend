@@ -9,7 +9,7 @@
             <h2 data-ng-if="player_name"><b><a href="https://www.eliteprospects.com/player/{{players[player_id].ep_id}}">{{ player_name}}</a></b> ({{ model.team }}) {{ svc.getSeasonIdentifier(season) }}&#160;</h2>
             <span class="ml-2"><span class="flag-icon flag-icon-{{ players[player_id].iso_country }}"></span></span>
             <span class="ml-2"><a href="https://www.eliteprospects.com/player/{{players[player_id].ep_id}}"><img height="20px" src="img/ep_icon.png" /></a></span>
-            <span class="ml-2" data-ng-if="season == 2023"><a href="https://www.penny-del.org/spielerprofil/{{team_id_lookup[currentTeam[0].abbr]}}/{{player_id}}"><img height="20px" src="img/penny-del-logo_small.png" /></a></span>
+            <!-- <span class="ml-2" data-ng-if="season == 2023"><a href="https://www.penny-del.org/spielerprofil/{{team_id_lookup[currentTeam[0].abbr]}}/{{player_id}}"><img height="20px" src="img/penny-del-logo_small.png" /></a></span> -->
             <span class="ml-2" data-ng-if="player_stats[0].u23"><img class="test" height="20px" src="img/u23.png" /></span>
             <span class="ml-2" data-ng-if="player_stats[0].u20"><img class="test" height="20px" src="img/u20.png" /></span>
             <span class="ml-2" data-ng-if="player_stats[0].rookie"><img class="test" height="20px" src="img/rookie.png" /></span>

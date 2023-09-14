@@ -20,7 +20,7 @@ app.controller('plrProfileController', function($scope, $http, $routeParams, $lo
     });
 
     // loading player ids with portraits
-    $http.get('./data/portraits.json').then(function (res) {
+    $http.get('./po/' + $scope.season + '/_portraits.json').then(function (res) {
         $scope.portraits = res.data;
         $scope.hasPortrait = $scope.portraits.includes($scope.player_id);
     });

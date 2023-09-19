@@ -117,7 +117,7 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
 
             // checking if current player is an active player
             is_active = false;
-            if (player_data['last_season'] == 2022)
+            if (player_data['last_season'] == 2023)
                 is_active = true;
                 
             if ($scope.show_only_active && !is_active)

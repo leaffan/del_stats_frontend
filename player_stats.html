@@ -6,6 +6,20 @@
 
     <div class="alert alert-info main-bg shadow">
         <h2>DEL-Spielerstatistiken für {{ svc.getSeasonIdentifier(season) }}</h2>
+        <ul class="list-group list-group-horizontal">
+            <li class="col-6 list-group-item border-0 p-0 bg-transparent text-left">
+                <a data-ng-if="svc.parseFloat(season) - 1 >= 2017" data-ng-href="#!/del_stats/{{svc.parseFloat(season) - 1}}">
+                    <i class="fas fa-arrow-left" aria-hidden="true" style="vertical-align: center;"></i>
+                    <b>Saison {{ svc.getSeasonIdentifier(svc.parseInt(season) - 1) }}</b>
+                </a>
+            </li>
+            <li class="col-6 list-group-item border-0 p-0 bg-transparent text-right">
+                <a data-ng-if="svc.parseFloat(season) + 1 <= 2023" data-ng-href="#!/del_stats/{{svc.parseFloat(season) + 1}}">
+                    <b>Saison {{ svc.getSeasonIdentifier(svc.parseInt(season) + 1) }}</b>
+                    <i class="fas fa-arrow-right" aria-hidden="true" style="vertical-align: center;"></i>
+                </a>
+            </li>
+        </ul>
     </div>
 
     <div class="alert alert-info main-bg shadow">

@@ -17,9 +17,17 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
     // initially setting indicators which view we're currently in
     $scope.isStandingsView = true;
     $scope.sortConfig = {
-        'sortKey': 'pts_per_game',
-        'sortCriteria': ['pts_per_game', 'pt_pctg', 'points', 'score_diff', 'score'],
+        'sortKey': 'points',
+        'sortCriteria': ['points', 'pt_pctg', 'pts_per_game', 'score_diff', 'score'],
         'sortDescending': true
+    };
+    // seasons 2020 through 2022 used points per game as primary ranking criterion
+    if ($scope.season > 2019 && $scope.season < 2023) {
+        $scope.sortConfig = {
+            'sortKey': 'pts_per_game',
+            'sortCriteria': ['pts_per_game', 'pt_pctg', 'points', 'score_diff', 'score'],
+            'sortDescending': true
+        };
     }
     $scope.fromRoundSelect = '1';
     // initially setting memory for previously used home/away game selection
@@ -388,7 +396,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
 
     // default sorting criteria for all defined tables
     $scope.tableSortCriteria = {
-        'standings': 'pts_per_game',
+        'standings': 'points',
         'group_standings': 'pts_per_game',
         'special_team_stats': 'pp_pctg',
         'goal_stats': 'goals_diff',

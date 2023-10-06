@@ -84,6 +84,15 @@ app.controller('plrCareerController', function ($scope, $http, $routeParams, svc
                     unique_filtered_playoff_seasons.add(season['season']);
                     unique_filtered_playoff_season_teams.add(season['team']);
                 }
+                season['sv_pctg'] = 100 - (season['ga'] / season['sa'] * 100);
+                season['gaa'] = season['ga'] * 3600 / season['toi'];
+                season['gpg'] = season['g'] / season['gp'];
+                season['ptspg'] = season['pts'] / season['gp'];
+                if (season['sog'] > 0) {
+                    season['sh_pctg'] = season['g'] / season['sog'] * 100;
+                } else {
+                    season['sh_pctg'] = 0.;
+                }
             }
         });
         $scope.min_filtered_regular_season = Math.min(...unique_filtered_regular_seasons);

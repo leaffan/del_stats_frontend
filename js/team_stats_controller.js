@@ -259,6 +259,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
             // calculating score and goal differentials
             element['score_diff'] = element['score'] - element['opp_score'];
             element['goals_diff'] = element['goals'] - element['opp_goals'];
+            element['goals_diff_5v5'] = element['goals_5v5'] - element['opp_goals_5v5'];
             element['goals_diff_1'] = element['goals_1'] - element['opp_goals_1'];
             element['goals_diff_2'] = element['goals_2'] - element['opp_goals_2'];
             element['goals_diff_3'] = element['goals_3'] - element['opp_goals_3'];
@@ -320,6 +321,17 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
             // calculating PDO in 5-on-5 play
             element['pdo_5v5'] = element['shot_pctg_5v5'] + element['save_pctg_5v5'];
             element['opp_pdo_5v5'] = element['opp_shot_pctg_5v5'] + element['opp_save_pctg_5v5'];
+            // calculating differentials between expected and actual goals
+            element['g_a_xg'] = element['goals'] - element['xg'];
+            element['opp_g_a_xg'] = element['opp_goals'] - element['opp_xg'];
+            element['g_a_xg_5v5'] = element['goals_5v5'] - element['xg_5v5'];
+            element['opp_g_a_xg_5v5'] = element['opp_goals_5v5'] - element['opp_xg_5v5'];
+            // calculating expected goal differentials
+            element['xg_diff'] = element['xg'] - element['opp_xg'];
+            element['xg_diff_5v5'] = element['xg_5v5'] - element['opp_xg_5v5'];
+            // calculating expected goals for percentage
+            element['xg_pctg'] = svc.calculatePercentage(element['xg'], element['xg'] + element['opp_xg']);
+            element['xg_pctg_5v5'] = svc.calculatePercentage(element['xg_5v5'], element['xg_5v5'] + element['opp_xg_5v5']);
             // calculating shots on goal for percentage
             element['shot_for_pctg'] = svc.calculatePercentage(element['shots_on_goal'], element['shots_on_goal'] + element['opp_shots_on_goal']);
             element['opp_shot_for_pctg'] = svc.calculatePercentage(element['opp_shots_on_goal'], element['shots_on_goal'] + element['opp_shots_on_goal']);
@@ -420,7 +432,9 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         'penalty_kill_details': 'pk_4v5_pctg',
         'special_team_times': 'pp_time_per_pp_goal',
         'u23_stats': 'u23_toi_per_game',
-        'goal_categories': 'goals'
+        'goal_categories': 'goals',
+        'xg_stats': 'xg_pctg',
+        'xg_stats_5v5': 'xg_pctg_5v5'
     }
 
     // hierarchical sorting criteria for specified sort key
@@ -442,6 +456,9 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         "opp_goals_1": ['opp_goals_1', '-goals_diff_1'],
         "opp_goals_2": ['opp_goals_2', '-goals_diff_2'],
         "opp_goals_3": ['opp_goals_3', '-goals_diff_3'],
+        // expected goal stats
+        "xg_pctg": ['xg_pctg', 'xg', 'goals'],
+        "xg_pctg_5v5": ['xg_pctg_5v5', 'xg_5v5', 'goals_5v5'],        
         // shots
         "opp_shots_on_goal": ['opp_shots_on_goal', 'games_played'],
         "opp_shots": ['opp_shots', 'games_played'],

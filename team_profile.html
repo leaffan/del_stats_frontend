@@ -78,7 +78,7 @@
                     <select class="form-control" id="table_select" data-ng-model="tableSelect" data-ng-change="changeTable()">
                         <option data-ng-option value="basic_game_by_game">Basisdaten</option>
                         <option data-ng-option value="game_goals">Torstatistiken</option>
-                        <option data-ng-option value="x_goals">Expected Goals</option>
+                        <option data-ng-if="season >= 2022" data-ng-option value="x_goals">Expected Goals</option>
                         <option data-ng-option value="game_shots">Schussstatistiken</option>
                         <option data-ng-option value="shot_zones">Schusszonen (alle Schüsse)</option>
                         <option data-ng-option value="shot_on_goal_zones">Schusszonen (Torschüsse)</option>

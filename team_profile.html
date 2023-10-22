@@ -6,7 +6,7 @@
     <div class="alert alert-info main-bg shadow">
         <div class="inline-headers mb-2">
             <div class="d-none d-md-block">
-                <span><img class="img-fluid" src="https://www.del.org/assets/img/teams/team_{{::current_team}}.png" alt="Team logo" width="40" height="40"/></span>
+                <span><img class="img-fluid" src="img/logos/logo_{{::current_team}}.{{ current_team == 'FRA' ? 'png' : 'svg'}}" alt="Team logo" width="40" height="40"/></span>
                     <h2 class="ml-3">{{ ::team_full_name_lookup[current_team] }} {{ svc.getSeasonIdentifier(season) }}</h2>
             </div>
             <div class="d-md-none">

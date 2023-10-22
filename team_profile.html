@@ -78,6 +78,7 @@
                     <select class="form-control" id="table_select" data-ng-model="tableSelect" data-ng-change="changeTable()">
                         <option data-ng-option value="basic_game_by_game">Basisdaten</option>
                         <option data-ng-option value="game_goals">Torstatistiken</option>
+                        <option data-ng-option value="x_goals">Expected Goals</option>
                         <option data-ng-option value="game_shots">Schussstatistiken</option>
                         <option data-ng-option value="shot_zones">Schusszonen (alle Schüsse)</option>
                         <option data-ng-option value="shot_on_goal_zones">Schusszonen (Torschüsse)</option>
@@ -412,6 +413,59 @@
                 <td class="text-right"><b>{{ opp_goals_3_total = svc.getFilteredTotal(filtered_game_log, 'opp_goals_3', game_log) }} ({{ (opp_goals_3_total / filtered_game_log.length).toFixed(1) }})</b></td>
                 <td class="text-right"><b>{{ goals_total = svc.getFilteredTotal(filtered_game_log, 'goals', game_log) }} ({{ (goals_total / filtered_game_log.length).toFixed(1) }})</b></td>
                 <td class="text-right"><b>{{ opp_goals_total = svc.getFilteredTotal(filtered_game_log, 'opp_goals', game_log) }} ({{ (opp_goals_total / filtered_game_log.length).toFixed(1) }})</b></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table id="x_goals" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'x_goals'">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                    <a href="" data-ng-click="$parent.statsSortDescending = $parent.setSortOrder(col.data_key, $parent.sortCriterion, $parent.statsSortDescending); $parent.sortCriterion = col.data_key">
+                        <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
+                        <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
+                        <span data-ng-show="$parent.sortCriterion == col.data_key && $parent.statsSortDescending" class="fa fa-caret-down"></span>
+                        <span data-ng-show="$parent.sortCriterion == col.data_key && !$parent.statsSortDescending" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="{{game.home_road === 'home'? 'table-info' : 'table-warning'}}" data-ng-repeat="game in filtered_game_log = (game_log | orderBy:sortCriterion:statsSortDescending | filter: {home_road: homeRoadFilter} | filter:dayFilter | filter:fromRoundFilter | filter:toRoundFilter | filter:weekdayFilter | filter: {opp_team: oppFilter} | filter: {season_type: seasonTypeFilter})">
+                <td class="w-07 text-center"><a href="https://www.del.org/spielplan/{{game.game_date}}#schedule">{{ game.game_date }}</a></td>
+                <td class="w-07 text-right">{{ game.round }}</td>
+                <td class="w-10 {{ svc.setTextColor(game.score, game.opp_score) }}">
+                    <b>{{game.score}}:{{game.opp_score}}</b>
+                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
+                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
+                    </a>
+                </td>
+                <td class="w-07 text-right">{{ game.goals }}</td>
+                <td class="w-07 text-right">{{ game.opp_goals }}</td>
+                <td class="w-08 text-right">{{ game.xg.toFixed(2) }}</td>
+                <td class="w-08 text-right">{{ game.opp_xg.toFixed(2) }}</td>
+                <td class="w-08 text-right">{{ game.xg_pctg.toFixed(2) }} %</td>
+                <td class="w-07 text-right">{{ game.goals_5v5 }}</td>
+                <td class="w-07 text-right">{{ game.opp_goals_5v5 }}</td>
+                <td class="w-08 text-right">{{ game.xg_5v5.toFixed(2) }}</td>
+                <td class="w-08 text-right">{{ game.opp_xg_5v5.toFixed(2) }}</td>
+                <td class="w-08 text-right">{{ game.xg_pctg_5v5.toFixed(2) }} %</td>
+            </tr>
+
+            <tr class="table-secondary">
+                <td></td>
+                <td>Gesamt:</td>
+                <td class="text-right"><b>{{ filtered_game_log.length }} Spiel{{ filtered_game_log.length == 1 ? '' : 'e'}}</b></td>
+                <td class="text-right"><b>{{ goals_total = svc.getFilteredTotal(filtered_game_log, 'goals', game_log) }} ({{ (goals_total / filtered_game_log.length).toFixed(1) }})</b></td>
+                <td class="text-right"><b>{{ opp_goals_total = svc.getFilteredTotal(filtered_game_log, 'opp_goals', game_log) }} ({{ (opp_goals_total / filtered_game_log.length).toFixed(1) }})</b></td>
+                <td class="text-right"><b>{{ (xg_total = svc.getFilteredTotal(filtered_game_log, 'xg', game_log)).toFixed(2) }} ({{ (xg_total / filtered_game_log.length).toFixed(2) }})</b></td>
+                <td class="text-right"><b>{{ (opp_xg_total = svc.getFilteredTotal(filtered_game_log, 'opp_xg', game_log)).toFixed(2) }} ({{ (opp_xg_total / filtered_game_log.length).toFixed(2) }})</b></td>
+                <td class="text-right"><b>{{ (xg_total / (xg_total + opp_xg_total) * 100).toFixed(2) }} %</b></td>
+                <td class="text-right"><b>{{ goals_5v5_total = svc.getFilteredTotal(filtered_game_log, 'goals_5v5', game_log) }} ({{ (goals_5v5_total / filtered_game_log.length).toFixed(1) }})</b></td>
+                <td class="text-right"><b>{{ opp_goals_5v5_total = svc.getFilteredTotal(filtered_game_log, 'opp_goals_5v5', game_log) }} ({{ (opp_goals_5v5_total / filtered_game_log.length).toFixed(1) }})</b></td>
+                <td class="text-right"><b>{{ (xg_5v5_total = svc.getFilteredTotal(filtered_game_log, 'xg_5v5', game_log)).toFixed(2) }} ({{ (xg_5v5_total / filtered_game_log.length).toFixed(1) }})</b></td>
+                <td class="text-right"><b>{{ (opp_xg_5v5_total = svc.getFilteredTotal(filtered_game_log, 'opp_xg_5v5', game_log)).toFixed(2) }} ({{ (opp_xg_5v5_total / filtered_game_log.length).toFixed(1) }})</b></td>
+                <td class="text-right"><b>{{ (xg_5v5_total / (xg_5v5_total + opp_xg_5v5_total) * 100).toFixed(2) }} %</b></td>
             </tr>
         </tbody>
     </table>

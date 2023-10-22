@@ -34,6 +34,21 @@
         {"data_key": "goals", "col_header": "GF", "expl_de": "Tore (ohne Penaltyschießen)", "expl_en": "Goals For (without Shootout)"},
         {"data_key": "opp_goals", "col_header": "GA", "expl_de": "Gegentore (ohne Penaltyschießen)", "expl_en": "Goals Against (without Shootout)"}
     ],
+    "x_goals": [
+        {"data_key": "date", "col_header": "Datum", "expl_de": null, "expl_en": null},
+        {"data_key": "round", "col_header": "Spieltag", "expl_de": null, "expl_en": null},
+        {"data_key": "opp_team", "col_header": "Gegner", "expl_de": null, "expl_en": null},
+        {"data_key": "goals", "col_header": "GF", "expl_de": "Tore (ohne Penaltyschießen)", "expl_en": "Goals For (without Shootout)"},
+        {"data_key": "opp_goals", "col_header": "GA", "expl_de": "Gegentore (ohne Penaltyschießen)", "expl_en": "Goals Against (without Shootout)"},
+        {"data_key": "xg", "col_header": "xGF", "expl_de": "Erwartete Tore", "expl_en": "Expected Goals For"},
+        {"data_key": "opp_xg", "col_header": "xGA", "expl_de": "Gegnerische erwartete Tore", "expl_en": "Expected Goals Against"},
+        {"data_key": "xg_pctg", "col_header": "xGF%", "expl_de": "Eigener Anteil an erwarteten Toren", "expl_en": "Expected Goals For Percentage"},
+        {"data_key": "xg_5v5", "col_header": "xGF 5v5", "expl_de": "Erwartete Tore im 5-gegen-5", "expl_en": "Expected Goals For in 5-on-5"},
+        {"data_key": "opp_xg_5v5", "col_header": "xGA 5v5", "expl_de": "Gegnerische erwartete Tore im 5-gegen-5", "expl_en": "Expected Goals Against in 5-on-5"},
+        {"data_key": "xg_5v5", "col_header": "xGF 5v5", "expl_de": "Erwartete Tore im 5-gegen-5", "expl_en": "Expected Goals For in 5-on-5"},
+        {"data_key": "opp_xg_5v5", "col_header": "xGA 5v5", "expl_de": "Gegnerische erwartete Tore im 5-gegen-5", "expl_en": "Expected Goals Against in 5-on-5"},
+        {"data_key": "xg_pctg_5v5", "col_header": "xGF% 5v5", "expl_de": "Eigener Anteil an erwarteten Toren im 5-gegen-5", "expl_en": "Expected Goals For Percentage in 5-on-5"}
+    ],
     "game_shots": [
         {"data_key": "date", "col_header": "Datum", "expl_de": null, "expl_en": null},
         {"data_key": "round", "col_header": "Spieltag", "expl_de": null, "expl_en": null},

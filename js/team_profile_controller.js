@@ -30,6 +30,13 @@ app.controller('teamProfileController', function($scope, $http, $routeParams, $l
         $scope.monthsPlayed = [...new Set($scope.game_log.map(item => moment(item.game_date).month()))];
         // setting to round selection to maximum round played
         $scope.toRoundSelect = $scope.maxRoundPlayed;
+
+        $scope.game_log.forEach(element => {
+            // calculating expected goals for percentage
+            element['xg_pctg'] = svc.calculatePercentage(element['xg'], element['xg'] + element['opp_xg']);
+            element['xg_pctg_5v5'] = svc.calculatePercentage(element['xg_5v5'], element['xg_5v5'] + element['opp_xg_5v5']);
+        });
+
     });
 
     // retrieving significant dates and previous year's attendance from external file
@@ -65,7 +72,7 @@ app.controller('teamProfileController', function($scope, $http, $routeParams, $l
             'ref_2', 'lma_1', 'lma_2', 'round']
     }
 
-    $scope.changeTable = function () {
+    $scope.changeTable = function() {
         // $location.path('/team_profile/' + $scope.season + '/' + $scope.current_team + '/' + $scope.tableSelect);
         if ($scope.tableSelect === 'basic_game_by_game') {
             $scope.sortCriterion = 'date';
@@ -91,7 +98,7 @@ app.controller('teamProfileController', function($scope, $http, $routeParams, $l
         // filtering team stats to only contain games played not later than the specified cutoff date
         var team_stats_pre_cutoff = $scope.team_stats.filter(team_game => moment(team_game['game_date']) <= cutoff_date);
 
-        // collesting team stats through cutoff date
+        // collecting team stats through cutoff date
         team_stats_pre_cutoff.forEach(team_game => {
             var team = team_game['team'];
             team_points_log[team]['games'] += 1;

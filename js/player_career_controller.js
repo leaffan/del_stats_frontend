@@ -119,10 +119,16 @@ app.controller('plrCareerController', function ($scope, $http, $routeParams, svc
     };
 
     $scope.elementPassedFilters = function(element) {
+
+        is_single_season_data = false;
         is_equal_past_from_season = false;
         is_prior_equal_to_season = false;
         is_selected_team = false;
         is_selected_season_type = false;
+
+        if (typeof(element.team) == 'string') {
+            is_single_season_data = true;
+        }
 
         // testing for selected season type
         if ($scope.season_type == 'ALL') {
@@ -159,7 +165,7 @@ app.controller('plrCareerController', function ($scope, $http, $routeParams, svc
         // finally aggregating values of all season stat lines that have been filtered
         if (
             is_equal_past_from_season && is_prior_equal_to_season &&
-            is_selected_season_type && is_selected_team
+            is_selected_season_type && is_selected_team && is_single_season_data
         ) {
             return true;
         } else {

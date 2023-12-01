@@ -308,7 +308,7 @@ app.factory('svc', function() {
                 'ga_5v5', 'ga_4v4', 'ga_3v3', 'ga_5v4', 'ga_5v3', 'ga_4v3', 'ga_4v5', 'ga_3v4', 'ga_3v5',
                 'sa_blue_line', 'sa_left', 'sa_right', 'sa_slot', 'sa_neutral_zone',
                 'ga_blue_line', 'ga_left', 'ga_right', 'ga_slot', 'ga_neutral_zone',
-                'sa_ev', 'ga_ev', 'sa_sh', 'ga_sh', 'sa_pp', 'ga_pp', 'so',
+                'sa_ev', 'ga_ev', 'sa_sh', 'ga_sh', 'sa_pp', 'ga_pp', 'so', 'sl_so',
                 'ga_avg', 'gsaa', 'ga_avg_5v5', 'gsaa_5v5',
                 'so_games_played', 'so_attempts_a', 'so_goals_a'
             ];    
@@ -372,6 +372,13 @@ app.factory('svc', function() {
                 return (value / toi_seconds) * 120;
             } else {
                 return 0;
+            }
+        },
+        getShutouts: function(element) {
+            if (element.so == element.so + element.sl_so) {
+                return element.so;
+            } else {
+                return element.so + element.sl_so + ' (' + element.sl_so + ')';
             }
         }
     }

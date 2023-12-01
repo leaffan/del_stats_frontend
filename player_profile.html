@@ -855,7 +855,7 @@
                 <td class="w-08 text-right">{{ stat.goals_against }}</td>
                 <td class="w-08 text-right">{{ stat.save_pctg != null ? stat.save_pctg.toFixed(2) + ' %' : 'n/a'}}</td>
                 <td class="w-08 text-right">{{ stat.gaa.toFixed(2) }}</td>
-                <td class="w-08 text-right">{{ stat.so }}</td>
+                <td class="w-08 text-right">{{ stat.sl_so != 0 ? '(' + stat.sl_so + ')' : stat.so }}</td>
                 <td class="w-08 text-right">{{ svc.formatTime(stat.toi) }}</td>
             </tr>
             <tr data-ng-if="player_name">

@@ -178,7 +178,7 @@
         {"data_key": "goals_against", "col_header": "GA", "expl_de": "Zugelassene Tore", "expl_en": "Goals Against"},
         {"data_key": "save_pctg", "col_header": "SV%", "expl_de": "Fangquote", "expl_en": "Save Percentage"},
         {"data_key": "gaa", "col_header": "GAA", "expl_de": "Gegentorschnitt", "expl_en": "Goals Against Average"},
-        {"data_key": "so", "col_header": "SO", "expl_de": "Ohne Gegentor", "expl_en": "Shutouts"},
+        {"data_key": "so", "col_header": "SO", "expl_de": "Shutout (Shutout bei Niederlage im Penaltyschießen)", "expl_en": "Shutout (Shutout in Shootout Loss)"},
         {"data_key": "toi", "col_header": "TOI", "expl_de": "Eiszeit", "expl_en": "Time On Ice"}
     ],
     "goalie_against_avg_stats": [

@@ -43,8 +43,8 @@
         {"data_key": "xg", "col_header": "xGF", "expl_de": "Erwartete Tore", "expl_en": "Expected Goals For"},
         {"data_key": "opp_xg", "col_header": "xGA", "expl_de": "Gegnerische erwartete Tore", "expl_en": "Expected Goals Against"},
         {"data_key": "xg_pctg", "col_header": "xGF%", "expl_de": "Eigener Anteil an erwarteten Toren", "expl_en": "Expected Goals For Percentage"},
-        {"data_key": "xg_5v5", "col_header": "xGF 5v5", "expl_de": "Erwartete Tore im 5-gegen-5", "expl_en": "Expected Goals For in 5-on-5"},
-        {"data_key": "opp_xg_5v5", "col_header": "xGA 5v5", "expl_de": "Gegnerische erwartete Tore im 5-gegen-5", "expl_en": "Expected Goals Against in 5-on-5"},
+        {"data_key": "goals_5v5", "col_header": "GF 5v5", "expl_de": "Tore im 5-gegen-5", "expl_en": "Goals For in 5-on-5"},
+        {"data_key": "opp_goals_5v5", "col_header": "GA 5v5", "expl_de": "Gegnerische Tore im 5-gegen-5", "expl_en": "Goals Against in 5-on-5"},
         {"data_key": "xg_5v5", "col_header": "xGF 5v5", "expl_de": "Erwartete Tore im 5-gegen-5", "expl_en": "Expected Goals For in 5-on-5"},
         {"data_key": "opp_xg_5v5", "col_header": "xGA 5v5", "expl_de": "Gegnerische erwartete Tore im 5-gegen-5", "expl_en": "Expected Goals Against in 5-on-5"},
         {"data_key": "xg_pctg_5v5", "col_header": "xGF% 5v5", "expl_de": "Eigener Anteil an erwarteten Toren im 5-gegen-5", "expl_en": "Expected Goals For Percentage in 5-on-5"}

@@ -420,6 +420,8 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
             } else {
                 element['so_sv_pctg'] = null; 
             }
+            // calculating total shutouts from shutouts in wins and shutouts in shootout losses
+            element['total_so'] = element['so'] + element['sl_so'];
         });
 
         $scope.maxGoalieGamesPlayed = Math.max.apply(Math, filtered_goalie_stats.map(function(o) { return o.games_played; }));
@@ -917,7 +919,8 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         'ozone_faceoff_pctg': ['ozone_faceoff_pctg', 'ozone_faceoffs'],
         'dzone_faceoff_pctg': ['dzone_faceoff_pctg', 'dzone_faceoffs'],
         'multi_season': ['multi_season', 'length', 'from_date'],
-        'two_point_games': ['two_point_games', '-games_played']
+        'two_point_games': ['two_point_games', '-games_played'],
+        'total_so': ['total_so', 'so', '-toi', 'sv_pctg']
     };
 
     $scope.change5v5Check = function() {

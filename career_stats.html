@@ -186,7 +186,7 @@
                 <td class="w-08 text-right">{{ stat.ga }}<span data-ng-if="$parent.from_season < 1999 && stat.first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></td>
                 <td class="w-08 text-right">{{ stat.sv_pctg.toFixed(1) + ' %'}}<span data-ng-if="$parent.from_season < 1999 && stat.first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></td>
                 <td class="w-08 text-right">{{ stat.gaa.toFixed(2) }}<span data-ng-if="$parent.from_season < 1999 && stat.first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></td>
-                <td class="w-08 text-right">{{ stat.so }}</td>
+                <td class="w-08 text-right">{{ svc.getShutouts(stat) }}</td>
             </tr>
         </tbody>
     </table>

@@ -22,7 +22,8 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
         "gpg": ['gpg', 'g', 'pts'],
         "sog": ['sog', '-gp'],
         "sh_pctg": ['sh_pctg', 'sog', '-gp'],
-        "sv_pctg": ['sv_pctg', 'sa', 'toi']
+        "sv_pctg": ['sv_pctg', 'sa', 'toi'],
+        "total_so": ['total_so', 'so', '-gp', '-toi']
     };
 
     // retrieving column headers (and abbreviations + explanations)
@@ -75,7 +76,7 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
     }, true);
 
     $scope.to_aggregate = [
-        'gp', 'g', 'a', 'plus_minus', 'pim', 'ppg', 'shg', 'gwg', 'sog', 'toi', 'w', 'l', 'sa', 'ga', 'so'];
+        'gp', 'g', 'a', 'plus_minus', 'pim', 'ppg', 'shg', 'gwg', 'sog', 'toi', 'w', 'l', 'sa', 'ga', 'so', 'sl_so'];
 
     $scope.filterCareerStats = function() {
         filtered_career_stats = [];
@@ -191,6 +192,8 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
             // calculating shooting percentage (only using goal totals after 1998/99 season to do so)
             if (filtered_stat_line['sog'])
                 filtered_stat_line['sh_pctg'] = filtered_stat_line['g_post_98'] / filtered_stat_line['sog'] * 100.;
+            // calculating total shutouts
+            filtered_stat_line['total_so'] = filtered_stat_line['so'] + filtered_stat_line['sl_so'];
             // calculating save percentage
             if (filtered_stat_line['sa'])
                 filtered_stat_line['sv_pctg'] = 100 - (filtered_stat_line['ga'] / filtered_stat_line['sa'] * 100.);

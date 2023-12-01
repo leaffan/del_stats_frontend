@@ -189,7 +189,7 @@
                 <td class="w-08 text-right">{{ season.season < 1999 ? '-' : season.ga }}</td>
                 <td class="w-08 text-right">{{ season.season < 1999 ? '-' : season.sv_pctg.toFixed(1) + ' %' }}</td>
                 <td class="w-08 text-right">{{ season.season < 1999 ? '-' : season.gaa.toFixed(2) }}</td>
-                <td class="w-08 text-right">{{ season.so }}</td>
+                <td class="w-08 text-right">{{ svc.getShutouts(season) }}</td>
             </tr>
             <tr data-ng-if="season_type == 'ALL'">
                 <td><b>Gesamt:</b></td>
@@ -203,7 +203,7 @@
                 <td class="text-right"><b>{{ goalsAgainstTotal = svc.getFilteredTotal(filtered_seasons, 'ga', seasons) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
                 <td class="text-right"><b>{{ ((1 - goalsAgainstTotal / shotsAgainstTotal) * 100.).toFixed(1) + ' %'}}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
                 <td class="text-right"><b>{{ (goalsAgainstTotal * 3600 / toi_post_1998).toFixed(2) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_seasons, 'so', seasons) }}</b></td>
+                <td class="text-right"><b>{{ totalSo = svc.getFilteredTotal(filtered_seasons, 'total_so', seasons); strictSo = svc.getFilteredTotal(filtered_seasons, 'so', seasons); totalSo == strictSo ? totalSo : totalSo.toString() + ' (' + svc.getFilteredTotal(filtered_seasons, 'sl_so', seasons) + ')' }}</b></td>
             </tr>
             <tr data-ng-if="number_of_regular_seasons > 0">
                 <td><b>Hauptrunde:</b></td>
@@ -217,7 +217,7 @@
                 <td class="text-right"><b>{{ goalsAgainstRegularTotal = svc.getFilteredTotal(filtered_regular_seasons, 'ga', seasons) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
                 <td class="text-right"><b>{{ ((1 - goalsAgainstRegularTotal / shotsAgainstRegularTotal) * 100.).toFixed(1) + ' %' }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
                 <td class="text-right"><b>{{ (goalsAgainstRegularTotal * 3600 / regular_toi_post_1998).toFixed(2) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_regular_seasons, 'so', seasons) }}</b></td>
+                <td class="text-right"><b>{{ totalSo = svc.getFilteredTotal(filtered_regular_seasons, 'total_so', seasons); strictSo = svc.getFilteredTotal(filtered_regular_seasons, 'so', seasons); totalSo == strictSo ? totalSo : totalSo.toString() + ' (' + svc.getFilteredTotal(filtered_regular_seasons, 'sl_so', seasons) + ')' }}</b></td>
             </tr>
             <tr data-ng-if="number_of_playoff_seasons > 0">
                 <td><b>Playoffs:</b></td>
@@ -231,7 +231,7 @@
                 <td class="text-right"><b>{{ goalsAgainstPlayoffTotal = svc.getFilteredTotal(filtered_playoff_seasons, 'ga', seasons) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
                 <td class="text-right"><b>{{ ((1 - goalsAgainstPlayoffTotal / shotsAgainstPlayoffTotal) * 100.).toFixed(1) + ' %' }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
                 <td class="text-right"><b>{{ (goalsAgainstPlayoffTotal * 3600 / playoff_toi_post_1998).toFixed(2) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_playoff_seasons, 'so', seasons) }}</b></td>
+                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_playoff_seasons, 'total_so', seasons) }}</b></td>
             </tr>
         </tbody>
     </table>

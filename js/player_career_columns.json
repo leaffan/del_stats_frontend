@@ -27,6 +27,6 @@
         {"data_key": "ga", "col_header": "GA", "expl_de": "Gegentore", "expl_en": "Goals Against"},
         {"data_key": "sv_pctg", "col_header": "SV%", "expl_de": "Fangquote", "expl_en": "Save Percentage"},
         {"data_key": "gaa", "col_header": "GAA", "expl_de": "Gegentorschnitt", "expl_en": "Goals Against Average"},
-        {"data_key": "so", "col_header": "SO", "expl_de": "Shutouts", "expl_en": "Shutouts"}
+        {"data_key": "total_so", "col_header": "SO", "expl_de": "Shutouts (Shutouts bei Niederlagen im Penaltyschießen)", "expl_en": "Shutouts (Shutouts in Shootout Losses)"}
     ]
 }

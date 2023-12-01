@@ -13,7 +13,8 @@ app.controller('plrCareerController', function ($scope, $http, $routeParams, svc
         "g": ['g', '-gp'],
         "sog": ['sog', '-gp'],
         "season_type": ['season_type', '-season'],
-        "season": ['-season', 'season_type', '-order']
+        "season": ['-season', 'season_type', '-order'],
+        "total_so": ['total_so', 'so', '-gp']
     };
 
     // retrieving column headers (and abbreviations + explanations)
@@ -85,6 +86,7 @@ app.controller('plrCareerController', function ($scope, $http, $routeParams, svc
                     unique_filtered_playoff_season_teams.add(season['team']);
                 }
                 season['sv_pctg'] = 100 - (season['ga'] / season['sa'] * 100);
+                season['total_so'] = season['so'] + season['sl_so'];
                 season['gaa'] = season['ga'] * 3600 / season['toi'];
                 season['gpg'] = season['g'] / season['gp'];
                 season['ptspg'] = season['pts'] / season['gp'];

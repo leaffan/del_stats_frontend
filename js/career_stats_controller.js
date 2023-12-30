@@ -96,14 +96,14 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
             let player_ep_id = '';
             if (player_data['ep_id'] === undefined) {
                 player_ep_id = 'g' + player_data['g_id'];
-                console.log(player_data);
+                // console.log(player_data);
             } else {
                 player_ep_id = 'e' + player_data['ep_id'].split("/")[0];
             }
             // console.log(player_data['ep_id'].split("/")[0]);
             // setting up filtered cumulated stat line for current player
             filtered_stat_line = {
-                'player_id': player_data['c_player_id'] ? player_data['c_player_id'] : player_data['c_id'] ? player_data['c_id'] : 'g' + player_data['g_id'],
+                'player_id': player_data['last_season'] < 2023 ? 'g' + player_data['g_id'] : player_data['c_player_id'] ? player_data['c_player_id'] : player_data['c_id'] ? player_data['c_id'] : 'g' + player_data['g_id'],
                 'player_ep_id': player_ep_id,
                 'first_name': player_data['first_name'],
                 'last_name': player_data['last_name'],

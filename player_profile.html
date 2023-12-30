@@ -869,7 +869,7 @@
                 <td class="text-right"><b>{{ goals_against_total = svc.getFilteredTotal(filtered_stats, 'goals_against', goalie_stats) }}</b></td>
                 <td class="text-right"><b>{{ ((1 - goals_against_total / shots_against_total) * 100.).toFixed(2) }} %</b></td>
                 <td class="text-right"><b>{{ (goals_against_total * 3600 / toi_total).toFixed(2) }}</b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_stats, 'so', goalie_stats) }}</b></td>
+                <td class="text-right"><b>{{ sl_so_total = svc.getFilteredTotal(filtered_stats, 'sl_so', goalie_stats); so_total = svc.getFilteredTotal(filtered_stats, 'so', goalie_stats); sl_so_total ? (so_total + sl_so_total) + ' (' + sl_so_total + ')' : so_total; }}</b></td>
                 <td class="text-right"><b>{{ toi_total = svc.getFilteredTotal(filtered_stats, 'toi', goalie_stats); svc.formatTime(toi_total) }}</b></td>
             </tr>
         </tbody>

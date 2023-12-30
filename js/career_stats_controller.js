@@ -11,7 +11,6 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
     $scope.sortCriteria = {
         "gp": ['gp', 'pts', 'g'],
         "pts": ['pts', 'ptspg', 'g', '-gp'],
-        "ptspg": ['ptspg', '-gp', 'sog'],
         "pim": ['pim', '-gp'],
         "w": ['w', '-gp'],
         "l": ['l', 'gp'],
@@ -94,9 +93,18 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
                 return false;
             });
             player_data = player_data[0];
+            let player_ep_id = '';
+            if (player_data['ep_id'] === undefined) {
+                player_ep_id = 'g' + player_data['g_id'];
+                console.log(player_data);
+            } else {
+                player_ep_id = 'e' + player_data['ep_id'].split("/")[0];
+            }
+            // console.log(player_data['ep_id'].split("/")[0]);
             // setting up filtered cumulated stat line for current player
             filtered_stat_line = {
                 'player_id': player_data['c_player_id'] ? player_data['c_player_id'] : player_data['c_id'] ? player_data['c_id'] : 'g' + player_data['g_id'],
+                'player_ep_id': player_ep_id,
                 'first_name': player_data['first_name'],
                 'last_name': player_data['last_name'],
                 'position': player_data['position'],
@@ -133,7 +141,7 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
                     is_selected_position = true;
                 }
             } else {
-                    if ($scope.position == 'GK' && player_data['position'].startsWith('G')) {
+                if ($scope.position == 'GK' && player_data['position'].startsWith('G')) {
                     is_selected_position = true;
                 } else if ($scope.position == 'DE' && player_data['position'].includes('D')) {
                     is_selected_position = true;

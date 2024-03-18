@@ -56,7 +56,7 @@
         {"data_key": "faceoffs_lost", "col_header": "FAC-", "expl_de": "Verlorene Bullies", "expl_en": "Faceoffs Lost"},
         {"data_key": "faceoff_pctg", "col_header": "FAC%", "expl_de": "Anteil gewonnener Bullies", "expl_en": "Faceoff Percentage"},
         {"data_key": "pim_from_events", "col_header": "PIM", "expl_de": "Strafminuten", "expl_en": "Penalties in Minutes"},
-        {"data_key": "blocked_shots", "col_header": "BLKS", "expl_de": "Aktiv geblockte Schüsse", "expl_en": "Shots Blocked Actively"}
+        {"data_key": "blocked_shots", "col_header": "BLKS", "expl_de": "Aktiv geblockte Schüsse", "expl_en": "Shots Actively Blocked"}
     ],
     "shootout_stats": [
         {"data_key": "date", "col_header": "Datum", "expl_de": null, "expl_en": null},

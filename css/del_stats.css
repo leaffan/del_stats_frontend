@@ -20,6 +20,10 @@ table {
     border: none;
 }
 
+hide {
+    display: none;
+}
+
 thead td.text-center a, span.rank, abbr.rank { font-size: 80%; font-weight: bold; }
 
 dl { margin: 0;}
@@ -32,6 +36,8 @@ label { padding-left: 5px;}
 
 .red { color: red; }
 .green { color: darkgreen; }
+
+.table-info.light td {background-color: #E1E9EA}
 
 div.main-bg { background-color: rgb(216, 250, 250); }
 

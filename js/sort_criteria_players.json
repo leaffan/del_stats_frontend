@@ -1,0 +1,8 @@
+{
+    "gp": ["gp", "pts", "g"],
+    "g": ["g", "-gp"],
+    "sog": ["sog", "-gp"],
+    "season_type": ["-season_type", "-season"],
+    "season": ["season", "-season_type", "order"],
+    "fac_pctg": ["fac_pctg", "fac_w", "fac"]
+}

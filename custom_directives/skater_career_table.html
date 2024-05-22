@@ -1,0 +1,38 @@
+<table class="table table-responsive-md table-bordered table-hover table-sm small shadow">
+    <thead table-header stats-cols="statsCols" ctrl="ctrl"></thead>
+    <tbody>
+        <tr
+            data-ng-if="!$parent.season.partial ? true : show_partial_seasons"
+            class="{{season.partial ? 'table-info light' : season.season_type == 'RS' ? 'table-info' : 'table-warning'}}"
+            data-ng-repeat="season in filteredSeasons | filter:ctrl.partialSeasonFilter | orderBy:ctrl.sortConfig['sortCriteria']:ctrl.sortConfig['sortDescending']"
+        >
+            <td
+                ng-repeat="col in statsCols"
+                class="w-{{ svc.pad(col.width, 2) }} text-{{ col.align ? col.align : 'right' }}"
+            >
+                <span data-ng-if="col.data_key == 'season'">
+                    {{ svc.getSeasonIdentifier(season[col.data_key]) }}
+                </span>
+
+                <i data-ng-if="col.data_key == 'c' && season['c']" class="fas fa-trophy" aria-hidden="true"></i>
+
+                <span data-ng-if="col.data_key == 'team'">
+                    <span data-ng-if="season.season < 2017 || season.order == 0">{{ season.team }}</span>
+                    <span data-ng-if="season.season > 2016 && season.order != 0"><b><a href="#!/player_profile/{{season.season}}/{{season.team}}/{{pid}}">{{ season.team }}</a></b></span>
+                </span>
+
+                <span data-ng-if="col.data_key == 'season_type'">
+                    {{ season.season_phase ? season.season_type + ' (' + season.season_phase + ')' : season.season_type }}                    
+                </span>
+
+                <span data-ng-if="!(['season', 'c', 'team', 'season_type'].includes(col.data_key))">
+                    {{ col.valid_from && season.season < col.valid_from ? '-' : col.time ? svc.formatTime(season[col.data_key]) : col.fixed ? season[col.data_key].toFixed(col.fixed) : season[col.data_key] }}
+                    {{ col.valid_from && season.season < col.valid_from ? '' : col.pctg ? ' %' : '' }}
+                </span>
+            </td>
+        </tr>
+    </tbody>
+    <tbody skater-career-table-footer season-type="seasonType" stats-cols="statsCols" ctrl="ctrl" filtered-seasons="filteredSeasons"></tbody>
+    <tbody data-ng-if="seasonType == 'ALL'" skater-career-table-footer season-type="'RS'" stats-cols="statsCols" ctrl="ctrl" filtered-seasons="filteredSeasons"></tbody>
+    <tbody data-ng-if="seasonType == 'ALL'" skater-career-table-footer season-type="'PO'" stats-cols="statsCols" ctrl="ctrl" filtered-seasons="filteredSeasons"></tbody>
+</table>

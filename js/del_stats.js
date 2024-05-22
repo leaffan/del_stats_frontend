@@ -56,6 +56,20 @@ app.config(['$routeProvider', function($routeProvider){
             controller: 'plrCareerController as ctrl',
             reloadOnSearch: false
         })
+        .when('/skater_career/:player_id',
+        {
+            title: 'Karriereverlauf',
+            templateUrl: 'skater_career.html',
+            controller: 'skaterCareerController as ctrl',
+            reloadOnSearch: false
+        })
+        .when('/goalie_career/:player_id',
+        {
+            title: 'Karriereverlauf',
+            templateUrl: 'goalie_career.html',
+            controller: 'goalieCareerController as ctrl',
+            reloadOnSearch: false
+        })
         .otherwise({
             redirectTo: '/home'
         })
@@ -140,17 +154,38 @@ app.factory('svc', function() {
         formatTime: function(timeInSeconds) {
             return this.pad(Math.floor(timeInSeconds / 60), 2) + ":" + ('00' + (Math.floor(timeInSeconds) % 60)).slice(-2);
         },
-        // gets total sum of filtered attribute values
-        getFilteredTotal: function(list, attribute, dataSource) {
+        // gets total sum of attribute values from provided list optionally starting at from season and for specified season type
+        getFilteredTotal: function(list, attribute, dataSource, fromSeason, seasonType) {
             if (dataSource === undefined)
                 return;
             if (list === undefined)
                 return;
-            var total = 0;
-            for(var i = 0; i < list.length; i++){
-                total += list[i][attribute];
+            list = list.filter(item => item.order != 0);
+            if (seasonType && seasonType != 'ALL') {
+                list = list.filter(item => item.season_type == seasonType);
             }
-            return total;
+            if (fromSeason) {
+                list = list.filter(item => item.season >= fromSeason);
+            }
+            return list.reduce((sum, item) => {return sum + item[attribute];}, 0);
+        },
+        getNumberOfUniqueItemsInSeasons: function(seasons, attribute, fromSeason, seasonType) {
+            if (seasons === undefined)
+                return;
+            seasons = seasons.filter(season => season.order != 0);
+            if (seasonType && seasonType != 'ALL')  {
+                seasons = seasons.filter(season => season.season_type == seasonType);
+            }
+            if (fromSeason) {
+                seasons = seasons.filter(season => season.season >= fromSeason);
+            }
+            return new Set(seasons.map(season => season[attribute])).size;
+        },
+        getMinMaxFromSeasons: function(seasons, attribute) {
+            if (seasons === undefined)
+                return;
+            let all_ages = new Set(seasons.map(season => season.age));
+            return [Math.min(...all_ages), Math.max(...all_ages)];
         },
         // gets total sum of filtered attributed values through a specified game date
         getFilteredAccumulatedTotal: function(list, attribute, dataSource, to) {
@@ -313,6 +348,21 @@ app.factory('svc', function() {
                 'so_games_played', 'so_attempts_a', 'so_goals_a'
             ];    
         },
+        skater_stats_to_aggregate: function() {
+            return [
+                'gp', 'g', 'a', 'pts', 'sog', 'ppg', 'shg', 'pim', 'shf', 'toi', 'toi_pp', 'toi_sh', 'missed',
+                'blocked', 'plus_minus', 'fac_w', 'fac_l', 'fac', 'blocks', 'gwg', 'prim_pts'
+            ]
+        },
+        skater_stats_to_calculate: function() {
+            return [
+                ['fac_l', 'difference', 'fac', 'fac_w'], ['gpg', 'rate', 'g', 'gp'],
+                ['apg', 'rate', 'a', 'gp'], ['ptspg', 'rate', 'pts', 'gp'], ['sh_pctg', 'percentage', 'g', 'sog'],
+                ['shf_pg', 'rate', 'shf', 'gp'], ['toi_shf', 'rate', 'toi', 'shf'], ['toi_pg', 'rate', 'toi', 'gp'],
+                ['toi_pp_pg', 'rate', 'toi_pp', 'gp'], ['toi_sh_pg', 'rate', 'toi_sh', 'gp'],
+                ['fac_pctg', 'percentage', 'fac_w', 'fac']
+            ]
+        },
         pad: function pad(num, size) {
             var s = num+"";
             while (s.length < size) s = "0" + s;
@@ -330,6 +380,9 @@ app.factory('svc', function() {
             }
             var names = full_name.split(' ');
             return names[0][0] + '. ' + names.slice(-1)[0];
+        },
+        calculateDifference: function(minuend, subtrahend) {
+            return minuend - subtrahend;
         },
         calculateRate: function(value_to_rate, rating_parameter) {
             if (rating_parameter) {
@@ -374,6 +427,47 @@ app.factory('svc', function() {
                 return 0;
             }
         },
+        calculateAge: function(birthDate, today) {
+            birthDate = new Date(birthDate);
+            if (today === undefined) {
+                today = new Date();
+            }
+            // calculating years
+            var years;
+            if (today.getMonth() > birthDate.getMonth() || (today.getMonth() == birthDate.getMonth() && today.getDate() >= birthDate.getDate())) {
+                years = today.getFullYear() - birthDate.getFullYear();
+            }
+            else {
+                years = today.getFullYear() - birthDate.getFullYear() - 1;
+            }
+          
+            // calculating months
+            var months;
+            if (today.getDate() >= birthDate.getDate()) {
+                months = today.getMonth() - birthDate.getMonth();
+            }
+            else if (today.getDate() < birthDate.getDate()) {
+                months = today.getMonth() - birthDate.getMonth() - 1;
+            }
+            // make month positive
+            months = months < 0 ? months + 12 : months;
+          
+            // Calculate days
+            var days;
+            // days of months in a year
+            var monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            // re-setting days of months in a year for leap years
+            if ((0 == birthDate.getFullYear() % 4) && (0 != birthDate.getFullYear() % 100) || (0 == birthDate.getFullYear() % 400)) {
+                var monthDays = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            }
+            if (today.getDate() >= birthDate.getDate()) {
+                days = today.getDate() - birthDate.getDate();
+            } else {
+                days = today.getDate() - birthDate.getDate() + monthDays[birthDate.getMonth()];
+            }
+    
+            return years + " Jahre " + months + " Monat" + (months != 1 ? "e " : " ") + days + " Tag" + (days != 1 ? "e" : "");
+        },
         getShutouts: function(element) {
             if (element.so == element.so + element.sl_so) {
                 return element.so;
@@ -383,3 +477,55 @@ app.factory('svc', function() {
         }
     }
 });
+
+
+app.directive('skaterCareerTable', ['svc', function(svc) {
+    return {
+        restrict: 'E',         
+        scope: {
+            id: '@',
+            pid: '=',
+            filteredSeasons: '=',
+            statsCols: '=',
+            ctrl: '=',
+            seasonType: '='
+        },
+        templateUrl: 'custom_directives/skater_career_table.html',
+        link: function(scope) {
+            scope.svc = svc;
+        }
+    }
+}]);
+
+app.directive('skaterCareerTableFooter', ['svc', function(svc) {
+    return {
+        restrict: 'A',         
+        scope: {
+            filteredSeasons: '=',
+            statsCols: '=',
+            ctrl: '=',
+            seasonType: '='
+        },
+        templateUrl: 'custom_directives/skater_career_table_footer.html',
+        link: function(scope) {
+            scope.svc = svc;
+        }
+    }
+}]);
+
+app.directive('tableHeader', ['svc', function(svc) {
+    return {
+        restrict: 'A',
+        scope: {
+            filteredSeasons: '=',
+            statsCols: '=',
+            ctrl: '=',
+            seasonType: '='
+        },
+        templateUrl: 'custom_directives/table_header.html',
+        link: function(scope) {
+            scope.svc = svc;
+        }
+    }
+}]);
+    

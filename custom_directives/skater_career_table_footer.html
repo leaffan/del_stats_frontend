@@ -63,6 +63,13 @@
                     ?
                         svc.formatTime(svc.getFilteredTotal(filteredSeasons, col.data_key, [], '', seasonType))
                     :
+                    (col.pctg && col.data_key == 'sh_pctg')
+                    ?
+                    svc.calculatePercentage(
+                        svc.getFilteredTotal(filteredSeasons, col.part_value, [], 1999, seasonType),
+                        svc.getFilteredTotal(filteredSeasons, col.base_value, [], 1999, seasonType)
+                    ).toFixed(col.fixed) + ' %'
+                    :
                     col.pctg
                     ?
                         svc.calculatePercentage(

@@ -1,0 +1,129 @@
+{
+    "career_goalie_stats_to_calculate": [
+        {
+            "name": "sv_pctg",
+            "type": "from_100_percentage",
+            "value": "ga",
+            "base": "sa"
+        },
+        {
+            "name": "gaa",
+            "type": "rate",
+            "numerator": "ga",
+            "denominator": "toi",
+            "factor": 3600
+        },
+        {
+            "name": "pts",
+            "type": "sum",
+            "summand_1": "g",
+            "summand_2": "a"
+        },
+        {
+            "name": "gpg",
+            "type": "rate",
+            "numerator": "g",
+            "denominator": "gp"
+        },
+        {
+            "name": "apg",
+            "type": "rate",
+            "numerator": "a",
+            "denominator": "gp"
+        },
+        {
+            "name": "ptspg",
+            "type": "rate",
+            "numerator": "pts",
+            "denominator": "gp"
+        },
+        {
+            "name": "sh_pctg",
+            "type": "percentage",
+            "value": "g",
+            "base": "sog"
+        }
+    ],
+    "skater_stats_to_calculate": [
+        {
+            "name": "pts",
+            "type": "sum",
+            "summand_1": "g",
+            "summand_2": "a"
+        },
+        {
+            "name": "fac_l",
+            "type": "difference",
+            "minuend": "fac",
+            "subtrahend": "fac_w"
+        },
+        {
+            "name": "gpg",
+            "type": "rate",
+            "numerator": "g",
+            "denominator": "gp"
+        },
+        {
+            "name": "apg",
+            "type": "rate",
+            "numerator": "a",
+            "denominator": "gp"
+        },
+        {
+            "name": "ptspg",
+            "type": "rate",
+            "numerator": "pts",
+            "denominator": "gp"
+        },
+        {
+            "name": "sh_pctg",
+            "type": "percentage",
+            "value": "g",
+            "base": "sog"
+        },
+        {
+            "name": "shf_pg",
+            "type": "rate",
+            "numerator": "shf",
+            "denominator": "gp"
+        },
+        {
+            "name": "toi_shf",
+            "type": "rate",
+            "numerator": "toi",
+            "denominator": "shf"
+        },
+        {
+            "name": "toi_pg",
+            "type": "rate",
+            "numerator": "toi",
+            "denominator": "gp"
+        },
+        {
+            "name": "toi_pp_pg",
+            "type": "rate",
+            "numerator": "toi_pp",
+            "denominator": "gp"
+        },
+        {
+            "name": "toi_sh_pg",
+            "type": "rate",
+            "numerator": "toi_sh",
+            "denominator": "gp"
+        },
+        {
+            "name": "fac_pctg",
+            "type": "percentage",
+            "value": "fac_w",
+            "base": "fac"
+        }
+    ],
+    "career_skater_stats_to_calculate": [
+        {
+            "name": "sh_pctg",
+            "type": "percentage",
+            "value": "g_post_98",
+            "base": "sog"
+        }
+    ]
+}

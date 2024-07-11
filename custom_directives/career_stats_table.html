@@ -1,0 +1,41 @@
+<table class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow">
+    <thead table-header stats-cols="statsCols" ctrl="ctrl"></thead>
+    <tbody>
+        <tr data-ng-repeat="(rowIndex, stat) in filteredSeasonPlayerStats | filter:ctrl.nameFilter | orderBy:ctrl.sortConfig['sortCriteria']:ctrl.sortConfig['sortDescending'] | limitTo:ctrl.limit" data-ng-init="rowIndex = $index">
+            <td
+                ng-repeat="col in statsCols"
+                class="w-{{ svc.pad(col.width, 2) }} text-{{ col.align ? col.align : 'right' }}"
+            >
+            <span data-ng-if="col.data_key == 'rank'">
+                {{ rowIndex + 1 }}
+            </span>
+
+            <span data-ng-if="col.data_key == 'last_name'">
+                <a data-ng-style="stat.last_season == 2023 && {'font-weight':'bold'}" href="#!/{{ stat.position.startsWith('G') ? 'player_career' : 'skater_career'}}/{{stat.player_id}}">
+                {{ stat.first_name }} {{ stat.last_name }}
+                </a>
+            </span>
+
+            <span data-ng-if="col.data_key == 'country'" data-ng-repeat="country in stat.country" class="flag-icon flag-icon-{{ country }} ml-1 p-0"></span>            
+
+            <span data-ng-if="col.data_key == 'teams_cnt'">
+                {{ stat.teams_cnt == 1 ? stat.teams[0] : stat.teams_cnt + ' Teams' }}
+            </span>
+
+            <span data-ng-if="col.data_key == 'championships'">
+                {{ stat[col.data_key] ? stat[col.data_key] : '' }}
+            </span>
+
+
+            <span data-ng-if="!(['rank', 'last_name', 'teams_cnt', 'championships', 'country'].includes(col.data_key))">
+                <span data-ng-if="['ppg', 'shg'].includes(col.data_key) && ctrl.from_season < 1998 && stat.first_season < 1998 && stat.position != 'G'" title="Ohne Daten vor 1998/1999.">*</span><!--
+                --><span data-ng-if="['sog', 'sh_pctg'].includes(col.data_key) && ctrl.from_season < 1999 && stat.first_season < 1999 && stat.position != 'G'" title="Ohne Daten vor 1999/2000.">**</span><!--
+                -->{{col.data_key == 'total_so' ? svc.getShutouts(stat) : col.time ? svc.formatTime(stat[col.data_key]) : col.fixed ? stat[col.data_key].toFixed(col.fixed) : stat[col.data_key]}}
+                {{col.pctg ? ' %' : ''}}
+            </span>
+
+            </td>
+        </tr>
+    </tbody>
+
+</table>

@@ -1,8 +1,11 @@
 {
     "gp": ["gp", "pts", "g"],
     "g": ["g", "-gp"],
+    "pts": ["pts", "-gp", "g"],
     "sog": ["sog", "-gp"],
     "season_type": ["-season_type", "-season"],
     "season": ["season", "-season_type", "order"],
-    "fac_pctg": ["fac_pctg", "fac_w", "fac"]
+    "fac_pctg": ["fac_pctg", "fac_w", "fac"],
+    "sv_pctg": ["sv_pctg", "sa", "toi"],
+    "total_so": ["total_so", "so", "-gp", "-toi"]
 }

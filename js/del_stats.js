@@ -1,5 +1,9 @@
 var app = angular.module('delStatsApp', ['ngResource', 'ngRoute', 'ngStorage', 'moment-picker', 'angularMoment'])
 
+app.constant('config', {
+    defaultSeason: 2023,
+});
+
 // main application configuration
 
 app.config(['$routeProvider', function($routeProvider){
@@ -40,6 +44,13 @@ app.config(['$routeProvider', function($routeProvider){
             title: 'Teamprofil',
             templateUrl: 'team_profile.html',
             controller: 'teamProfileController as ctrl',
+            reloadOnSearch: false
+        })
+        .when('/career_stats_old',
+        {
+            title: 'Karrierestatistiken',
+            templateUrl: 'career_stats_old.html',
+            controller: 'careerStatsControllerOld as ctrl',
             reloadOnSearch: false
         })
         .when('/career_stats',
@@ -127,17 +138,16 @@ app.factory('svc', function() {
                     'sortDescending': !oldSortConfig['sortDescending']
                 }
             } else {
+                let sortCriteria = globalSortConfig[sortKey] || sortKey;
                 // ascending sort order for a few columns
                 if (ascendingAttrs.indexOf(sortKey) !== -1) {
-                    sortCriteria = globalSortConfig[sortKey] || sortKey;
                     return {
                         'sortKey': sortKey,
                         'sortCriteria': sortCriteria,
                         'sortDescending': false
                     }
+                // otherwise descending sort order
                 } else {
-                    // otherwise descending sort order
-                    sortCriteria = globalSortConfig[sortKey] || sortKey;
                     return {
                         'sortKey': sortKey,
                         'sortCriteria': sortCriteria,
@@ -192,8 +202,8 @@ app.factory('svc', function() {
             if (dataSource === undefined) {
                 return
             }
-            var total = 0;
-            for (var i = list.length-1; i >= 0; i--) {
+            let total = 0;
+            for (let i = list.length-1; i >= 0; i--) {
                 total += list[i][attribute];
                 if (list[i]['game_date'] == to)
                 {
@@ -207,9 +217,9 @@ app.factory('svc', function() {
             if (dataSource === undefined) {
                 return;
             }
-            var total = 0;
-            var cnt_data = 0;
-            for (var i = list.length-1; i >= 0; i--) {
+            let total = 0;
+            let cnt_data = 0;
+            for (let i = list.length-1; i >= 0; i--) {
                 cnt_data++;
                 total += list[i][attribute];
                 
@@ -267,8 +277,8 @@ app.factory('svc', function() {
         },
         range: function(min, max, step) {
             step = step || 1;
-            var input = [];
-            for (var i = min; i <= max; i += step) {
+            let input = [];
+            for (let i = min; i <= max; i += step) {
                 input.push(i);
             }
             return input;
@@ -348,15 +358,15 @@ app.factory('svc', function() {
                 'so_games_played', 'so_attempts_a', 'so_goals_a'
             ];    
         },
-        skater_stats_to_aggregate: function() {
-            return [
-                'gp', 'g', 'a', 'pts', 'sog', 'ppg', 'shg', 'pim', 'shf', 'toi', 'toi_pp', 'toi_sh', 'missed',
-                'blocked', 'plus_minus', 'fac_w', 'fac_l', 'fac', 'blocks', 'gwg', 'prim_pts'
-            ]
-        },
+        // career_skater_stats_to_aggregate: function() {
+        //     return [
+        //         'gp', 'g', 'a', 'pts', 'sog', 'ppg', 'shg', 'pim', 'shf', 'toi', 'toi_pp', 'toi_sh', 'missed',
+        //         'blocked', 'plus_minus', 'fac_w', 'fac_l', 'fac', 'blocks', 'gwg', 'prim_pts'
+        //     ]
+        // },
         skater_stats_to_calculate: function() {
             return [
-                ['fac_l', 'difference', 'fac', 'fac_w'], ['gpg', 'rate', 'g', 'gp'],
+                ['pts', 'sum', 'g', 'a'], ['fac_l', 'difference', 'fac', 'fac_w'], ['gpg', 'rate', 'g', 'gp'],
                 ['apg', 'rate', 'a', 'gp'], ['ptspg', 'rate', 'pts', 'gp'], ['sh_pctg', 'percentage', 'g', 'sog'],
                 ['shf_pg', 'rate', 'shf', 'gp'], ['toi_shf', 'rate', 'toi', 'shf'], ['toi_pg', 'rate', 'toi', 'gp'],
                 ['toi_pp_pg', 'rate', 'toi_pp', 'gp'], ['toi_sh_pg', 'rate', 'toi_sh', 'gp'],
@@ -364,7 +374,7 @@ app.factory('svc', function() {
             ]
         },
         pad: function pad(num, size) {
-            var s = num+"";
+            let s = num+"";
             while (s.length < size) s = "0" + s;
             return s;
         },
@@ -378,13 +388,15 @@ app.factory('svc', function() {
             if (!full_name) {
                 return '';
             }
-            var names = full_name.split(' ');
+            let names = full_name.split(' ');
             return names[0][0] + '. ' + names.slice(-1)[0];
         },
         calculateDifference: function(minuend, subtrahend) {
             return minuend - subtrahend;
         },
-        calculateRate: function(value_to_rate, rating_parameter) {
+        calculateRate: function(value_to_rate, rating_parameter, factor) {
+            if (factor)
+                value_to_rate = value_to_rate * factor;
             if (rating_parameter) {
                 return value_to_rate / rating_parameter;
             } else {
@@ -433,7 +445,7 @@ app.factory('svc', function() {
                 today = new Date();
             }
             // calculating years
-            var years;
+            let years;
             if (today.getMonth() > birthDate.getMonth() || (today.getMonth() == birthDate.getMonth() && today.getDate() >= birthDate.getDate())) {
                 years = today.getFullYear() - birthDate.getFullYear();
             }
@@ -442,7 +454,7 @@ app.factory('svc', function() {
             }
           
             // calculating months
-            var months;
+            let months;
             if (today.getDate() >= birthDate.getDate()) {
                 months = today.getMonth() - birthDate.getMonth();
             }
@@ -453,12 +465,13 @@ app.factory('svc', function() {
             months = months < 0 ? months + 12 : months;
           
             // Calculate days
-            var days;
+            let days;
             // days of months in a year
-            var monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            let monthDays;
+            monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
             // re-setting days of months in a year for leap years
             if ((0 == birthDate.getFullYear() % 4) && (0 != birthDate.getFullYear() % 100) || (0 == birthDate.getFullYear() % 400)) {
-                var monthDays = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+                monthDays = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
             }
             if (today.getDate() >= birthDate.getDate()) {
                 days = today.getDate() - birthDate.getDate();
@@ -477,6 +490,23 @@ app.factory('svc', function() {
         }
     }
 });
+
+app.directive('careerStatsTable', ['svc', function(svc) {
+    return {
+        restrict: 'E',         
+        scope: {
+            id: '@',
+            filteredSeasonPlayerStats: '=',
+            statsCols: '=',
+            ctrl: '=',
+            seasonType: '='
+        },
+        templateUrl: 'custom_directives/career_stats_table.html',
+        link: function(scope) {
+            scope.svc = svc;
+        }
+    }
+}]);
 
 
 app.directive('skaterCareerTable', ['svc', function(svc) {
@@ -528,4 +558,3 @@ app.directive('tableHeader', ['svc', function(svc) {
         }
     }
 }]);
-    

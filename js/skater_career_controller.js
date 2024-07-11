@@ -28,6 +28,16 @@ app.controller('skaterCareerController', function ($scope, $http, $routeParams, 
         };
     });
 
+    // loading list of stats to be aggregated
+    $http.get('./js/stats_to_aggregate.json').then(function (res) {
+        ctrl.statsToAggregate = res.data;
+    });
+
+    // loading criteria to calculate stats
+    $http.get('./js/stats_to_calculate.json').then(function (res) {
+        ctrl.statsToCalculate = res.data;
+    });
+
     // retrieving column headers (and abbreviations + explanations)
     $http.get('./js/skater_career_columns.json').then(function (res) {
         $scope.stats_cols = res.data;
@@ -71,7 +81,7 @@ app.controller('skaterCareerController', function ($scope, $http, $routeParams, 
                 combined_season['order'] = 0;
                 combined_season['age'] = single_season_data[0]['age'];
                 combined_season['team'] = Array.from(new Set(single_season_data.map(season => season.team))).join(", ");
-                svc.skater_stats_to_aggregate().forEach(attr => {
+                ctrl.statsToAggregate['career_skater_stats_to_aggregate'].forEach(attr => {
                     combined_season[attr] = single_season_data.reduce((attr_sum, season) => {return attr_sum + season[attr];}, 0);
                 });
                 $scope.seasons.push(combined_season);
@@ -146,19 +156,23 @@ app.controller('skaterCareerController', function ($scope, $http, $routeParams, 
                 if (seasonType == 'ALL') {
                     team_seasons['no_of_seasons'] = new Set(team_filtered_seasons.map(season => season.season)).size;
                     min_max_ages = svc.getMinMaxFromSeasons(team_filtered_seasons, 'age');
-                    svc.skater_stats_to_aggregate().forEach(parameter => {
-                        team_seasons[parameter] = team_filtered_seasons.reduce((param, season) => {return param + season[parameter] || 0;}, 0);
+                    ctrl.statsToAggregate['career_skater_stats_to_aggregate'].forEach(parameter => {
+                        team_seasons[parameter] = team_filtered_seasons.reduce((param, season) => {return param + (season[parameter] || 0);}, 0);
                     })
+                    team_seasons['g_post_98'] = team_filtered_seasons.filter(season => season.season > 1998).reduce((param, season) => {return param + (season['g'] || 0);}, 0);
                 } else {
                     team_season_type_filtered_seasons = team_filtered_seasons.filter(season => season.season_type == seasonType);
                     team_seasons['no_of_seasons'] = new Set(team_season_type_filtered_seasons.map(season => season.season)).size;
                     min_max_ages = svc.getMinMaxFromSeasons(team_season_type_filtered_seasons, 'age');
-                    svc.skater_stats_to_aggregate().forEach(parameter => {
-                        team_seasons[parameter] = team_season_type_filtered_seasons.reduce((param, season) => {return param + season[parameter] || 0;}, 0);
+                    ctrl.statsToAggregate['career_skater_stats_to_aggregate'].forEach(parameter => {
+                        team_seasons[parameter] = team_season_type_filtered_seasons.reduce((param, season) => {return param + (season[parameter] || 0);}, 0);
                     })
+                    team_seasons['g_post_98'] = team_season_type_filtered_seasons.filter(season => season.season > 1998).reduce((param, season) => {return param + (season['g'] || 0);}, 0);
                 }
                 svc.skater_stats_to_calculate().forEach(calculation_cfg => {
                     let [parameter, calculation_type, src_parameter, norm_parameter] = calculation_cfg;
+                    if (parameter == 'sh_pctg')
+                        src_parameter = 'g_post_98';
                     if (calculation_type == 'rate') {
                         team_seasons[parameter] = svc.calculateRate(team_seasons[src_parameter], team_seasons[norm_parameter]);
                     }

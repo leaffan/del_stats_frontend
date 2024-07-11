@@ -1,9 +1,10 @@
 <thead class="thead-light">
     <tr>
         <th scope="col" class="text-center" data-ng-repeat="col in statsCols">
-            <a data-ng-if="col['sortable'] === undefined || col['sortable'] == true" href="" data-ng-click="ctrl.sortConfig = svc.setSortOrder2(col.data_key, ctrl.sortConfig, ctrl.sortCriteria, ['season_type', 'team', 'season'])">
+            <a data-ng-if="col['sortable'] === undefined || col['sortable'] == true" href="" data-ng-click="ctrl.sortConfig = svc.setSortOrder2(col.data_key, ctrl.sortConfig, ctrl.sortCriteria, ['country', 'last_name', 'season_type', 'team', 'season'])">
                 <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
-                <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
+                <span data-ng-if="!col.expl_de && !col.class">{{col.col_header}}</span>
+                <span data-ng-if="col.class"><i data-ng-if="col.class" class="{{col.class}}" aria-hidden="true"></i></span>
                 <span data-ng-show="ctrl.sortConfig['sortKey'] == col.data_key && ctrl.sortConfig['sortDescending']" class="fa fa-caret-down"></span>
                 <span data-ng-show="ctrl.sortConfig['sortKey'] == col.data_key && !ctrl.sortConfig['sortDescending']" class="fa fa-caret-up"></span>
             </a>

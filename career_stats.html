@@ -7,187 +7,119 @@
         <h1 class="mb-0">DEL-Karrierestatistiken</h1>
     </div>
 
-    <div class="alert alert-info main-bg shadow">
-        <span ng-click="toggle=!toggle"><b>Anmerkungen&#32;&#32;<span ng-show="toggle" class="fa fa-minus"></span><span ng-show="!toggle" class="fa fa-plus"></span></b></span>
-            <div data-ng-show="toggle" class="row mt-2 mx-2 mb-0">
-                <div data-ng-if="position != 'GK'">
-                    <p class="mb-1">Mit der Erfassung von Über- und Unterzahltoren wurde in der DEL erst im Verlauf der Saison 1998/99 begonnen. Davon betroffene Gesamtzahlen sind mit <b>*</b> gekennzeichnet.</p>
-                    <p class="mb-0">Die Erfassung von Torschüssen begann mit der Saison 1999/2000, vorher sind keine Daten dieser Form vorhanden. Davon betroffene Gesamtzahlen sind mit <b>**</b> gekennzeichnet.</p>
-                </div>
-                <div data-ng-if="position == 'GK'">
-                    <p class="mb-1">Mit der Erfassung von Siegen und Niederlagen bei Torhütern wurde in der DEL erst in der Saison 2007/08 begonnen. Davon betroffene Gesamtzahlen sind mit <b>*</b> gekennzeichnet.</p>
-                    <p class="mb-0">Die Erfassung von Torschüssen sowie von zugelassenen Treffern bei Torhütern begann mit der Saison 1999/2000, vorher sind keine Daten dieser Form vorhanden. Entsprechend ist auch eine Berechnung von Fangquoten und Gegentorschnitten vor diesem Zeitpunkt nicht möglich. Davon betroffene Gesamtzahlen sind mit <b>**</b> gekennzeichnet.</p>
-                </div>
-            </div>
-    </div>
-
     <form>
         <div class="form-row mb-1">
-            <div class="input-group col-12">
+            <div class="input-group col-2">
+                <select class="form-control" data-ng-model="position">
+                    <option data-ng-option value selected="selected">alle Positionen</option>
+                    <option data-ng-option value="GK">Torhüter</option>
+                    <option data-ng-option value="DE">Verteidiger</option>
+                    <option data-ng-option value="FO">Stürmer</option>
+                </select>
+            </div>
+            <div class="input-group col-10 pl-0">
                 <div class="input-group-prepend w-5">
                     <span class="input-group-text w-100 justify-content-center"><i class="fa fa-search"></i></span>
                 </div>
-                <input type="text" class="form-control" placeholder="Spieler filtern" data-ng-model="$parent.nameFilter" />
+                <input type="text" class="form-control" placeholder="Spieler filtern" data-ng-model="ctrl.nameFilter" />
             </div>
         </div>
-        <div class="d-md-none">
-            <div class="form-row mb-1">
-                <div class="input-group col-6">
-                    <select class="form-control" data-ng-model="position">
-                        <option data-ng-option value selected="selected">alle Positionen</option>
-                        <option data-ng-option value="GK">Torhüter</option>
-                        <option data-ng-option value="DE">Verteidiger</option>
-                        <option data-ng-option value="FO">Stürmer</option>
-                    </select>
-                </div>
-                <div class="input-group col-6 pl-0">
-                    <select class="form-control" data-ng-model="team" data-ng-options="team_full_name_lookup[team] for team in active_teams">
-                        <option data-ng-option value selected="selected">alle</option>
-                    </select>
-                </div>
+        <div class="form-row mb-1">
+            <div class="input-group col-3">
+                <select class="form-control" data-ng-model="table_type">
+                    <option value="skater_career_stats">Basisstatistiken</option>
+                    <option data-ng-if="position == 'GK'" value="goalie_career_stats">Torhüterstatistiken</option>
+                    <option data-ng-if="position != 'GK'" data-ng-option value="skater_toi_shift_stats">Eiszeiten/Wechsel (seit 2018/19)</option>
+                    <option data-ng-if="position != 'GK'" data-ng-option value="skater_additional_stats">Zusatzstatistiken (seit 2018/19)</option>
+                </select>
             </div>
-            <div class="form-row mb-1">
-                <div class="input-group col-6">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">von:</span>
-                    </div>
-                    <select class="form-control" data-ng-model="from_season" data-ng-options="(season.toString() + '/' + (season + 1).toString().substr(-2)) for season in svc.range(min_season, to_season)">
-                    </select>                
-                </div>
-                <div class="input-group col-6 pl-0">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">bis:</span>
-                    </div>
-                    <select class="form-control" data-ng-model="to_season" data-ng-options="(season.toString() + '/' + (season + 1).toString().substr(-2)) for season in svc.range(from_season, max_season)">
-                    </select>
-                </div>
+            <div class="input-group col-3 pl-0">
+                <select class="form-control" data-ng-model="season_type">
+                    <option data-ng-option value="ALL">Hauptrunde und Playoffs</option>
+                    <option data-ng-option value="RS">Hauptrunde</option>
+                    <option data-ng-option value="PO">Playoffs</option>
+                </select>
             </div>
-            <div class="form-row mb-1">
-                <div class="input-group col-12">
-                    <select class="form-control" data-ng-model="season_type">
-                        <option data-ng-option value="ALL">Hauptrunde und Playoffs</option>
-                        <option data-ng-option value="RS">Hauptrunde</option>
-                        <option data-ng-option value="PO">Playoffs</option>
-                    </select>
-                </div>
+            <div class="input-group col-3 pl-0">
+                <select class="form-control" data-ng-model="team" data-ng-options="team_full_name_lookup[team] for team in all_teams">
+                    <option data-ng-option value selected="selected">alle Teams</option>
+                </select>
+            </div>
+            <div class="input-group col-3 pl-0">
+                <select class="form-control" id="country" data-ng-model="country">
+                    <option data-ng-option value selected="selected">alle Länder</option>
+                    <option data-ng-option value="non_de">Kontingent</option>
+                    <option data-ng-option data-ng-repeat="country in display_countries" value="{{country['iso_country']}}">{{country['country']}}</option>                    
+                </select>
             </div>
         </div>
-
-        <div class="d-none d-md-block">
-            <div class="form-row mb-1">
-                <div class="input-group col-2">
-                    <select class="form-control" data-ng-model="position">
-                        <option data-ng-option value selected="selected">alle Positionen</option>
-                        <option data-ng-option value="GK">Torhüter</option>
-                        <option data-ng-option value="DE">Verteidiger</option>
-                        <option data-ng-option value="FO">Stürmer</option>
-                    </select>
+        <div class="form-row mb-2">
+            <div class="input-group col-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">von:</span>
                 </div>
-                <div class="input-group col-3 pl-0">
-                    <select class="form-control" data-ng-model="team" data-ng-options="team_full_name_lookup[team] for team in all_teams">
-                        <option data-ng-option value selected="selected">alle</option>
-                    </select>
+                <select class="form-control" data-ng-model="ctrl.from_season" data-ng-options="svc.getSeasonIdentifier(season) for season in svc.range(ctrl.first_season, ctrl.to_season)">
+                </select>                
+            </div>
+            <div class="input-group col-3 pl-0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">bis:</span>
                 </div>
-                <div class="input-group col-2 pl-0">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">von:</span>
-                    </div>
-                    <select class="form-control" data-ng-model="from_season" data-ng-options="(season.toString() + '/' + (season + 1).toString().substr(-2)) for season in svc.range(min_season, to_season)">
-                    </select>                
+                <select class="form-control" data-ng-model="ctrl.to_season" data-ng-options="svc.getSeasonIdentifier(season) for season in svc.range(ctrl.from_season, ctrl.last_season)">
+                </select>
+            </div>
+            <div class="input-group col-3 pl-0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">von:</span>
                 </div>
-                <div class="input-group col-2 pl-0">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">bis:</span>
-                    </div>
-                    <select class="form-control" data-ng-model="to_season" data-ng-options="(season.toString() + '/' + (season + 1).toString().substr(-2)) for season in svc.range(from_season, max_season)">
-                    </select>
+                <select class="form-control" data-ng-model="ctrl.from_age" data-ng-options="age for age in svc.range(ctrl.min_age, ctrl.to_age)">
+                </select>                
+            </div>
+            <div class="input-group col-3 pl-0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">bis:</span>
                 </div>
-                <div class="input-group col-3 pl-0">
-                    <select class="form-control" data-ng-model="season_type">
-                        <option data-ng-option value="ALL">Hauptrunde und Playoffs</option>
-                        <option data-ng-option value="RS">Hauptrunde</option>
-                        <option data-ng-option value="PO">Playoffs</option>
-                    </select>
-                </div>
+                <select class="form-control" data-ng-model="ctrl.to_age" data-ng-options="age for age in svc.range(ctrl.from_age, ctrl.max_age)">
+                </select>
             </div>
         </div>
 
-        <div class="mt-0 mb-3">
-            <div class="border-0">
-                    <label for="show_only_active">
-                    <input type="checkbox" id="show_only_active" data-ng-model="show_only_active" value="">
-                    <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
-                    Nur aktive Spieler anzeigen
-                </label>
+        <div class="form-row mb-1">
+            <div class="input-group col-4">
+                <div class="mt-0 mb-3">
+                    <div class="border-0">
+                            <label for="show_only_active">
+                            <input type="checkbox" id="show_only_active" data-ng-model="show_only_active" value="">
+                            <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                            Nur aktive Spieler anzeigen
+                        </label>
+                    </div>
+                </div>
             </div>
+
+            <div data-ng-if="team" class="input-group col-4">
+                <div class="mt-0 mb-3">
+                        <div class="border-0">
+                            <label for="display_games_with_other_teams">
+                            <input type="checkbox" id="display_games_with_other_teams" data-ng-model="ctrl.display_games_with_other_teams" value="">
+                            <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                            Auch Spiele mit anderen Teams aufführen
+                        </label>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
     </form>
 
-    <table id="career_stats_skaters" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="position != 'GK'">
-        <thead class="thead-light">
-            <tr>
-                <th scope="col" class="text-center d-none d-md-block">Rang</th>
-                <th scope="col" class="text-center d-md-none">#</th>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols['career_stats_skaters']">
-                    <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
-                        <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
-                        <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
-                        <span data-ng-show="$parent.sortConfig['sortKey'] == col.data_key && $parent.sortConfig['sortDescending']" class="fa fa-caret-down"></span>
-                        <span data-ng-show="$parent.sortConfig['sortKey'] == col.data_key && !$parent.sortConfig['sortDescending']" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-ng-repeat="stat in filtered_season_player_stats | filter:nameFilter | filter:greaterThanFilter('gp', 0) | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
-                <td class="w-05 text-right">{{ $index + 1 }}</td>
-                <td class="w-17"><a data-ng-style="stat.last_season == 2023 && {'font-weight':'bold'}" href="#!/{{ stat.position.startsWith('G') ? 'player_career' : 'skater_career'}}/{{stat.player_id}}">{{ stat.first_name }} {{ stat.last_name }}</b></td>
-                <td class="w-08">{{ stat.teams_cnt == 1 ? stat.teams[0] : stat.teams_cnt + ' Teams' }}</td>
-                <td class="w-06 text-right">{{ stat.gp }}</td>
-                <td class="w-06 text-right">{{ stat.g }}</td>
-                <td class="w-06 text-right">{{ stat.a }}</td>
-                <td class="w-06 text-right">{{ stat.pts }}</td>
-                <td class="w-06 text-right">{{ stat.pim }}</td>
-                <td class="w-06 text-right">{{ stat.ppg }}<span data-ng-if="$parent.from_season < 1998 && stat.first_season < 1998" title="Ohne Daten vor 1998/1999.">*</span></td>
-                <td class="w-06 text-right">{{ stat.shg }}<span data-ng-if="$parent.from_season < 1998 && stat.first_season < 1998" title="Ohne Daten vor 1998/1999.">*</span></td>
-                <td class="w-07 text-right">{{ stat.sog }}<span data-ng-if="$parent.from_season < 1999 && stat.first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></td>
-                <td class="w-07 text-right">{{ stat.sh_pctg.toFixed(1) + ' %' }}<span data-ng-if="$parent.from_season < 1999 && stat.first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></td>
-                <td class="w-07 text-right">{{ stat.gpg.toFixed(2) }}</td>
-                <td class="w-07 text-right">{{ stat.ptspg.toFixed(2) }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <!-- basic skater career stats -->
+    <career-stats-table data-ng-if="table_type == 'skater_career_stats'" id="skater_career_stats" stats-cols="stats_cols['skater_career_stats']" filtered-season-player-stats="filtered_season_player_stats" ctrl="ctrl"></career-stats-table>
+    <!-- skater time-on-ice and shift stats -->
+    <career-stats-table data-ng-if="table_type == 'skater_toi_shift_stats'" id="skater_toi_shift_stats" stats-cols="stats_cols['skater_toi_shift_stats']" filtered-season-player-stats="filtered_season_player_stats" ctrl="ctrl"></career-stats-table>
+    <!-- skater additional stats -->
+    <career-stats-table data-ng-if="table_type == 'skater_additional_stats'" id="skater_additional_stats" stats-cols="stats_cols['skater_additional_stats']" filtered-season-player-stats="filtered_season_player_stats" ctrl="ctrl"></career-stats-table>
+    <!-- basic goalie career stats -->
+    <career-stats-table data-ng-if="table_type == 'goalie_career_stats'" id="goalie_career_stats" stats-cols="stats_cols['goalie_career_stats']" filtered-season-player-stats="filtered_season_player_stats" ctrl="ctrl"></career-stats-table>
 
-    <table id="career_stats_goalies" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="position == 'GK'">
-        <thead class="thead-light">
-            <tr>
-                <th scope="col" class="text-center">Rang</th>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols['career_stats_goalies']">
-                    <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
-                        <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
-                        <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
-                        <span data-ng-show="$parent.sortConfig['sortKey'] == col.data_key && $parent.sortConfig['sortDescending']" class="fa fa-caret-down"></span>
-                        <span data-ng-show="$parent.sortConfig['sortKey'] == col.data_key && !$parent.sortConfig['sortDescending']" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-ng-repeat="stat in filtered_season_player_stats | filter:nameFilter | filter:greaterThanFilter('gp', 0) | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
-                <td class="w-05 text-right">{{ $index + 1 }}</td>
-                <td class="w-16"><a data-ng-style="stat.last_season == 2023 && {'font-weight':'bold'}" href="#!/player_career/{{stat.player_id}}">{{ stat.first_name }} {{ stat.last_name }}</a></td>
-                <td class="w-07 text-right">{{ stat.teams_cnt == 1 ? stat.teams[0] : stat.teams_cnt + ' Teams' }}</td>
-                <td class="w-08 text-right">{{ stat.gp }}</td>
-                <td class="w-08 text-right">{{ svc.formatTime(stat.toi) }}</td>
-                <td class="w-08 text-right">{{ stat.w }}<span data-ng-if="$parent.from_season < 2007 && stat.first_season < 2007" title="Ohne Daten vor 2007/2008.">*</span></td>
-                <td class="w-08 text-right">{{ stat.l }}<span data-ng-if="$parent.from_season < 2007 && stat.first_season < 2007" title="Ohne Daten vor 2007/2008.">*</span></td>
-                <td class="w-08 text-right">{{ stat.sa }}<span data-ng-if="$parent.from_season < 1999 && stat.first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></td>
-                <td class="w-08 text-right">{{ stat.ga }}<span data-ng-if="$parent.from_season < 1999 && stat.first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></td>
-                <td class="w-08 text-right">{{ stat.sv_pctg.toFixed(1) + ' %'}}<span data-ng-if="$parent.from_season < 1999 && stat.first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></td>
-                <td class="w-08 text-right">{{ stat.gaa.toFixed(2) }}<span data-ng-if="$parent.from_season < 1999 && stat.first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></td>
-                <td class="w-08 text-right">{{ svc.getShutouts(stat) }}</td>
-            </tr>
-        </tbody>
-    </table>
 </div>

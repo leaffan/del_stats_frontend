@@ -1,30 +1,40 @@
-app.controller('careerStatsController', function ($scope, $http, $routeParams, svc) {
+app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'config', function ($scope, $http, $window, svc, config) {
+    let ctrl = this;
     $scope.svc = svc;
+    $scope.table_type = 'skater_career_stats';
     $scope.season_type = 'ALL';
     $scope.show_only_active = false;
-    // $scope.position = 'GK';
-    $scope.sortConfig = {
-        'sortKey': 'pts',
-        'sortCriteria': ['pts', 'ptspg', 'g', '-gp'],
-        'sortDescending': true
-    }
-    $scope.sortCriteria = {
-        "gp": ['gp', 'pts', 'g'],
-        "pts": ['pts', 'ptspg', 'g', '-gp'],
-        "pim": ['pim', '-gp'],
-        "w": ['w', '-gp'],
-        "l": ['l', 'gp'],
-        "ga": ['ga', 'gp'],
-        "teams_cnt": ['teams_cnt', '-teams[0]'],
-        "ppg": ['ppg', '-gp'],
-        "shg": ['shg', '-gp'],
-        "ptspg": ['ptspg', 'pts', 'g'],
-        "gpg": ['gpg', 'g', 'pts'],
-        "sog": ['sog', '-gp'],
-        "sh_pctg": ['sh_pctg', 'sog', '-gp'],
-        "sv_pctg": ['sv_pctg', 'sa', 'toi'],
-        "total_so": ['total_so', 'so', '-gp', '-toi']
+    $scope.aggregate_season = true;
+    ctrl.display_games_with_other_teams = false;
+    ctrl.limit = 100;
+
+    $window.onscroll = function() {
+        let pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
+        let max = document.documentElement.scrollHeight;
+        if (pos >= max) {
+            $scope.$apply(loadMoreRecords());
+        }
     };
+
+    // loading list of stats to be aggregated
+    $http.get('./js/stats_to_aggregate.json').then(function (res) {
+        ctrl.statsToAggregate = res.data;
+    });
+
+    // loading criteria to calculate stats
+    $http.get('./js/stats_to_calculate.json').then(function (res) {
+        ctrl.statsToCalculate = res.data;
+    });
+
+    // loading sort criteria for displayed tables
+    $http.get('./js/sort_criteria_tables.json').then(function (res) {
+        ctrl.tableSortCriteria = res.data;
+    });
+
+    // loading sort criteria for player stats
+    $http.get('./js/sort_criteria_players.json').then(function (res) {
+        ctrl.sortCriteria = res.data;
+    });
 
     // retrieving column headers (and abbreviations + explanations)
     $http.get('./js/career_stats_columns.json').then(function (res) {
@@ -32,11 +42,11 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
     });
 
     $http.get('./js/teams_historic.json').then(function (res) {
-        orig_teams = res.data;
+        let orig_teams = res.data;
         // setting teams that are valid for current season as active ones
-        active_teams = orig_teams.filter(team => team.active).sort((a, b)=> (a.location > b.location ? 1 : -1)).map(team => team.abbr);
+        let active_teams = orig_teams.filter(team => team.active).sort((a, b)=> (a.location > b.location ? 1 : -1)).map(team => team.abbr);
         // setting teams that are not valid for current season as inactive ones
-        inactive_teams = orig_teams.filter(team => !team.active).sort((a, b)=> (a.location > b.location ? 1 : -1)).map(team => team.abbr);
+        let inactive_teams = orig_teams.filter(team => !team.active).sort((a, b)=> (a.location > b.location ? 1 : -1)).map(team => team.abbr);
         $scope.all_teams = active_teams.concat(inactive_teams);
         // setting up lookup dictionary for full team names
         $scope.team_full_name_lookup = orig_teams.reduce((o, key) => Object.assign(o, {[key.abbr]: key.full_name}), {});
@@ -45,165 +55,179 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
     // loading player information from external file
     $http.get('data/career_stats/upd_all_players.json').then(function (res) {
         $scope.players = res.data;
+        let all_hands = new Set($scope.players.map(player => player['hand']));
+        let all_countries = new Set($scope.players.map(player => player['country'].split(", ")).flat());
+        $http.get('js/iso_countries.json').then(function (res) {
+            let country_mapping = res.data;
+            $scope.display_countries = []
+            all_countries.forEach(iso_country => {
+                let plrs_per_country = $scope.players.filter((player) => player.country.includes(iso_country)).length;
+                $scope.display_countries.push({
+                    'iso_country': iso_country,
+                    'country': country_mapping[iso_country],
+                    'count': plrs_per_country
+                })
+            });
+            $scope.display_countries.sort((a, b)=> (a.count < b.count ? 1 : -1))
+        });
     });
 
     // loading stats from external json file
     $http.get('data/career_stats/upd_full_career_stats_stripped.json').then(function (res) {
         $scope.player_stats = res.data;
-        var all_seasons = new Set();
-        $scope.player_stats.forEach(element => {
-            element['seasons'].forEach(season_stat_line => {
-                all_seasons.add(season_stat_line['season']);
-            })
-        });
-        $scope.min_season = Math.min(...all_seasons);
-        $scope.max_season = Math.max(...all_seasons);
-        $scope.from_season = $scope.min_season;
-        $scope.to_season = $scope.max_season;
+
+        let all_seasons = new Set($scope.player_stats.map(career => career['seasons']).flat().map(season => season['season']));
+        let all_ages = new Set($scope.player_stats.map(career => career['seasons']).flat().map(season => season['age']).filter(Number.isFinite));
+
+        ctrl.first_season = ctrl.from_season = Math.min(...all_seasons);
+        ctrl.last_season = ctrl.to_season = Math.max(...all_seasons);
+        ctrl.min_age = ctrl.from_age = Math.min(...all_ages);
+        ctrl.max_age = ctrl.to_age = Math.max(...all_ages);
     });
 
-    $scope.$watchGroup(['position', 'from_season', 'to_season', 'season_type', 'team', 'show_only_active'], function(new_values, old_values) {
-        // adjusting sort order when switching between skaters and goaltenders
-        if (new_values[0] == 'GK' && old_values[0] != 'GK') {
-            $scope.sortConfig = $scope.setSortOrder('sv_pctg', $scope.sortConfig);
-        } else if (new_values[0] != 'GK' && old_values[0] == 'GK') {
-            $scope.sortConfig = $scope.setSortOrder('pts', $scope.sortConfig);
+    $scope.$watchGroup([
+        'country', 'team', 'position', 'season_type',
+        'ctrl.from_season', 'ctrl.to_season', 'ctrl.from_age', 'ctrl.to_age',
+        'table_type', 'show_only_active', 'ctrl.display_games_with_other_teams'
+    ], function(new_values, old_values) {
+        // if (old_values != new_values)
+        //     console.log(old_values, "=>", new_values, old_values === new_values);
+        // setting sort criteria according to selected table type
+        if (ctrl.tableSortCriteria) {
+            let sortKey = ctrl.tableSortCriteria[$scope.table_type]        
+            ctrl.sortConfig = {
+                'sortKey': sortKey,
+                'sortCriteria': ctrl.sortCriteria[sortKey] || sortKey,
+                'sortDescending': true
+            };
         }
-        // filtering stats to adjust displayed players
-        if ($scope.player_stats) {
-            $scope.filtered_season_player_stats = $scope.filterCareerStats();
-        }
-    }, true);
+        // filtering player career stats
+        $scope.filtered_season_player_stats = $scope.filterCareerStats();
+        // re-setting limit of displayed rows
+        ctrl.limit = 100;
+    });
 
-    $scope.to_aggregate = [
-        'gp', 'g', 'a', 'plus_minus', 'pim', 'ppg', 'shg', 'gwg', 'sog', 'toi', 'w', 'l', 'sa', 'ga', 'so', 'sl_so'];
+    // identifies whether specified player is of interest according to defined filters
+    $scope.filterPlayer = function(player) {
+        if (!['skater_career_stats', 'goalie_career_stats'].includes($scope.table_type) && player['position'].includes('G'))
+            return false;
+        if ($scope.show_only_active && player['last_season'] != config.defaultSeason)
+            return false;
+        if ($scope.position) {
+            if ($scope.position == 'DE' && !player['position'].includes('D'))
+                return false;
+            if ($scope.position == 'GK' && !player['position'].includes('G'))
+                return false;
+            if ($scope.position == 'FO' && (player['position'].includes('G') || player['position'].includes('D')))
+                return false;
+        }
+        if (ctrl.from_season > player['last_season'])
+            return false;
+        if (ctrl.to_season < player['first_season'])
+            return false;
+        if ($scope.country) {
+            if ($scope.country == 'non_de') {
+                if (player['country'].includes('de'))
+                    return false;
+            } else {
+                if (!player['country'].includes($scope.country))
+                    return false;
+            }
+        }
+
+        return true;
+    };
+
+    $scope.filterPlayerSeasons = function(player_season, player_teams) {
+        if (player_season['season'] < ctrl.from_season)
+            return false;
+        if (player_season['season'] > ctrl.to_season)
+            return false;
+        if (ctrl.from_age != $scope.min_age && (player_season['age'] < ctrl.from_age || player_season['age'] === undefined))
+            return false;
+        if (ctrl.to_age != $scope.max_age && (player_season['age'] > ctrl.to_age || player_season['age'] === undefined))
+            return false;
+        if ($scope.season_type != 'ALL' && player_season['season_type'] != $scope.season_type)
+            return false;
+        if ($scope.team) {
+            if (ctrl.display_games_with_other_teams) {
+                if (!player_teams.has($scope.team))
+                    return false
+            } else {
+                if (player_season['team'] != $scope.team)
+                    return false;                
+            }
+        }
+        return true;
+    };
+
+    $scope.preparePlayer = function(player) {
+        return {
+            'player_id': player['last_season'] < config.defaultSeason ? 'g' + player['g_id'] : player['c_id'], 
+            'first_name': player['first_name'],
+            'last_name': player['last_name'],
+            'position': player['position'],
+            'country': player['country'].split(", "),
+            'first_season': player['first_season'],
+            'last_season': player['last_season'],
+        };
+    };
 
     $scope.filterCareerStats = function() {
-        filtered_career_stats = [];
-        if ($scope.player_stats === undefined)
-            return filtered_career_stats;
-        $scope.player_stats.forEach(player => {
-            player_data = $scope.players.filter(function(orig_player) {
-                if (orig_player.c_id && orig_player.c_id == player.id) {
-                    return true;
-                } else if (orig_player.c_id && orig_player.c_id == player.id) {
-                    return true;
-                } else if (orig_player.g_id && orig_player.g_id == player.id) {
-                    return true;
-                }
-                return false;
-            });
-            player_data = player_data[0];
-            let player_ep_id = '';
-            if (player_data['ep_id'] === undefined) {
-                player_ep_id = 'g' + player_data['g_id'];
-            } else {
-                player_ep_id = 'e' + player_data['ep_id'].split("/")[0];
+        if ($scope.players === undefined)
+            return;
+        let filtered_career_stats = [];
+        let players_of_interest = $scope.players.filter(function(player) {
+            return $scope.filterPlayer(player);
+        });
+
+        players_of_interest.forEach(player => {
+            let player_seasons = $scope.player_stats.filter(career => (career['id'] == player['g_id'] || career['id'] == player['c_id'])).map(career => career['seasons']).flat();
+            let player_teams = new Set(player_seasons.map(player_season => player_season.team));
+            if (!['skater_career_stats', 'goalie_career_stats'].includes($scope.table_type)) {
+                player_seasons = player_seasons.filter(season => season.season >= 2018);
             }
+            player_seasons = player_seasons.filter(function(player_season) {
+                return $scope.filterPlayerSeasons(player_season, player_teams);
+            });
+            if (player_seasons.length < 1)
+                return;
             // setting up filtered cumulated stat line for current player
-            filtered_stat_line = {
-                'player_id': player_data['last_season'] < 2023 ? 'g' + player_data['g_id'] : player_data['c_player_id'] ? player_data['c_player_id'] : player_data['c_id'] ? player_data['c_id'] : 'g' + player_data['g_id'],
-                'player_ep_id': player_ep_id,
-                'first_name': player_data['first_name'],
-                'last_name': player_data['last_name'],
-                'position': player_data['position'],
-                'first_season': player_data['first_season'],
-                'last_season': player_data['last_season'],
-                'pts': 0,
-                'sh_pctg': 0.0,
-                'sv_pctg': 0.0,
-                'gpg': 0.0,
-                'ptspg': 0.0,
-                'teams': new Set()
-            };
-            $scope.to_aggregate.forEach(category => {
-                filtered_stat_line[category] = 0;
-            })
-            // setting up category for goals past 1998/99 season to calculate shooting percentages properly
-            filtered_stat_line['g_post_98'] = 0;
-
-            // checking if current player is an active player
-            is_active = false;
-            if (player_data['last_season'] == 2023)
-                is_active = true;
-                
-            if ($scope.show_only_active && !is_active)
-                return;
-
-            // checking if current player plays selected position
-            is_selected_position = false;
-            // only show skaters by default
-            if (!$scope.position) {
-                if (player_data['position'].startsWith('G')) {
-                    is_selected_position = false;
-                } else {
-                    is_selected_position = true;
-                }
+            let filtered_stat_line = $scope.preparePlayer(player);
+            filtered_stat_line['teams'] = new Set(player_seasons.map(season => season['team']));
+            let stats_to_aggregate;
+            let stats_to_calculate;
+            if (player.position.startsWith('G')) {
+                stats_to_aggregate = ctrl.statsToAggregate['career_goalie_stats_to_aggregate'];
+                stats_to_calculate = ctrl.statsToCalculate['career_goalie_stats_to_calculate'];
             } else {
-                if ($scope.position == 'GK' && player_data['position'].startsWith('G')) {
-                    is_selected_position = true;
-                } else if ($scope.position == 'DE' && player_data['position'].includes('D')) {
-                    is_selected_position = true;
-                } else if ($scope.position == 'FO' && !player_data['position'].startsWith('G') && !player_data['position'].includes('D')) {
-                    is_selected_position = true;
-                }
+                stats_to_aggregate = ctrl.statsToAggregate['career_skater_stats_to_aggregate'];
+                stats_to_calculate = ctrl.statsToCalculate['skater_stats_to_calculate'].concat(ctrl.statsToCalculate['career_skater_stats_to_calculate']);
             }
-
-            if (!is_selected_position)
+            if (stats_to_calculate == undefined)
                 return;
-
-            player['seasons'].forEach(season_stat_line => {
-                in_season_range = false;
-                in_season_types = false;
-                is_selected_team = false;
-
-                // checking if current stat line is from a selected season
-                if (season_stat_line['season'] >= $scope.from_season && season_stat_line['season'] <= $scope.to_season)
-                    in_season_range = true;
-                // checking if current stat line is of a selected season type
-                if ($scope.season_type == 'ALL') {
-                    in_season_types = true;
-                } else {
-                    if ($scope.season_type == season_stat_line['season_type'])
-                        in_season_types = true;
-                };
-                // checking if current stat line is for the selected team
-                if (!$scope.team) {
-                    is_selected_team = true;
-                } else {
-                    if (season_stat_line['team'] == $scope.team)
-                        is_selected_team = true;
-                };
-                // finally aggregating values of all season stat lines that have been filtered
-                if (in_season_range && in_season_types && is_selected_team && is_selected_position) {
-                    filtered_stat_line['teams'].add(season_stat_line['team']);
-                    $scope.to_aggregate.forEach(category => {
-                        if (season_stat_line[category])
-                            filtered_stat_line[category] += season_stat_line[category];
-                    });
-                    if (season_stat_line['season'] > 1998)
-                        if (season_stat_line['g'])    
-                            filtered_stat_line['g_post_98'] += season_stat_line['g'];
+            stats_to_aggregate.forEach(parameter => {
+                filtered_stat_line[parameter] = player_seasons.reduce((param, season) => {return param + (season[parameter] || 0);}, 0);
+            })
+            filtered_stat_line['g_post_98'] = player_seasons.filter(season => season.season > 1998).reduce((param, season) => {return param + (season['g'] || 0);}, 0);
+            stats_to_calculate.forEach(calculation_cfg => {
+                if (calculation_cfg.type == 'sum') {
+                    filtered_stat_line[calculation_cfg.name] = filtered_stat_line[calculation_cfg.summand_1] + filtered_stat_line[calculation_cfg.summand_2];
+                }
+                if (calculation_cfg.type == 'rate') {
+                    filtered_stat_line[calculation_cfg.name] = svc.calculateRate(filtered_stat_line[calculation_cfg.numerator], filtered_stat_line[calculation_cfg.denominator]);
+                }
+                if (calculation_cfg.type == 'difference') {
+                    filtered_stat_line[calculation_cfg.name] = filtered_stat_line[calculation_cfg.minuend] - filtered_stat_line[calculation_cfg.subtrahend];
+                }
+                if (calculation_cfg.type == 'percentage') {
+                    filtered_stat_line[calculation_cfg.name] = svc.calculatePercentage(filtered_stat_line[calculation_cfg.value], filtered_stat_line[calculation_cfg.base]);
+                }
+                if (calculation_cfg.type == 'from_100_percentage') {
+                    filtered_stat_line[calculation_cfg.name] = svc.calculateFrom100Percentage(filtered_stat_line[calculation_cfg.value], filtered_stat_line[calculation_cfg.base]);
                 }
             });
-            filtered_stat_line['pts'] = filtered_stat_line['g'] + filtered_stat_line['a']
-            // calculating shooting percentage (only using goal totals after 1998/99 season to do so)
-            if (filtered_stat_line['sog'])
-                filtered_stat_line['sh_pctg'] = filtered_stat_line['g_post_98'] / filtered_stat_line['sog'] * 100.;
-            // calculating total shutouts
-            filtered_stat_line['total_so'] = filtered_stat_line['so'] + filtered_stat_line['sl_so'];
-            // calculating save percentage
-            if (filtered_stat_line['sa'])
-                filtered_stat_line['sv_pctg'] = 100 - (filtered_stat_line['ga'] / filtered_stat_line['sa'] * 100.);
-            // calculating goals against average
-            if (filtered_stat_line['toi'])
-                filtered_stat_line['gaa'] = filtered_stat_line['ga'] * 3600. / filtered_stat_line['toi'];
-            // calculating per-game statistics
-            if (filtered_stat_line['gp']) {
-                filtered_stat_line['gpg'] = filtered_stat_line['g'] / filtered_stat_line['gp'];
-                // filtered_stat_line['apg'] = filtered_stat_line['a'] / filtered_stat_line['gp'];
-                filtered_stat_line['ptspg'] = filtered_stat_line['pts'] / filtered_stat_line['gp'];
-            };
+            filtered_stat_line['championships'] = player_seasons.filter(season => season.c == 1).length;
             filtered_stat_line['teams'] = Array.from(filtered_stat_line['teams']);
             filtered_stat_line['teams_cnt'] = filtered_stat_line['teams'].length;
             filtered_career_stats.push(filtered_stat_line);
@@ -211,14 +235,8 @@ app.controller('careerStatsController', function ($scope, $http, $routeParams, s
         return filtered_career_stats;
     };
 
-    $scope.setSortOrder = function(sortKey, oldSortConfig) {
-        return svc.setSortOrder2(sortKey, oldSortConfig, $scope.sortCriteria, ['last_name']);
+    let loadMoreRecords = function () {
+        ctrl.limit += 100;
     };
 
-    $scope.greaterThanFilter = function (prop, val) {
-        return function (item) {
-            return item[prop] > val;
-        }
-    }
-
-});
+}]);

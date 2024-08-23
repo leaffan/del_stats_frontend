@@ -25,7 +25,11 @@
                     {{ season.season_phase ? season.season_type + ' (' + season.season_phase + ')' : season.season_type }}                    
                 </span>
 
-                <span data-ng-if="!(['season', 'c', 'team', 'season_type'].includes(col.data_key))">
+                <span data-ng-if="col.data_key == 'total_so'">
+                    {{ season[col.data_key] == season['so'] ? season[col.data_key] : season[col.data_key] + ' (' + season['sl_so'] + ')' }}                    
+                </span>
+
+                <span data-ng-if="!(['season', 'c', 'team', 'season_type', 'total_so'].includes(col.data_key))">
                     {{ col.valid_from && season.season < col.valid_from ? '-' : col.time ? svc.formatTime(season[col.data_key]) : col.fixed ? season[col.data_key].toFixed(col.fixed) : season[col.data_key] }}
                     {{ col.valid_from && season.season < col.valid_from ? '' : col.pctg ? ' %' : '' }}
                 </span>

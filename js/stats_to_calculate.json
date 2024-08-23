@@ -44,6 +44,27 @@
             "base": "sog"
         }
     ],
+    "goalie_stats_to_calculate": [
+        {
+            "name": "sv_pctg",
+            "type": "from_100_percentage",
+            "value": "ga",
+            "base": "sa"
+        },
+        {
+            "name": "gaa",
+            "type": "rate_with_factor",
+            "numerator": "ga",
+            "denominator": "toi",
+            "factor": 3600
+        },
+        {
+            "name": "total_so",
+            "type": "sum",
+            "summand_1": "so",
+            "summand_2": "sl_so"
+        }
+    ],
     "skater_stats_to_calculate": [
         {
             "name": "pts",

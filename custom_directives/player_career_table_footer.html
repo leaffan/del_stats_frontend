@@ -2,7 +2,7 @@
     <tr>
         <td colspan="{{ statsCols.length }}"></td>
     </tr>
-    <tr class="{{ (seasonType == 'RS') ? 'table-info' : (seasonType == 'PO') ? 'table-warning' : '' }}">
+    <tr class="{{ (seasonType == 'ALL') ? '' : (seasonType == 'RS') ? 'table-info' : 'table-warning' }}">
         <th scope="col" class="text-center" colspan="5"><b>{{ seasonType == 'ALL' ? 'Gesamt:' : seasonType == 'RS' ? 'Hauptrunde:' : 'Playoffs:' }}</b></td>
         <th scope="col" class="text-center" data-ng-repeat="col in statsCols.slice(5)">
             <a data-ng-if="col['sortable'] === undefined || col['sortable'] == true" href="" data-ng-click="ctrl.teamSeasonSortConfig = svc.setSortOrder2(col.data_key, ctrl.teamSeasonSortConfig, ctrl.sortCriteria, ['season_type', 'team', 'season'])">
@@ -27,7 +27,7 @@
             <i data-ng-if="team_season.championships" class="fas fa-trophy" aria-hidden="true"></i>
         </td>
         <td
-            ng-repeat="col in statsCols.slice(5)"
+            data-ng-repeat="col in statsCols.slice(5)"
             class="w-{{ svc.pad(col.width, 2) }} text-{{ col.align ? col.align : 'right' }}"
         >
             {{ col.time ? svc.formatTime(team_season[col.data_key]) : col.fixed ? team_season[col.data_key].toFixed(col.fixed) : team_season[col.data_key] }}
@@ -52,39 +52,19 @@
         >
             <b>
                 {{
-                    (col.time && col.rate_parameter)
-                    ?
-                        svc.formatTime(svc.calculateRate(
-                            svc.getFilteredTotal(filteredSeasons, col.value_to_rate, [], '', seasonType),
-                            svc.getFilteredTotal(filteredSeasons, col.rate_parameter, [], '', seasonType)
-                        ))
-                    :
                     col.time
                     ?
-                        svc.formatTime(svc.getFilteredTotal(filteredSeasons, col.data_key, [], '', seasonType))
-                    :
-                    (col.pctg && col.data_key == 'sh_pctg')
-                    ?
-                    svc.calculatePercentage(
-                        svc.getFilteredTotal(filteredSeasons, col.part_value, [], 1999, seasonType),
-                        svc.getFilteredTotal(filteredSeasons, col.base_value, [], 1999, seasonType)
-                    ).toFixed(col.fixed) + ' %'
+                        svc.formatTime(ctrl.career_values[seasonType][col.data_key])
                     :
                     col.pctg
                     ?
-                        svc.calculatePercentage(
-                            svc.getFilteredTotal(filteredSeasons, col.part_value, [], '', seasonType),
-                            svc.getFilteredTotal(filteredSeasons, col.base_value, [], '', seasonType)
-                        ).toFixed(col.fixed) + ' %'
+                        ctrl.career_values[seasonType][col.data_key].toFixed(col.fixed) + ' %'
                     :
                     col.rate_parameter
                     ?
-                        svc.calculateRate(
-                            svc.getFilteredTotal(filteredSeasons, col.value_to_rate, [], '', seasonType),
-                            svc.getFilteredTotal(filteredSeasons, col.rate_parameter, [], '', seasonType)
-                        ).toFixed(col.fixed)
+                        ctrl.career_values[seasonType][col.data_key].toFixed(col.fixed)
                     :
-                        svc.getFilteredTotal(filteredSeasons, col.data_key, [], '', seasonType)
+                        ctrl.career_values[seasonType][col.data_key]
                 }}
             <span data-ng-if="col.valid_from && ctrl.from_season < col.valid_from && ctrl.first_season < col.valid_from" title="Ohne Daten vor {{ svc.getSeasonIdentifier(col.valid_from) }}">*</span>
             </b>

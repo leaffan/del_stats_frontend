@@ -11,7 +11,7 @@
             </span>
 
             <span data-ng-if="col.data_key == 'last_name'">
-                <a data-ng-style="stat.last_season == 2023 && {'font-weight':'bold'}" href="#!/{{ stat.position.startsWith('G') ? 'player_career' : 'skater_career'}}/{{stat.player_id}}">
+                <a data-ng-style="stat.last_season == 2023 && {'font-weight':'bold'}" href="#!/player_career/{{stat.player_id}}">
                 {{ stat.first_name }} {{ stat.last_name }}
                 </a>
             </span>

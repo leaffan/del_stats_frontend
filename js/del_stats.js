@@ -64,7 +64,7 @@ app.config(['$routeProvider', function($routeProvider){
         {
             title: 'Karriereverlauf',
             templateUrl: 'player_career.html',
-            controller: 'plrCareerController as ctrl',
+            controller: 'playerCareerController as ctrl',
             reloadOnSearch: false
         })
         .when('/skater_career/:player_id',
@@ -358,12 +358,6 @@ app.factory('svc', function() {
                 'so_games_played', 'so_attempts_a', 'so_goals_a'
             ];    
         },
-        // career_skater_stats_to_aggregate: function() {
-        //     return [
-        //         'gp', 'g', 'a', 'pts', 'sog', 'ppg', 'shg', 'pim', 'shf', 'toi', 'toi_pp', 'toi_sh', 'missed',
-        //         'blocked', 'plus_minus', 'fac_w', 'fac_l', 'fac', 'blocks', 'gwg', 'prim_pts'
-        //     ]
-        // },
         skater_stats_to_calculate: function() {
             return [
                 ['pts', 'sum', 'g', 'a'], ['fac_l', 'difference', 'fac', 'fac_w'], ['gpg', 'rate', 'g', 'gp'],
@@ -371,6 +365,12 @@ app.factory('svc', function() {
                 ['shf_pg', 'rate', 'shf', 'gp'], ['toi_shf', 'rate', 'toi', 'shf'], ['toi_pg', 'rate', 'toi', 'gp'],
                 ['toi_pp_pg', 'rate', 'toi_pp', 'gp'], ['toi_sh_pg', 'rate', 'toi_sh', 'gp'],
                 ['fac_pctg', 'percentage', 'fac_w', 'fac']
+            ]
+        },
+        goalie_stats_to_calculate: function() {
+            return [
+                ['sv_pctg', 'percentage_from_100', 'ga', 'sa'], ['gaa', 'rate_with_factor', 'ga', 'toi', 3600],
+                ['total_so', 'sum', 'so', 'sl_so'], ['pts', 'sum', 'g', 'a'], ['ptspg', 'rate', 'pts', 'gp']
             ]
         },
         pad: function pad(num, size) {
@@ -487,6 +487,46 @@ app.factory('svc', function() {
             } else {
                 return element.so + element.sl_so + ' (' + element.sl_so + ')';
             }
+        },
+        // calculating derived stats according to calculate configuration for each specified season
+        calculateDerivedStatsForSeasons: function(seasons, statsToCalculate) {
+            seasons.forEach(season => {
+                this.calculateDerivedStats(season, statsToCalculate);
+            });
+        },
+        calculateDerivedStats: function(statLine, statsToCalculate) {
+            statsToCalculate.forEach(calculation_cfg => {
+                switch (calculation_cfg.type) {
+                    case 'from_100_percentage':
+                        statLine[calculation_cfg.name] = this.calculateFrom100Percentage(statLine[calculation_cfg.value], statLine[calculation_cfg.base]);
+                        break;
+                    case 'rate_with_factor':
+                        statLine[calculation_cfg.name] = this.calculateRate(statLine[calculation_cfg.numerator], statLine[calculation_cfg.denominator], calculation_cfg.factor);
+                        break;
+                    case 'sum':
+                        statLine[calculation_cfg.name] = statLine[calculation_cfg.summand_1] + statLine[calculation_cfg.summand_2];
+                        break;
+                    case 'rate':
+                        statLine[calculation_cfg.name] = this.calculateRate(statLine[calculation_cfg.numerator], statLine[calculation_cfg.denominator]);
+                        break;
+                    case 'difference':
+                        statLine[calculation_cfg.name] = statLine[calculation_cfg.minuend] - statLine[calculation_cfg.subtrahend];
+                        break;
+                    case 'percentage':
+                        statLine[calculation_cfg.name] = this.calculatePercentage(statLine[calculation_cfg.value], statLine[calculation_cfg.base]);
+                        break;
+                    case 'filter':
+                        if (statLine['season'] >= calculation_cfg.valid_from) {
+                            statLine[calculation_cfg.name] = statLine[calculation_cfg.value];
+                        } else {
+                            statLine[calculation_cfg.name] = 0;
+                        };
+                        break;
+                    default:
+                        break;
+                };
+            });
+
         }
     }
 });
@@ -509,7 +549,7 @@ app.directive('careerStatsTable', ['svc', function(svc) {
 }]);
 
 
-app.directive('skaterCareerTable', ['svc', function(svc) {
+app.directive('playerCareerTable', ['svc', function(svc) {
     return {
         restrict: 'E',         
         scope: {
@@ -520,14 +560,14 @@ app.directive('skaterCareerTable', ['svc', function(svc) {
             ctrl: '=',
             seasonType: '='
         },
-        templateUrl: 'custom_directives/skater_career_table.html',
+        templateUrl: 'custom_directives/player_career_table.html',
         link: function(scope) {
             scope.svc = svc;
         }
     }
 }]);
 
-app.directive('skaterCareerTableFooter', ['svc', function(svc) {
+app.directive('playerCareerTableFooter', ['svc', function(svc) {
     return {
         restrict: 'A',         
         scope: {
@@ -536,7 +576,7 @@ app.directive('skaterCareerTableFooter', ['svc', function(svc) {
             ctrl: '=',
             seasonType: '='
         },
-        templateUrl: 'custom_directives/skater_career_table_footer.html',
+        templateUrl: 'custom_directives/player_career_table_footer.html',
         link: function(scope) {
             scope.svc = svc;
         }

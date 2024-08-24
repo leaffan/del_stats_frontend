@@ -4,236 +4,108 @@
     </div>
 
     <div class="alert alert-info main-bg mb-2 shadow">
-        <h2><a href="https://www.eliteprospects.com/player/{{player_stats.ep_id}}"><b>{{ player_first_name }} {{ player_last_name }}</b></a></h2>
-        <p><b>DEL-Karriere:</b> {{ first_season + '/' + (first_season + 1).toString().substr(-2) }} - {{ last_season + '/' + (last_season + 1).toString().substr(-2) }} ({{ player_stats.no_of_seasons }} Saison{{ player_stats.no_of_seasons > 1 ? 's' : ''}})</p>
+        <div class="row align-items-center ml-0">
+            <h2><a href="https://www.eliteprospects.com/player/{{player_stats.ep_id}}"><b>{{ player_first_name }} {{ player_last_name }}</b></a></h2>
+            <span data-ng-repeat="country in player_stats.countries" class="flag-icon flag-icon-{{ country }} ml-2"></span>
+        </div>
+        <div class="col-md-6 ml-0 pl-0">
+            <ul class="list-group list-group-horizontal my-1">
+                <li class="col-12 list-group-item border-0 bg-transparent p-0">
+                    <b>DEL-Karriere:</b> {{ svc.getSeasonIdentifier(ctrl.first_season) }} - {{ svc.getSeasonIdentifier(ctrl.last_season) }} ({{ no_of_seasons }} Saison{{ player_stats.no_of_seasons > 1 ? 's' : ''}})
+                </li>
+            </ul>
+            <ul class="list-group list-group-horizontal my-1">
+                <li class="col-6 list-group-item border-0 bg-transparent p-0">
+                    <b>Geburtsdatum:</b> {{ player_stats.dob | date: 'dd.MM.yyyy' }}
+                </li>
+                <li class="col-6 list-group-item border-0 bg-transparent p-0">
+                    <b>Alter:</b> {{ current_age }}
+                </li>
+            </ul>
+            <ul class="list-group list-group-horizontal my-1">
+                <li class="col-6 list-group-item border-0 bg-transparent p-0">
+                    <b>Position:</b> {{player_stats.position.includes('D') ? 'Verteidiger' : player_stats.position.startsWith('G') ? 'Torhüter' : 'Stürmer'}}
+                </li>
+                <li class="col-6 list-group-item border-0 bg-transparent p-0">
+                    <b>{{ player_stats.position.startsWith('G') ? 'Handschuh: ' : 'Stockhand: '}}</b> {{ player_stats.hand == 'L' ? 'links' : player_stats.hand == 'R' ? 'rechts' : 'unbekannt' }}
+                </li>
+            </ul>
+        </div>
     </div>
 
     <form>
-        <div class="d-none d-md-block">
-            <div class="form-row mb-2">
-                <div class="input-group col-3">
-                    <select class="form-control" data-ng-model="season_type">
-                        <option data-ng-option value="ALL">Hauptrunde und Playoffs</option>
-                        <option data-ng-option value="RS">Hauptrunde</option>
-                        <option data-ng-option value="PO">Playoffs</option>
-                    </select>
-                </div>
-                <div class="input-group col-3 pl-0">
-                    <select class="form-control" data-ng-model="team" data-ng-options="team_full_name_lookup[team] for team in all_teams">
-                        <option data-ng-option value selected="selected">alle Teams</option>
-                    </select>
-                </div>
-                <div class="input-group col-3 pl-0">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">von:</span>
-                    </div>
-                    <select class="form-control" data-ng-model="from_season" data-ng-options="(season.toString() + '/' + (season + 1).toString().substr(-2)) for season in svc.range(min_season, to_season)">
-                    </select>                
-                </div>
-                <div class="input-group col-3 pl-0">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">bis:</span>
-                    </div>
-                    <select class="form-control" data-ng-model="to_season" data-ng-options="(season.toString() + '/' + (season + 1).toString().substr(-2)) for season in svc.range(from_season, max_season)">
-                    </select>
-                </div>
+        <div class="form-row mb-1">
+            <div class="input-group col-4">
+                <select class="form-control" data-ng-model="table_select">
+                    <option data-ng-if="player_stats.position.startsWith('G')" data-ng-option value="goalie_career_stats">Basisstatistiken</option>
+                    <option data-ng-if="!player_stats.position.startsWith('G')" data-ng-option value="skater_career_stats">Basisstatistiken</option>
+                    <option data-ng-if="!player_stats.position.startsWith('G') && player_stats.last_season > 2017" data-ng-option value="skater_toi_shift_stats">Eiszeiten/Wechsel (seit 2018/19)</option>
+                    <option data-ng-if="!player_stats.position.startsWith('G') && player_stats.last_season > 2017" data-ng-option value="skater_additional_stats">Zusatzstatistiken (seit 2018/19)</option>
+                    <option data-ng-if="player_stats.position.startsWith('G') && player_stats.last_season > 2017" data-ng-option value="goalie_toi_shift_stats">Goalie-Eiszeiten/Wechsel (seit 2018/19)</option>
+                    <option data-ng-if="player_stats.position.startsWith('G') && player_stats.last_season > 2017" data-ng-option value="goalie_additional_stats">Goalie-Zusatzstatistiken (seit 2018/19)</option>
+                </select>
+            </div>
+            <div class="input-group col-4 pl-0">
+                <select class="form-control" data-ng-model="season_type">
+                    <option data-ng-option value="ALL">Hauptrunde und Playoffs</option>
+                    <option data-ng-option value="RS">Hauptrunde</option>
+                    <option data-ng-option value="PO">Playoffs</option>
+                </select>
+            </div>
+            <div class="input-group col-4 pl-0">
+                <select class="form-control" data-ng-model="team" data-ng-options="team_full_name_lookup[team] for team in all_teams">
+                    <option data-ng-option value selected="selected">alle Teams</option>
+                </select>
             </div>
         </div>
-        <div class="d-md-none">
-            <div class="form-row mb-1">
-                <div class="input-group col-6">
-                    <select class="form-control" data-ng-model="season_type">
-                        <option data-ng-option value="ALL">Hauptrunde und Playoffs</option>
-                        <option data-ng-option value="RS">Hauptrunde</option>
-                        <option data-ng-option value="PO">Playoffs</option>
-                    </select>
+        <div class="form-row mb-2">
+            <div class="input-group col-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">von:</span>
                 </div>
-                <div class="input-group col-6 pl-0">
-                    <select class="form-control" data-ng-model="team" data-ng-options="team_full_name_lookup[team] for team in all_teams">
-                        <option data-ng-option value selected="selected">alle Teams</option>
-                    </select>
-                </div>
+                <select class="form-control" data-ng-model="ctrl.from_season" data-ng-options="svc.getSeasonIdentifier(season) for season in svc.range(ctrl.first_season, ctrl.to_season)">
+                </select>                
             </div>
-            <div class="form-row mb-1">
-                <div class="input-group col-6">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">von:</span>
-                    </div>
-                    <select class="form-control" data-ng-model="from_season" data-ng-options="(season.toString() + '/' + (season + 1).toString().substr(-2)) for season in svc.range(min_season, to_season)">
-                    </select>                
+            <div class="input-group col-3 pl-0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">bis:</span>
                 </div>
-                <div class="input-group col-6 pl-0">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">bis:</span>
-                    </div>
-                    <select class="form-control" data-ng-model="to_season" data-ng-options="(season.toString() + '/' + (season + 1).toString().substr(-2)) for season in svc.range(from_season, max_season)">
-                    </select>
+                <select class="form-control" data-ng-model="ctrl.to_season" data-ng-options="svc.getSeasonIdentifier(season) for season in svc.range(ctrl.from_season, ctrl.last_season)">
+                </select>
+            </div>
+            <div class="input-group col-3 pl-0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">von:</span>
                 </div>
+                <select class="form-control" data-ng-model="from_age" data-ng-options="age for age in svc.range(min_age, to_age)">
+                </select>                
+            </div>
+            <div class="input-group col-3 pl-0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">bis:</span>
+                </div>
+                <select class="form-control" data-ng-model="to_age" data-ng-options="age for age in svc.range(from_age, max_age)">
+                </select>
+            </div>
+        </div>
+        <div class="mt-0 mb-3" data-ng-if="has_partial_seasons">
+            <div class="border-0">
+                    <label for="show_partial_seasons">
+                    <input type="checkbox" id="show_partial_seasons" data-ng-model="$parent.show_partial_seasons" value="">
+                    <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                    Partielle Spielzeiten anzeigen
+                </label>
             </div>
         </div>
     </form>
-
-    <table id="skater_career_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="table_select == 'skater_career_stats'">
-        <thead class="thead-light">
-            <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols['skater_career_stats']">
-                    <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
-                        <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
-                        <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
-                        <span data-ng-show="$parent.sortConfig['sortKey'] == col.data_key && $parent.sortConfig['sortDescending']" class="fa fa-caret-down"></span>
-                        <span data-ng-show="$parent.sortConfig['sortKey'] == col.data_key && !$parent.sortConfig['sortDescending']" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="{{season.season_type === 'RS'? 'table-info' : 'table-warning'}}" data-ng-repeat="season in filtered_seasons | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
-                <td class="w-10">{{ season.season + '/' + (season.season + 1).toString().substr(-2) }}</td>
-                <td data-ng-if="season.season < 2018" class="w-10">{{ season.team }}</td>
-                <td data-ng-if="season.season > 2017" class="w-10"><b><a href="#!/player_profile/{{season.season}}/{{season.team}}/{{player_id}}">{{ season.team }}</a></b></td>
-                <td class="w-10">{{ season.season_phase ? season.season_type + ' (' + season.season_phase + ')' : season.season_type }}</td>
-                <td class="w-06 text-right">{{ season.gp }}</td>
-                <td class="w-06 text-right">{{ season.g }}</td>
-                <td class="w-06 text-right">{{ season.a }}</td>
-                <td class="w-06 text-right">{{ season.pts }}</td>
-                <td class="w-06 text-right">{{ season.season < 1998 ? '-' : season.ppg }}</td>
-                <td class="w-06 text-right">{{ season.season < 1998 ? '-' : season.shg }}</td>
-                <td class="w-06 text-right">{{ season.pim }}</td>
-                <td class="w-07 text-right">{{ season.season < 1999 ? '-' : season.sog }}</td>
-                <td class="w-07 text-right d-none d-md-table-cell">{{ season.season < 1999 ? '-' : season.sh_pctg.toFixed(1) + ' %' }}</td>
-                <td class="w-07 text-right d-md-none px-0">{{ season.season < 1999 ? '-' : season.sh_pctg.toFixed(1) + ' %' }}</td>
-                <td class="w-07 text-right">{{ season.gpg.toFixed(2) }}</td>
-                <td class="w-07 text-right">{{ season.ptspg.toFixed(2) }}</td>
-            </tr>
-            <tr data-ng-if="season_type == 'ALL'">
-                <td><b>Gesamt:</b></td>
-                <td class="d-none d-md-table-cell"><b>{{ number_of_teams }} Team{{ number_of_teams == 1 ? '' : 's'}}</b></td>
-                <td class="d-md-none"><b>{{ number_of_teams }} T{{ number_of_teams == 1 ? '' : 's'}}</b></td>
-                <td class="d-none d-md-table-cell"><b>{{ number_of_seasons }} Saison{{ number_of_seasons == 1 ? '' : 's'}}</b></td>
-                <td class="d-md-none"><b>{{ number_of_seasons }} S{{ number_of_seasons == 1 ? '' : 's'}}</b></td>
-                <td class="text-right"><b>{{ totalGames = svc.getFilteredTotal(filtered_seasons, 'gp', seasons) }}</b></td>
-                <td class="text-right"><b>{{ totalGoals = svc.getFilteredTotal(filtered_seasons, 'g', seasons) }}</b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_seasons, 'a', seasons) }}</b></td>
-                <td class="text-right"><b>{{ totalPoints = svc.getFilteredTotal(filtered_seasons, 'pts', seasons) }}</b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_seasons, 'ppg', seasons) }}<span data-ng-if="from_season < 1998 && first_season < 1998" title="Ohne Daten vor 1998/1999.">*</span></b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_seasons, 'shg', seasons) }}<span data-ng-if="from_season < 1998 && first_season < 1998" title="Ohne Daten vor 1998/1999.">*</span></b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_seasons, 'pim', seasons) }}</b></td>
-                <td class="text-right"><b>{{ totalShots = svc.getFilteredTotal(filtered_seasons, 'sog', seasons) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
-                <td class="text-right"><b>{{ (totalShots != 0 ? goals_post_1998 / totalShots * 100 : 0).toFixed(1) + ' %'}}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
-                <td class="text-right"><b>{{ totalGames != 0 ? (totalGoals / totalGames).toFixed(2) : (0).toFixed(2)}}</b></td>
-                <td class="text-right"><b>{{ totalGames != 0 ? (totalPoints / totalGames).toFixed(2) : (0).toFixed(2)}}</b></td>
-            </tr>
-            <tr data-ng-if="number_of_regular_seasons > 0">
-                <td><b>Hauptrunde:</b></td>
-                <td class="d-none d-md-table-cell"><b>{{ number_of_regular_season_teams }} Team{{ number_of_regular_season_teams == 1 ? '' : 's'}}</b></td>
-                <td class="d-md-none"><b>{{ number_of_regular_season_teams }} T{{ number_of_regular_season_teams == 1 ? '' : 's'}}</b></td>
-                <td class="d-none d-md-table-cell"><b>{{ number_of_regular_seasons }} Saison{{ number_of_regular_seasons == 1 ? '' : 's'}}</b></td>
-                <td class="d-md-none"><b>{{ number_of_regular_seasons }} S{{ number_of_regular_seasons == 1 ? '' : 's'}}</b></td>
-                <td class="text-right"><b>{{ totalRegularGames = svc.getFilteredTotal(filtered_regular_seasons, 'gp', seasons) }}</b></td>
-                <td class="text-right"><b>{{ totalRegularGoals = svc.getFilteredTotal(filtered_regular_seasons, 'g', seasons) }}</b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_regular_seasons, 'a', seasons) }}</b></td>
-                <td class="text-right"><b>{{ totalRegularPoints = svc.getFilteredTotal(filtered_regular_seasons, 'pts', seasons) }}</b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_regular_seasons, 'ppg', seasons) }}<span data-ng-if="$parent.from_season < 1998 && first_season < 1998" title="Ohne Daten vor 1998/1999.">*</span></b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_regular_seasons, 'shg', seasons) }}<span data-ng-if="$parent.from_season < 1998 && first_season < 1998" title="Ohne Daten vor 1998/1999.">*</span></b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_regular_seasons, 'pim', seasons) }}</b></td>
-                <td class="text-right"><b>{{ totalRegularShots = svc.getFilteredTotal(filtered_regular_seasons, 'sog', seasons) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</b></td>
-                <td class="text-right"><b>{{ (totalRegularShots != 0 ? regular_goals_post_1998 / totalRegularShots * 100 : 0).toFixed(1) + ' %'}}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</b></td>
-                <td class="text-right"><b>{{ totalRegularGames != 0 ? (totalRegularGoals / totalRegularGames).toFixed(2) : (0).toFixed(2)}}</b></td>
-                <td class="text-right"><b>{{ totalRegularGames != 0 ? (totalRegularPoints / totalRegularGames).toFixed(2) : (0).toFixed(2)}}</b></td>
-            </tr>
-            <tr data-ng-if="number_of_playoff_seasons > 0">
-                <td><b>Playoffs:</b></td>
-                <td class="d-none d-md-table-cell"><b>{{ number_of_playoff_season_teams }} Team{{ number_of_playoff_season_teams == 1 ? '' : 's'}}</b></td>
-                <td class="d-md-none"><b>{{ number_of_playoff_season_teams }} T{{ number_of_playoff_season_teams == 1 ? '' : 's'}}</b></td>
-                <td class="d-none d-md-table-cell"><b>{{ number_of_playoff_seasons }} Saison{{ number_of_playoff_seasons == 1 ? '' : 's'}}</b></td>
-                <td class="d-md-none"><b>{{ number_of_playoff_seasons }} S{{ number_of_playoff_seasons == 1 ? '' : 's'}}</b></td>
-                <td class="text-right"><b>{{ totalPlayoffGames = svc.getFilteredTotal(filtered_playoff_seasons, 'gp', seasons) }}</b></td>
-                <td class="text-right"><b>{{ totalPlayoffGoals = svc.getFilteredTotal(filtered_playoff_seasons, 'g', seasons) }}</b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_playoff_seasons, 'a', seasons) }}</b></td>
-                <td class="text-right"><b>{{ totalPlayoffPoints = svc.getFilteredTotal(filtered_playoff_seasons, 'pts', seasons) }}</b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_playoff_seasons, 'ppg', seasons) }}<span data-ng-if="$parent.from_season < 1998 && first_season < 1998" title="Ohne Daten vor 1998/1999.">*</span></b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_playoff_seasons, 'shg', seasons) }}<span data-ng-if="$parent.from_season < 1998 && first_season < 1998" title="Ohne Daten vor 1998/1999.">*</span></b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_playoff_seasons, 'pim', seasons) }}</b></td>
-                <td class="text-right"><b>{{ totalPlayoffShots = svc.getFilteredTotal(filtered_playoff_seasons, 'sog', seasons) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</b></td>
-                <td class="text-right"><b>{{ (totalPlayoffShots != 0 ? playoff_goals_post_1998 / totalPlayoffShots * 100 : 0).toFixed(1) + ' %'}}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</b></td>
-                <td class="text-right"><b>{{ totalPlayoffGames != 0 ? (totalPlayoffGoals / totalPlayoffGames).toFixed(2) : (0).toFixed(2)}}</b></td>
-                <td class="text-right"><b>{{ totalPlayoffGames != 0 ? (totalPlayoffPoints / totalPlayoffGames).toFixed(2) : (0).toFixed(2)}}</b></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <table id="goalie_career_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="table_select == 'goalie_career_stats'">
-        <thead class="thead-light">
-            <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols['goalie_career_stats']">
-                    <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
-                        <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
-                        <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
-                        <span data-ng-show="$parent.sortConfig['sortKey'] == col.data_key && $parent.sortConfig['sortDescending']" class="fa fa-caret-down"></span>
-                        <span data-ng-show="$parent.sortConfig['sortKey'] == col.data_key && !$parent.sortConfig['sortDescending']" class="fa fa-caret-up"></span>
-                    </a>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="{{season.season_type === 'RS'? 'table-info' : 'table-warning'}}" data-ng-repeat="season in filtered_seasons | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
-                <td class="w-08">{{ season.season + '/' + (season.season + 1).toString().substr(-2) }}</td>
-                <td data-ng-if="season.season < 2018" class="w-10">{{ season.team }}</td>
-                <td data-ng-if="season.season > 2017" class="w-10"><b><a href="#!/player_profile/{{season.season}}/{{season.team}}/{{player_id}}">{{ season.team }}</a></b></td>
-                <td class="w-10">{{ season.season_phase ? season.season_type + ' (' + season.season_phase + ')' : season.season_type }}</td>
-                <td class="w-08 text-right">{{ season.gp }}</td>
-                <td class="w-08 text-right">{{ svc.formatTime(season.toi) }}</td>
-                <td class="w-08 text-right">{{ season.season < 2007 ? '-' : season.w }}</td>
-                <td class="w-08 text-right">{{ season.season < 2007 ? '-' : season.l }}</td>
-                <td class="w-08 text-right">{{ season.season < 1999 ? '-' : season.sa }}</td>
-                <td class="w-08 text-right">{{ season.season < 1999 ? '-' : season.ga }}</td>
-                <td class="w-08 text-right">{{ season.season < 1999 ? '-' : season.sv_pctg.toFixed(1) + ' %' }}</td>
-                <td class="w-08 text-right">{{ season.season < 1999 ? '-' : season.gaa.toFixed(2) }}</td>
-                <td class="w-08 text-right">{{ svc.getShutouts(season) }}</td>
-            </tr>
-            <tr data-ng-if="season_type == 'ALL'">
-                <td><b>Gesamt:</b></td>
-                <td><b>{{ number_of_teams }} Team{{ number_of_teams == 1 ? '' : 's'}}</b></td>
-                <td><b>{{ number_of_seasons }} Saison{{ number_of_seasons == 1 ? '' : 's'}}</b></td>
-                <td class="text-right"><b>{{ totalGames = svc.getFilteredTotal(filtered_seasons, 'gp', seasons) }}</b></td>
-                <td class="text-right"><b>{{ toiTotal = svc.getFilteredTotal(filtered_seasons, 'toi', seasons); svc.formatTime(toiTotal) }}</b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_seasons, 'w', seasons) }}<span data-ng-if="$parent.from_season < 2007 && first_season < 2007" title="Ohne Daten vor 2007/2008.">*</span></b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_seasons, 'l', seasons) }}<span data-ng-if="$parent.from_season < 2007 && first_season < 2007" title="Ohne Daten vor 2007/2008.">*</span></b></td>
-                <td class="text-right"><b>{{ shotsAgainstTotal = svc.getFilteredTotal(filtered_seasons, 'sa', seasons) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
-                <td class="text-right"><b>{{ goalsAgainstTotal = svc.getFilteredTotal(filtered_seasons, 'ga', seasons) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
-                <td class="text-right"><b>{{ ((1 - goalsAgainstTotal / shotsAgainstTotal) * 100.).toFixed(1) + ' %'}}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
-                <td class="text-right"><b>{{ (goalsAgainstTotal * 3600 / toi_post_1998).toFixed(2) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
-                <td class="text-right"><b>{{ totalSo = svc.getFilteredTotal(filtered_seasons, 'total_so', seasons); strictSo = svc.getFilteredTotal(filtered_seasons, 'so', seasons); totalSo == strictSo ? totalSo : totalSo.toString() + ' (' + svc.getFilteredTotal(filtered_seasons, 'sl_so', seasons) + ')' }}</b></td>
-            </tr>
-            <tr data-ng-if="number_of_regular_seasons > 0">
-                <td><b>Hauptrunde:</b></td>
-                <td><b>{{ number_of_regular_season_teams }} Team{{ number_of_regular_season_teams == 1 ? '' : 's'}}</b></td>
-                <td><b>{{ number_of_regular_seasons }} Saison{{ number_of_regular_seasons == 1 ? '' : 's'}}</b></td>
-                <td class="text-right"><b>{{ totalRegularGames = svc.getFilteredTotal(filtered_regular_seasons, 'gp', seasons) }}</b></td>
-                <td class="text-right"><b>{{ toiRegularTotal = svc.getFilteredTotal(filtered_regular_seasons, 'toi', seasons); svc.formatTime(toiRegularTotal) }}</b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_regular_seasons, 'w', seasons) }}<span data-ng-if="$parent.from_season < 2007 && first_season < 2007" title="Ohne Daten vor 2007/2008.">*</span></b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_regular_seasons, 'l', seasons) }}<span data-ng-if="$parent.from_season < 2007 && first_season < 2007" title="Ohne Daten vor 2007/2008.">*</span></b></td>
-                <td class="text-right"><b>{{ shotsAgainstRegularTotal = svc.getFilteredTotal(filtered_regular_seasons, 'sa', seasons) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
-                <td class="text-right"><b>{{ goalsAgainstRegularTotal = svc.getFilteredTotal(filtered_regular_seasons, 'ga', seasons) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
-                <td class="text-right"><b>{{ ((1 - goalsAgainstRegularTotal / shotsAgainstRegularTotal) * 100.).toFixed(1) + ' %' }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
-                <td class="text-right"><b>{{ (goalsAgainstRegularTotal * 3600 / regular_toi_post_1998).toFixed(2) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
-                <td class="text-right"><b>{{ totalSo = svc.getFilteredTotal(filtered_regular_seasons, 'total_so', seasons); strictSo = svc.getFilteredTotal(filtered_regular_seasons, 'so', seasons); totalSo == strictSo ? totalSo : totalSo.toString() + ' (' + svc.getFilteredTotal(filtered_regular_seasons, 'sl_so', seasons) + ')' }}</b></td>
-            </tr>
-            <tr data-ng-if="number_of_playoff_seasons > 0">
-                <td><b>Playoffs:</b></td>
-                <td><b>{{ number_of_playoff_season_teams }} Team{{ number_of_playoff_season_teams == 1 ? '' : 's'}}</b></td>
-                <td><b>{{ number_of_playoff_seasons }} Saison{{ number_of_playoff_seasons == 1 ? '' : 's'}}</b></td>
-                <td class="text-right"><b>{{ totalPlayoffGames = svc.getFilteredTotal(filtered_playoff_seasons, 'gp', seasons) }}</b></td>
-                <td class="text-right"><b>{{ toiPlayoffTotal = svc.getFilteredTotal(filtered_playoff_seasons, 'toi', seasons); svc.formatTime(toiPlayoffTotal) }}</b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_playoff_seasons, 'w', seasons) }}<span data-ng-if="$parent.from_season < 2007 && first_season < 2007" title="Ohne Daten vor 2007/2008.">*</span></b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_playoff_seasons, 'l', seasons) }}<span data-ng-if="$parent.from_season < 2007 && first_season < 2007" title="Ohne Daten vor 2007/2008.">*</span></b></td>
-                <td class="text-right"><b>{{ shotsAgainstPlayoffTotal = svc.getFilteredTotal(filtered_playoff_seasons, 'sa', seasons) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
-                <td class="text-right"><b>{{ goalsAgainstPlayoffTotal = svc.getFilteredTotal(filtered_playoff_seasons, 'ga', seasons) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
-                <td class="text-right"><b>{{ ((1 - goalsAgainstPlayoffTotal / shotsAgainstPlayoffTotal) * 100.).toFixed(1) + ' %' }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
-                <td class="text-right"><b>{{ (goalsAgainstPlayoffTotal * 3600 / playoff_toi_post_1998).toFixed(2) }}<span data-ng-if="$parent.from_season < 1999 && first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span></b></td>
-                <td class="text-right"><b>{{ svc.getFilteredTotal(filtered_playoff_seasons, 'total_so', seasons) }}</b></td>
-            </tr>
-        </tbody>
-    </table>
     
+    <!-- basic goalie career stats -->
+    <player-career-table id="goalie_career_stats" pid="player_stats.c_id" stats-cols="stats_cols['goalie_career_stats']" filtered-seasons="filtered_seasons" ctrl="ctrl" season-type="season_type" data-ng-if="table_select == 'goalie_career_stats'"></player-career-table>
+    <!-- basic skater career stats -->
+    <player-career-table id="skater_career_stats" pid="player_stats.c_id" stats-cols="stats_cols['skater_career_stats']" filtered-seasons="filtered_seasons" ctrl="ctrl" season-type="season_type" data-ng-if="table_select == 'skater_career_stats'"></player-career-table>
+    <!-- skater time-on-ice and shift career stats -->
+    <player-career-table id="skater_toi_shift_stats" pid="player_stats.c_id" stats-cols="stats_cols['skater_toi_shift_stats']" filtered-seasons="filtered_seasons" ctrl="ctrl" season-type="season_type" data-ng-if="table_select == 'skater_toi_shift_stats'"></player-career-table>
+    <!-- skater additional career stats -->
+    <player-career-table id="skater_additional_stats" pid="player_stats.c_id" stats-cols="stats_cols['skater_additional_stats']" filtered-seasons="filtered_seasons" ctrl="ctrl" season-type="season_type" data-ng-if="table_select == 'skater_additional_stats'"></player-career-table>
+
 </div>

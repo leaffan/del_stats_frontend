@@ -2,6 +2,7 @@
     "career_skater_stats_to_aggregate": [
         "gp",
         "g",
+        "g_post_1998",
         "a",
         "pts",
         "sog",

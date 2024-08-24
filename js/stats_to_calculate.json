@@ -137,14 +137,38 @@
             "type": "percentage",
             "value": "fac_w",
             "base": "fac"
+        },
+        {
+            "name": "g_post_1998",
+            "type": "filter",
+            "value": "g",
+            "valid_from": 1999
         }
     ],
     "career_skater_stats_to_calculate": [
         {
             "name": "sh_pctg",
             "type": "percentage",
-            "value": "g_post_98",
+            "value": "g_post_1998",
             "base": "sog"
+        },
+        {
+            "name": "gpg",
+            "type": "rate",
+            "numerator": "g",
+            "denominator": "gp"
+        },
+        {
+            "name": "apg",
+            "type": "rate",
+            "numerator": "a",
+            "denominator": "gp"
+        },
+        {
+            "name": "ptspg",
+            "type": "rate",
+            "numerator": "pts",
+            "denominator": "gp"
         }
     ]
 }

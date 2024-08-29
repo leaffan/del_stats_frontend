@@ -598,3 +598,50 @@ app.directive('tableHeader', ['svc', function(svc) {
         }
     }
 }]);
+
+app.directive('previewTableHeader', ['svc', function(svc) {
+    return {
+        restrict: 'A',
+        scope: {
+            statsCols: '=',
+            ctrl: '=',
+            tableTopic: '='
+        },
+        templateUrl: 'custom_directives/preview_table_header.html',
+        link: function(scope) {
+            scope.svc = svc;
+        }
+    }
+}]);
+
+app.directive('previewHomeRoadSwitch', ['svc', function(svc) {
+    return {
+        restrict: 'E',
+        scope: {
+            // statsCols: '=',
+            ctrl: '=',
+            periods: '='
+            // tableTopic: '='
+        },
+        templateUrl: 'custom_directives/preview_home_road_switch.html',
+        link: function(scope) {
+            scope.svc = svc;
+        }
+    }
+}]);
+
+app.directive('previewSectionHeader', ['svc', function(svc) {
+    return {
+        restrict: 'E',
+        scope: {
+            ctrl: '=',
+            sectionId: '=',
+            sectionTitle: '=',
+            po: '='
+        },
+        templateUrl: 'custom_directives/preview_section_header.html',
+        link: function(scope) {
+            scope.svc = svc;
+        }
+    }
+}]);

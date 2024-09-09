@@ -161,7 +161,9 @@ app.factory('svc', function() {
             return season + "/" + (parseInt(season) + 1).toString().slice(-2);
         },
         // formats time (in seconds) as mm:ss
-        formatTime: function(timeInSeconds) {
+        formatTime: function(timeInSeconds, factor) {
+            if (factor)
+                timeInSeconds = timeInSeconds * factor;
             return this.pad(Math.floor(timeInSeconds / 60), 2) + ":" + ('00' + (Math.floor(timeInSeconds) % 60)).slice(-2);
         },
         // gets total sum of attribute values from provided list optionally starting at from season and for specified season type
@@ -621,7 +623,6 @@ app.directive('previewHomeRoadSwitch', ['svc', function(svc) {
             // statsCols: '=',
             ctrl: '=',
             periods: '='
-            // tableTopic: '='
         },
         templateUrl: 'custom_directives/preview_home_road_switch.html',
         link: function(scope) {
@@ -637,9 +638,32 @@ app.directive('previewSectionHeader', ['svc', function(svc) {
             ctrl: '=',
             sectionId: '=',
             sectionTitle: '=',
-            po: '='
+            po: '=',
+            minGames: '='
         },
         templateUrl: 'custom_directives/preview_section_header.html',
+        link: function(scope) {
+            scope.svc = svc;
+        }
+    }
+}]);
+
+app.directive('previewTeamTable', ['svc', function(svc) {
+    return {
+        restrict: 'E',         
+        scope: {
+            // id: '@',
+            // pid: '=',
+            // filteredSeasons: '=',
+            statsCols: '=',
+            ctrl: '=',
+            tableTopic: '=',
+            displayStats: '=',
+            po: '=',
+            filter: '=',
+            limit: '='
+        },
+        templateUrl: 'custom_directives/preview_team_table.html',
         link: function(scope) {
             scope.svc = svc;
         }

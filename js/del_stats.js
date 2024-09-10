@@ -607,7 +607,8 @@ app.directive('previewTableHeader', ['svc', function(svc) {
         scope: {
             statsCols: '=',
             ctrl: '=',
-            tableTopic: '='
+            tableTopic: '=',
+            noRank: '='
         },
         templateUrl: 'custom_directives/preview_table_header.html',
         link: function(scope) {
@@ -639,7 +640,8 @@ app.directive('previewSectionHeader', ['svc', function(svc) {
             sectionId: '=',
             sectionTitle: '=',
             po: '=',
-            minGames: '='
+            minGames: '=',
+            team: '='
         },
         templateUrl: 'custom_directives/preview_section_header.html',
         link: function(scope) {

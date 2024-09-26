@@ -14,7 +14,7 @@
                 </a>
             </li>
             <li class="col-6 list-group-item border-0 p-0 bg-transparent text-right">
-                <a data-ng-if="svc.parseFloat(season) + 1 <= 2023" data-ng-href="#!/team_stats/{{svc.parseFloat(season) + 1}}">
+                <a data-ng-if="svc.parseFloat(season) + 1 <= 2024" data-ng-href="#!/team_stats/{{svc.parseFloat(season) + 1}}">
                     <b>Saison {{ svc.getSeasonIdentifier(svc.parseInt(season) + 1) }}</b>
                     <i class="fas fa-arrow-right" aria-hidden="true" style="vertical-align: center;"></i>
                 </a>
@@ -133,12 +133,12 @@
                     <option data-ng-if="season != 2020" data-ng-option value="post_dcup">Nach Deutschland Cup</option>
                     <option data-ng-if="season == 2020" data-ng-option value="pre_reunification">Vor Wiedervereinigung</option>
                     <option data-ng-if="season == 2020" data-ng-option value="post_reunification">Nach Wiedervereinigung</option>
-                    <option data-ng-if="season == 2023 && roundsPlayed.length - 2 >= 5" data-ng-option>-----------</option>
-                    <option data-ng-if="season == 2023 && roundsPlayed.length - 2 >= 5" data-ng-option value="last_5_games">In letzten 5 Spielen</option>
-                    <option data-ng-if="season == 2023 && roundsPlayed.length - 2 >= 10" data-ng-option value="last_10_games">In letzten 10 Spielen</option>
-                    <option data-ng-if="season == 2023 && roundsPlayed.length - 2 >= 15" data-ng-option value="last_15_games">In letzten 15 Spielen</option>
-                    <option data-ng-if="season == 2023 && roundsPlayed.length - 2 >= 20" data-ng-option value="last_20_games">In letzten 20 Spielen</option>
-                    <option data-ng-if="season == 2023 && roundsPlayed.length - 2 >= 25" data-ng-option value="last_25_games">In letzten 25 Spielen</option>
+                    <option data-ng-if="season == 2024 && roundsPlayed.length - 2 >= 5" data-ng-option>-----------</option>
+                    <option data-ng-if="season == 2024 && roundsPlayed.length - 2 >= 5" data-ng-option value="last_5_games">In letzten 5 Spielen</option>
+                    <option data-ng-if="season == 2024 && roundsPlayed.length - 2 >= 10" data-ng-option value="last_10_games">In letzten 10 Spielen</option>
+                    <option data-ng-if="season == 2024 && roundsPlayed.length - 2 >= 15" data-ng-option value="last_15_games">In letzten 15 Spielen</option>
+                    <option data-ng-if="season == 2024 && roundsPlayed.length - 2 >= 20" data-ng-option value="last_20_games">In letzten 20 Spielen</option>
+                    <option data-ng-if="season == 2024 && roundsPlayed.length - 2 >= 25" data-ng-option value="last_25_games">In letzten 25 Spielen</option>
                 </select>
             </div>
             <div class="input-group col-2 pl-0">
@@ -221,7 +221,7 @@
                     <a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a>
                     <span class="rank" title=" {{ clinched_data[stat.team]['clinched_top_spot'] ? 'Hauptrundenmeister' : clinched_data[stat.team]['clinched_quarters'] ? 'Direktqualifkant Viertelfinale' : clinched_data[stat.team]['clinched_playoffs'] ? 'Qualifikant Playoffs' : clinched_data[stat.team]['relegated'] ? 'Absteiger' : clinched_data[stat.team]['no_playoffs'] ? 'Keine Playoffqualifikation mehr möglich' : '' }}">
                     {{
-                        season == 2023 && seasonTypeSelect == 'RS' ?
+                        season == 2024 && seasonTypeSelect == 'RS' ?
                             (
                                 clinched_data[stat.team]['clinched_top_spot'] ? 'M' :
                                 clinched_data[stat.team]['clinched_quarters'] ? 'V' :

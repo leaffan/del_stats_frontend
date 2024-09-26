@@ -9,7 +9,6 @@
             <h2 data-ng-if="player_name"><b><a href="https://www.eliteprospects.com/player/{{players[player_id].ep_id}}">{{ player_name}}</a></b> ({{ model.team }}) {{ svc.getSeasonIdentifier(season) }}&#160;</h2>
             <span class="ml-2"><span class="flag-icon flag-icon-{{ players[player_id].iso_country }}"></span></span>
             <span class="ml-2"><a href="https://www.eliteprospects.com/player/{{players[player_id].ep_id}}"><img height="20px" src="img/ep_icon.png" /></a></span>
-            <!-- <span class="ml-2" data-ng-if="season == 2023"><a href="https://www.penny-del.org/spielerprofil/{{team_id_lookup[currentTeam[0].abbr]}}/{{player_id}}"><img height="20px" src="img/penny-del-logo_small.png" /></a></span> -->
             <span class="ml-2" data-ng-if="player_stats[0].u23"><img class="test" height="20px" src="img/u23.png" /></span>
             <span class="ml-2" data-ng-if="player_stats[0].u20"><img class="test" height="20px" src="img/u20.png" /></span>
             <span class="ml-2" data-ng-if="player_stats[0].rookie"><img class="test" height="20px" src="img/rookie.png" /></span>
@@ -21,8 +20,8 @@
             <div class="col-md-5 ml-0 p-0">
                 <ul class="list-group list-group-horizontal my-1">
                     <li class="col-6 list-group-item border-0 bg-transparent p-0"><b>Geburtsdatum:</b> {{ player_stats[0].date_of_birth | date: 'dd.MM.yyyy' }}</li>
-                    <li data-ng-if="season == 2023" class="col-6 list-group-item border-0 bg-transparent p-0"><b>Alter:</b> {{ players[player_id].age.toFixed(3) }}</li>
-                    <li data-ng-if="season < 2023" class="col-6 list-group-item border-0 bg-transparent p-0"><b>Alter:</b> {{ svc.parseFloat(season) - svc.parseFloat(player_stats[0].date_of_birth | date: 'yyyy') }}</li>
+                    <li data-ng-if="season == 2024" class="col-6 list-group-item border-0 bg-transparent p-0"><b>Alter:</b> {{ players[player_id].age.toFixed(3) }}</li>
+                    <li data-ng-if="season < 2024" class="col-6 list-group-item border-0 bg-transparent p-0"><b>Alter:</b> {{ svc.parseFloat(season) - svc.parseFloat(player_stats[0].date_of_birth | date: 'yyyy') }}</li>
                 </ul>
                 <ul class="list-group list-group-horizontal my-1">
                     <li class="col-6 list-group-item border-0 bg-transparent p-0"><b>Größe:</b> {{player_stats[0].height }} cm</li>

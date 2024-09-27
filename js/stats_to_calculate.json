@@ -8,7 +8,7 @@
         },
         {
             "name": "gaa",
-            "type": "rate",
+            "type": "rate_with_factor",
             "numerator": "ga",
             "denominator": "toi",
             "factor": 3600

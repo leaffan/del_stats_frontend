@@ -1,4 +1,4 @@
-app.controller('plrProfileController', function($scope, $http, $routeParams, $location, svc) {
+app.controller('plrProfileController', function($rootScope, $scope, $http, $routeParams, $location, svc) {
 
     var ctrl = this;
     $scope.svc = svc;
@@ -37,6 +37,7 @@ app.controller('plrProfileController', function($scope, $http, $routeParams, $lo
     $http.get('data/' + $scope.season + '/per_player/' + $routeParams.team + '_' + $routeParams.player_id + '.json').then(function (res) {
         $scope.player_stats = res.data;
         $scope.player_name = res.data[0].full_name;
+        $rootScope.title = $scope.player_name + ": Spielerprofil";
         if ($scope.player_stats[0]['position'] == 'GK') {
             $scope.tableSelect = 'goalie_stats'
         } else {

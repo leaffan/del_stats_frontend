@@ -68,6 +68,7 @@
                     <option data-ng-option value="bottom_game_scores_per_game">Schlechteste Game-Scores pro Spiel</option>
                     <option data-ng-option value="streaks">Scoringstreaks</option>
                     <option data-ng-option value="slumps">Scoringslumps</option>
+                    <option data-ng-option value="goalie_streaks">Torhüterstreaks</option>
                     <option data-ng-option value="shootout_stats">Statistiken im Penaltyschießen</option>
                     <option data-ng-option value="goal_categories">Torkategorien</option>
                     <option data-ng-option value="goals_per_period">Tore pro Drittel</option>
@@ -93,7 +94,7 @@
                 </select>
             </div>
 
-            <div class="input-group col-4 pl-0" data-ng-if="tableSelect != 'streaks' && tableSelect != 'slumps'">
+            <div class="input-group col-4 pl-0" data-ng-if="tableSelect != 'streaks' && tableSelect != 'slumps' && tableSelect != 'goalie_streaks'">
                 <select class="form-control" data-ng-model="$parent.playerStatusSelect">
                     <option data-ng-option value selected="selected">alle Spieler</option>
                     <option data-ng-option value="u23">U23-Spieler</option>
@@ -127,7 +128,7 @@
             </div>
 
         </div>
-        <div class="form-row mb-1" data-ng-if="tableSelect != 'streaks' && tableSelect != 'slumps' && tableSelect != 'player_information'">
+        <div class="form-row mb-1" data-ng-if="tableSelect != 'streaks' && tableSelect != 'slumps' && tableSelect != 'goalie_streaks' && tableSelect != 'player_information'">
             <div class="col-3">
                 <select class="form-control" data-ng-model="$parent.seasonTypeSelect">
                     <option data-ng-if="season == 2020" data-ng-option value="MSC">MagentaSport Cup</option>
@@ -161,7 +162,7 @@
                 </select>
             </div>
         </div>
-        <div class="form-row mb-1" data-ng-if="tableSelect != 'streaks' && tableSelect != 'slumps' && tableSelect != 'player_information'">
+        <div class="form-row mb-1" data-ng-if="tableSelect != 'streaks' && tableSelect != 'slumps' && tableSelect != 'goalie_streaks' && tableSelect != 'player_information'">
             <div class="col-6">
                 <select class="form-control" data-ng-model="$parent.timespanSelect" data-ng-change="changeTimespan()">
                     <option data-ng-option value selected="selected">alle Zeiträume</option>
@@ -237,7 +238,7 @@
             </div>
         </div>
 
-        <div class="form-row mb-3" data-ng-if="tableSelect != 'streaks' && tableSelect != 'slumps' && tableSelect != 'player_information' && tableSelect != 'top_game_scores_per_game' && tableSelect != 'bottom_game_scores_per_game'">
+        <div class="form-row mb-3" data-ng-if="tableSelect != 'streaks' && tableSelect != 'slumps' && tableSelect != 'goalie_streaks' && tableSelect != 'player_information' && tableSelect != 'top_game_scores_per_game' && tableSelect != 'bottom_game_scores_per_game'">
 
             <!-- skater filters for minimum games played/time on ice -->
             <div class="input-group col-6" data-ng-if="tableSelect != 'goalie_stats' && tableSelect != 'goalie_against_avg_stats' && tableSelect != 'goalie_stats_ev' && tableSelect != 'goalie_stats_pp' && tableSelect != 'goalie_stats_sh' && tableSelect != 'goalie_zone_stats_far' && tableSelect != 'goalie_zone_stats_near' && tableSelect != 'goalie_shootout_stats'">
@@ -284,7 +285,7 @@
             </div>
         </div>
 
-        <div class="mt-0 mb-3" data-ng-if="tableSelect == 'streaks' || tableSelect == 'slumps'">
+        <div class="mt-0 mb-3" data-ng-if="tableSelect == 'streaks' || tableSelect == 'slumps' || tableSelect == 'goalie_streaks'">
             <!-- <div class="border-0" data-ng-if="tableSelect != 'streaks' && tableSelect != 'slumps' && tableSelect != 'player_information'">
                 <label for="u23Check">
                     <input type="checkbox" id="u23Check" data-ng-model="$parent.u23Check" value="">
@@ -1694,6 +1695,54 @@
             </tr>
         </tbody>
     </table>
+
+    <table id="goalie_streaks" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_streaks'">
+        <p></p>
+        <thead class="thead-light">
+            <tr>
+                <th scope="col" class="text-center">Rang</th>
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                    <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
+                        <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
+                        <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
+                        <span data-ng-show="$parent.sortConfig['sortKey'] == col.data_key && $parent.sortConfig['sortDescending']" class="fa fa-caret-down"></span>
+                        <span data-ng-show="$parent.sortConfig['sortKey'] == col.data_key && !$parent.sortConfig['sortDescending']" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr data-ng-repeat="streak in goalie_streaks | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:longestStreakFilter | filter:currentStreakFilter | filter:{full_name: nameFilter} | filter:streakSlumpTeamFilter | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter">
+                <td class="w-03 text-right">{{ $index + 1 }}</td>
+                <td class="w-15">
+                    <a data-ng-if="!streak.sub_streaks" href="#!/player_profile/{{season}}/{{streak.display_team}}/{{streak.player_id}}">{{ streak.full_name }}</a>
+                    <span data-ng-if="streak.sub_streaks">
+                        {{ streak.full_name }}
+                        (<span data-ng-repeat="sub in streak.sub_streaks">
+                            <a href="#!/player_profile/{{sub[1]}}/{{sub[0]}}/{{streak.player_id}}">{{sub[1].toString().substr(-2) + '/' + (sub[1] + 1).toString().substr(-2)}}</a>{{$last ? '' : ' | '}}
+                        </span>)
+                    </span>
+                </td>
+                <td class="w-06">
+                    <a data-ng-if="!streak.sub_streaks" href="#!/team_profile/{{season}}/{{streak.display_team}}">{{ streak.display_team }}</a>
+                    <span data-ng-if="streak.sub_streaks">
+                        <span data-ng-repeat="sub in streak.sub_streaks">
+                            <a href="#!/team_profile/{{sub[1]}}/{{sub[0]}}">{{ sub[0] }}</a> {{$last ? '' : ' | '}}
+                        </span>
+                    </span>
+                </td>
+                <td class="w-07 text-right">{{ streak.length_overall }}</td>
+                <td class="w-07 text-right">{{ streak.length }}</td>
+                <td class="w-07 text-right">{{ streak.so }}</td>
+                <td class="w-08 text-right">{{ streak.multi_season ? 'X' : '' }}</td>
+                <td class="w-08 text-right">{{ svc.formatTime(streak.so_streak_seconds) }}</td>
+                <td class="w-15 text-right">{{ streak.last_goal_against ? streak.from_date + ' - ' + svc.formatTime(streak.last_goal_against) : '' }}</td>
+                <td class="w-15 text-right">{{ streak.next_goal_against ? streak.to_date + ' - ' + svc.formatTime(streak.next_goal_against) : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
 
     <table id="streaks" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'streaks'">
         <thead class="thead-light">

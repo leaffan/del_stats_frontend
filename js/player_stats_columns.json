@@ -468,6 +468,17 @@
         {"data_key": "ga_neutral_zone", "col_header": "Out Of Zone GA", "expl_de": "Zugelassene Tore von außerhalb des Drittels", "expl_en": "Out Of Zone Goals Against"},
         {"data_key": "save_pctg_neutral_zone", "col_header": "Out Of Zone SV%", "expl_de": "Fangquote von außerhalb des Drittels", "expl_en": "Out Of Zone Save Percentage"}
     ],
+    "goalie_streaks": [
+        {"data_key": "last_name", "col_header": "Name", "expl_de": null, "expl_en": null},
+        {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},
+        {"data_key": "length", "col_header": "Spiele", "expl_de": null, "expl_en": null},
+        {"data_key": "length_overall", "col_header": "Spiele ohne Gegentor", "expl_de": null, "expl_en": null},
+        {"data_key": "so", "col_header": "Shutouts", "expl_de": null, "expl_en": null},
+        {"data_key": "multi_season", "col_header": "Vorsaison", "expl_de": null, "expl_en": null},
+        {"data_key": "so_streak_seconds", "col_header": "Min w/o GA", "expl_de": "Minuten ohne Gegentor", "expl_en": "Minutes without Goal Against"},
+        {"data_key": "last_goal_timestamp", "col_header": "LGA", "expl_de": null, "expl_en": null},
+        {"data_key": "next_goal_timestamp", "col_header": "NGA", "expl_de": null, "expl_en": null}
+    ],
     "streaks": [
         {"data_key": "last_name", "col_header": "Name", "expl_de": null, "expl_en": null},
         {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null},

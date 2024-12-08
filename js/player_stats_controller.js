@@ -159,6 +159,11 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         $scope.loose_slumps = res.data;
     });
 
+    // loading goalie streaks from external json file
+    $http.get('data/' + $scope.season + '/del_streaks_goalies.json').then(function (res) {
+        $scope.goalie_streaks = res.data;
+    });
+
     // loading game scores per game and player from external json file
     $http.get('data/' + $scope.season + '/del_game_scores_per_game_top.json').then(function (res) {
         $scope.top_game_scores = res.data;
@@ -832,6 +837,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         'player_information': 'last_name',
         'streaks': 'length',
         'slumps': 'length',
+        'goalie_streaks': 'so_streak_seconds',
         'basic_stats': 'points',
         'basic_stats_5v5': 'points_5v5',
         'on_goal_shot_zones': 'shots_on_goal',
@@ -886,6 +892,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         "sh_goals": ['sh_goals', '-time_on_ice_sh', '-games_played'],
         "games_played": ['games_played', '-team'],
         "length": ['length', 'points', 'from_date'],
+        "so_streak_seconds": ['so_streak_seconds'],
         "save_pctg_blue_line": ['save_pctg_blue_line', 'sa_blue_line'],
         'save_pctg_slot': ['save_pctg_slot', 'sa_slot'],
         'save_pctg_5v4': ['save_pctg_5v4', 'sa_5v4'],

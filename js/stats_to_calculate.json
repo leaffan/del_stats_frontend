@@ -169,6 +169,42 @@
             "type": "rate",
             "numerator": "pts",
             "denominator": "gp"
+        },
+        {
+            "name": "shf_pg",
+            "type": "rate",
+            "numerator": "shf",
+            "denominator": "gp"
+        },
+        {
+            "name": "toi_shf",
+            "type": "rate",
+            "numerator": "toi",
+            "denominator": "shf"
+        },
+        {
+            "name": "toi_pg",
+            "type": "rate",
+            "numerator": "toi",
+            "denominator": "gp"
+        },
+        {
+            "name": "toi_pp_pg",
+            "type": "rate",
+            "numerator": "toi_pp",
+            "denominator": "gp"
+        },
+        {
+            "name": "toi_sh_pg",
+            "type": "rate",
+            "numerator": "toi_sh",
+            "denominator": "gp"
+        },
+        {
+            "name": "fac_pctg",
+            "type": "percentage",
+            "value": "fac_w",
+            "base": "fac"
         }
     ]
 }

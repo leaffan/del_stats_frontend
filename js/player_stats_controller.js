@@ -3,6 +3,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
     $scope.svc = svc;
     var ctrl = this;
     $scope.season = $routeParams.season;
+    svc.setTitle("DEL-Spielerstatistiken " + svc.getSeasonIdentifier($scope.season));
     // default table selection and sort criterion for skater page
     $scope.tableSelect = 'basic_stats';
     $scope.seasonTypeSelect = 'RS';
@@ -179,22 +180,22 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
 
 	$scope.processData = function(allText) {
         // split content based on new line
-		var allTextLines = allText.data.split(/\r\n|\n/);
-		var headers = allTextLines[0].split(';');
-		var lines = [];
+		let allTextLines = allText.data.split(/\r\n|\n/);
+		let headers = allTextLines[0].split(';');
+		let lines = [];
 
-		for ( var i = 0; i < allTextLines.length; i++) {
-			// split content based on separator
-			var data = allTextLines[i].split(';');
-			if (data.length == headers.length) {
-				var tarr = [];
-				for ( var j = 0; j < headers.length; j++) {
-                    tarr.push(data[j]);
-				}
-				lines.push(tarr);
-			}
+        for (const line of allTextLines) {
+            // Split content based on separator
+            const data = line.split(';');
+            if (data.length === headers.length) {
+                const tarr = [];
+                for (const header of headers) {
+                    tarr.push(data[headers.indexOf(header)]);
+                }
+                lines.push(tarr);
+            }
         }
-        var headers = lines[0];
+        headers = lines[0];
         $scope.player_games = lines.slice(1).map(function(line) {
             return line.reduce(function(player_game, value, i) {
                 if ($scope.svc.player_stats_to_aggregate().indexOf(headers[i]) !== -1) {

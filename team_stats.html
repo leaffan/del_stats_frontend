@@ -1141,11 +1141,12 @@
         <tbody>
             <tr class="{{season == 2020 && seasonTypeSelect == 'MSC' && (stat.team === 'SWW' || stat.team == 'EBB') ? 'table-danger' : ''}}" data-ng-repeat="stat in filtered_team_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending']">
                 <td class="w-03 text-right">{{ $index + 1 }}</td>
-                <td class="w-17"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
-                <td class="w-08 text-right">{{ stat.games_played }}</td>
-                <td class="w-16 text-right">{{ stat.attendance }}</td>
-                <td class="w-16 text-right">{{ stat.avg_attendance.toFixed(0) }}</td>
+                <td class="w-15"><a href="#!/team_profile/{{season}}/{{stat.team}}">{{ team_location_lookup[stat.team] }}</a></td>
+                <td class="w-06 text-right">{{ stat.games_played }}</td>
+                <td class="w-14 text-right">{{ stat.attendance }}</td>
+                <td class="w-12 text-right">{{ stat.avg_attendance.toFixed(0) }}</td>
                 <td class="w-12 text-right">{{ stat.util_capacity_pctg.toFixed(1) }} %</td>
+                <td class="w-10 text-right">{{ stat.sellout }}</td>
                 <td class="w-16 text-right">{{ homeAwaySelect == 'home' ? stat.avg_attendance_ref_season : ''}}</td>
                 <td class="w-12 text-right">{{ homeAwaySelect == 'home' ? stat.avg_attendance_delta.toFixed(0) : '' }}</td>
             </tr>

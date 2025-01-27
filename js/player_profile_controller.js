@@ -1,4 +1,4 @@
-app.controller('plrProfileController', function($rootScope, $scope, $http, $routeParams, $location, svc) {
+app.controller('plrProfileController', function($scope, $http, $routeParams, $location, svc) {
 
     var ctrl = this;
     $scope.svc = svc;
@@ -37,7 +37,7 @@ app.controller('plrProfileController', function($rootScope, $scope, $http, $rout
     $http.get('data/' + $scope.season + '/per_player/' + $routeParams.team + '_' + $routeParams.player_id + '.json').then(function (res) {
         $scope.player_stats = res.data;
         $scope.player_name = res.data[0].full_name;
-        $rootScope.title = $scope.player_name + ": Spielerprofil";
+        svc.setTitle($scope.player_name + ": Spielerprofil " + svc.getSeasonIdentifier($scope.season));
         if ($scope.player_stats[0]['position'] == 'GK') {
             $scope.tableSelect = 'goalie_stats'
         } else {
@@ -53,7 +53,7 @@ app.controller('plrProfileController', function($rootScope, $scope, $http, $rout
         $scope.toRoundSelect = $scope.maxRoundPlayed;
         // retrieving all numbers a player used
         $scope.numbersWorn = [...new Set($scope.player_stats.map(item => item.no))];
-        numberFrequencies = $scope.player_stats.reduce(function(obj, v) {
+        let numberFrequencies = $scope.player_stats.reduce(function(obj, v) {
             // increment or set the property
             // `(obj[v.status] || 0)` returns the property value if defined
             // or 0 ( since `undefined` is a falsy value
@@ -78,14 +78,14 @@ app.controller('plrProfileController', function($rootScope, $scope, $http, $rout
     });
 
     $http.get('data/'+ $scope.season + '/del_player_game_stats_aggregated.json').then(function (res) {
-        seen = [];
+        let seen = [];
         $scope.all_players = []
         // de-duplicating array with players because they usually will appear with
         // both aggregated regular season and playoff statistics
         res.data[1].forEach(element => {
             // using a combination of player id and team abbreviation to account for players that
             // changed teams during the season
-            player_team_key = element.player_id + '_' + element.team;
+            let player_team_key = element.player_id + '_' + element.team;
             if (!seen[player_team_key]) {
                 $scope.all_players.push(element);
                 seen[player_team_key] = true;

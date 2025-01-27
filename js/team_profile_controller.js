@@ -64,6 +64,7 @@ app.controller('teamProfileController', function($scope, $http, $routeParams, $l
         $scope.team_playoff_lookup = $scope.teams.reduce((o, key) => Object.assign(o, {[key.abbr]: key.po}), {});
         // retrieving current team's data
         $scope.current_team_data = $scope.teams.filter(team => team.abbr == $scope.current_team)[0];
+        svc.setTitle($scope.current_team_data.full_name + ": Teamprofil " + svc.getSeasonIdentifier($scope.season));
     });
 
     $scope.model = {

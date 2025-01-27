@@ -3,6 +3,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
     $scope.svc = svc;
     var ctrl = this;
     $scope.season = $routeParams.season;
+    svc.setTitle("DEL-Teamstatistiken " + svc.getSeasonIdentifier($scope.season));
     // setting reference season for attendance stats display
     $scope.referenceSeasonSelect = ($scope.season - 1).toString();
     if ($scope.referenceSeasonSelect == '2020')

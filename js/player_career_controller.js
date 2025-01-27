@@ -54,6 +54,7 @@ app.controller('playerCareerController', function ($scope, $http, $routeParams, 
         $scope.player_stats = res.data;
         $scope.player_first_name = res.data.first_name;
         $scope.player_last_name = res.data.last_name;
+        svc.setTitle($scope.player_first_name + " " + $scope.player_last_name + ": Karriereverlauf")
         let statsToAggregate = [];
         let statsToCalculate = [];
         if ($scope.player_stats.position.startsWith('G')) {

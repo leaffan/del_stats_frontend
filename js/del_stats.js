@@ -1,4 +1,4 @@
-var app = angular.module('delStatsApp', ['ngResource', 'ngRoute', 'ngStorage', 'moment-picker', 'angularMoment'])
+let app = angular.module('delStatsApp', ['ngResource', 'ngRoute', 'ngStorage', 'moment-picker', 'angularMoment'])
 
 app.constant('config', {
     defaultSeason: 2024,
@@ -110,8 +110,11 @@ app.run(function(amMoment) {
 });
 
 // providing functions to several controllers as services
-app.factory('svc', function() {
+app.factory('svc', function($rootScope) {
     return {
+        setTitle: function(title) {
+            $rootScope.title = title;
+        },
         // sets sorting order according to selected sort criterion
         setSortOrder: function(sortCriterion, oldSortCriterion, oldStatsSortDescending, ascendingAttrs) {
             // if current criterion equals the new one

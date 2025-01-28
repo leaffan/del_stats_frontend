@@ -162,7 +162,8 @@ app.controller('playerCareerController', function ($scope, $http, $routeParams, 
             if (team.indexOf(',') > -1) {
                 return;
             }
-            let teamSeasons = filteredSeasons.filter(season => season.team == team);
+            // not considering seasons for other teams or with order == 0, i.e. combined seasons with multiple phases
+            let teamSeasons = filteredSeasons.filter(season => season.team == team && season.order > 0);
             ['ALL', 'RS', 'PO'].forEach(seasonType => {
                 let teamCareer = {};
                 let minMaxAges = []

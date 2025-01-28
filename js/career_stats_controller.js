@@ -202,14 +202,14 @@ app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'c
                 stats_to_calculate = ctrl.statsToCalculate['career_goalie_stats_to_calculate'];
             } else {
                 stats_to_aggregate = ctrl.statsToAggregate['career_skater_stats_to_aggregate'];
-                stats_to_calculate = ctrl.statsToCalculate['skater_stats_to_calculate'].concat(ctrl.statsToCalculate['career_skater_stats_to_calculate']);
+                stats_to_calculate = ctrl.statsToCalculate['career_skater_stats_to_calculate'];
             }
             if (stats_to_calculate == undefined)
                 return;
             stats_to_aggregate.forEach(parameter => {
                 filtered_stat_line[parameter] = player_seasons.reduce((param, season) => {return param + (season[parameter] || 0);}, 0);
             })
-            filtered_stat_line['g_post_98'] = player_seasons.filter(season => season.season > 1998).reduce((param, season) => {return param + (season['g'] || 0);}, 0);
+            filtered_stat_line['g_post_1998'] = player_seasons.filter(season => season.season > 1998).reduce((param, season) => {return param + (season['g'] || 0);}, 0);
             stats_to_calculate.forEach(calculation_cfg => {
                 if (calculation_cfg.type == 'sum') {
                     filtered_stat_line[calculation_cfg.name] = filtered_stat_line[calculation_cfg.summand_1] + filtered_stat_line[calculation_cfg.summand_2];

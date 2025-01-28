@@ -364,21 +364,6 @@ app.factory('svc', function($rootScope) {
                 'so_games_played', 'so_attempts_a', 'so_goals_a'
             ];    
         },
-        skater_stats_to_calculate: function() {
-            return [
-                ['pts', 'sum', 'g', 'a'], ['fac_l', 'difference', 'fac', 'fac_w'], ['gpg', 'rate', 'g', 'gp'],
-                ['apg', 'rate', 'a', 'gp'], ['ptspg', 'rate', 'pts', 'gp'], ['sh_pctg', 'percentage', 'g', 'sog'],
-                ['shf_pg', 'rate', 'shf', 'gp'], ['toi_shf', 'rate', 'toi', 'shf'], ['toi_pg', 'rate', 'toi', 'gp'],
-                ['toi_pp_pg', 'rate', 'toi_pp', 'gp'], ['toi_sh_pg', 'rate', 'toi_sh', 'gp'],
-                ['fac_pctg', 'percentage', 'fac_w', 'fac']
-            ]
-        },
-        goalie_stats_to_calculate: function() {
-            return [
-                ['sv_pctg', 'percentage_from_100', 'ga', 'sa'], ['gaa', 'rate_with_factor', 'ga', 'toi', 3600],
-                ['total_so', 'sum', 'so', 'sl_so'], ['pts', 'sum', 'g', 'a'], ['ptspg', 'rate', 'pts', 'gp']
-            ]
-        },
         pad: function pad(num, size) {
             let s = num+"";
             while (s.length < size) s = "0" + s;

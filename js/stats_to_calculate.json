@@ -147,6 +147,12 @@
     ],
     "career_skater_stats_to_calculate": [
         {
+            "name": "pts",
+            "type": "sum",
+            "summand_1": "g",
+            "summand_2": "a"
+        },
+        {
             "name": "sh_pctg",
             "type": "percentage",
             "value": "g_post_1998",
@@ -205,6 +211,12 @@
             "type": "percentage",
             "value": "fac_w",
             "base": "fac"
+        },
+        {
+            "name": "fac_l",
+            "type": "difference",
+            "minuend": "fac",
+            "subtrahend": "fac_w"
         }
     ]
 }

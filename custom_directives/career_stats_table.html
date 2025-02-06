@@ -1,7 +1,10 @@
 <table class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow">
     <thead table-header stats-cols="statsCols" ctrl="ctrl"></thead>
     <tbody>
-        <tr data-ng-repeat="(rowIndex, stat) in filteredSeasonPlayerStats | filter:ctrl.nameFilter | orderBy:ctrl.sortConfig['sortCriteria']:ctrl.sortConfig['sortDescending'] | limitTo:ctrl.limit" data-ng-init="rowIndex = $index">
+        <tr 
+            data-ng-repeat="(rowIndex, stat) in filteredSeasonPlayerStats | filter:ctrl.nameFilter | orderBy:ctrl.sortConfig['sortCriteria']:ctrl.sortConfig['sortDescending'] | limitTo:ctrl.limit" data-ng-init="rowIndex = $index"
+            class="{{stat.season_type == 'RS' ? 'table-info' : stat.season_type == 'PO' ? 'table-warning' : ''}}"        
+        >
             <td
                 ng-repeat="col in statsCols"
                 class="w-{{ svc.pad(col.width, 2) }} text-{{ col.align ? col.align : 'right' }}"
@@ -14,6 +17,7 @@
                 <a data-ng-style="stat.last_season == 2024 && {'font-weight':'bold'}" href="#!/player_career/{{stat.player_id}}">
                 {{ stat.first_name }} {{ stat.last_name }}
                 </a>
+                <span data-ng-if="ctrl.display_single_seasons && stat.championships"><i class="fas fa-trophy" aria-hidden="true"></i></span>
             </span>
 
             <span data-ng-if="col.data_key == 'country'" data-ng-repeat="country in stat.country" class="flag-icon flag-icon-{{ country }} ml-1 p-0"></span>            
@@ -26,12 +30,24 @@
                 {{ stat[col.data_key] ? stat[col.data_key] : '' }}
             </span>
 
+            <span data-ng-if="col.data_key == 'season'">
+                {{ svc.getSeasonIdentifier(stat[col.data_key]) }}
+            </span>
 
-            <span data-ng-if="!(['rank', 'last_name', 'teams_cnt', 'championships', 'country'].includes(col.data_key))">
-                <span data-ng-if="['ppg', 'shg'].includes(col.data_key) && ctrl.from_season < 1998 && stat.first_season < 1998 && stat.position != 'G'" title="Ohne Daten vor 1998/1999.">*</span><!--
-                --><span data-ng-if="['sog', 'sh_pctg'].includes(col.data_key) && ctrl.from_season < 1999 && stat.first_season < 1999 && stat.position != 'G'" title="Ohne Daten vor 1999/2000.">**</span><!--
-                -->{{col.data_key == 'total_so' ? svc.getShutouts(stat) : col.time ? svc.formatTime(stat[col.data_key]) : col.fixed ? stat[col.data_key].toFixed(col.fixed) : stat[col.data_key]}}
-                {{col.pctg ? ' %' : ''}}
+            <span data-ng-if="!ctrl.display_single_seasons">
+                <span data-ng-if="!(['rank', 'last_name', 'teams_cnt', 'championships', 'country', 'season'].includes(col.data_key))">
+                    <span data-ng-if="['ppg', 'shg'].includes(col.data_key) && ctrl.from_season < 1998 && stat.first_season < 1998" title="Ohne Daten vor 1998/1999.">*</span><!--
+                    --><span data-ng-if="['sog', 'sh_pctg'].includes(col.data_key) && ctrl.from_season < 1999 && stat.first_season < 1999" title="Ohne Daten vor 1999/2000.">**</span><!--
+                    -->{{col.data_key == 'total_so' ? svc.getShutouts(stat) : col.time ? svc.formatTime(stat[col.data_key]) : col.fixed ? stat[col.data_key].toFixed(col.fixed) : stat[col.data_key]}}
+                    {{col.pctg ? ' %' : ''}}
+                </span>
+            </span>
+
+            <span data-ng-if="ctrl.display_single_seasons">
+                <span data-ng-if="!(['rank', 'last_name', 'teams_cnt', 'championships', 'country', 'season'].includes(col.data_key))">
+                    {{ col.valid_from && stat.season < col.valid_from ? '-' : col.data_key == 'total_so' ? svc.getShutouts(stat) : col.time ? svc.formatTime(stat[col.data_key]) : col.fixed ? stat[col.data_key].toFixed(col.fixed) : stat[col.data_key]}}
+                    {{ col.valid_from && stat.season < col.valid_from ? '-' : col.pctg ? ' %' : ''}}
+                </span>
             </span>
 
             </td>

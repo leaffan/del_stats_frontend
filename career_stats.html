@@ -97,29 +97,49 @@
                 </div>
             </div>
 
+            <div class="input-group col-4">
+                <div class="mt-0 mb-3">
+                    <div class="border-0">
+                            <label for="display_single_seasons">
+                            <input type="checkbox" id="display_single_seasons" data-ng-model="ctrl.display_single_seasons" value="">
+                            <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                            Einzelne Saisons anzeigen
+                        </label>
+                    </div>
+                </div>
+            </div>
+
             <div data-ng-if="team" class="input-group col-4">
                 <div class="mt-0 mb-3">
                         <div class="border-0">
                             <label for="display_games_with_other_teams">
                             <input type="checkbox" id="display_games_with_other_teams" data-ng-model="ctrl.display_games_with_other_teams" value="">
                             <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
-                            Auch Spiele mit anderen Teams aufführen
+                            Auch Spiele mit anderen Teams berücksichtigen
                         </label>
                     </div>
                 </div>
             </div>
-
+            
         </div>
 
     </form>
 
     <!-- basic skater career stats -->
-    <career-stats-table data-ng-if="table_type == 'skater_career_stats'" id="skater_career_stats" stats-cols="stats_cols['skater_career_stats']" filtered-season-player-stats="filtered_season_player_stats" ctrl="ctrl"></career-stats-table>
+    <career-stats-table data-ng-if="!ctrl.display_single_seasons && table_type == 'skater_career_stats'" id="skater_career_stats" stats-cols="stats_cols['skater_career_stats']" filtered-season-player-stats="filtered_season_player_stats" ctrl="ctrl"></career-stats-table>
+    <!-- basic skater career stats per season -->
+    <career-stats-table data-ng-if="ctrl.display_single_seasons && table_type == 'skater_career_stats'" id="skater_career_stats_per_season" stats-cols="stats_cols['skater_career_stats_per_season']" filtered-season-player-stats="filtered_season_player_stats" ctrl="ctrl"></career-stats-table>
     <!-- skater time-on-ice and shift stats -->
-    <career-stats-table data-ng-if="table_type == 'skater_toi_shift_stats'" id="skater_toi_shift_stats" stats-cols="stats_cols['skater_toi_shift_stats']" filtered-season-player-stats="filtered_season_player_stats" ctrl="ctrl"></career-stats-table>
+    <career-stats-table data-ng-if="!ctrl.display_single_seasons && table_type == 'skater_toi_shift_stats'" id="skater_toi_shift_stats" stats-cols="stats_cols['skater_toi_shift_stats']" filtered-season-player-stats="filtered_season_player_stats" ctrl="ctrl"></career-stats-table>
+    <!-- skater time-on-ice and shift stats per season -->
+    <career-stats-table data-ng-if="ctrl.display_single_seasons && table_type == 'skater_toi_shift_stats'" id="skater_toi_shift_stats_per_season" stats-cols="stats_cols['skater_toi_shift_stats_per_season']" filtered-season-player-stats="filtered_season_player_stats" ctrl="ctrl"></career-stats-table>
     <!-- skater additional stats -->
-    <career-stats-table data-ng-if="table_type == 'skater_additional_stats'" id="skater_additional_stats" stats-cols="stats_cols['skater_additional_stats']" filtered-season-player-stats="filtered_season_player_stats" ctrl="ctrl"></career-stats-table>
-    <!-- basic goalie career stats -->
-    <career-stats-table data-ng-if="table_type == 'goalie_career_stats'" id="goalie_career_stats" stats-cols="stats_cols['goalie_career_stats']" filtered-season-player-stats="filtered_season_player_stats" ctrl="ctrl"></career-stats-table>
+    <career-stats-table data-ng-if="!ctrl.display_single_seasons && table_type == 'skater_additional_stats'" id="skater_additional_stats" stats-cols="stats_cols['skater_additional_stats']" filtered-season-player-stats="filtered_season_player_stats" ctrl="ctrl"></career-stats-table>
+    <!-- skater additional stats per season -->
+    <career-stats-table data-ng-if="ctrl.display_single_seasons && table_type == 'skater_additional_stats'" id="skater_additional_stats_per_season" stats-cols="stats_cols['skater_additional_stats_per_season']" filtered-season-player-stats="filtered_season_player_stats" ctrl="ctrl"></career-stats-table>    <!-- basic goalie career stats -->
+    <!-- goalie career stats -->
+    <career-stats-table data-ng-if="!ctrl.display_single_seasons && table_type == 'goalie_career_stats'" id="goalie_career_stats" stats-cols="stats_cols['goalie_career_stats']" filtered-season-player-stats="filtered_season_player_stats" ctrl="ctrl"></career-stats-table>
+    <!-- goalie career stats per season -->
+    <career-stats-table data-ng-if="ctrl.display_single_seasons && table_type == 'goalie_career_stats'" id="goalie_career_stats_per_season" stats-cols="stats_cols['goalie_career_stats_per_season']" filtered-season-player-stats="filtered_season_player_stats" ctrl="ctrl"></career-stats-table>
 
 </div>

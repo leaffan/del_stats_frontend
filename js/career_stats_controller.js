@@ -6,6 +6,7 @@ app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'c
     $scope.show_only_active = false;
     $scope.aggregate_season = true;
     ctrl.display_games_with_other_teams = false;
+    ctrl.display_single_seasons = false;
     ctrl.limit = 100;
 
     $window.onscroll = function() {
@@ -88,7 +89,8 @@ app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'c
     $scope.$watchGroup([
         'country', 'team', 'position', 'season_type',
         'ctrl.from_season', 'ctrl.to_season', 'ctrl.from_age', 'ctrl.to_age',
-        'table_type', 'show_only_active', 'ctrl.display_games_with_other_teams'
+        'table_type', 'show_only_active', 'ctrl.display_games_with_other_teams',
+        'ctrl.display_single_seasons'
     ], function(new_values, old_values) {
         // if (old_values != new_values)
         //     console.log(old_values, "=>", new_values, old_values === new_values);
@@ -102,7 +104,11 @@ app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'c
             };
         }
         // filtering player career stats
-        $scope.filtered_season_player_stats = $scope.filterCareerStats();
+        if (ctrl.display_single_seasons) {
+            $scope.filtered_season_player_stats = $scope.filterSingleSeasons();
+        } else {
+            $scope.filtered_season_player_stats = $scope.filterCareerStats();
+        }
         // re-setting limit of displayed rows
         ctrl.limit = 100;
     });
@@ -173,6 +179,61 @@ app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'c
         };
     };
 
+    $scope.filterSingleSeasons = function() {
+        if ($scope.players === undefined)
+            return;
+        let players_of_interest = $scope.players.filter(function(player) {
+            return $scope.filterPlayer(player);
+        });
+        let filtered_season_stats = [];
+        players_of_interest.forEach(player => {
+            let player_seasons = $scope.player_stats.filter(career => (career['id'] == player['g_id'] || career['id'] == player['c_id'])).map(career => career['seasons']).flat();
+            let player_teams = new Set(player_seasons.map(player_season => player_season.team));
+            if (!['skater_career_stats', 'goalie_career_stats'].includes($scope.table_type)) {
+                player_seasons = player_seasons.filter(season => season.season >= 2018);
+            }
+            player_seasons = player_seasons.filter(function(player_season) {
+                return $scope.filterPlayerSeasons(player_season, player_teams);
+            });
+            if (player_seasons.length < 1)
+                return;
+            let seasons_played = new Set(player_seasons.map(season => season['season']));
+            let stats_to_fill_up;
+            let stats_to_calculate;
+            if (player.position.startsWith('G')) {
+                stats_to_fill_up = ctrl.statsToAggregate['career_goalie_stats_to_aggregate'];
+                stats_to_calculate = ctrl.statsToCalculate['career_goalie_stats_to_calculate'];
+            } else {
+                stats_to_fill_up = ctrl.statsToAggregate['career_skater_stats_to_aggregate'];
+                stats_to_calculate = ctrl.statsToCalculate['career_skater_stats_to_calculate'];
+            }
+            seasons_played.forEach(season => {
+                let player_season_stats = player_seasons.filter(single_season => single_season.season == season);
+                let championships = player_season_stats.filter(single_season => single_season.c == 1).length;
+                ['RS', 'PO'].forEach(seasonType => {
+                    let player_season_type_stats = player_season_stats.filter(single_season => single_season.season_type == seasonType);
+                    if (player_season_type_stats.length < 1)
+                        return;
+                    let filtered_stat_line = $scope.preparePlayer(player);
+                    filtered_stat_line['season'] = player_season_type_stats[0]['season'];
+                    filtered_stat_line['season_type'] = player_season_type_stats[0]['season_type'];
+                    filtered_stat_line['age'] = player_season_type_stats[0]['age'];
+                    filtered_stat_line['championships'] = championships > 0 ? 1 : 0;
+                    filtered_stat_line['teams'] = Array.from(new Set(player_season_type_stats.map(season => season['team'])));
+                    filtered_stat_line['teams_cnt'] = filtered_stat_line['teams'].length;
+                    stats_to_fill_up.forEach(parameter => {
+                        filtered_stat_line[parameter] = player_season_type_stats.reduce((param, season) => {return param + (season[parameter] || 0);}, 0);
+                    })
+                    if (filtered_stat_line['season'] > 1998)
+                        filtered_stat_line['g_post_1998'] = filtered_stat_line['g'];
+                    $scope.calculateStatsForStatline(stats_to_calculate, filtered_stat_line);
+                    filtered_season_stats.push(filtered_stat_line);
+                });
+            });
+        });
+        return filtered_season_stats;
+    };
+
     $scope.filterCareerStats = function() {
         if ($scope.players === undefined)
             return;
@@ -210,29 +271,36 @@ app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'c
                 filtered_stat_line[parameter] = player_seasons.reduce((param, season) => {return param + (season[parameter] || 0);}, 0);
             })
             filtered_stat_line['g_post_1998'] = player_seasons.filter(season => season.season > 1998).reduce((param, season) => {return param + (season['g'] || 0);}, 0);
-            stats_to_calculate.forEach(calculation_cfg => {
-                if (calculation_cfg.type == 'sum') {
-                    filtered_stat_line[calculation_cfg.name] = filtered_stat_line[calculation_cfg.summand_1] + filtered_stat_line[calculation_cfg.summand_2];
-                }
-                if (calculation_cfg.type == 'rate') {
-                    filtered_stat_line[calculation_cfg.name] = svc.calculateRate(filtered_stat_line[calculation_cfg.numerator], filtered_stat_line[calculation_cfg.denominator]);
-                }
-                if (calculation_cfg.type == 'difference') {
-                    filtered_stat_line[calculation_cfg.name] = filtered_stat_line[calculation_cfg.minuend] - filtered_stat_line[calculation_cfg.subtrahend];
-                }
-                if (calculation_cfg.type == 'percentage') {
-                    filtered_stat_line[calculation_cfg.name] = svc.calculatePercentage(filtered_stat_line[calculation_cfg.value], filtered_stat_line[calculation_cfg.base]);
-                }
-                if (calculation_cfg.type == 'from_100_percentage') {
-                    filtered_stat_line[calculation_cfg.name] = svc.calculateFrom100Percentage(filtered_stat_line[calculation_cfg.value], filtered_stat_line[calculation_cfg.base]);
-                }
-            });
+            $scope.calculateStatsForStatline(stats_to_calculate, filtered_stat_line);
             filtered_stat_line['championships'] = player_seasons.filter(season => season.c == 1).length;
             filtered_stat_line['teams'] = Array.from(filtered_stat_line['teams']);
             filtered_stat_line['teams_cnt'] = filtered_stat_line['teams'].length;
             filtered_career_stats.push(filtered_stat_line);
         });
         return filtered_career_stats;
+    };
+
+    $scope.calculateStatsForStatline = function(stats_to_calculate, filtered_stat_line) {
+        stats_to_calculate.forEach(calculation_cfg => {
+            if (calculation_cfg.type == 'sum') {
+                filtered_stat_line[calculation_cfg.name] = filtered_stat_line[calculation_cfg.summand_1] + filtered_stat_line[calculation_cfg.summand_2];
+            }
+            if (calculation_cfg.type == 'rate') {
+                filtered_stat_line[calculation_cfg.name] = svc.calculateRate(filtered_stat_line[calculation_cfg.numerator], filtered_stat_line[calculation_cfg.denominator]);
+            }
+            if (calculation_cfg.type == 'rate_with_factor') {
+                filtered_stat_line[calculation_cfg.name] = svc.calculateRate(filtered_stat_line[calculation_cfg.numerator], filtered_stat_line[calculation_cfg.denominator], calculation_cfg.factor);
+            }
+            if (calculation_cfg.type == 'difference') {
+                filtered_stat_line[calculation_cfg.name] = filtered_stat_line[calculation_cfg.minuend] - filtered_stat_line[calculation_cfg.subtrahend];
+            }
+            if (calculation_cfg.type == 'percentage') {
+                filtered_stat_line[calculation_cfg.name] = svc.calculatePercentage(filtered_stat_line[calculation_cfg.value], filtered_stat_line[calculation_cfg.base]);
+            }
+            if (calculation_cfg.type == 'from_100_percentage') {
+                filtered_stat_line[calculation_cfg.name] = svc.calculateFrom100Percentage(filtered_stat_line[calculation_cfg.value], filtered_stat_line[calculation_cfg.base]);
+            }
+        });
     };
 
     let loadMoreRecords = function () {

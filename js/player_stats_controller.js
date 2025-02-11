@@ -106,15 +106,6 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         });
     });
 
-    // loading goalie stats from external json file
-    $http.get('data/' + $scope.season + '/del_goalie_game_stats.json').then(function (res) {
-        $scope.goalie_games = res.data;
-        // temporary hack to delay filtering goalie stats for a minuscule while until all player data is loaded
-        // somehow we're always having problems at the beginning of seasons
-        $timeout(function(){$scope.filtered_goalie_stats = $scope.filterGoalieStats($scope.goalie_games);}, 1);
-        // $scope.filtered_goalie_stats = $scope.filterGoalieStats($scope.goalie_games);
-    });
-
     // loading strictly defined player scoring streaks from external json file
     $http.get('data/' + $scope.season + '/del_streaks_strict.json').then(function (res) {
         $scope.strict_streaks = res.data;
@@ -158,6 +149,14 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
             $http.get('data/' + $scope.season + '/del_player_game_stats.csv').then($scope.processData);
         };
         $scope.readCSV();
+        // loading goalie stats from external json file
+        $http.get('data/' + $scope.season + '/del_goalie_game_stats.json').then(function (res) {
+            $scope.goalie_games = res.data;
+            // temporary hack to delay filtering goalie stats for a minuscule while until all player data is loaded
+            // somehow we're always having problems at the beginning of seasons
+            // $timeout(function(){$scope.filtered_goalie_stats = $scope.filterGoalieStats($scope.goalie_games);}, 1);
+            $scope.filtered_goalie_stats = $scope.filterGoalieStats($scope.goalie_games);
+        });
     });
 
 	$scope.processData = function(allText) {

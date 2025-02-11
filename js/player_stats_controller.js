@@ -33,31 +33,6 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
     $scope.teamSelect = ''; // empty name filter
     $scope.gamesBackSelect = '';
 
-    // for some reason the previous way to load all players doesn't work with 2020 data
-    // some problem with asynchronous loading I don't clearly understand
-    // that is why we have to wait explicitly for the data being loaded by using a list of promises
-    // if ($scope.season == 2020) {
-    //     var promises = [];
-    //     promises.push(getPlayers());
-    //     $q.all(promises).then(function (results) {
-    //         $scope.all_players = results[0].data;
-    //     });
-    //     function getPlayers() {
-    //         return $http.get('data/del_players.json');
-    //     }
-    // } else {
-    //     // old way to load all players
-    //     // loading all players from external json file
-    //     $http.get('data/del_players.json').then(function (res) {
-    //         $scope.all_players = res.data;
-    //     });
-    // }
-
-    // loading all players from external json file
-    $http.get('data/del_players.json').then(function (res) {
-        $scope.all_players = res.data;
-    });
-
     // retrieving column headers (and abbreviations + explanations)
     $http.get('./js/player_stats_columns.json').then(function (res) {
         $scope.stats_cols = res.data;
@@ -173,10 +148,17 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         $scope.bottom_game_scores = res.data;
     });
 
-	$scope.readCSV = function() {
-		// http get request to read CSV file content
-        $http.get('data/' + $scope.season + '/del_player_game_stats.csv').then($scope.processData);
-	};
+    // wrapping loading of players around data processing to make sure the all_players objects really exists before
+    // we do so
+    // loading all players from external json file
+    $http.get('data/del_players.json').then(function (res) {
+        $scope.all_players = res.data;
+        $scope.readCSV = function() {
+            // http get request to read CSV file content
+            $http.get('data/' + $scope.season + '/del_player_game_stats.csv').then($scope.processData);
+        };
+        $scope.readCSV();
+    });
 
 	$scope.processData = function(allText) {
         // split content based on new line
@@ -216,7 +198,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         });
         // retrieving all weekdays a game was played
         $scope.weekdaysPlayed = [...new Set($scope.player_games.map(item => item.weekday))].sort();
-        // retrieving all months a game was played by the current team
+        // retrieving all months a game was played
         $scope.monthsPlayed = [...new Set($scope.player_games.map(item => moment(item.game_date).month()))];
         // retrieving rounds played
         $scope.roundsPlayed = [...new Set($scope.player_games.map(item => svc.parseInt(item.round)))].sort(function(a, b) {return a - b;});
@@ -230,7 +212,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
             plr_id = element['player_id'];
             team = element['team'];
             key = [plr_id, team]
-            if (!$scope.all_players[plr_id])
+            if ($scope.all_players === undefined || !$scope.all_players[plr_id])
                 return;
             if (!$scope.prep_player_games[key]) {
                 $scope.prep_player_games[key] = {};
@@ -275,7 +257,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         // $scope.filtered_player_stats = $scope.filterStats();
 	};
 
-    $scope.readCSV();
+    // $scope.readCSV();
 
     $scope.filterGameScores = function(game_scores) {
         if (game_scores === undefined)

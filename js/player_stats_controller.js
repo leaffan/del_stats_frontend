@@ -211,30 +211,13 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
             plr_id = element['player_id'];
             team = element['team'];
             key = [plr_id, team]
-            if ($scope.all_players === undefined || !$scope.all_players[plr_id])
-                return;
-            if (!$scope.prep_player_games[key]) {
-                $scope.prep_player_games[key] = {};
-                $scope.prep_player_games[key]['player_id'] = plr_id;
-                $scope.prep_player_games[key]['first_name'] = $scope.all_players[plr_id]['first_name'];
-                $scope.prep_player_games[key]['last_name'] = $scope.all_players[plr_id]['last_name'];
-                $scope.prep_player_games[key]['full_name'] = $scope.all_players[plr_id]['first_name'] + ' ' + $scope.all_players[plr_id]['last_name'];
-                $scope.prep_player_games[key]['age'] = $scope.all_players[plr_id]['age'];
-                // setting player statuses from combined player status
-                $scope.prep_player_games[key] = $scope.setPlayerStatus(element['status'], $scope.prep_player_games[key])
-                $scope.prep_player_games[key]['iso_country'] = $scope.all_players[plr_id]['iso_country'];
-                $scope.prep_player_games[key]['position'] = $scope.all_players[plr_id]['position'];
-                $scope.prep_player_games[key]['shoots'] = $scope.all_players[plr_id]['hand'];
-                $scope.prep_player_games[key]['team'] = element['team'];
-                $scope.prep_player_games[key]['single_team'] = true;
-                $scope.svc.player_stats_to_aggregate().forEach(category => {
-                    $scope.prep_player_games[key][category] = 0;
+            if (!prep_player_stats[key]) {
+                prep_player_stats[key] = $scope.preparePersonalData(element);
+                ctrl.statsToAggregate.forEach(category => {
+                    prep_player_stats[key][category] = 0;
                 });
-                svc.player_float_stats_to_aggregate().forEach(category => {
-                    $scope.prep_player_games[key][category] = 0.0;
-                });
-                ctrl.statsToCategorize.forEach(categoryCfg => {
-                    prep_player_stats[key][categoryCfg.name] = 0;
+                ctrl.statsToFilter.forEach(filterCfg => {
+                    prep_player_stats[key][filterCfg.name] = 0;
                 })
             };
         });

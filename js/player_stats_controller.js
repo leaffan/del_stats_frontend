@@ -139,27 +139,19 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         $scope.bottom_game_scores = res.data;
     });
 
-    // wrapping loading of players around data processing to make sure the all_players objects really exists before
+    // wrapping loading of players around data processing to make sure the all_players object really exists before
     // we do so
-    // loading all players from external json file
     $http.get('data/del_players.json').then(function (res) {
         $scope.all_players = res.data;
-        $scope.readCSV = function() {
-            // http get request to read CSV file content
-            $http.get('data/' + $scope.season + '/del_player_game_stats.csv').then($scope.processData);
-        };
-        $scope.readCSV();
-        // loading goalie stats from external json file
+        $http.get('data/' + $scope.season + '/del_player_game_stats.csv').then($scope.preProcessData);
         $http.get('data/' + $scope.season + '/del_goalie_game_stats.json').then(function (res) {
             $scope.goalie_games = res.data;
-            // temporary hack to delay filtering goalie stats for a minuscule while until all player data is loaded
-            // somehow we're always having problems at the beginning of seasons
-            // $timeout(function(){$scope.filtered_goalie_stats = $scope.filterGoalieStats($scope.goalie_games);}, 1);
+            $scope.prep_goalie_stats = $scope.prepareGoalieStats($scope.goalie_games);
             $scope.filtered_goalie_stats = $scope.filterGoalieStats($scope.goalie_games);
         });
     });
 
-	$scope.processData = function(allText) {
+	$scope.preProcessData = function(allText) {
         // split content based on new line
 		let allTextLines = allText.data.split(/\r\n|\n/);
 		let headers = allTextLines[0].split(';');
@@ -205,9 +197,48 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         $scope.toRoundSelect = Math.max.apply(Math, $scope.roundsPlayed).toString();
 
         // preparing player games for later filtering, i.e. retrieving personal data etc.
-        $scope.prep_player_games = {};
+        $scope.prep_player_games = $scope.preparePlayerStats($scope.player_games);
+	};
 
-        $scope.player_games.forEach(element => {
+    $scope.preparePersonalData = function(player_game) {
+        personal_data = {};
+        personal_data['player_id'] = plr_id;
+        personal_data['first_name'] = $scope.all_players[plr_id]['first_name'];
+        personal_data['last_name'] = $scope.all_players[plr_id]['last_name'];
+        personal_data['full_name'] = $scope.all_players[plr_id]['first_name'] + ' ' + $scope.all_players[plr_id]['last_name'];
+        personal_data['age'] = $scope.all_players[plr_id]['age'];
+        // setting player statuses from combined player status
+        personal_data = $scope.setPlayerStatus(player_game['status'], personal_data)
+        personal_data['iso_country'] = $scope.all_players[plr_id]['iso_country'];
+        personal_data['position'] = $scope.all_players[plr_id]['position'];
+        personal_data['shoots'] = $scope.all_players[plr_id]['hand'];
+        personal_data['team'] = player_game['team'];
+        personal_data['single_team'] = true;
+        return personal_data;
+    };
+
+    $scope.prepareGoalieStats = function(goalie_games) {
+        let prep_goalie_stats = {};
+
+        goalie_games.forEach(element => {
+            plr_id = element['goalie_id'];
+            team = element['team'];
+            key = [plr_id, team];
+            if (!prep_goalie_stats[key]) {
+                prep_goalie_stats[key] = $scope.preparePersonalData(element);
+                ctrl.goalieStatsToAggregate.forEach(category => {
+                    prep_goalie_stats[key][category] = 0;
+                });
+            }
+        });
+        return prep_goalie_stats
+    };
+
+    $scope.preparePlayerStats = function(player_games) {
+        // preparing player games for later filtering, i.e. retrieving personal data etc.
+        let prep_player_stats = {};
+
+        player_games.forEach(element => {
             plr_id = element['player_id'];
             team = element['team'];
             key = [plr_id, team]
@@ -216,16 +247,13 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                 ctrl.statsToAggregate.forEach(category => {
                     prep_player_stats[key][category] = 0;
                 });
-                ctrl.statsToFilter.forEach(filterCfg => {
-                    prep_player_stats[key][filterCfg.name] = 0;
+                ctrl.statsToCategorize.forEach(categoryCfg => {
+                    prep_player_stats[key][categoryCfg.name] = 0;
                 })
             };
         });
-        // deactivated since initial filtering will be triggered after change of maximum round played
-        // $scope.filtered_player_stats = $scope.filterStats();
-	};
-
-    // $scope.readCSV();
+        return prep_player_stats;
+    };
 
     $scope.filterGameScores = function(game_scores) {
         if (game_scores === undefined)
@@ -241,7 +269,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
     }
 
     $scope.filterGoalieStats = function(stats) {
-        filtered_goalie_stats = {};
+        filtered_goalie_stats = angular.copy($scope.prep_goalie_stats);
         goalie_teams = {};
         if ($scope.goalie_games === undefined)
             return filtered_goalie_stats;
@@ -249,23 +277,6 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
             plr_id = element['goalie_id'];
             team = element['team'];
             key = [plr_id, team];
-            if (!filtered_goalie_stats[key]) {
-                filtered_goalie_stats[key] = {};
-                filtered_goalie_stats[key]['player_id'] = plr_id;
-                filtered_goalie_stats[key]['first_name'] = element['first_name'];
-                filtered_goalie_stats[key]['last_name'] = element['last_name'];
-                filtered_goalie_stats[key]['full_name'] = element['first_name'] + ' ' + element['last_name'];
-                filtered_goalie_stats[key]['age'] = $scope.all_players[plr_id]['age'];
-                // splitting up original player status into three single player statuses
-                filtered_goalie_stats[key] = $scope.setPlayerStatus(element['status'], filtered_goalie_stats[key])
-                filtered_goalie_stats[key]['iso_country'] = $scope.all_players[plr_id]['iso_country'];
-                filtered_goalie_stats[key]['position'] = $scope.all_players[plr_id]['position'];
-                filtered_goalie_stats[key]['team'] = element['team'];
-                filtered_goalie_stats[key]['single_team'] = true;
-                $scope.svc.goalie_stats_to_aggregate().forEach(category => {
-                    filtered_goalie_stats[key][category] = 0;
-                });
-            }
             // checking whether current element passes all filters
             if ($scope.elementPassedFilters(element))
             {
@@ -285,95 +296,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         filtered_goalie_stats = Object.values(filtered_goalie_stats);
 
         filtered_goalie_stats.forEach(element => {
-            // calculating standard save percentage
-            element['save_pctg'] = 100 - svc.calculatePercentage(element['goals_against'], element['shots_against']);
-            if (element['toi']) {
-                element['gaa'] = (element['goals_against'] * 3600.) / element['toi'];
-            } else {
-                element['gaa'] = 0;
-            }
-            // calculating grouped save percentages in even strength
-            if (element['sa_5v5']) {
-                element['save_pctg_5v5'] = (1 - element['ga_5v5'] / element['sa_5v5']) * 100.;
-            } else {
-                element['save_pctg_5v5'] = null;
-            }
-            if (element['sa_4v4']) {
-                element['save_pctg_4v4'] = (1 - element['ga_4v4'] / element['sa_4v4']) * 100.;
-            } else {
-                element['save_pctg_4v4'] = null;
-            }
-            if (element['sa_3v3']) {
-                element['save_pctg_3v3'] = (1 - element['ga_3v3'] / element['sa_3v3']) * 100.;
-            } else {
-                element['save_pctg_3v3'] = null;
-            }
-            // calculating grouped shorthanded save percentages
-            if (element['sa_4v5']) {
-                element['save_pctg_4v5'] = (1 - element['ga_4v5'] / element['sa_4v5']) * 100.;
-            } else {
-                element['save_pctg_4v5'] = null;
-            }
-            if (element['sa_3v4']) {
-                element['save_pctg_3v4'] = (1 - element['ga_3v4'] / element['sa_3v4']) * 100.;
-            } else {
-                element['save_pctg_3v4'] = null;
-            }
-            if (element['sa_3v5']) {
-                element['save_pctg_3v5'] = (1 - element['ga_3v5'] / element['sa_3v5']) * 100.;
-            } else {
-                element['save_pctg_3v5'] = null;
-            }
-            // calculating grouped powerplay save percentages
-            if (element['sa_5v4']) {
-                element['save_pctg_5v4'] = (1 - element['ga_5v4'] / element['sa_5v4']) * 100.;
-            } else {
-                element['save_pctg_5v4'] = null;
-            }
-            if (element['sa_4v3']) {
-                element['save_pctg_4v3'] = (1 - element['ga_4v3'] / element['sa_4v3']) * 100.;
-            } else {
-                element['save_pctg_4v3'] = null;
-            }
-            if (element['sa_5v3']) {
-                element['save_pctg_5v3'] = (1 - element['ga_5v3'] / element['sa_5v3']) * 100.;
-            } else {
-                element['save_pctg_5v3'] = null;
-            }
-            // calculating save percentages by shot zone
-            if (element['sa_slot']) {
-                element['save_pctg_slot'] = (1 - element['ga_slot'] / element['sa_slot']) * 100.;
-            } else {
-                element['save_pctg_slot'] = null;
-            }
-            if (element['sa_left']) {
-                element['save_pctg_left'] = (1 - element['ga_left'] / element['sa_left']) * 100.;
-            } else {
-                element['save_pctg_left'] = null;
-            }
-            if (element['sa_right']) {
-                element['save_pctg_right'] = (1 - element['ga_right'] / element['sa_right']) * 100.;
-            } else {
-                element['save_pctg_right'] = null;
-            }
-            if (element['sa_blue_line']) {
-                element['save_pctg_blue_line'] = (1 - element['ga_blue_line'] / element['sa_blue_line']) * 100.;
-            } else {
-                element['save_pctg_blue_line'] = null;
-            }
-            if (element['sa_neutral_zone']) {
-                element['save_pctg_neutral_zone'] = (1 - element['ga_neutral_zone'] / element['sa_neutral_zone']) * 100.;
-            } else {
-                element['save_pctg_neutral_zone'] = null;
-            }
-            // calculating save percentage in shootouts
-            if (element['so_attempts_a']) {
-                element['so_sv_pctg'] = (1 - element['so_goals_a'] / element['so_attempts_a']) * 100.; 
-            } else {
-                element['so_sv_pctg'] = null; 
-            }
-            // calculating total shutouts from shutouts in wins and shutouts in shootout losses
-            element['total_so'] = element['so'] + element['sl_so'];
+            $scope.calculateStatsForStatline(ctrl.goalieStatsToCalculate, element);
         });
 
         $scope.maxGoalieGamesPlayed = Math.max.apply(Math, filtered_goalie_stats.map(function(o) { return o.games_played; }));

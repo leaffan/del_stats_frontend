@@ -469,16 +469,8 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         is_equal_past_from_round = !$scope.fromRoundSelect || element.round >= parseFloat($scope.fromRoundSelect);
         is_prior_equal_to_round = !$scope.toRoundSelect || element.round <= parseFloat($scope.toRoundSelect);
         is_selected_games_back = !$scope.gamesBackSelect || element.games_back <= $scope.gamesBackSelect;
-
-        // testing selected season type
-        if ($scope.seasonTypeSelect) {
-            if ($scope.seasonTypeSelect === element.season_type)
-                is_selected_season_type = true;
-        } else {
-            // if seasonTypeSelect is set to "Hauptrunde und Playoffs" we just want that but no pre-season games
-            if (element['season_type'] != 'MSC')
-                is_selected_season_type = true;
-        }
+        // if seasonTypeSelect is set to "Hauptrunde und Playoffs" we just want games of these types but no pre-season games
+        is_selected_season_type = $scope.seasonTypeSelect ? $scope.seasonTypeSelect === element.season_type : ["RS", "PO"].includes(element.season_type);
 
         // finally combining booleans of all previous tests
         return is_equal_past_from_date && is_prior_equal_to_date &&

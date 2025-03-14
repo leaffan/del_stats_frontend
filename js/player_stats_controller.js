@@ -233,8 +233,8 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                 svc.player_float_stats_to_aggregate().forEach(category => {
                     $scope.prep_player_games[key][category] = 0.0;
                 });
-                ctrl.statsToFilter.forEach(filterCfg => {
-                    prep_player_stats[key][filterCfg.name] = 0;
+                ctrl.statsToCategorize.forEach(categoryCfg => {
+                    prep_player_stats[key][categoryCfg.name] = 0;
                 })
             };
         });
@@ -406,16 +406,16 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         return filtered_goalie_stats;
     }
 
-    $scope.filterStatsForStatline = function(stats_to_filter, single_game, filtered_stat_line) {
-        stats_to_filter.forEach(filterCfg => {
-            if (filterCfg.operator == 'greater_equal' && single_game[filterCfg.criterion] >= filterCfg.value) {
-                filtered_stat_line[filterCfg.name] += 1;
+    $scope.categorizeStatsForStatline = function(statsToCategorize, singleGameStats, filteredStats) {
+        statsToCategorize.forEach(categoryCfg => {
+            if (categoryCfg.operator == 'greater_equal' && singleGameStats[categoryCfg.criterion] >= categoryCfg.value) {
+                filteredStats[categoryCfg.name] += 1;
             }
-            if (filterCfg.operator == 'less_equal' && single_game[filterCfg.criterion] <= filterCfg.value) {
-                filtered_stat_line[filterCfg.name] += 1;
+            if (categoryCfg.operator == 'less_equal' && singleGameStats[categoryCfg.criterion] <= categoryCfg.value) {
+                filteredStats[categoryCfg.name] += 1;
             }
-            if (filterCfg.operator == 'greater' && single_game[filterCfg.criterion] > filterCfg.value) {
-                filtered_stat_line[filterCfg.name] += 1;
+            if (categoryCfg.operator == 'greater' && singleGameStats[categoryCfg.criterion] > categoryCfg.value) {
+                filteredStats[categoryCfg.name] += 1;
             }
         });
     };
@@ -508,8 +508,8 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                 ctrl.statsToAggregate.forEach(category => {
                     multiTeamPlayerStats[category] = 0;
                 })
-                ctrl.statsToFilter.forEach(filterCfg => {
-                    multiTeamPlayerStats[filterCfg.name] = 0;
+                ctrl.statsToCategorize.forEach(categoryCfg => {
+                    multiTeamPlayerStats[categoryCfg.name] = 0;
                 })
             }
             // aggregating numeric attributes
@@ -523,8 +523,8 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                     ctrl.statsToAggregate.forEach(category => {
                         multiTeamPlayerStats[category] += plr_team_stats[category];
                     })
-                    ctrl.statsToFilter.forEach(filterCfg => {
-                        multiTeamPlayerStats[filterCfg.name] += plr_team_stats[filterCfg.name];
+                    ctrl.statsToCategorize.forEach(categoryCfg => {
+                        multiTeamPlayerStats[categoryCfg.name] += plr_team_stats[categoryCfg.name];
                     })
                 }
             });
@@ -556,9 +556,9 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         ctrl.goalieStatsToCalculate = res.data['season_goalie_stats_to_calculate'];
     });
 
-    // loading criteria to filter stats
-    $http.get('./js/stats_to_filter.json').then(function (res) {
-        ctrl.statsToFilter = res.data['season_skater_stats_to_filter'];
+    // loading criteria to categorize stats
+    $http.get('./js/stats_to_categorize.json').then(function (res) {
+        ctrl.statsToCategorize = res.data['season_skater_stats_categories'];
     });
 
     $scope.filterStats = function(stats) {
@@ -579,7 +579,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
                     filtered_player_stats[key][category] += (element[category] ? element[category] : 0);
                 });
                 // filtering values
-                $scope.filterStatsForStatline(ctrl.statsToFilter, element, filtered_player_stats[key]);
+                $scope.categorizeStatsForStatline(ctrl.statsToCategorize, element, filtered_player_stats[key]);
                 // registering player's team
                 if (!player_teams[plr_id]) {
                     player_teams[plr_id] = new Set();

@@ -1,5 +1,5 @@
 {
-    "season_skater_stats_to_filter": [
+    "season_skater_stats_categories": [
         {
             "name": "three_goal_games",
             "operator": "greater_equal",

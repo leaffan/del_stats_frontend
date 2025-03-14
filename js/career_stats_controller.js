@@ -18,12 +18,12 @@ app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'c
     };
 
     // loading list of stats to be aggregated
-    $http.get('./js/stats_to_aggregate.json').then(function (res) {
+    $http.get('./cfg/stats_to_aggregate.json').then(function (res) {
         ctrl.statsToAggregate = res.data;
     });
 
     // loading criteria to calculate stats
-    $http.get('./js/stats_to_calculate.json').then(function (res) {
+    $http.get('./cfg/stats_to_calculate.json').then(function (res) {
         ctrl.statsToCalculate = res.data;
     });
 
@@ -58,7 +58,7 @@ app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'c
         $scope.players = res.data;
         let all_hands = new Set($scope.players.map(player => player['hand']));
         let all_countries = new Set($scope.players.map(player => player['country'].split(", ")).flat());
-        $http.get('js/iso_countries.json').then(function (res) {
+        $http.get('./cfg/iso_countries.json').then(function (res) {
             let country_mapping = res.data;
             $scope.display_countries = []
             all_countries.forEach(iso_country => {

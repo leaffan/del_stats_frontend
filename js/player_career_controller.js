@@ -28,12 +28,12 @@ app.controller('playerCareerController', function ($scope, $http, $routeParams, 
     });
 
     // loading list of stats to be aggregated
-    $http.get('./js/stats_to_aggregate.json').then(function (res) {
+    $http.get('./cfg/stats_to_aggregate.json').then(function (res) {
         ctrl.statsToAggregate = res.data;
     });
 
     // loading criteria to calculate stats
-    $http.get('./js/stats_to_calculate.json').then(function (res) {
+    $http.get('./cfg/stats_to_calculate.json').then(function (res) {
         ctrl.statsToCalculate = res.data;
     });
 

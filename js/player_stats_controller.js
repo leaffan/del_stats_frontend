@@ -34,7 +34,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
     $scope.gamesBackSelect = '';
 
     // retrieving column headers (and abbreviations + explanations)
-    $http.get('./js/player_stats_columns.json').then(function (res) {
+    $http.get('./cfg/columns_player_stats.json').then(function (res) {
         $scope.stats_cols = res.data;
     });
 
@@ -95,7 +95,7 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         $scope.last_modified = res.data[0];
         $scope.personal_data = res.data[1];
         // retrieving countries of players
-        $http.get('js/iso_countries.json').then(function (res) {
+        $http.get('./cfg/iso_countries.json').then(function (res) {
             country_mapping = res.data;
             countries_in_player_games = [...new Set($scope.personal_data.map(item => item.iso_country))].sort();
             $scope.display_countries = []
@@ -537,19 +537,19 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
     }
 
     // loading list of stats to be aggregated
-    $http.get('./js/stats_to_aggregate.json').then(function (res) {
+    $http.get('./cfg/stats_to_aggregate.json').then(function (res) {
         ctrl.statsToAggregate = res.data['season_skater_stats_to_aggregate'];
         ctrl.goalieStatsToAggregate = res.data['season_goalie_stats_to_aggregate'];
     });
 
     // loading criteria to calculate stats
-    $http.get('./js/stats_to_calculate.json').then(function (res) {
+    $http.get('./cfg/stats_to_calculate.json').then(function (res) {
         ctrl.statsToCalculate = res.data['season_skater_stats_to_calculate'];
         ctrl.goalieStatsToCalculate = res.data['season_goalie_stats_to_calculate'];
     });
 
     // loading criteria to categorize stats
-    $http.get('./js/stats_to_categorize.json').then(function (res) {
+    $http.get('./cfg/stats_to_categorize.json').then(function (res) {
         ctrl.statsToCategorize = res.data['season_skater_stats_categories'];
     });
 

@@ -1,4 +1,115 @@
 {
+    "season_goalie_stats_to_calculate": [
+        {
+            "name": "save_pctg",
+            "type": "from_100_percentage",
+            "value": "goals_against",
+            "base": "shots_against"
+        },
+        {
+            "name": "gaa",
+            "type": "rate_with_factor",
+            "numerator": "goals_against",
+            "denominator": "toi",
+            "factor": 3600
+        },
+        {
+            "name": "save_pctg_5v5",
+            "type": "from_100_percentage",
+            "value": "ga_5v5",
+            "base": "sa_5v5"
+        },
+        {
+            "name": "save_pctg_4v4",
+            "type": "from_100_percentage",
+            "value": "ga_4v4",
+            "base": "sa_4v4"
+        },
+        {
+            "name": "save_pctg_3v3",
+            "type": "from_100_percentage",
+            "value": "ga_3v3",
+            "base": "sa_3v3"
+        },
+        {
+            "name": "save_pctg_4v5",
+            "type": "from_100_percentage",
+            "value": "ga_4v5",
+            "base": "sa_4v5"
+        },
+        {
+            "name": "save_pctg_3v4",
+            "type": "from_100_percentage",
+            "value": "ga_3v4",
+            "base": "sa_3v4"
+        },
+        {
+            "name": "save_pctg_3v5",
+            "type": "from_100_percentage",
+            "value": "ga_3v5",
+            "base": "sa_3v5"
+        },
+        {
+            "name": "save_pctg_5v4",
+            "type": "from_100_percentage",
+            "value": "ga_5v4",
+            "base": "sa_5v4"
+        },
+        {
+            "name": "save_pctg_4v3",
+            "type": "from_100_percentage",
+            "value": "ga_4v3",
+            "base": "sa_4v3"
+        },
+        {
+            "name": "save_pctg_5v3",
+            "type": "from_100_percentage",
+            "value": "ga_5v3",
+            "base": "sa_5v3"
+        },
+        {
+            "name": "save_pctg_slot",
+            "type": "from_100_percentage",
+            "value": "ga_slot",
+            "base": "sa_slot"
+        },
+        {
+            "name": "save_pctg_left",
+            "type": "from_100_percentage",
+            "value": "ga_left",
+            "base": "sa_left"
+        },
+        {
+            "name": "save_pctg_right",
+            "type": "from_100_percentage",
+            "value": "ga_right",
+            "base": "sa_right"
+        },
+        {
+            "name": "save_pctg_blue_line",
+            "type": "from_100_percentage",
+            "value": "ga_blue_line",
+            "base": "sa_blue_line"
+        },
+        {
+            "name": "save_pctg_neutral_zone",
+            "type": "from_100_percentage",
+            "value": "ga_neutral_zone",
+            "base": "sa_neutral_zone"
+        },
+        {
+            "name": "so_sv_pctg",
+            "type": "from_100_percentage",
+            "value": "so_goals_a",
+            "base": "so_attempts_a"
+        },
+        {
+            "name": "total_so",
+            "type": "sum",
+            "summand_1": "so",
+            "summand_2": "sl_so"
+        }
+    ],
     "career_goalie_stats_to_calculate": [
         {
             "name": "sv_pctg",
@@ -143,6 +254,506 @@
             "type": "filter",
             "value": "g",
             "valid_from": 1999
+        }
+    ],
+    "season_skater_stats_to_calculate": [
+        {
+            "name": "points_per_game",
+            "type": "rate",
+            "numerator": "points",
+            "denominator": "games_played"
+        },
+        {
+            "name": "points_per_game_5v5",
+            "type": "rate",
+            "numerator": "points_5v5",
+            "denominator": "games_played"
+        },
+        {
+            "name": "shot_pctg",
+            "type": "percentage",
+            "value": "goals",
+            "base": "shots_on_goal"
+        },
+        {
+            "name": "shot_pctg_5v5",
+            "type": "percentage",
+            "value": "goals_5v5",
+            "base": "shots_on_goal_5v5"
+        },
+        {
+            "name": "faceoffs_per_game",
+            "type": "rate",
+            "numerator": "faceoffs",
+            "denominator": "games_played"
+        },
+        {
+            "name": "faceoff_pctg",
+            "type": "percentage",
+            "value": "faceoffs_won",
+            "base": "faceoffs"
+        },
+        {
+            "name": "nzone_faceoff_pctg",
+            "type": "percentage",
+            "value": "nzone_faceoffs_won",
+            "base": "nzone_faceoffs"
+        },
+        {
+            "name": "ozone_faceoff_pctg",
+            "type": "percentage",
+            "value": "ozone_faceoffs_won",
+            "base": "ozone_faceoffs"
+        },
+        {
+            "name": "dzone_faceoff_pctg",
+            "type": "percentage",
+            "value": "dzone_faceoffs_won",
+            "base": "dzone_faceoffs"
+        },
+        {
+            "name": "left_side_faceoff_pctg",
+            "type": "percentage",
+            "value": "left_side_faceoffs_won",
+            "base": "left_side_faceoffs"
+        },
+        {
+            "name": "right_side_faceoff_pctg",
+            "type": "percentage",
+            "value": "right_side_faceoffs_won",
+            "base": "right_side_faceoffs"
+        },
+        {
+            "name": "pp_goals_per_60",
+            "type": "rate_per_60",
+            "numerator": "pp_goals",
+            "denominator": "time_on_ice_pp"
+        },
+        {
+            "name": "pp_points_per_60",
+            "type": "rate_per_60",
+            "numerator": "pp_points",
+            "denominator": "time_on_ice_pp"
+        },
+        {
+            "name": "pp_assists_per_60",
+            "type": "rate_per_60",
+            "numerator": "pp_assists",
+            "denominator": "time_on_ice_pp"
+        },
+        {
+            "name": "time_on_ice_per_game",
+            "type": "rate",
+            "numerator": "time_on_ice",
+            "denominator": "games_played"
+        },
+        {
+            "name": "time_on_ice_pp_per_game",
+            "type": "rate",
+            "numerator": "time_on_ice_pp",
+            "denominator": "games_played"
+        },
+        {
+            "name": "time_on_ice_sh_per_game",
+            "type": "rate",
+            "numerator": "time_on_ice_sh",
+            "denominator": "games_played"
+        },
+        {
+            "name": "time_on_ice_special",
+            "type": "sum",
+            "summand_1": "time_on_ice_pp",
+            "summand_2": "time_on_ice_sh"
+        },
+        {
+            "name": "time_on_ice_special_per_game",
+            "type": "rate",
+            "numerator": "time_on_ice_special",
+            "denominator": "games_played"
+        },
+        {
+            "name": "shifts_per_game",
+            "type": "rate",
+            "numerator": "shifts",
+            "denominator": "games_played"
+        },
+        {
+            "name": "game_score_per_game",
+            "type": "rate",
+            "numerator": "game_score",
+            "denominator": "games_played"
+        },
+        {
+            "name": "goals_per_60",
+            "type": "rate_per_60",
+            "numerator": "goals",
+            "denominator": "time_on_ice"
+        },
+        {
+            "name": "assists_per_60",
+            "type": "rate_per_60",
+            "numerator": "assists",
+            "denominator": "time_on_ice"
+        },
+        {
+            "name": "primary_assists_per_60",
+            "type": "rate_per_60",
+            "numerator": "primary_assists",
+            "denominator": "time_on_ice"
+        },
+        {
+            "name": "secondary_assists_per_60",
+            "type": "rate_per_60",
+            "numerator": "secondary_assists",
+            "denominator": "time_on_ice"
+        },
+        {
+            "name": "points_per_60",
+            "type": "rate_per_60",
+            "numerator": "points",
+            "denominator": "time_on_ice"
+        },
+        {
+            "name": "primary_points_per_60",
+            "type": "rate_per_60",
+            "numerator": "primary_points",
+            "denominator": "time_on_ice"
+        },
+        {
+            "name": "shots_per_60",
+            "type": "rate_per_60",
+            "numerator": "shots",
+            "denominator": "time_on_ice"
+        },
+        {
+            "name": "shots_on_goal_per_60",
+            "type": "rate_per_60",
+            "numerator": "shots_on_goal",
+            "denominator": "time_on_ice"
+        },
+        {
+            "name": "game_score_per_60",
+            "type": "rate_per_60",
+            "numerator": "game_score",
+            "denominator": "time_on_ice"
+        },
+        {
+            "name": "faceoffs_per_60",
+            "type": "rate_per_60",
+            "numerator": "faceoffs",
+            "denominator": "time_on_ice"
+        },
+        {
+            "name": "goals_per_game",
+            "type": "rate",
+            "numerator": "goals",
+            "denominator": "games_played"
+        },
+        {
+            "name": "assists_per_game",
+            "type": "rate",
+            "numerator": "assists",
+            "denominator": "games_played"
+        },
+        {
+            "name": "primary_assists_per_game",
+            "type": "rate",
+            "numerator": "primary_assists",
+            "denominator": "games_played"
+        },
+        {
+            "name": "secondary_assists_per_game",
+            "type": "rate",
+            "numerator": "secondary_assists",
+            "denominator": "games_played"
+        },
+        {
+            "name": "primary_points_per_game",
+            "type": "rate",
+            "numerator": "primary_points",
+            "denominator": "games_played"
+        },
+        {
+            "name": "shots_per_game",
+            "type": "rate",
+            "numerator": "shots",
+            "denominator": "games_played"
+        },
+        {
+            "name": "shots_on_goal_per_game",
+            "type": "rate",
+            "numerator": "shots_on_goal",
+            "denominator": "games_played"
+        },
+        {
+            "name": "pim_per_game",
+            "type": "rate",
+            "numerator": "pim_from_events",
+            "denominator": "games_played"
+        },
+        {
+            "name": "time_on_ice_per_shift",
+            "type": "rate",
+            "numerator": "time_on_ice",
+            "denominator": "shifts"
+        },
+        {
+            "name": "slot_pctg",
+            "type": "percentage",
+            "value": "slot_shots",
+            "base": "shots"
+        },
+        {
+            "name": "left_pctg",
+            "type": "percentage",
+            "value": "left_shots",
+            "base": "shots"
+        },
+        {
+            "name": "right_pctg",
+            "type": "percentage",
+            "value": "right_shots",
+            "base": "shots"
+        },
+        {
+            "name": "blue_line_pctg",
+            "type": "percentage",
+            "value": "blue_line_shots",
+            "base": "shots"
+        },
+        {
+            "name": "neutral_zone_pctg",
+            "type": "percentage",
+            "value": "neutral_zone_shots",
+            "base": "shots"
+        },
+        {
+            "name": "slot_on_goal_pctg",
+            "type": "percentage",
+            "value": "slot_on_goal",
+            "base": "shots_on_goal"
+        },
+        {
+            "name": "left_on_goal_pctg",
+            "type": "percentage",
+            "value": "left_on_goal",
+            "base": "shots_on_goal"
+        },
+        {
+            "name": "right_on_goal_pctg",
+            "type": "percentage",
+            "value": "right_on_goal",
+            "base": "shots_on_goal"
+        },
+        {
+            "name": "blue_line_on_goal_pctg",
+            "type": "percentage",
+            "value": "blue_line_on_goal",
+            "base": "shots_on_goal"
+        },
+        {
+            "name": "neutral_zone_on_goal_pctg",
+            "type": "percentage",
+            "value": "neutral_zone_on_goal",
+            "base": "shots_on_goal"
+        },
+        {
+            "name": "on_ice_sh",
+            "type": "sum",
+            "summand_1": "on_ice_sh_f",
+            "summand_2": "on_ice_sh_a"
+        },
+        {
+            "name": "on_ice_sh_pctg",
+            "type": "percentage",
+            "value": "on_ice_sh_f",
+            "base": "on_ice_sh"
+        },
+        {
+            "name": "on_ice_unblocked_sh",
+            "type": "sum",
+            "summand_1": "on_ice_unblocked_sh_f",
+            "summand_2": "on_ice_unblocked_sh_a"
+        },
+        {
+            "name": "on_ice_unblocked_sh_pctg",
+            "type": "percentage",
+            "value": "on_ice_unblocked_sh_f",
+            "base": "on_ice_unblocked_sh"
+        },
+        {
+            "name": "on_ice_sog",
+            "type": "sum",
+            "summand_1": "on_ice_sog_f",
+            "summand_2": "on_ice_sog_a"
+        },
+        {
+            "name": "on_ice_sog_pctg",
+            "type": "percentage",
+            "value": "on_ice_sog_f",
+            "base": "on_ice_sog"
+        },
+        {
+            "name": "on_ice_goals",
+            "type": "sum",
+            "summand_1": "on_ice_goals_f",
+            "summand_2": "on_ice_goals_a"
+        },
+        {
+            "name": "on_ice_goals_pctg",
+            "type": "percentage",
+            "value": "on_ice_goals_f",
+            "base": "on_ice_goals"
+        },
+        {
+            "name": "on_ice_sh_5v5",
+            "type": "sum",
+            "summand_1": "on_ice_sh_f_5v5",
+            "summand_2": "on_ice_sh_a_5v5"
+        },
+        {
+            "name": "on_ice_sh_pctg_5v5",
+            "type": "percentage",
+            "value": "on_ice_sh_f_5v5",
+            "base": "on_ice_sh_5v5"
+        },
+        {
+            "name": "on_ice_unblocked_sh_5v5",
+            "type": "sum",
+            "summand_1": "on_ice_unblocked_sh_f_5v5",
+            "summand_2": "on_ice_unblocked_sh_a_5v5"
+        },
+        {
+            "name": "on_ice_unblocked_sh_pctg_5v5",
+            "type": "percentage",
+            "value": "on_ice_unblocked_sh_f_5v5",
+            "base": "on_ice_unblocked_sh_5v5"
+        },
+        {
+            "name": "on_ice_sog_5v5",
+            "type": "sum",
+            "summand_1": "on_ice_sog_f_5v5",
+            "summand_2": "on_ice_sog_a_5v5"
+        },
+        {
+            "name": "on_ice_sog_pctg_5v5",
+            "type": "percentage",
+            "value": "on_ice_sog_f_5v5",
+            "base": "on_ice_sog_5v5"
+        },
+        {
+            "name": "on_ice_goals_5v5",
+            "type": "sum",
+            "summand_1": "on_ice_goals_f_5v5",
+            "summand_2": "on_ice_goals_a_5v5"
+        },
+        {
+            "name": "on_ice_goals_pctg_5v5",
+            "type": "percentage",
+            "value": "on_ice_goals_f_5v5",
+            "base": "on_ice_goals_5v5"
+        },
+        {
+            "name": "on_ice_shooting_pctg",
+            "type": "percentage",
+            "value": "on_ice_goals_f",
+            "base": "on_ice_sog_f"
+        },
+        {
+            "name": "on_ice_save_pctg",
+            "type": "from_100_percentage",
+            "value": "on_ice_goals_a",
+            "base": "on_ice_sog_a"
+        },
+        {
+            "name": "on_ice_pdo",
+            "type": "sum",
+            "summand_1": "on_ice_shooting_pctg",
+            "summand_2": "on_ice_save_pctg"
+        },
+        {
+            "name": "on_ice_shooting_pctg_5v5",
+            "type": "percentage",
+            "value": "on_ice_goals_f_5v5",
+            "base": "on_ice_sog_f_5v5"
+        },
+        {
+            "name": "on_ice_save_pctg_5v5",
+            "type": "from_100_percentage",
+            "value": "on_ice_goals_a_5v5",
+            "base": "on_ice_sog_a_5v5"
+        },
+        {
+            "name": "on_ice_pdo_5v5",
+            "type": "sum",
+            "summand_1": "on_ice_shooting_pctg_5v5",
+            "summand_2": "on_ice_save_pctg_5v5"
+        },
+        {
+            "name": "so_pctg",
+            "type": "percentage",
+            "value": "so_goals",
+            "base": "so_attempts"
+        },
+        {
+            "name": "sog_pctg",
+            "type": "percentage",
+            "value": "shots_on_goal",
+            "base": "shots"
+        },
+        {
+            "name": "ms_pctg",
+            "type": "percentage",
+            "value": "shots_missed",
+            "base": "shots"
+        },
+        {
+            "name": "bs_pctg",
+            "type": "percentage",
+            "value": "shots_blocked",
+            "base": "shots"
+        },
+        {
+            "name": "goals_1_pctg",
+            "type": "percentage",
+            "value": "period_1_goals",
+            "base": "goals"
+        },
+        {
+            "name": "goals_2_pctg",
+            "type": "percentage",
+            "value": "period_2_goals",
+            "base": "goals"
+        },
+        {
+            "name": "goals_3_pctg",
+            "type": "percentage",
+            "value": "period_3_goals",
+            "base": "goals"
+        },
+        {
+            "name": "goals_ot_pctg",
+            "type": "percentage",
+            "value": "period_ot_goals",
+            "base": "goals"
+        },
+        {
+            "name": "faceoffs_diff",
+            "type": "difference",
+            "minuend": "faceoffs_won",
+            "subtrahend": "faceoffs_lost"
+        },
+        {
+            "name": "on_ice_sh_diff",
+            "type": "difference",
+            "minuend": "on_ice_sh_f",
+            "subtrahend": "on_ice_sh_a"
+        },
+        {
+            "name": "on_ice_goals_diff",
+            "type": "difference",
+            "minuend": "on_ice_goals_f",
+            "subtrahend": "on_ice_goals_a"
         }
     ],
     "career_skater_stats_to_calculate": [

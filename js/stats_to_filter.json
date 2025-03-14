@@ -1,0 +1,106 @@
+{
+    "season_skater_stats_to_filter": [
+        {
+            "name": "three_goal_games",
+            "operator": "greater_equal",
+            "criterion": "goals",
+            "value": 3
+        },
+        {
+            "name": "two_goal_games",
+            "operator": "greater_equal",
+            "criterion": "goals",
+            "value": 2
+        },
+        {
+            "name": "goal_games",
+            "operator": "greater_equal",
+            "criterion": "goals",
+            "value": 1
+        },
+        {
+            "name": "four_point_games",
+            "operator": "greater_equal",
+            "criterion": "points",
+            "value": 4
+        },
+        {
+            "name": "three_point_games",
+            "operator": "greater_equal",
+            "criterion": "points",
+            "value": 3
+        },
+        {
+            "name": "two_point_games",
+            "operator": "greater_equal",
+            "criterion": "points",
+            "value": 2
+        },
+        {
+            "name": "point_games",
+            "operator": "greater_equal",
+            "criterion": "points",
+            "value": 1
+        },
+        {
+            "name": "penalty_games",
+            "operator": "greater",
+            "criterion": "pim_from_events",
+            "value": 0
+        },
+        {
+            "name": "toi_30_min",
+            "operator": "greater_equal",
+            "criterion": "time_on_ice",
+            "value": 1800
+        },
+        {
+            "name": "toi_25_min",
+            "operator": "greater_equal",
+            "criterion": "time_on_ice",
+            "value": 1500
+        },
+        {
+            "name": "toi_20_min",
+            "operator": "greater_equal",
+            "criterion": "time_on_ice",
+            "value": 1200
+        },
+        {
+            "name": "toi_10_min",
+            "operator": "less_equal",
+            "criterion": "time_on_ice",
+            "value": 600
+        },
+        {
+            "name": "toi_5_min",
+            "operator": "less_equal",
+            "criterion": "time_on_ice",
+            "value": 300
+        },
+        {
+            "name": "toi_pp_2_min",
+            "operator": "greater_equal",
+            "criterion": "time_on_ice_pp",
+            "value": 120
+        },
+        {
+            "name": "toi_pk_2_min",
+            "operator": "greater_equal",
+            "criterion": "time_on_ice_sh",
+            "value": 120
+        },
+        {
+            "name": "game_score_plus_1",
+            "operator": "greater_equal",
+            "criterion": "game_score",
+            "value": 1.0
+        },
+        {
+            "name": "game_score_minus_1",
+            "operator": "less_equal",
+            "criterion": "game_score",
+            "value": -1.0
+        }
+    ]
+}

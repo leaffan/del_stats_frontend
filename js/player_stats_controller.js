@@ -1,4 +1,4 @@
-app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, svc, $timeout) {
+app.controller('plrStatsController', function ($scope, $http, $window, $routeParams, $q, svc, $timeout) {
 
     $scope.svc = svc;
     var ctrl = this;
@@ -32,6 +32,15 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
     $scope.nameFilter = ''; // empty name filter
     $scope.teamSelect = ''; // empty name filter
     $scope.gamesBackSelect = '';
+    ctrl.limit = 100;
+
+    $window.onscroll = function() {
+        let pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
+        let max = document.documentElement.scrollHeight;
+        if (pos >= max) {
+            $scope.$apply(loadMoreRecords());
+        }
+    };
 
     // retrieving column headers (and abbreviations + explanations)
     $http.get('./cfg/columns_player_stats.json').then(function (res) {
@@ -794,5 +803,9 @@ app.controller('plrStatsController', function ($scope, $http, $routeParams, $q, 
         }
         $scope.$apply();
     }
+
+    let loadMoreRecords = function () {
+        ctrl.limit += 100;
+    };
 
 });

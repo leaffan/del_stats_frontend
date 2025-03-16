@@ -486,31 +486,31 @@ app.factory('svc', function($rootScope) {
             });
         },
         calculateDerivedStats: function(statLine, statsToCalculate) {
-            statsToCalculate.forEach(calculation_cfg => {
-                switch (calculation_cfg.type) {
+            statsToCalculate.forEach(calcCfg => {
+                switch (calcCfg.type) {
                     case 'from_100_percentage':
-                        statLine[calculation_cfg.name] = this.calculateFrom100Percentage(statLine[calculation_cfg.value], statLine[calculation_cfg.base]);
+                        statLine[calcCfg.name] = this.calculateFrom100Percentage(statLine[calcCfg.value], statLine[calcCfg.base]);
                         break;
                     case 'rate_with_factor':
-                        statLine[calculation_cfg.name] = this.calculateRate(statLine[calculation_cfg.numerator], statLine[calculation_cfg.denominator], calculation_cfg.factor);
+                        statLine[calcCfg.name] = this.calculateRate(statLine[calcCfg.numerator], statLine[calcCfg.denominator], calcCfg.factor);
                         break;
                     case 'sum':
-                        statLine[calculation_cfg.name] = statLine[calculation_cfg.summand_1] + statLine[calculation_cfg.summand_2];
+                        statLine[calcCfg.name] = statLine[calcCfg.summand_1] + statLine[calcCfg.summand_2];
                         break;
                     case 'rate':
-                        statLine[calculation_cfg.name] = this.calculateRate(statLine[calculation_cfg.numerator], statLine[calculation_cfg.denominator]);
+                        statLine[calcCfg.name] = this.calculateRate(statLine[calcCfg.numerator], statLine[calcCfg.denominator]);
                         break;
                     case 'difference':
-                        statLine[calculation_cfg.name] = statLine[calculation_cfg.minuend] - statLine[calculation_cfg.subtrahend];
+                        statLine[calcCfg.name] = statLine[calcCfg.minuend] - statLine[calcCfg.subtrahend];
                         break;
                     case 'percentage':
-                        statLine[calculation_cfg.name] = this.calculatePercentage(statLine[calculation_cfg.value], statLine[calculation_cfg.base]);
+                        statLine[calcCfg.name] = this.calculatePercentage(statLine[calcCfg.value], statLine[calcCfg.base]);
                         break;
                     case 'filter':
-                        if (statLine['season'] >= calculation_cfg.valid_from) {
-                            statLine[calculation_cfg.name] = statLine[calculation_cfg.value];
+                        if (statLine['season'] >= calcCfg.valid_from) {
+                            statLine[calcCfg.name] = statLine[calcCfg.value];
                         } else {
-                            statLine[calculation_cfg.name] = 0;
+                            statLine[calcCfg.name] = 0;
                         };
                         break;
                     default:

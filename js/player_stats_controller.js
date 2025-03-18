@@ -85,10 +85,10 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         'tableSelect', 'homeAwaySelect', 'seasonTypeSelect', 'fromRoundSelect', 'toRoundSelect', 'weekdaySelect', 'gamesBackSelect'
     ], function (newValue, oldValue) {
         if ($scope.player_games && !$scope.tableSelect.includes('goalie')) {
-            $scope.filtered_player_stats = $scope.filterStats($scope.player_games);
+            $scope.filtered_player_stats = $scope.filterStats();
         }
         if ($scope.goalie_games && $scope.tableSelect.includes('goalie')) {
-            $scope.filtered_goalie_stats = $scope.filterGoalieStats($scope.goalie_games);
+            $scope.filtered_goalie_stats = $scope.filterGoalieStats();
         }
         $scope.filtered_top_game_scores = $scope.filterGameScores($scope.top_game_scores);
         $scope.filtered_bottom_game_scores = $scope.filterGameScores($scope.bottom_game_scores);
@@ -162,7 +162,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         $http.get('data/' + $scope.season + '/del_goalie_game_stats.json').then(function (res) {
             $scope.goalie_games = res.data;
             $scope.prep_goalie_stats = $scope.prepareGoalieStats($scope.goalie_games);
-            $scope.filtered_goalie_stats = $scope.filterGoalieStats($scope.goalie_games);
+            $scope.filtered_goalie_stats = $scope.filterGoalieStats();
         });
     });
 
@@ -277,7 +277,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         return filtered_game_scores;
     }
 
-    $scope.filterGoalieStats = function(stats) {
+    $scope.filterGoalieStats = function() {
         filtered_goalie_stats = angular.copy($scope.prep_goalie_stats);
         goalie_teams = {};
         if ($scope.goalie_games === undefined)
@@ -293,6 +293,8 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
                 ctrl.goalieStatsToAggregate.forEach(category => {
                     filtered_goalie_stats[key][category] += (element[category] ? element[category] : 0);
                 });
+                // calculating save pctg, gaa etc for single game
+                svc.calculateDerivedStats(element, ctrl.goalieStatsToCalculate);
                 $scope.categorizeStatsForStatline(ctrl.goalieStatsToCategorize, element, filtered_goalie_stats[key]);
                 // registering player's team
                 if (!goalie_teams[plr_id]) {
@@ -344,12 +346,16 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
     
     // helper function to check single condition
     function checkCondition(condition, stats) {
-        const { operator, criterion, value } = condition;
+        let { operator, criterion, value } = condition;
     
         if (stats[criterion] === undefined) {
             return false; // Falls das Kriterium nicht existiert
         }
-    
+        // hacky: evaluating value if found to be of string type
+        if (typeof(value) === "string") {
+            value = eval(value);
+        }
+
         switch (operator) {
             case 'greater_equal': return stats[criterion] >= value;
             case 'less_equal': return stats[criterion] <= value;
@@ -412,6 +418,9 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
                 ctrl.goalieStatsToAggregate.forEach(category => {
                     multiTeamPlayerStats[category] = 0;
                 });
+                ctrl.goalieStatsToCategorize.forEach(categoryCfg => {
+                    multiTeamPlayerStats[categoryCfg.name] = 0;
+                })
             } else {
                 ctrl.statsToAggregate.forEach(category => {
                     multiTeamPlayerStats[category] = 0;
@@ -427,6 +436,9 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
                     ctrl.goalieStatsToAggregate.forEach(category => {
                         multiTeamPlayerStats[category] += plr_team_stats[category];
                     });
+                    ctrl.goalieStatsToCategorize.forEach(categoryCfg => {
+                        multiTeamPlayerStats[categoryCfg.name] += plr_team_stats[categoryCfg.name];
+                    })
                 } else {
                     ctrl.statsToAggregate.forEach(category => {
                         multiTeamPlayerStats[category] += plr_team_stats[category];
@@ -713,10 +725,10 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
 
     $scope.changeDate = function() {
         if ($scope.player_games) {
-            $scope.filtered_player_stats = $scope.filterStats($scope.player_games);
+            $scope.filtered_player_stats = $scope.filterStats();
         };
         if ($scope.goalie_games) {
-            $scope.filtered_goalie_stats = $scope.filterGoalieStats($scope.goalie_games);
+            $scope.filtered_goalie_stats = $scope.filterGoalieStats();
         }
         $scope.filtered_top_game_scores = $scope.filterGameScores($scope.top_game_scores);
         $scope.filtered_bottom_game_scores = $scope.filterGameScores($scope.bottom_game_scores);

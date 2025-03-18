@@ -148,6 +148,12 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         $scope.bottom_game_scores = res.data;
     });
 
+    // loading list of stats to be aggregated
+    $http.get('./cfg/stats_to_aggregate.json').then(function (res) {
+        ctrl.statsToAggregate = res.data['season_skater_stats_to_aggregate'];
+        ctrl.goalieStatsToAggregate = res.data['season_goalie_stats_to_aggregate'];
+    });
+
     // wrapping loading of players around data processing to make sure the all_players object really exists before
     // we do so
     $http.get('data/del_players.json').then(function (res) {
@@ -161,13 +167,13 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
     });
 
 	$scope.preProcessData = function(allText) {
-        // split content based on new line
+        // spliting content based on new line
 		let allTextLines = allText.data.split(/\r\n|\n/);
 		let headers = allTextLines[0].split(';');
 		let lines = [];
 
         for (const line of allTextLines) {
-            // Split content based on separator
+            // splitting content based on separator
             const data = line.split(';');
             if (data.length === headers.length) {
                 const tarr = [];
@@ -177,19 +183,10 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
                 lines.push(tarr);
             }
         }
-        headers = lines[0];
         $scope.player_games = lines.slice(1).map(function(line) {
             return line.reduce(function(player_game, value, i) {
-                if ($scope.svc.player_stats_to_aggregate().indexOf(headers[i]) !== -1) {
-                    player_game[headers[i]] = parseInt(value);
-                } else if ($scope.svc.player_float_stats_to_aggregate().indexOf(headers[i]) !== -1 ) {
+                if (ctrl.statsToAggregate.includes(headers[i])) {
                     player_game[headers[i]] = parseFloat(value);
-                } else if (headers[i] == 'u23') {
-                    if (value == 'True') {
-                        player_game[headers[i]] = true;
-                    } else {
-                        player_game[headers[i]] = false;
-                    }
                 } else {
                     player_game[headers[i]] = value;
                 }
@@ -305,7 +302,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         filtered_goalie_stats = Object.values(filtered_goalie_stats);
 
         filtered_goalie_stats.forEach(element => {
-            $scope.calculateStatsForStatline(ctrl.goalieStatsToCalculate, element);
+            svc.calculateDerivedStats(element, ctrl.goalieStatsToCalculate);
         });
 
         $scope.maxGoalieGamesPlayed = Math.max.apply(Math, filtered_goalie_stats.map(function(o) { return o.games_played; }));
@@ -334,33 +331,6 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
             }
         });
     };
-
-    $scope.calculateStatsForStatline = function(stats_to_calculate, filtered_stat_line) {
-        stats_to_calculate.forEach(calcCfg => {
-            if (calcCfg.type == 'sum') {
-                filtered_stat_line[calcCfg.name] = filtered_stat_line[calcCfg.summand_1] + filtered_stat_line[calcCfg.summand_2];
-            }
-            if (calcCfg.type == 'rate') {
-                filtered_stat_line[calcCfg.name] = svc.calculateRate(filtered_stat_line[calcCfg.numerator], filtered_stat_line[calcCfg.denominator]);
-            }
-            if (calcCfg.type == 'rate_per_60') {
-                filtered_stat_line[calcCfg.name] = svc.calculatePer60(filtered_stat_line[calcCfg.numerator], filtered_stat_line[calcCfg.denominator]);
-            }
-            if (calcCfg.type == 'rate_with_factor') {
-                filtered_stat_line[calcCfg.name] = svc.calculateRate(filtered_stat_line[calcCfg.numerator], filtered_stat_line[calcCfg.denominator], calcCfg.factor);
-            }
-            if (calcCfg.type == 'difference') {
-                filtered_stat_line[calcCfg.name] = filtered_stat_line[calcCfg.minuend] - filtered_stat_line[calcCfg.subtrahend];
-            }
-            if (calcCfg.type == 'percentage') {
-                filtered_stat_line[calcCfg.name] = svc.calculatePercentage(filtered_stat_line[calcCfg.value], filtered_stat_line[calcCfg.base]);
-            }
-            if (calcCfg.type == 'from_100_percentage') {
-                filtered_stat_line[calcCfg.name] = svc.calculateFrom100Percentage(filtered_stat_line[calcCfg.value], filtered_stat_line[calcCfg.base]);
-            }
-        });
-    };
-
 
     $scope.elementPassedFilters = function(element) {
         let is_equal_past_from_date = false;
@@ -451,11 +421,6 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         });
     }
 
-    // loading list of stats to be aggregated
-    $http.get('./cfg/stats_to_aggregate.json').then(function (res) {
-        ctrl.statsToAggregate = res.data['season_skater_stats_to_aggregate'];
-        ctrl.goalieStatsToAggregate = res.data['season_goalie_stats_to_aggregate'];
-    });
 
     // loading criteria to calculate stats
     $http.get('./cfg/stats_to_calculate.json').then(function (res) {
@@ -512,7 +477,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         filtered_player_stats = Object.values(filtered_player_stats);
 
         filtered_player_stats.forEach(element => {
-            $scope.calculateStatsForStatline(ctrl.statsToCalculate, element);
+            svc.calculateDerivedStats(element, ctrl.statsToCalculate);
         });
 
         // retrieving maximum number of games played from filtered player stats

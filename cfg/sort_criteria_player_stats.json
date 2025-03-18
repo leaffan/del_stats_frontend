@@ -38,7 +38,8 @@
     "top_game_scores_per_game": "single_game_score",
     "bottom_game_scores_per_game": "b_single_game_score",
     "game_categories": "two_point_games",
-    "game_minutes": "time_on_ice"
+    "game_minutes": "time_on_ice",
+    "goalie_categories": "quality_starts"
   },
   "ascendingAttrs": [
     "last_name", "team", "position", "shoots",
@@ -88,6 +89,7 @@
     "dzone_faceoff_pctg": ["dzone_faceoff_pctg", "dzone_faceoffs"],
     "multi_season": ["multi_season", "length", "from_date"],
     "two_point_games": ["two_point_games", "-games_played"],
-    "total_so": ["total_so", "so", "-toi", "sv_pctg"]
+    "total_so": ["total_so", "so", "-toi", "sv_pctg"],
+    "quality_starts": ["quality_starts", "-games_played"]
   }
 }

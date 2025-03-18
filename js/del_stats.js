@@ -318,52 +318,6 @@ app.factory('svc', function($rootScope) {
                 'sellout'
             ];    
         },
-        player_stats_to_aggregate: function() {
-            return [
-                'assists', 'blocked_shots', 'faceoffs', 'faceoffs_lost', 'faceoffs_won',
-                'first_goals', 'games_played', 'goals', 'goals_5v5', 'assists_5v5', 'points_5v5',
-                'primary_assists_5v5', 'primary_points_5v5', 'secondary_assists_5v5', 'gw_goals', 'lazy',
-                'minus', 'other', 'penalties', 'penalty_shots', 'pim', 'pim_from_events',
-                'plus', 'plus_minus', 'points', 'pp_points', 'pp_goals', 'pp_assists',
-                'pp_primary_assists', 'pp_secondary_assists', 'primary_assists', 'primary_points',
-                'reckless', 'roughing', 'secondary_assists', 'sh_assists', 'sh_goals', 'sh_points',
-                'shifts', 'shots', 'shots_5v5', 'shots_blocked', 'shots_missed', 'shots_missed_5v5',
-                'shots_on_goal', 'shots_on_goal_5v5', 'time_on_ice', 'time_on_ice_pp', 'time_on_ice_sh',
-                '_2min', '_5min', '_10min', '_20min', 'slot_shots', 'left_shots', 'right_shots',
-                'blue_line_shots', 'slot_on_goal', 'left_on_goal', 'right_on_goal', 'blue_line_on_goal',
-                'neutral_zone_shots', 'neutral_zone_on_goal', 'neutral_zone_goals', 'behind_goal_shots',
-                'behind_goal_on_goal', 'behind_goal_goals', 'goals_5v5_from_events',
-                'on_ice_sh_f', 'on_ice_sh_a', 'on_ice_unblocked_sh_f', 'on_ice_unblocked_sh_a',
-                'on_ice_sh_f_5v5', 'on_ice_sh_a_5v5', 'on_ice_unblocked_sh_f_5v5', 'on_ice_unblocked_sh_a_5v5',
-                'on_ice_sog_f', 'on_ice_sog_a', 'on_ice_goals_f', 'on_ice_goals_a',
-                'on_ice_sog_f_5v5', 'on_ice_sog_a_5v5', 'on_ice_goals_f_5v5', 'on_ice_goals_a_5v5',
-                'nzone_faceoffs', 'nzone_faceoffs_won', 'nzone_faceoffs_lost',
-                'ozone_faceoffs', 'ozone_faceoffs_won', 'ozone_faceoffs_lost',
-                'dzone_faceoffs', 'dzone_faceoffs_won', 'dzone_faceoffs_lost',
-                'left_side_faceoffs', 'left_side_faceoffs_won', 'left_side_faceoffs_lost',
-                'right_side_faceoffs', 'right_side_faceoffs_won', 'right_side_faceoffs_lost',
-                'so_games_played', 'so_attempts', 'so_goals', 'so_gw_goals',
-                'go_ahead_g', 'tying_g', 'clutch_g', 'blowout_g', 'w_winning_g', 'w_losing_g', 'hit_post',
-                'empty_net_goals', 'extra_attacker_goals', 'period_1_goals', 'period_2_goals', 'period_3_goals',
-                'period_ot_goals'
-            ];
-        },
-        player_float_stats_to_aggregate: function() {
-            return ['game_score'];
-        },
-        goalie_stats_to_aggregate: function() {
-            return [
-                'games_dressed', 'games_played', 'games_started', 'toi', 'of_record',
-                'w', 'rw', 'ow', 'sw', 'l', 'rl', 'ol', 'sl', 'shots_against', 'goals_against',
-                'sa_5v5', 'sa_4v4', 'sa_3v3', 'sa_5v4', 'sa_5v3', 'sa_4v3', 'sa_4v5', 'sa_3v4', 'sa_3v5',
-                'ga_5v5', 'ga_4v4', 'ga_3v3', 'ga_5v4', 'ga_5v3', 'ga_4v3', 'ga_4v5', 'ga_3v4', 'ga_3v5',
-                'sa_blue_line', 'sa_left', 'sa_right', 'sa_slot', 'sa_neutral_zone',
-                'ga_blue_line', 'ga_left', 'ga_right', 'ga_slot', 'ga_neutral_zone',
-                'sa_ev', 'ga_ev', 'sa_sh', 'ga_sh', 'sa_pp', 'ga_pp', 'so', 'sl_so',
-                'ga_avg', 'gsaa', 'ga_avg_5v5', 'gsaa_5v5',
-                'so_games_played', 'so_attempts_a', 'so_goals_a'
-            ];    
-        },
         pad: function pad(num, size) {
             let s = num+"";
             while (s.length < size) s = "0" + s;
@@ -499,6 +453,9 @@ app.factory('svc', function($rootScope) {
                         break;
                     case 'rate':
                         statLine[calcCfg.name] = this.calculateRate(statLine[calcCfg.numerator], statLine[calcCfg.denominator]);
+                        break;
+                    case 'rate_per_60':
+                        statLine[calcCfg.name] = this.calculatePer60(statLine[calcCfg.numerator], statLine[calcCfg.denominator]);
                         break;
                     case 'difference':
                         statLine[calcCfg.name] = statLine[calcCfg.minuend] - statLine[calcCfg.subtrahend];

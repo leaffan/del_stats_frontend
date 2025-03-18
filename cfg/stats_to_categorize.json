@@ -1,4 +1,118 @@
 {
+    "season_goalie_stats_categories": [
+        {
+            "name": "quality_starts",
+            "categories":
+            [
+                {
+                    "operator": "greater_equal",
+                    "criterion": "save_pctg",
+                    "value": "$scope.league_data.save_pctg * 100"
+                },
+                {
+                    "operator": "equal",
+                    "criterion": "games_started",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "name": "minus_2_goals_against",
+            "categories":
+            [
+                {
+                    "operator": "less_equal",
+                    "criterion": "goals_against",
+                    "value": 1
+                },
+                {
+                    "operator": "equal",
+                    "criterion": "games_started",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "name": "plus_5_goals_against",
+            "categories":
+            [
+                {
+                    "operator": "greater_equal",
+                    "criterion": "goals_against",
+                    "value": 5
+                },
+                {
+                    "operator": "equal",
+                    "criterion": "games_started",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "name": "minus_15_shots_against",
+            "categories":
+            [
+                {
+                    "operator": "less_equal",
+                    "criterion": "shots_against",
+                    "value": 15
+                },
+                {
+                    "operator": "equal",
+                    "criterion": "games_started",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "name": "plus_30_shots_against",
+            "categories":
+            [
+                {
+                    "operator": "greater_equal",
+                    "criterion": "shots_against",
+                    "value": 30
+                },
+                {
+                    "operator": "equal",
+                    "criterion": "games_started",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "name": "plus_40_shots_against",
+            "categories":
+            [
+                {
+                    "operator": "greater_equal",
+                    "criterion": "shots_against",
+                    "value": 40
+                },
+                {
+                    "operator": "equal",
+                    "criterion": "games_started",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "name": "plus_50_shots_against",
+            "categories":
+            [
+                {
+                    "operator": "greater_equal",
+                    "criterion": "shots_against",
+                    "value": 50
+                },
+                {
+                    "operator": "equal",
+                    "criterion": "games_started",
+                    "value": 1
+                }
+            ]
+        }
+    ],
     "season_skater_stats_categories": [
         {
             "name": "three_goal_games",

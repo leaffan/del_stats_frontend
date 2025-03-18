@@ -73,6 +73,7 @@
                     <option data-ng-option value="goal_categories">Torkategorien</option>
                     <option data-ng-option value="goals_per_period">Tore pro Drittel</option>
                     <option data-ng-option value="game_categories">Spielkategorien</option>
+                    <option data-ng-option value="goalie_categories">Spielkategorien (Torhüter)</option>
                     <option data-ng-option value="game_minutes">Eiszeitkategorien</option>
                     <option data-ng-option value="on_ice_stats">On-Ice-Statistiken</option>
                     <option data-ng-if="season != 2017" data-ng-option value="on_ice_shot_stats">On-Ice-Schussstatistiken (alle Situationen)</option>
@@ -511,6 +512,44 @@
                 <td class="w-07 text-right">{{ stat.penalty_games }}</td>
                 <td class="w-07 text-right">{{ stat.game_score_plus_1 }}</td>
                 <td class="w-07 text-right">{{ stat.game_score_minus_1 }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table id="goalie_categories" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_categories'">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col" class="text-center">Rang</th>
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                    <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
+                        <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
+                        <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
+                        <span data-ng-show="$parent.sortConfig['sortKey'] == col.data_key && $parent.sortConfig['sortDescending']" class="fa fa-caret-down"></span>
+                        <span data-ng-show="$parent.sortConfig['sortKey'] == col.data_key && !$parent.sortConfig['sortDescending']" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+                <td class="w-04 text-right">{{ $index + 1 }}</td>
+                <td class="w-14">
+                    <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
+                    <span data-ng-if="!stat.single_team">{{ stat.full_name }}</span>
+                </td>
+                <td class="w-06">
+                    <a data-ng-if="stat.single_team" href="#!/team_profile/{{season}}/{{ stat.team }}">{{ stat.team }}</a>
+                    <span data-ng-if="!stat.single_team">{{ stat.team }}</span>
+                </td>
+                <td class="w-08 text-right">{{ stat.games_played }}</td>
+                <td class="w-08 text-right">{{ stat.games_started }}</td>
+                <td class="w-08 text-right">{{ stat.quality_starts }}</td>
+                <td class="w-08 text-right">{{ stat.minus_2_goals_against }}</td>
+                <td class="w-08 text-right">{{ stat.plus_5_goals_against }}</td>
+                <td class="w-09 text-right">{{ stat.minus_15_shots_against }}</td>
+                <td class="w-09 text-right">{{ stat.plus_30_shots_against }}</td>
+                <td class="w-09 text-right">{{ stat.plus_40_shots_against }}</td>
+                <td class="w-09 text-right">{{ stat.plus_50_shots_against }}</td>
             </tr>
         </tbody>
     </table>

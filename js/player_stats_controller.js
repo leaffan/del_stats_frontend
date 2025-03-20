@@ -356,6 +356,10 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
             value = eval(value);
         }
 
+        if (stats[criterion] === null) {
+            return false;
+        }
+
         switch (operator) {
             case 'greater_equal': return stats[criterion] >= value;
             case 'less_equal': return stats[criterion] <= value;

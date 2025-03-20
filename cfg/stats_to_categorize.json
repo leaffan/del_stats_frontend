@@ -1,6 +1,22 @@
 {
     "season_goalie_stats_categories": [
         {
+            "name": "goal_against_in_first_5_mins",
+            "categories":
+            [
+                {
+                    "operator": "less_equal",
+                    "criterion": "first_goal_against",
+                    "value": "300"
+                },
+                {
+                    "operator": "equal",
+                    "criterion": "games_started",
+                    "value": 1
+                }
+            ]
+        },
+        {
             "name": "quality_starts",
             "categories":
             [

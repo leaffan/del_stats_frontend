@@ -533,23 +533,24 @@
         <tbody>
             <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
-                <td class="w-14">
+                <td class="w-15">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
                     <span data-ng-if="!stat.single_team">{{ stat.full_name }}</span>
                 </td>
-                <td class="w-06">
+                <td class="w-05">
                     <a data-ng-if="stat.single_team" href="#!/team_profile/{{season}}/{{ stat.team }}">{{ stat.team }}</a>
                     <span data-ng-if="!stat.single_team">{{ stat.team }}</span>
                 </td>
-                <td class="w-08 text-right">{{ stat.games_played }}</td>
-                <td class="w-08 text-right">{{ stat.games_started }}</td>
-                <td class="w-08 text-right">{{ stat.quality_starts }}</td>
-                <td class="w-08 text-right">{{ stat.minus_2_goals_against }}</td>
-                <td class="w-08 text-right">{{ stat.plus_5_goals_against }}</td>
-                <td class="w-09 text-right">{{ stat.minus_15_shots_against }}</td>
-                <td class="w-09 text-right">{{ stat.plus_30_shots_against }}</td>
-                <td class="w-09 text-right">{{ stat.plus_40_shots_against }}</td>
-                <td class="w-09 text-right">{{ stat.plus_50_shots_against }}</td>
+                <td class="w-07 text-right">{{ stat.games_played }}</td>
+                <td class="w-07 text-right">{{ stat.games_started }}</td>
+                <td class="w-07 text-right">{{ stat.quality_starts }}</td>
+                <td class="w-07 text-right">{{ stat.minus_2_goals_against }}</td>
+                <td class="w-07 text-right">{{ stat.plus_5_goals_against }}</td>
+                <td class="w-08 text-right">{{ stat.goal_against_in_first_5_mins }}</td>
+                <td class="w-08 text-right">{{ stat.minus_15_shots_against }}</td>
+                <td class="w-08 text-right">{{ stat.plus_30_shots_against }}</td>
+                <td class="w-08 text-right">{{ stat.plus_40_shots_against }}</td>
+                <td class="w-08 text-right">{{ stat.plus_50_shots_against }}</td>
             </tr>
         </tbody>
     </table>

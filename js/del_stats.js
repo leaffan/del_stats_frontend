@@ -479,6 +479,23 @@ app.factory('svc', function($rootScope) {
     }
 });
 
+app.directive('playerStatsTable', ['svc', function(svc) {
+    return {
+        restrict: 'E',         
+        scope: {
+            id: '@',
+            filteredPlayerStats: '=',
+            statsCols: '=',
+            ctrl: '=',
+            seasonType: '='
+        },
+        templateUrl: 'custom_directives/player_stats_table.html',
+        link: function(scope) {
+            scope.svc = svc;
+        }
+    }
+}]);
+
 app.directive('careerStatsTable', ['svc', function(svc) {
     return {
         restrict: 'E',         

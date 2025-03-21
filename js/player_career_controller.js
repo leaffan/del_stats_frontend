@@ -38,12 +38,12 @@ app.controller('playerCareerController', function ($scope, $http, $routeParams, 
     });
 
     // retrieving column headers (and abbreviations + explanations)
-    $http.get('./js/player_career_columns.json').then(function (res) {
+    $http.get('./cfg/columns_player_career.json').then(function (res) {
         $scope.stats_cols = res.data;
     });
 
     // loading all (including historic) teams
-    $http.get('./js/teams_historic.json').then(function (res) {
+    $http.get('./cfg/teams_historic.json').then(function (res) {
         $scope.teams = res.data;
         // creating lookup from team abbreviation to full team name
         $scope.team_full_name_lookup = $scope.teams.reduce((o, key) => Object.assign(o, {[key.abbr]: key.full_name}), {});

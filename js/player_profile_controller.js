@@ -10,7 +10,7 @@ app.controller('plrProfileController', function($scope, $http, $routeParams, $lo
     $scope.shootoutParticipation = false;
 
     // retrieving column headers (and abbreviations + explanations)
-    $http.get('./js/player_profile_columns.json').then(function (res) {
+    $http.get('./cfg/columns_player_profile.json').then(function (res) {
         $scope.stats_cols = res.data;
     });
 
@@ -26,7 +26,7 @@ app.controller('plrProfileController', function($scope, $http, $routeParams, $lo
     });
 
     // retrieving current season's teams as well currently selected team and its colors
-    $http.get('./js/teams.json').then(function (res) {
+    $http.get('./cfg/teams.json').then(function (res) {
         $scope.all_teams = res.data.filter(team => team.valid_from <= $scope.season && team.valid_to >= $scope.season);
         $scope.team_lookup = $scope.all_teams.reduce((o, key) => Object.assign(o, {[key.abbr]: key.url_name}), {});
         $scope.currentTeam = $scope.all_teams.filter(team => team.abbr == $routeParams.team);

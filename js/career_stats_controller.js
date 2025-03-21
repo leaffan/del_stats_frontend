@@ -38,11 +38,11 @@ app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'c
     });
 
     // retrieving column headers (and abbreviations + explanations)
-    $http.get('./js/career_stats_columns.json').then(function (res) {
+    $http.get('./cfg/columns_career_stats.json').then(function (res) {
         $scope.stats_cols = res.data;
     });
 
-    $http.get('./js/teams_historic.json').then(function (res) {
+    $http.get('./cfg/teams_historic.json').then(function (res) {
         let orig_teams = res.data;
         // setting teams that are valid for current season as active ones
         let active_teams = orig_teams.filter(team => team.active).sort((a, b)=> (a.location > b.location ? 1 : -1)).map(team => team.abbr);

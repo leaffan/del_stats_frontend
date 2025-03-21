@@ -54,7 +54,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
     });
 
     // retrieving teams
-    $http.get('./js/teams.json').then(function (res) {
+    $http.get('./cfg/teams.json').then(function (res) {
         // only retaining teams that are valid for current season
         $scope.teams = res.data.filter(team => team.valid_from <= $scope.season && team.valid_to >= $scope.season);
         // creating lookup structures...

@@ -46,11 +46,11 @@ app.controller('teamProfileController', function($scope, $http, $routeParams, $l
     });
 
     // retrieving column headers (and abbreviations + explanations)
-    $http.get('./js/team_profile_columns.json').then(function (res) {
+    $http.get('./cfg/columns_team_profile.json').then(function (res) {
         $scope.stats_cols = res.data;
     });
     // retrieving teams
-    $http.get('./js/teams.json').then(function (res) {
+    $http.get('./cfg/teams.json').then(function (res) {
         $scope.teams = res.data;
         $scope.teams = $scope.teams.filter(team => team.valid_from <= $scope.season && team.valid_to >= $scope.season);
         // creating lookup structures...

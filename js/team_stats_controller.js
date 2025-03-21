@@ -35,7 +35,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
     $scope.oldHomeAwaySelect = 'unused';
 
     // retrieving column headers (and abbreviations + explanations)
-    $http.get('./js/team_stats_columns.json').then(function (res) {
+    $http.get('./cfg/columns_team_stats.json').then(function (res) {
         $scope.stats_cols = res.data;
     });
 
@@ -56,7 +56,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
     });
 
     // retrieving teams
-    $http.get('./js/teams.json').then(function (res) {
+    $http.get('./cfg/teams.json').then(function (res) {
         // only retaining teams that are valid for current season
         $scope.teams = res.data.filter(team => team.valid_from <= $scope.season && team.valid_to >= $scope.season);
         // creating lookup structures...

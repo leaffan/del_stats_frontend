@@ -46,7 +46,7 @@
     "date_of_birth", "iso_country", "gaa", "from_date", "to_date"
   ],
   "sortCriteria": {
-    "last_name": ["last_name", "team"],
+    "last_name": ["last_name", "first_name", "team"],
     "points": ["points", "goals", "-games_played", "primary_points"],
     "points_5v5": ["points_5v5", "goals_5v5_from_events", "-games_played", "primary_points_5v5"],
     "assists": ["assists", "-games_played", "primary_assists"],
@@ -64,7 +64,9 @@
     "points_per_60": ["points_per_60", "time_on_ice_seconds"],
     "shots_on_goal": ["shots_on_goal", "slot_on_goal_pctg", "slot_on_goal"],
     "shots": ["shots", "slot_pctg", "slot_shots"],
-    "points_per_game": ["points_per_game", "primary_points_per_game"],
+    "points_per_game": ["points_per_game", "-games_played", "primary_points_per_game"],
+    "goals_per_game": ["goals_per_game", "-games_played"],
+    "assists_per_game": ["assists_per_game", "-games_played"],
     "time_on_ice": ["time_on_ice", "shifts"],
     "time_on_ice_pp": ["time_on_ice_pp", "pp_goals_per_60"],
     "time_on_ice_sh": ["time_on_ice_sh", "sh_points"],

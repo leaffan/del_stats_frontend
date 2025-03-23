@@ -2,7 +2,31 @@
     <thead table-header stats-cols="statsCols" ctrl="ctrl"></thead>
     <tbody>
         <tr 
-            data-ng-repeat="(rowIndex, stat) in filteredPlayerStats | filter:ctrl.nameFilter | filter:ctrl.teamFilter | filter:ctrl.playerStatusFilter | filter:ctrl.minimumAgeFilter | filter:ctrl.maximumAgeFilter | filter:ctrl.countryFilter | filter:{position: ctrl.positionFilter}  | filter:ctrl.greaterThanFilter('games_played', 0) | filter:ctrl.longestStreakFilter | filter:ctrl.currentStreakFilter | orderBy:ctrl.sortConfig['sortCriteria']:ctrl.sortConfig['sortDescending'] | limitTo:ctrl.limit" data-ng-init="rowIndex = $index"
+            data-ng-repeat="
+                (rowIndex, stat) in filteredPlayerStats | 
+                filter: {full_name: ctrl.nameFilter} | 
+                filter:ctrl.teamFilter | 
+                filter: {position: ctrl.positionFilter} | 
+                filter:ctrl.goalieFilter |
+                filter:ctrl.minimumAgeFilter | 
+                filter:ctrl.maximumAgeFilter | 
+                filter:ctrl.countryFilter | 
+                filter:ctrl.playerStatusFilter | 
+                filter:ctrl.greaterThanFilter('games_played', 0) | 
+                filter:ctrl.greaterThanFilter('so_games_played', 0) | 
+                filter:ctrl.greaterThanFilter('faceoffs_per_game', 8) | 
+                filter:ctrl.greaterThanFilter('time_on_ice_pp', 0) | 
+                filter:ctrl.greaterThanFilter('time_on_ice_sh', 0) | 
+                filter:ctrl.greaterThanFilter('time_on_ice', 0) | 
+                filter:ctrl.greaterThanFilter('toi', 0) |
+                filter:ctrl.greaterThanFilter('goals', 0) | 
+                filter:ctrl.scoringStreakTypeFilter |
+                filter:ctrl.longestStreakFilter | 
+                filter:ctrl.currentStreakFilter | 
+                filter:ctrl.streakSlumpTeamFilter | 
+                orderBy:ctrl.sortConfig['sortCriteria']:ctrl.sortConfig['sortDescending'] |
+                limitTo:ctrl.limit"
+            data-ng-init="rowIndex = $index"
         >
             <td
             ng-repeat="col in statsCols"
@@ -18,7 +42,7 @@
 
             <span data-ng-if="col.data_key == 'last_name' && !['streaks', 'slumps', 'goalie_streaks'].includes(ctrl.tableSelect)">
                 <a data-ng-if="stat.single_team === undefined || stat.single_team" href="#!/player_profile/{{ctrl.season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
-                <span data-ng-if="!stat.single_team === undefined && !stat.single_team">{{ stat.full_name }}</span>
+                <span data-ng-if="stat.hasOwnProperty('single_team') && !stat.single_team">{{ stat.full_name }}</span>
             </span>
 
             <!-- special display of player names for streaks and slumps -->
@@ -46,7 +70,7 @@
 
             <span data-ng-if="col.data_key == 'team' && !['streaks', 'slumps', 'goalie_streaks'].includes(ctrl.tableSelect)">
                 <a data-ng-if="stat.single_team === undefined || stat.single_team" href="#!/team_profile/{{ctrl.season}}/{{ stat.team }}">{{ stat.team }}</a>
-                <span data-ng-if="!stat.single_team === undefined && !stat.single_team">{{ stat.team }}</span>
+                <span data-ng-if="stat.hasOwnProperty('single_team') && !stat.single_team">{{ stat.team }}</span>
             </span>
 
             <!-- special display of teams for streaks and slumps -->

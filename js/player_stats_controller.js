@@ -8,10 +8,10 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
     // default table selection and sort criterion for skater page
     ctrl.tableSelect = $scope.tableSelect = 'basic_stats';
     $scope.seasonTypeSelect = 'RS';
-    // if ($scope.season == 2025) {
-    //     $scope.seasonTypeSelect = 'PO';
-    // }
-    $scope.scoringStreakTypeFilter = 'points';
+    if ($scope.season == 2024) {
+        $scope.seasonTypeSelect = 'RS';
+    }
+    ctrl.scoringStreakTypeSelect = $scope.scoringStreakTypeSelect = 'points';
     $scope.minGamesPlayed = 1;
     $scope.minTimeOnIce = 0;
     $scope.minTimeOnIceInMinutes = 0;
@@ -49,7 +49,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
     ctrl.nameFilter = $scope.nameFilter = ''; // empty name filter
     ctrl.teamSelect = $scope.teamSelect = ''; // empty name filter
     $scope.gamesBackSelect = '';
-    ctrl.limit = 10;
+    ctrl.limit = 100;
 
     $window.onscroll = function() {
         let pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
@@ -588,7 +588,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
             sortDescending = true;
         }
         // setting global sort configuration according to findings
-        $scope.sortConfig = {
+        ctrl.sortConfig = $scope.sortConfig = {
             'sortKey': sortKey,
             'sortCriteria': $scope.sortCriteria[sortKey],
             'sortDescending': sortDescending
@@ -603,15 +603,49 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
 
     // filter definitions
     ctrl.greaterThanFilter = $scope.greaterThanFilter = function (prop, val) {
-        if ($scope.season == 2017 && prop.includes('on_ice')) {
-            return true;
-        }
         return function (item) {
+            if ($scope.season == 2017 && prop.includes('on_ice')) {
+                return true;
+            }
+            if (prop == 'goals' && !['goals_per_period'].includes($scope.tableSelect)) {
+                return true;
+            }
+            if (prop == 'toi' && !['goalie_stats', 'goalie_against_avg_stats', 'goalie_stats_ev', 'goalie_stats_sh', 'goalie_stats_pp', 'goalie_zone_stats_near', 'goalie_zone_stats_far'].includes($scope.tableSelect)) {
+                return true;
+            }
+            if (prop == 'time_on_ice' && !['per_game_stats', 'per_60_stats', 'time_on_ice_shift_stats'].includes($scope.tableSelect)) {
+                return true;
+            }
+            if (prop == 'time_on_ice_pp' && !['power_play_stats'].includes($scope.tableSelect)) {
+                return true;
+            }
+            if (prop == 'time_on_ice_sh' && !['shorthanded_stats'].includes($scope.tableSelect)) {
+                return true;
+            }
+            if (prop == 'faceoffs_per_game' && !['faceoff_stats', 'faceoff_by_side_stats', 'faceoff_by_zone_stats'].includes($scope.tableSelect)) {
+                return true;
+            }
+            if (prop == 'so_games_played' && !['goalie_shootout_stats', 'shootout_stats'].includes($scope.tableSelect)) {
+                return true;
+            }
             if (item[prop] === undefined)
                 return true;
             return item[prop] > val;
         }
     }
+
+    ctrl.goalieFilter = function(a) {
+        if (['player_information'].includes($scope.tableSelect)) {
+            return true;
+        }
+        if ($scope.tableSelect.startsWith('goalie') && a.position == 'GK') {
+            return true;
+        }
+        if (!$scope.tableSelect.startsWith('goalie') && a.position == 'GK') {
+            return false;
+        }
+        return true;
+    };
 
     ctrl.playerStatusFilter = $scope.playerStatusFilter = function(a) {
         if (!$scope.playerStatusSelect)
@@ -783,6 +817,17 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
             }
         } else {
             return true;
+        }
+    };
+
+    ctrl.scoringStreakTypeFilter = $scope.scoringStreakTypeFilter = function(a) {
+        if (!['streaks', 'slumps', 'goalie_streaks'].includes($scope.tableSelect)) {
+            return true;
+        }
+        if (a.type == ctrl.scoringStreakTypeSelect) {
+            return true;
+        } else {
+            return false;
         }
     };
 

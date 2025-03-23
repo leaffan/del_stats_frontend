@@ -1,3 +1,88 @@
 <table class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow">
     <thead table-header stats-cols="statsCols" ctrl="ctrl"></thead>
+    <tbody>
+        <tr 
+            data-ng-repeat="(rowIndex, stat) in filteredPlayerStats | filter:ctrl.nameFilter | filter:ctrl.teamFilter | filter:ctrl.playerStatusFilter | filter:ctrl.minimumAgeFilter | filter:ctrl.maximumAgeFilter | filter:ctrl.countryFilter | filter:{position: ctrl.positionFilter}  | filter:ctrl.greaterThanFilter('games_played', 0) | filter:ctrl.longestStreakFilter | filter:ctrl.currentStreakFilter | orderBy:ctrl.sortConfig['sortCriteria']:ctrl.sortConfig['sortDescending'] | limitTo:ctrl.limit" data-ng-init="rowIndex = $index"
+        >
+            <td
+            ng-repeat="col in statsCols"
+            class="w-{{ svc.pad(col.width, 2) }} text-{{ col.align ? col.align : 'right' }} {{ col.data_key == 'game_id' ? svc.setTextColor(stat.score, stat.opp_score) : '' }}"
+            >
+            <span data-ng-if="col.data_key == 'rank'">
+                {{ rowIndex + 1 }}
+            </span>
+
+            <span data-ng-if="col.data_key == 'game_id'">
+                <b>{{stat.score}}:{{stat.opp_score}} </b>{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}
+            </span>
+
+            <span data-ng-if="col.data_key == 'last_name' && !['streaks', 'slumps', 'goalie_streaks'].includes(ctrl.tableSelect)">
+                <a data-ng-if="stat.single_team === undefined || stat.single_team" href="#!/player_profile/{{ctrl.season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
+                <span data-ng-if="!stat.single_team === undefined && !stat.single_team">{{ stat.full_name }}</span>
+            </span>
+
+            <!-- special display of player names for streaks and slumps -->
+            <span data-ng-if="col.data_key == 'last_name' && ['streaks', 'slumps', 'goalie_streaks'].includes(ctrl.tableSelect)">
+                <a data-ng-if="!stat.sub_streaks" href="#!/player_profile/{{ctrl.season}}/{{stat.display_team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
+                <span data-ng-if="stat.sub_streaks">
+                    {{ stat.full_name }}
+                    (<span data-ng-repeat="sub in stat.sub_streaks">
+                        <a href="#!/player_profile/{{sub[1]}}/{{sub[0]}}/{{stat.player_id}}">{{sub[1].toString().substr(-2) + '/' + (sub[1] + 1).toString().substr(-2)}}</a>{{$last ? '' : ' | '}}
+                    </span>)
+                </span>
+            </span>
+
+            <span data-ng-if="col.data_key == 'last_goal_timestamp'">
+                {{ stat.last_goal_against ? stat.from_date + ' - ' + svc.formatTime(stat.last_goal_against) : '' }}
+            </span>
+
+            <span data-ng-if="col.data_key == 'next_goal_timestamp'">
+                {{ stat.next_goal_against ? stat.to_date + ' - ' + svc.formatTime(stat.next_goal_against) : '' }}
+            </span>
+
+            <span data-ng-if="col.data_key == 'shoots'">
+                {{ stat.shoots == 'left' ? 'L' : 'R' }}
+            </span>
+
+            <span data-ng-if="col.data_key == 'team' && !['streaks', 'slumps', 'goalie_streaks'].includes(ctrl.tableSelect)">
+                <a data-ng-if="stat.single_team === undefined || stat.single_team" href="#!/team_profile/{{ctrl.season}}/{{ stat.team }}">{{ stat.team }}</a>
+                <span data-ng-if="!stat.single_team === undefined && !stat.single_team">{{ stat.team }}</span>
+            </span>
+
+            <!-- special display of teams for streaks and slumps -->
+            <span data-ng-if="col.data_key == 'team' && ['streaks', 'slumps', 'goalie_streaks'].includes(ctrl.tableSelect)">
+                <a data-ng-if="!stat.sub_streaks" href="#!/team_profile/{{ctrl.season}}/{{stat.display_team}}">{{ stat.display_team }}</a>
+                <span data-ng-if="stat.sub_streaks">
+                    <span data-ng-repeat="sub in stat.sub_streaks">
+                        <a href="#!/team_profile/{{sub[1]}}/{{sub[0]}}">{{ sub[0] }}</a> {{$last ? '' : ' | '}}
+                    </span>
+                </span>
+            </span>
+
+            <span data-ng-if="col.data_key == 'type'">
+                {{ stat.type == 'points' ? 'Punkte' : stat.type == 'goals' ? 'Tore' : 'Vorlagen' }}
+            </span> 
+
+            <span data-ng-if="col.data_key == 'multi_season'">
+                {{ stat.multi_season ? 'X' : '' }}
+            </span> 
+
+            <span data-ng-if="col.data_key == 'total_so'">
+                {{ svc.getShutouts(stat) }}
+            </span> 
+
+            <span data-ng-if="col.data_key == 'iso_country'" class="flag-icon flag-icon-{{ stat.iso_country }}"></span>            
+
+            <span data-ng-if="col.data_key == 'date_of_birth'">
+                {{ stat.date_of_birth | date : 'yyyy-MM-dd' }}
+            </span>
+
+            <span data-ng-if="!(['rank', 'last_name', 'team', 'game_id', 'type', 'multi_season', 'next_goal_timestamp', 'last_goal_timestamp', 'shoots', 'total_so', 'iso_country', 'date_of_birth'].includes(col.data_key))">
+                {{ col.valid_to && ctrl.season > col.valid_to ? '-' : col.valid_from && ctrl.season < col.valid_from ? '-' : col.time ? (col.factor ? svc.formatTime(stat[col.data_key] * col.factor): svc.formatTime(stat[col.data_key])) : col.fixed ? stat[col.data_key].toFixed(col.fixed) : stat[col.data_key] }}
+                {{ !col.pctg ? '' : stat[col.data_key] != undefined ? '%' : '-' }}
+            </span>
+
+            </td>
+        </tr>
+    </tbody>
 </table>

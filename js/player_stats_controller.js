@@ -2,10 +2,11 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
 
     $scope.svc = svc;
     var ctrl = this;
-    $scope.season = $routeParams.season;
+
+    ctrl.season = $scope.season = $routeParams.season;
     svc.setTitle("DEL-Spielerstatistiken " + svc.getSeasonIdentifier($scope.season));
     // default table selection and sort criterion for skater page
-    $scope.tableSelect = 'basic_stats';
+    ctrl.tableSelect = $scope.tableSelect = 'basic_stats';
     $scope.seasonTypeSelect = 'RS';
     // if ($scope.season == 2025) {
     //     $scope.seasonTypeSelect = 'PO';
@@ -21,18 +22,34 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
     $scope.minGoalieTimeOnIceInMinutesFormatted = '00:00';
     $scope.showStrictStreaks = true;
     $scope.u23Check = false;
-    // setting default sort configuration
-    $scope.sortConfig = {
-        'sortKey': 'points',
-        'sortCriteria': ['points', 'goals', '-games_played', 'primary_points'],
-        'sortDescending': true
-    }
+
+    // loading sorting criteria
+    $http.get('./cfg/sort_criteria_player_stats.json').then(response => {
+        let tableSortConfig = response.data;
+        // default columns to sort after for each displayed table
+        $scope.tableSortCriteria = tableSortConfig.tableSortCriteria;
+        // attributes to sort in ascending order by default
+        $scope.ascendingAttrs = tableSortConfig.ascendingAttrs;
+        // sorting hierarchy for each sortable column
+        ctrl.sortCriteria = $scope.sortCriteria = tableSortConfig.sortCriteria;
+        // setting initial sort configuration based on selected table
+        ctrl.sortConfig = $scope.sortConfig = {
+            // sort key represents default sorting column for selected table
+            'sortKey': $scope.tableSortCriteria[$scope.tableSelect],
+            // sort criteria identify the sorting hierarchy
+            'sortCriteria': $scope.sortCriteria[$scope.tableSortCriteria[$scope.tableSelect]],
+            // this one toggles whether sorting is initially in ascending or descending order
+            'sortDescending': !$scope.ascendingAttrs.includes($scope.sortCriteria[$scope.tableSortCriteria[$scope.tableSelect]][0])
+        }
+    });
+
+
     $scope.fromRoundSelect = '1';
     // default filter values
-    $scope.nameFilter = ''; // empty name filter
-    $scope.teamSelect = ''; // empty name filter
+    ctrl.nameFilter = $scope.nameFilter = ''; // empty name filter
+    ctrl.teamSelect = $scope.teamSelect = ''; // empty name filter
     $scope.gamesBackSelect = '';
-    ctrl.limit = 100;
+    ctrl.limit = 10;
 
     $window.onscroll = function() {
         let pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
@@ -480,18 +497,6 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         ctrl.goalieStatsToCategorize = res.data['season_goalie_stats_categories'];
     });
 
-    // loading sorting criteria
-    $http.get('./cfg/sort_criteria_player_stats.json').then(response => {
-        let tableSortConfig = response.data;
-        // default columns to sort after for each displayed table
-        $scope.tableSortCriteria = tableSortConfig.tableSortCriteria;
-        // attributes to sort in ascending order by default
-        $scope.ascendingAttrs = tableSortConfig.ascendingAttrs;
-        // sorting hierarchy for each sortable column
-        $scope.sortCriteria = tableSortConfig.sortCriteria;
-    });
-    
-
     $scope.filterStats = function() {
         // copying template for filtered stats from prepared player games
         filtered_player_stats = angular.copy($scope.prep_player_games);
@@ -597,16 +602,18 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
     };
 
     // filter definitions
-    $scope.greaterThanFilter = function (prop, val) {
+    ctrl.greaterThanFilter = $scope.greaterThanFilter = function (prop, val) {
         if ($scope.season == 2017 && prop.includes('on_ice')) {
             return true;
         }
         return function (item) {
+            if (item[prop] === undefined)
+                return true;
             return item[prop] > val;
         }
     }
 
-    $scope.playerStatusFilter = function(a) {
+    ctrl.playerStatusFilter = $scope.playerStatusFilter = function(a) {
         if (!$scope.playerStatusSelect)
             return true;
         switch ($scope.playerStatusSelect) {
@@ -632,7 +639,10 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
     };
 
 
-    $scope.longestStreakFilter = function(a) {
+    ctrl.longestStreakFilter = $scope.longestStreakFilter = function(a) {
+        if (!['streaks', 'slumps', 'goalie_streaks'].includes($scope.tableSelect)) {
+            return true;
+        }
         if (!$scope.showOnlyLongestStreak) {
             return true;
         }
@@ -643,7 +653,10 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         }
     };
 
-    $scope.currentStreakFilter = function(a) {
+    ctrl.currentStreakFilter = $scope.currentStreakFilter = function(a) {
+        if (!['streaks', 'slumps', 'goalie_streaks'].includes($scope.tableSelect)) {
+            return true;
+        }
         if (!$scope.showOnlyCurrentStreak)
             return true;
         if ($scope.showOnlyCurrentStreak && a.current) {
@@ -653,7 +666,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         }
     };
 
-    $scope.minimumAgeFilter = function (a) {
+    ctrl.minimumAgeFilter = $scope.minimumAgeFilter = function (a) {
         if ($scope.minimumAge) {
             if (a.age < $scope.minimumAge) {
                 return false;
@@ -665,7 +678,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         }
     };
 
-    $scope.maximumAgeFilter = function (a) {
+    ctrl.maximumAgeFilter = $scope.maximumAgeFilter = function (a) {
         if ($scope.maximumAge) {
             if (a.age > $scope.maximumAge) {
                 return false;
@@ -738,7 +751,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         $scope.filtered_bottom_game_scores = $scope.filterGameScores($scope.bottom_game_scores);
     }
 
-    $scope.teamFilter = function (a) {
+    ctrl.teamFilter = $scope.teamFilter = function (a) {
         if ($scope.teamSelect) {
             if (['Nord', 'Süd', 'A', 'B'].includes($scope.teamSelect)) {
                 if ($scope.divisions[$scope.seasonTypeSelect][$scope.teamSelect] && $scope.divisions[$scope.seasonTypeSelect][$scope.teamSelect].includes(a.team)) {
@@ -758,7 +771,10 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         }
     };
 
-    $scope.streakSlumpTeamFilter = function(a) {
+    ctrl.streakSlumpTeamFilter = $scope.streakSlumpTeamFilter = function(a) {
+        if (!['streaks', 'slumps', 'goalie_streaks'].includes($scope.tableSelect)) {
+            return true;
+        }
         if ($scope.teamSelect) {
             if (a.team.includes($scope.teamSelect)) {
                 return true;
@@ -770,7 +786,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         }
     };
 
-    $scope.countryFilter = function(a) {
+    ctrl.countryFilter = $scope.countryFilter = function(a) {
         if ($scope.countrySelect) {
             if ($scope.countrySelect == 'non_de' && a.iso_country != 'de') {
                 return true

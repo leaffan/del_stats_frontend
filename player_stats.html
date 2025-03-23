@@ -43,7 +43,7 @@
     <div class="alert alert-info main-bg shadow">
         <span ng-click="toggle=!toggle"><b>Abkürzungsverzeichnis&#32;&#32;<span ng-show="toggle" class="fa fa-minus"></span><span ng-show="!toggle" class="fa fa-plus"></span></b></span>
             <dl data-ng-show="toggle" class="row mx-2">
-                <dt class="col-md-2 text-right" data-ng-repeat-start="term in stats_cols[tableSelect] | filter:{expl_de: '!!'}">{{ term.col_header }}</dt>
+                <dt class="col-md-2 text-right" data-ng-repeat-start="term in stats_cols[ctrl.tableSelect] | filter:{expl_de: '!!'}">{{ term.col_header }}</dt>
                 <dd class="col-md-10" data-ng-repeat-end><i>{{ term.expl_en }}:</i> {{ term.expl_de }}</dd>
             </dl>
     </div>
@@ -51,7 +51,7 @@
     <form>
         <div class="form-row mb-1">
             <div class="input-group col-4">
-                <select class="form-control" id="table_select" data-ng-model="tableSelect" data-ng-change="changeTable()">
+                <select class="form-control" id="table_select" data-ng-model="ctrl.tableSelect" data-ng-change="changeTable()">
                     <option data-ng-option value="basic_stats">Basisstatistiken</option>
                     <option data-ng-option value="basic_stats_5v5">Basisstatistiken (5-gegen-5)</option>
                     <option data-ng-option value="per_game_stats">Spielbezogene Statistiken</option>
@@ -95,7 +95,7 @@
                 </select>
             </div>
 
-            <div class="input-group col-4 pl-0" data-ng-if="tableSelect != 'streaks' && tableSelect != 'slumps' && tableSelect != 'goalie_streaks'">
+            <div class="input-group col-4 pl-0" data-ng-if="ctrl.tableSelect != 'streaks' && ctrl.tableSelect != 'slumps' && ctrl.tableSelect != 'goalie_streaks'">
                 <select class="form-control" data-ng-model="$parent.playerStatusSelect">
                     <option data-ng-option value selected="selected">alle Spieler</option>
                     <option data-ng-option value="u23">U23-Spieler</option>
@@ -104,7 +104,7 @@
                 </select>
             </div>
 
-            <!-- <div class="input-group col-3 pl-0" data-ng-if="tableSelect == 'streaks' || tableSelect == 'slumps'">
+            <!-- <div class="input-group col-3 pl-0" data-ng-if="ctrl.tableSelect == 'streaks' || ctrl.tableSelect == 'slumps'">
                 <select class="form-control" data-ng-model="$parent.playerStatusSelect">
                     <option data-ng-option value selected="selected">alle Spieler</option>
                     <option data-ng-option value="u23">U23-Spieler</option>
@@ -113,10 +113,10 @@
                 </select>
             </div> -->
 
-            <div class="input-group col-4 pl-0" data-ng-if="tableSelect == 'streaks' || tableSelect == 'slumps'">
+            <div class="input-group col-4 pl-0" data-ng-if="ctrl.tableSelect == 'streaks' || ctrl.tableSelect == 'slumps'">
                 <select class="form-control" data-ng-model="ctrl.scoringStreakTypeSelect">
                     <option data-ng-option value="goals">Tore</option>
-                    <option data-ng-option data-ng-if="tableSelect == 'streaks'" value="assists">Vorlagen</option>
+                    <option data-ng-option data-ng-if="ctrl.tableSelect == 'streaks'" value="assists">Vorlagen</option>
                     <option data-ng-option value="points">Punkte</option>
                 </select>
             </div>
@@ -129,7 +129,7 @@
             </div>
 
         </div>
-        <div class="form-row mb-1" data-ng-if="tableSelect != 'streaks' && tableSelect != 'slumps' && tableSelect != 'goalie_streaks' && tableSelect != 'player_information'">
+        <div class="form-row mb-1" data-ng-if="ctrl.tableSelect != 'streaks' && ctrl.tableSelect != 'slumps' && ctrl.tableSelect != 'goalie_streaks' && ctrl.tableSelect != 'player_information'">
             <div class="col-3">
                 <select class="form-control" data-ng-model="$parent.seasonTypeSelect">
                     <option data-ng-if="season == 2020" data-ng-option value="MSC">MagentaSport Cup</option>
@@ -163,7 +163,7 @@
                 </select>
             </div>
         </div>
-        <div class="form-row mb-1" data-ng-if="tableSelect != 'streaks' && tableSelect != 'slumps' && tableSelect != 'goalie_streaks' && tableSelect != 'player_information'">
+        <div class="form-row mb-1" data-ng-if="ctrl.tableSelect != 'streaks' && ctrl.tableSelect != 'slumps' && ctrl.tableSelect != 'goalie_streaks' && ctrl.tableSelect != 'player_information'">
             <div class="col-6">
                 <select class="form-control" data-ng-model="$parent.timespanSelect" data-ng-change="changeTimespan()">
                     <option data-ng-option value selected="selected">alle Zeiträume</option>
@@ -173,12 +173,12 @@
                     <option data-ng-if="season != 2020" data-ng-option value="post_dcup">Nach Deutschland Cup</option>
                     <option data-ng-if="season == 2020" data-ng-option value="pre_reunification">Vor Wiedervereinigung</option>
                     <option data-ng-if="season == 2020" data-ng-option value="post_reunification">Nach Wiedervereinigung</option>
-                    <option data-ng-if="season == 2024 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 5" data-ng-option>-----------</option>
-                    <option data-ng-if="season == 2024 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 5" data-ng-option value="last_5_games">In letzten 5 Spielen</option>
-                    <option data-ng-if="season == 2024 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 10" data-ng-option value="last_10_games">In letzten 10 Spielen</option>
-                    <option data-ng-if="season == 2024 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 15" data-ng-option value="last_15_games">In letzten 15 Spielen</option>
-                    <option data-ng-if="season == 2024 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 20" data-ng-option value="last_20_games">In letzten 20 Spielen</option>
-                    <option data-ng-if="season == 2024 && !tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 25" data-ng-option value="last_25_games">In letzten 25 Spielen</option>
+                    <option data-ng-if="season == 2024 && !ctrl.tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 5" data-ng-option>-----------</option>
+                    <option data-ng-if="season == 2024 && !ctrl.tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 5" data-ng-option value="last_5_games">In letzten 5 Spielen</option>
+                    <option data-ng-if="season == 2024 && !ctrl.tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 10" data-ng-option value="last_10_games">In letzten 10 Spielen</option>
+                    <option data-ng-if="season == 2024 && !ctrl.tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 15" data-ng-option value="last_15_games">In letzten 15 Spielen</option>
+                    <option data-ng-if="season == 2024 && !ctrl.tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 20" data-ng-option value="last_20_games">In letzten 20 Spielen</option>
+                    <option data-ng-if="season == 2024 && !ctrl.tableSelect.includes('game_scores_per') && roundsPlayed.length - 10 >= 25" data-ng-option value="last_25_games">In letzten 25 Spielen</option>
                 </select>
             </div>
 
@@ -239,10 +239,10 @@
             </div>
         </div>
 
-        <div class="form-row mb-3" data-ng-if="tableSelect != 'streaks' && tableSelect != 'slumps' && tableSelect != 'goalie_streaks' && tableSelect != 'player_information' && tableSelect != 'top_game_scores_per_game' && tableSelect != 'bottom_game_scores_per_game'">
+        <div class="form-row mb-3" data-ng-if="ctrl.tableSelect != 'streaks' && ctrl.tableSelect != 'slumps' && ctrl.tableSelect != 'goalie_streaks' && ctrl.tableSelect != 'player_information' && ctrl.tableSelect != 'top_game_scores_per_game' && ctrl.tableSelect != 'bottom_game_scores_per_game'">
 
             <!-- skater filters for minimum games played/time on ice -->
-            <div class="input-group col-6" data-ng-if="tableSelect != 'goalie_stats' && tableSelect != 'goalie_against_avg_stats' && tableSelect != 'goalie_stats_ev' && tableSelect != 'goalie_stats_pp' && tableSelect != 'goalie_stats_sh' && tableSelect != 'goalie_zone_stats_far' && tableSelect != 'goalie_zone_stats_near' && tableSelect != 'goalie_shootout_stats'">
+            <div class="input-group col-6" data-ng-if="ctrl.tableSelect != 'goalie_stats' && ctrl.tableSelect != 'goalie_against_avg_stats' && ctrl.tableSelect != 'goalie_stats_ev' && ctrl.tableSelect != 'goalie_stats_pp' && ctrl.tableSelect != 'goalie_stats_sh' && ctrl.tableSelect != 'goalie_zone_stats_far' && ctrl.tableSelect != 'goalie_zone_stats_near' && ctrl.tableSelect != 'goalie_shootout_stats'">
                 <div class="input-group-prepend w-65">
                     <label class="input-group-text w-100 justify-content-center">Mindestens absolvierte Spiele:</label>
                 </div>
@@ -250,8 +250,8 @@
                 <input type="range" data-ng-model="$parent.$parent.minGamesPlayed" class="custom-range" min="1" max="{{$parent.$parent.maxGamesPlayed}}" onchange="changeMinGamesPlayed()">
             </div>
 
-            <!-- <div class="input-group col-6 pl-0" data-ng-if="tableSelect != 'goalie_stats' && tableSelect != 'goalie_against_avg_stats' && tableSelect != 'goalie_stats_ev' && tableSelect != 'goalie_stats_pp' && tableSelect != 'goalie_stats_sh' && tableSelect != 'goalie_zone_stats_far' && tableSelect != 'goalie_zone_stats_near' && tableSelect != 'goalie_shootout_stats' && tableSelect != 'basic_stats_5v5' && tableSelect != 'on_ice_shot_stats_5v5' && tableSelect != 'on_ice_shot_on_goal_stats_5v5'"> -->
-            <div class="input-group col-6 pl-0" data-ng-if="season != 2017 && tableSelect != 'goalie_stats' && tableSelect != 'goalie_against_avg_stats' && tableSelect != 'goalie_stats_ev' && tableSelect != 'goalie_stats_pp' && tableSelect != 'goalie_stats_sh' && tableSelect != 'goalie_zone_stats_far' && tableSelect != 'goalie_zone_stats_near' && tableSelect != 'goalie_shootout_stats'">
+            <!-- <div class="input-group col-6 pl-0" data-ng-if="ctrl.tableSelect != 'goalie_stats' && ctrl.tableSelect != 'goalie_against_avg_stats' && ctrl.tableSelect != 'goalie_stats_ev' && ctrl.tableSelect != 'goalie_stats_pp' && ctrl.tableSelect != 'goalie_stats_sh' && ctrl.tableSelect != 'goalie_zone_stats_far' && ctrl.tableSelect != 'goalie_zone_stats_near' && ctrl.tableSelect != 'goalie_shootout_stats' && ctrl.tableSelect != 'basic_stats_5v5' && ctrl.tableSelect != 'on_ice_shot_stats_5v5' && ctrl.tableSelect != 'on_ice_shot_on_goal_stats_5v5'"> -->
+            <div class="input-group col-6 pl-0" data-ng-if="season != 2017 && ctrl.tableSelect != 'goalie_stats' && ctrl.tableSelect != 'goalie_against_avg_stats' && ctrl.tableSelect != 'goalie_stats_ev' && ctrl.tableSelect != 'goalie_stats_pp' && ctrl.tableSelect != 'goalie_stats_sh' && ctrl.tableSelect != 'goalie_zone_stats_far' && ctrl.tableSelect != 'goalie_zone_stats_near' && ctrl.tableSelect != 'goalie_shootout_stats'">
                     <div class="input-group-prepend w-65">
                     <label class="input-group-text w-100 justify-content-center">Mindestens gespielte Eiszeit:</label>
                 </div>
@@ -260,7 +260,7 @@
             </div>
 
             <!-- 5v5 time on ice is used for corresponding table displays -->
-            <!-- <div class="input-group col-6 pl-0" data-ng-if="tableSelect == 'basic_stats_5v5' && tableSelect == 'on_ice_shot_stats_5v5' && tableSelect == 'on_ice_shot_on_goal_stats_5v5'">
+            <!-- <div class="input-group col-6 pl-0" data-ng-if="ctrl.tableSelect == 'basic_stats_5v5' && ctrl.tableSelect == 'on_ice_shot_stats_5v5' && ctrl.tableSelect == 'on_ice_shot_on_goal_stats_5v5'">
                 <div class="input-group-prepend w-65">
                     <label class="input-group-text w-100 justify-content-center">Mindestens gespielte Eiszeit:</label>
                 </div>
@@ -269,7 +269,7 @@
             </div> -->
 
             <!-- goaltender filters for minimum games played/time on ice -->
-            <div class="input-group col-6" data-ng-if="tableSelect == 'goalie_stats' || tableSelect == 'goalie_against_avg_stats' || tableSelect == 'goalie_stats_ev' || tableSelect == 'goalie_stats_pp' || tableSelect == 'goalie_stats_sh' || tableSelect == 'goalie_zone_stats_far' || tableSelect == 'goalie_zone_stats_near' || tableSelect == 'goalie_shootout_stats'">
+            <div class="input-group col-6" data-ng-if="ctrl.tableSelect == 'goalie_stats' || ctrl.tableSelect == 'goalie_against_avg_stats' || ctrl.tableSelect == 'goalie_stats_ev' || ctrl.tableSelect == 'goalie_stats_pp' || ctrl.tableSelect == 'goalie_stats_sh' || ctrl.tableSelect == 'goalie_zone_stats_far' || ctrl.tableSelect == 'goalie_zone_stats_near' || ctrl.tableSelect == 'goalie_shootout_stats'">
                 <div class="input-group-prepend w-65">
                     <label class="input-group-text w-100 justify-content-center">Mindestens absolvierte Spiele:</label>
                 </div>
@@ -277,7 +277,7 @@
                 <input type="range" data-ng-model="$parent.$parent.minGoalieGamesPlayed" class="custom-range" min="1" max="{{$parent.$parent.maxGoalieGamesPlayed}}" onchange="changeMinGamesPlayed()">
             </div>
 
-            <div class="input-group col-6 pl-0" data-ng-if="tableSelect == 'goalie_stats' || tableSelect == 'goalie_against_avg_stats' || tableSelect == 'goalie_stats_ev' || tableSelect == 'goalie_stats_pp' || tableSelect == 'goalie_stats_sh' || tableSelect == 'goalie_zone_stats_far' || tableSelect == 'goalie_zone_stats_near' || tableSelect == 'goalie_shootout_stats'">
+            <div class="input-group col-6 pl-0" data-ng-if="ctrl.tableSelect == 'goalie_stats' || ctrl.tableSelect == 'goalie_against_avg_stats' || ctrl.tableSelect == 'goalie_stats_ev' || ctrl.tableSelect == 'goalie_stats_pp' || ctrl.tableSelect == 'goalie_stats_sh' || ctrl.tableSelect == 'goalie_zone_stats_far' || ctrl.tableSelect == 'goalie_zone_stats_near' || ctrl.tableSelect == 'goalie_shootout_stats'">
                 <div class="input-group-prepend w-65">
                     <label class="input-group-text w-100 justify-content-center">Mindestens gespielte Eiszeit:</label>
                 </div>
@@ -286,8 +286,8 @@
             </div>
         </div>
 
-        <div class="mt-0 mb-3" data-ng-if="tableSelect == 'streaks' || tableSelect == 'slumps' || tableSelect == 'goalie_streaks'">
-            <!-- <div class="border-0" data-ng-if="tableSelect != 'streaks' && tableSelect != 'slumps' && tableSelect != 'player_information'">
+        <div class="mt-0 mb-3" data-ng-if="ctrl.tableSelect == 'streaks' || ctrl.tableSelect == 'slumps' || ctrl.tableSelect == 'goalie_streaks'">
+            <!-- <div class="border-0" data-ng-if="ctrl.tableSelect != 'streaks' && ctrl.tableSelect != 'slumps' && ctrl.tableSelect != 'player_information'">
                 <label for="u23Check">
                     <input type="checkbox" id="u23Check" data-ng-model="$parent.u23Check" value="">
                     <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
@@ -319,12 +319,12 @@
 
     </form>
 
-    <player-stats-table data-ng-if="tableSelect == 'penalty_stats'" id="penalty_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'penalty_stats'" id="penalty_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="penalty_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'penalty_stats'">
+    <table id="penalty_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'penalty_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -360,12 +360,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'shot_stats'" id="shot_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'shot_stats'" id="shot_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="shot_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'shot_stats'">
+    <table id="shot_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'shot_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -400,12 +400,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'faceoff_stats'" id="faceoff_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'faceoff_stats'" id="faceoff_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="faceoff_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'faceoff_stats'">
+    <table id="faceoff_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'faceoff_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -437,12 +437,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'goal_categories'" id="goal_categories" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'goal_categories'" id="goal_categories" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="goal_categories" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goal_categories'">
+    <table id="goal_categories" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'goal_categories'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -480,12 +480,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'game_categories'" id="game_categories" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'game_categories'" id="game_categories" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="game_categories" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'game_categories'">
+    <table id="game_categories" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'game_categories'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -521,12 +521,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'goalie_categories'" id="goalie_categories" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'goalie_categories'" id="goalie_categories" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="goalie_categories" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_categories'">
+    <table id="goalie_categories" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'goalie_categories'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -561,12 +561,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'game_minutes'" id="game_minutes" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'game_minutes'" id="game_minutes" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="game_minutes" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'game_minutes'">
+    <table id="game_minutes" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'game_minutes'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -601,12 +601,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'goals_per_period'" id="goals_per_period" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'goals_per_period'" id="goals_per_period" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="goals_per_period" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goals_per_period'">
+    <table id="goals_per_period" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'goals_per_period'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -641,12 +641,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'shootout_stats'" id="shootout_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'shootout_stats'" id="shootout_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="shootout_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'shootout_stats'">
+    <table id="shootout_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'shootout_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -677,12 +677,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'goalie_shootout_stats'" id="goalie_shootout_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'goalie_shootout_stats'" id="goalie_shootout_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="goalie_shootout_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_shootout_stats'">
+    <table id="goalie_shootout_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'goalie_shootout_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -712,12 +712,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'on_ice_stats'" id="on_ice_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'on_ice_stats'" id="on_ice_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="on_ice_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'on_ice_stats'">
+    <table id="on_ice_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'on_ice_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -746,12 +746,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'on_ice_shot_stats'" id="on_ice_shot_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'on_ice_shot_stats'" id="on_ice_shot_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="on_ice_shot_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'on_ice_shot_stats'">
+    <table id="on_ice_shot_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'on_ice_shot_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -784,12 +784,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'on_ice_shot_on_goal_stats'" id="on_ice_shot_on_goal_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'on_ice_shot_on_goal_stats'" id="on_ice_shot_on_goal_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="on_ice_shot_on_goal_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'on_ice_shot_on_goal_stats'">
+    <table id="on_ice_shot_on_goal_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'on_ice_shot_on_goal_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -824,12 +824,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'on_ice_shot_stats_5v5'" id="on_ice_shot_stats_5v5" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'on_ice_shot_stats_5v5'" id="on_ice_shot_stats_5v5" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="on_ice_shot_stats_5v5" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'on_ice_shot_stats_5v5'">
+    <table id="on_ice_shot_stats_5v5" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'on_ice_shot_stats_5v5'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -861,12 +861,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'on_ice_shot_on_goal_stats_5v5'" id="on_ice_shot_on_goal_stats_5v5" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'on_ice_shot_on_goal_stats_5v5'" id="on_ice_shot_on_goal_stats_5v5" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="on_ice_shot_on_goal_stats_5v5" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'on_ice_shot_on_goal_stats_5v5'">
+    <table id="on_ice_shot_on_goal_stats_5v5" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'on_ice_shot_on_goal_stats_5v5'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -901,12 +901,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'faceoff_by_zone_stats'" id="faceoff_by_zone_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'faceoff_by_zone_stats'" id="faceoff_by_zone_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="faceoff_by_zone_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'faceoff_by_zone_stats'">
+    <table id="faceoff_by_zone_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'faceoff_by_zone_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -944,12 +944,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'faceoff_by_side_stats'" id="faceoff_by_side_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'faceoff_by_side_stats'" id="faceoff_by_side_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="faceoff_by_side_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'faceoff_by_side_stats'">
+    <table id="faceoff_by_side_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'faceoff_by_side_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -984,12 +984,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'power_play_stats'" id="power_play_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'power_play_stats'" id="power_play_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="power_play_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'power_play_stats'">
+    <table id="power_play_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'power_play_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1024,12 +1024,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'shorthanded_stats'" id="shorthanded_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'shorthanded_stats'" id="shorthanded_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="shorthanded_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'shorthanded_stats'">
+    <table id="shorthanded_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'shorthanded_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1062,12 +1062,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'game_score_stats'" id="game_score_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'game_score_stats'" id="game_score_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="game_score_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'game_score_stats'">
+    <table id="game_score_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'game_score_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1102,12 +1102,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'top_game_scores_per_game'" id="top_game_scores_per_game" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_top_game_scores" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'top_game_scores_per_game'" id="top_game_scores_per_game" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_top_game_scores" ctrl="ctrl"></player-stats-table>
 
-    <table id="top_game_scores_per_game" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow mt-3" data-ng-if="tableSelect == 'top_game_scores_per_game'">
+    <table id="top_game_scores_per_game" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow mt-3" data-ng-if="ctrl.tableSelect == 'top_game_scores_per_game'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1137,12 +1137,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'bottom_game_scores_per_game'" id="bottom_game_scores_per_game" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_bottom_game_scores" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'bottom_game_scores_per_game'" id="bottom_game_scores_per_game" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_bottom_game_scores" ctrl="ctrl"></player-stats-table>
 
-    <table id="bottom_game_scores_per_game_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow mt-3" data-ng-if="tableSelect == 'bottom_game_scores_per_game'">
+    <table id="bottom_game_scores_per_game_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow mt-3" data-ng-if="ctrl.tableSelect == 'bottom_game_scores_per_game'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1172,12 +1172,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'time_on_ice_shift_stats'" id="time_on_ice_shift_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'time_on_ice_shift_stats'" id="time_on_ice_shift_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="time_on_ice_shift_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'time_on_ice_shift_stats'">
+    <table id="time_on_ice_shift_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'time_on_ice_shift_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1213,12 +1213,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'per_game_stats'" id="per_game_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'per_game_stats'" id="per_game_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="per_game_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'per_game_stats'">
+    <table id="per_game_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'per_game_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1252,12 +1252,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'per_60_stats'" id="per_60_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'per_60_stats'" id="per_60_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="per_60_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'per_60_stats'">
+    <table id="per_60_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'per_60_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1291,11 +1291,11 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'basic_stats'" id="basic_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
-    <!-- <table id="basic_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'basic_stats'">
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'basic_stats'" id="basic_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <!-- <table id="basic_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'basic_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1330,12 +1330,12 @@
         </tbody>
     </table> -->
 
-    <player-stats-table data-ng-if="tableSelect == 'basic_stats_5v5'" id="basic_stats_5v5" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'basic_stats_5v5'" id="basic_stats_5v5" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="basic_stats_5v5" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'basic_stats_5v5'">
+    <table id="basic_stats_5v5" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'basic_stats_5v5'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1370,12 +1370,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'player_information'" id="player_information" stats-cols="stats_cols[tableSelect]" filtered-player-stats="personal_data" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'player_information'" id="player_information" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="personal_data" ctrl="ctrl"></player-stats-table>
     
-    <table id="player_information" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'player_information'">
+    <table id="player_information" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'player_information'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1407,12 +1407,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'on_goal_shot_zones'" id="on_goal_shot_zones" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'on_goal_shot_zones'" id="on_goal_shot_zones" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="on_goal_shot_zones" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'on_goal_shot_zones'">
+    <table id="on_goal_shot_zones" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'on_goal_shot_zones'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1447,12 +1447,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'shot_zones'" id="shot_zones" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'shot_zones'" id="shot_zones" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="shot_zones" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'shot_zones'">
+    <table id="shot_zones" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'shot_zones'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1487,12 +1487,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'goalie_stats'" id="goalie_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'goalie_stats'" id="goalie_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="goalie_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_stats'">
+    <table id="goalie_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'goalie_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1527,7 +1527,7 @@
         </tbody>
     </table>
 
-    <div class="alert alert-info main-bg shadow" data-ng-if="tableSelect == 'goalie_against_avg_stats'">
+    <div class="alert alert-info main-bg shadow" data-ng-if="ctrl.tableSelect == 'goalie_against_avg_stats'">
         <table id="league_wide_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small" >
             <tbody>
                 <tr>
@@ -1540,12 +1540,12 @@
         </table>
     </div>
 
-    <player-stats-table data-ng-if="tableSelect == 'goalie_against_avg_stats'" id="goalie_against_avg_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'goalie_against_avg_stats'" id="goalie_against_avg_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="goalie_against_avg_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_against_avg_stats'">
+    <table id="goalie_against_avg_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'goalie_against_avg_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1580,12 +1580,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'goalie_stats_ev'" id="goalie_stats_ev" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'goalie_stats_ev'" id="goalie_stats_ev" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="goalie_stats_ev" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_stats_ev'">
+    <table id="goalie_stats_ev" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'goalie_stats_ev'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1619,12 +1619,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'goalie_stats_sh'" id="goalie_stats_sh" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'goalie_stats_sh'" id="goalie_stats_sh" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="goalie_stats_sh" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_stats_sh'">
+    <table id="goalie_stats_sh" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'goalie_stats_sh'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1658,12 +1658,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'goalie_stats_pp'" id="goalie_stats_pp" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'goalie_stats_pp'" id="goalie_stats_pp" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="goalie_stats_pp" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_stats_pp'">
+    <table id="goalie_stats_pp" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'goalie_stats_pp'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1697,12 +1697,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'goalie_zone_stats_near'" id="goalie_zone_stats_near" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'goalie_zone_stats_near'" id="goalie_zone_stats_near" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="goalie_zone_stats_near" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_zone_stats_near'">
+    <table id="goalie_zone_stats_near" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'goalie_zone_stats_near'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1736,12 +1736,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'goalie_zone_stats_far'" id="goalie_zone_stats_far" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'goalie_zone_stats_far'" id="goalie_zone_stats_far" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
 
-    <table id="goalie_zone_stats_far" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_zone_stats_far'">
+    <table id="goalie_zone_stats_far" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'goalie_zone_stats_far'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1772,13 +1772,13 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'goalie_streaks'" id="goalie_streaks" stats-cols="stats_cols[tableSelect]" filtered-player-stats="goalie_streaks" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'goalie_streaks'" id="goalie_streaks" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="goalie_streaks" ctrl="ctrl"></player-stats-table>
 
-    <table id="goalie_streaks" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_streaks'">
+    <table id="goalie_streaks" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'goalie_streaks'">
         <p></p>
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1820,12 +1820,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'streaks'" id="streaks" stats-cols="stats_cols[tableSelect]" filtered-player-stats="streaks" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'streaks'" id="streaks" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="streaks" ctrl="ctrl"></player-stats-table>
 
-    <table id="streaks" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'streaks'">
+    <table id="streaks" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'streaks'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
@@ -1868,12 +1868,12 @@
         </tbody>
     </table>
 
-    <player-stats-table data-ng-if="tableSelect == 'slumps'" id="slumps" stats-cols="stats_cols[tableSelect]" filtered-player-stats="slumps" ctrl="ctrl"></player-stats-table>
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'slumps'" id="slumps" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="slumps" ctrl="ctrl"></player-stats-table>
 
-    <table id="slumps" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'slumps'">
+    <table id="slumps" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.tableSelect == 'slumps'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
+                <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[ctrl.tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
                         <span data-ng-if="!col.expl_de">{{col.col_header}}</span>

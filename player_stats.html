@@ -125,7 +125,7 @@
                 <div class="input-group-prepend w-10">
                     <span class="input-group-text w-100 justify-content-center"><i class="fa fa-search"></i></span>
                 </div>
-                <input type="text" class="form-control" placeholder="Spieler filtern" data-ng-model="nameFilter" />
+                <input type="text" class="form-control" placeholder="Spieler filtern" data-ng-model="ctrl.nameFilter" />
             </div>
 
         </div>
@@ -211,7 +211,7 @@
                 </select>
             </div>
             <div class="input-group col-2 pl-0">
-                <select class="form-control" id="positionSelect" data-ng-model="positionFilter">
+                <select class="form-control" id="positionSelect" data-ng-model="ctrl.positionFilter">
                     <option data-ng-option value selected="selected">alle Positionen</option>
                     <option data-ng-option value="GK">Torhüter</option>
                     <option data-ng-option value="DE">Verteidiger</option>
@@ -319,10 +319,11 @@
 
     </form>
 
+    <player-stats-table data-ng-if="tableSelect == 'penalty_stats'" id="penalty_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="penalty_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'penalty_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -334,7 +335,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-21">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -359,10 +360,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'shot_stats'" id="shot_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="shot_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'shot_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -374,7 +376,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-21">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -398,10 +400,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'faceoff_stats'" id="faceoff_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="faceoff_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'faceoff_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -413,7 +416,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-21">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -434,10 +437,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'goal_categories'" id="goal_categories" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="goal_categories" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goal_categories'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -449,7 +453,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-19">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -476,10 +480,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'game_categories'" id="game_categories" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="game_categories" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'game_categories'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -491,7 +496,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-13">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -516,10 +521,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'goalie_categories'" id="goalie_categories" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="goalie_categories" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_categories'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -531,7 +537,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-15">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -555,10 +561,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'game_minutes'" id="game_minutes" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="game_minutes" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'game_minutes'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -570,7 +577,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-13">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -594,10 +601,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'goals_per_period'" id="goals_per_period" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="goals_per_period" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goals_per_period'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -609,7 +617,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('goals', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('goals', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-21">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -633,10 +641,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'shootout_stats'" id="shootout_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="shootout_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'shootout_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -648,7 +657,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('so_games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('so_games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-25">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -668,10 +677,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'goalie_shootout_stats'" id="goalie_shootout_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="goalie_shootout_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_shootout_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -683,7 +693,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:greaterThanFilter('so_games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:greaterThanFilter('so_games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-25">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -702,10 +712,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'on_ice_stats'" id="on_ice_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="on_ice_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'on_ice_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -717,7 +728,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-23">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -735,10 +746,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'on_ice_shot_stats'" id="on_ice_shot_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="on_ice_shot_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'on_ice_shot_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -750,7 +762,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-19">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -772,10 +784,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'on_ice_shot_on_goal_stats'" id="on_ice_shot_on_goal_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="on_ice_shot_on_goal_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'on_ice_shot_on_goal_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -787,7 +800,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-21">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -811,10 +824,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'on_ice_shot_stats_5v5'" id="on_ice_shot_stats_5v5" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="on_ice_shot_stats_5v5" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'on_ice_shot_stats_5v5'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -826,7 +840,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-21">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -847,10 +861,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'on_ice_shot_on_goal_stats_5v5'" id="on_ice_shot_on_goal_stats_5v5" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="on_ice_shot_on_goal_stats_5v5" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'on_ice_shot_on_goal_stats_5v5'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -862,7 +877,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-16">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -886,10 +901,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'faceoff_by_zone_stats'" id="faceoff_by_zone_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="faceoff_by_zone_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'faceoff_by_zone_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -901,7 +917,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0) | filter:greaterThanFilter('faceoffs_per_game', 8)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0) | filter:greaterThanFilter('faceoffs_per_game', 8)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-14">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -928,10 +944,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'faceoff_by_side_stats'" id="faceoff_by_side_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="faceoff_by_side_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'faceoff_by_side_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -943,7 +960,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0) | filter:greaterThanFilter('faceoffs_per_game', 8)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0) | filter:greaterThanFilter('faceoffs_per_game', 8)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-20">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -967,10 +984,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'power_play_stats'" id="power_play_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="power_play_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'power_play_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -982,7 +1000,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:greaterThanFilter('time_on_ice_pp', 0) | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:greaterThanFilter('time_on_ice_pp', 0) | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-21">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1006,10 +1024,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'shorthanded_stats'" id="shorthanded_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="shorthanded_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'shorthanded_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1021,7 +1040,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:greaterThanFilter('time_on_ice_pp', 0) | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:greaterThanFilter('time_on_ice_pp', 0) | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-19">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1043,10 +1062,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'game_score_stats'" id="game_score_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="game_score_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'game_score_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1058,7 +1078,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-21">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1082,10 +1102,11 @@
         </tbody>
     </table>
 
-    <table id="top_game_scores_per_game_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow mt-3" data-ng-if="tableSelect == 'top_game_scores_per_game'">
+    <player-stats-table data-ng-if="tableSelect == 'top_game_scores_per_game'" id="top_game_scores_per_game" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_top_game_scores" ctrl="ctrl"></player-stats-table>
+
+    <table id="top_game_scores_per_game" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow mt-3" data-ng-if="tableSelect == 'top_game_scores_per_game'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1097,8 +1118,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="game_score in filtered_top_game_scores | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{position: positionFilter} | filter:teamFilter | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:countryFilter | filter:minimumAgeFilter | filter:maximumAgeFilter">
-                <td class="w-04 text-right">{{ $index + 1 }}</td>
+            <tr data-ng-repeat="game_score in filtered_top_game_scores | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{position: ctrl.positionFilter} | filter:teamFilter | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:countryFilter | filter:minimumAgeFilter | filter:maximumAgeFilter">
+                <td class="w-04 text-right">{{ $index + 2 }}</td>
                 <td class="w-21">
                     <a href="#!/player_profile/{{season}}/{{game_score.team}}/{{game_score.player_id}}">{{ game_score.full_name }}</a>
                 </td>
@@ -1116,10 +1137,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'bottom_game_scores_per_game'" id="bottom_game_scores_per_game" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_bottom_game_scores" ctrl="ctrl"></player-stats-table>
+
     <table id="bottom_game_scores_per_game_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow mt-3" data-ng-if="tableSelect == 'bottom_game_scores_per_game'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1131,7 +1153,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="game_score in filtered_bottom_game_scores | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{position: positionFilter} | filter:teamFilter | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:countryFilter | filter:minimumAgeFilter | filter:maximumAgeFilter">
+            <tr data-ng-repeat="game_score in filtered_bottom_game_scores | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{position: ctrl.positionFilter} | filter:teamFilter | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:countryFilter | filter:minimumAgeFilter | filter:maximumAgeFilter">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-21">
                     <a href="#!/player_profile/{{season}}/{{game_score.team}}/{{game_score.player_id}}">{{ game_score.full_name }}</a>
@@ -1150,10 +1172,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'time_on_ice_shift_stats'" id="time_on_ice_shift_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="time_on_ice_shift_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'time_on_ice_shift_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1165,7 +1188,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:greaterThanFilter('time_on_ice', 0) | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter}">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:greaterThanFilter('time_on_ice', 0) | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter}">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-13">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1190,10 +1213,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'per_game_stats'" id="per_game_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="per_game_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'per_game_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1205,7 +1229,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:greaterThanFilter('time_on_ice', 0) | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter}">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:greaterThanFilter('time_on_ice', 0) | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter}">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-19">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1228,10 +1252,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'per_60_stats'" id="per_60_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="per_60_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'per_60_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1243,7 +1268,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:greaterThanFilter('time_on_ice', 0) | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter}">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:greaterThanFilter('time_on_ice', 0) | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter}">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-19">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1266,10 +1291,10 @@
         </tbody>
     </table>
 
+    <!-- <player-stats-table data-ng-if="tableSelect == 'basic_stats'" id="basic_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table> -->
     <table id="basic_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'basic_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1281,7 +1306,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter: {position: positionFilter} | filter:teamFilter | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter: {position: ctrl.positionFilter} | filter:teamFilter | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-21">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1305,10 +1330,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'basic_stats_5v5'" id="basic_stats_5v5" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="basic_stats_5v5" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'basic_stats_5v5'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1320,7 +1346,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:minimumAgeFilter | filter:maximumAgeFilter | filter: {iso_country: countryFilter} | filter: {position: positionFilter} | filter:teamFilter | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:minimumAgeFilter | filter:maximumAgeFilter | filter: {iso_country: countryFilter} | filter: {position: ctrl.positionFilter} | filter:teamFilter | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-21">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1344,10 +1370,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'player_information'" id="player_information" stats-cols="stats_cols[tableSelect]" filtered-player-stats="personal_data" ctrl="ctrl"></player-stats-table>
+    
     <table id="player_information" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'player_information'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1359,7 +1386,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="personal_data_item in personal_data | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter}">
+            <tr data-ng-repeat="personal_data_item in personal_data | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter}">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-21">
                     <a data-ng-if="personal_data_item.single_team" href="#!/player_profile/{{season}}/{{personal_data_item.team}}/{{personal_data_item.player_id}}">{{ personal_data_item.full_name }}</a>
@@ -1380,10 +1407,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'on_goal_shot_zones'" id="on_goal_shot_zones" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="on_goal_shot_zones" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'on_goal_shot_zones'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1395,7 +1423,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-21">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1419,10 +1447,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'shot_zones'" id="shot_zones" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="shot_zones" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'shot_zones'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1434,7 +1463,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-21">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1458,10 +1487,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'goalie_stats'" id="goalie_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="goalie_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1473,7 +1503,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:greaterThanFilter('toi', 0)">
+            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:greaterThanFilter('toi', 0)">
                     <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-21">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1510,10 +1540,11 @@
         </table>
     </div>
 
+    <player-stats-table data-ng-if="tableSelect == 'goalie_against_avg_stats'" id="goalie_against_avg_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="goalie_against_avg_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_against_avg_stats'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1525,7 +1556,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:greaterThanFilter('toi', 0)">
+            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:greaterThanFilter('toi', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-21">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1549,10 +1580,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'goalie_stats_ev'" id="goalie_stats_ev" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="goalie_stats_ev" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_stats_ev'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1564,7 +1596,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('toi', 0)">
+            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('toi', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-19">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1587,10 +1619,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'goalie_stats_sh'" id="goalie_stats_sh" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="goalie_stats_sh" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_stats_sh'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1602,7 +1635,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('toi', 0)">
+            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('toi', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-19">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1625,10 +1658,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'goalie_stats_pp'" id="goalie_stats_pp" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="goalie_stats_pp" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_stats_pp'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1640,7 +1674,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('toi', 0)">
+            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('toi', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-19">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1663,10 +1697,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'goalie_zone_stats_near'" id="goalie_zone_stats_near" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="goalie_zone_stats_near" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_zone_stats_near'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1678,7 +1713,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter} | filter:greaterThanFilter('toi', 0)">
+            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('toi', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-19">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1701,10 +1736,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'goalie_zone_stats_far'" id="goalie_zone_stats_far" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
+
     <table id="goalie_zone_stats_far" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_zone_stats_far'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1716,7 +1752,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter}  | filter:greaterThanFilter('toi', 0)">
+            <tr data-ng-repeat="stat in filtered_goalie_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: 'GK'} | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter}  | filter:greaterThanFilter('toi', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-19">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1736,11 +1772,12 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'goalie_streaks'" id="goalie_streaks" stats-cols="stats_cols[tableSelect]" filtered-player-stats="goalie_streaks" ctrl="ctrl"></player-stats-table>
+
     <table id="goalie_streaks" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'goalie_streaks'">
         <p></p>
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1753,7 +1790,7 @@
         </thead>
 
         <tbody>
-            <tr data-ng-repeat="streak in goalie_streaks | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:longestStreakFilter | filter:currentStreakFilter | filter:{full_name: nameFilter} | filter:streakSlumpTeamFilter | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter">
+            <tr data-ng-repeat="streak in goalie_streaks | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:longestStreakFilter | filter:currentStreakFilter | filter:{full_name: ctrl.nameFilter} | filter:streakSlumpTeamFilter | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter">
                 <td class="w-03 text-right">{{ $index + 1 }}</td>
                 <td class="w-15">
                     <a data-ng-if="!streak.sub_streaks" href="#!/player_profile/{{season}}/{{streak.display_team}}/{{streak.player_id}}">{{ streak.full_name }}</a>
@@ -1783,11 +1820,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'streaks'" id="streaks" stats-cols="stats_cols[tableSelect]" filtered-player-stats="streaks" ctrl="ctrl"></player-stats-table>
 
     <table id="streaks" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'streaks'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1800,7 +1837,7 @@
         </thead>
 
         <tbody>
-            <tr data-ng-repeat="streak in streaks | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:longestStreakFilter | filter:currentStreakFilter | filter:{type: scoringStreakTypeFilter} | filter:{full_name: nameFilter} | filter:streakSlumpTeamFilter | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter}">
+            <tr data-ng-repeat="streak in streaks | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:longestStreakFilter | filter:currentStreakFilter | filter:{type: scoringStreakTypeFilter} | filter:{full_name: ctrl.nameFilter} | filter:streakSlumpTeamFilter | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter}">
                 <td class="w-03 text-right">{{ $index + 1 }}</td>
                 <td class="w-25">
                     <a data-ng-if="!streak.sub_streaks" href="#!/player_profile/{{season}}/{{streak.display_team}}/{{streak.player_id}}">{{ streak.full_name }}</a>
@@ -1831,10 +1868,11 @@
         </tbody>
     </table>
 
+    <player-stats-table data-ng-if="tableSelect == 'slumps'" id="slumps" stats-cols="stats_cols[tableSelect]" filtered-player-stats="slumps" ctrl="ctrl"></player-stats-table>
+
     <table id="slumps" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'slumps'">
         <thead class="thead-light">
             <tr>
-                <th scope="col" class="text-center">Rang</th>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
                     <a href="" data-ng-click="$parent.sortConfig = $parent.setSortOrder(col.data_key, $parent.sortConfig)">
                         <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
@@ -1846,7 +1884,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="slump in slumps | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:longestStreakFilter | filter:currentStreakFilter | filter:{type: scoringStreakTypeFilter} | filter:{full_name: nameFilter} | filter:streakSlumpTeamFilter | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: positionFilter}">
+            <tr data-ng-repeat="slump in slumps | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:longestStreakFilter | filter:currentStreakFilter | filter:{type: scoringStreakTypeFilter} | filter:{full_name: ctrl.nameFilter} | filter:streakSlumpTeamFilter | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter}">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-32">
                     <a data-ng-if="!slump.sub_streaks" href="#!/player_profile/{{season}}/{{slump.display_team}}/{{slump.player_id}}">{{ slump.full_name }}</a>

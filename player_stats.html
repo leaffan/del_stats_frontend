@@ -114,7 +114,7 @@
             </div> -->
 
             <div class="input-group col-4 pl-0" data-ng-if="tableSelect == 'streaks' || tableSelect == 'slumps'">
-                <select class="form-control" data-ng-model="$parent.scoringStreakTypeFilter">
+                <select class="form-control" data-ng-model="ctrl.scoringStreakTypeSelect">
                     <option data-ng-option value="goals">Tore</option>
                     <option data-ng-option data-ng-if="tableSelect == 'streaks'" value="assists">Vorlagen</option>
                     <option data-ng-option value="points">Punkte</option>
@@ -1040,7 +1040,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:greaterThanFilter('time_on_ice_pp', 0) | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
+            <tr data-ng-repeat="stat in filtered_player_stats | orderBy:sortConfig['sortCriteria']:sortConfig['sortDescending'] | filter:{full_name: ctrl.nameFilter} | filter:playerStatusFilter | filter:teamFilter | filter:{position: '!GK'} | filter:greaterThanFilter('time_on_ice_sh', 0) | filter:minimumAgeFilter | filter:maximumAgeFilter | filter:countryFilter | filter:{position: ctrl.positionFilter} | filter:greaterThanFilter('games_played', 0)">
                 <td class="w-04 text-right">{{ $index + 1 }}</td>
                 <td class="w-19">
                     <a data-ng-if="stat.single_team" href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.player_id}}">{{ stat.full_name }}</a>
@@ -1291,8 +1291,8 @@
         </tbody>
     </table>
 
-    <!-- <player-stats-table data-ng-if="tableSelect == 'basic_stats'" id="basic_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table> -->
-    <table id="basic_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'basic_stats'">
+    <player-stats-table data-ng-if="tableSelect == 'basic_stats'" id="basic_stats" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+    <!-- <table id="basic_stats" class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="tableSelect == 'basic_stats'">
         <thead class="thead-light">
             <tr>
                 <th scope="col" class="text-center" data-ng-repeat="col in stats_cols[tableSelect]">
@@ -1328,7 +1328,7 @@
                 <td class="w-07 text-right">{{ stat.points_per_game.toFixed(2) }}</td>
             </tr>
         </tbody>
-    </table>
+    </table> -->
 
     <player-stats-table data-ng-if="tableSelect == 'basic_stats_5v5'" id="basic_stats_5v5" stats-cols="stats_cols[tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 

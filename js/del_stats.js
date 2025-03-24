@@ -483,11 +483,9 @@ app.directive('playerStatsTable', ['svc', function(svc) {
     return {
         restrict: 'E',         
         scope: {
-            id: '@',
             filteredPlayerStats: '=',
             statsCols: '=',
-            ctrl: '=',
-            seasonType: '='
+            ctrl: '='
         },
         templateUrl: 'custom_directives/player_stats_table.html',
         link: function(scope) {

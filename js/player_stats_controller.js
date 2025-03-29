@@ -7,9 +7,9 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
     svc.setTitle("DEL-Spielerstatistiken " + svc.getSeasonIdentifier($scope.season));
     // default table selection and sort criterion for skater page
     ctrl.tableSelect = 'basic_stats';
-    $scope.seasonTypeSelect = 'RS';
+    ctrl.seasonTypeSelect = 'RS';
     if ($scope.season == 2024) {
-        $scope.seasonTypeSelect = 'RS';
+        ctrl.seasonTypeSelect = 'PO';
     }
     ctrl.scoringStreakTypeSelect = $scope.scoringStreakTypeSelect = 'points';
     $scope.minGamesPlayed = 1;
@@ -42,7 +42,6 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
             'sortDescending': !$scope.ascendingAttrs.includes($scope.sortCriteria[$scope.tableSortCriteria[ctrl.tableSelect]][0])
         }
     });
-
 
     $scope.fromRoundSelect = '1';
     // default filter values
@@ -412,7 +411,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         is_prior_equal_to_round = !$scope.toRoundSelect || element.round <= parseFloat($scope.toRoundSelect);
         is_selected_games_back = !$scope.gamesBackSelect || element.games_back <= $scope.gamesBackSelect;
         // if seasonTypeSelect is set to "Hauptrunde und Playoffs" we just want games of these types but no pre-season games
-        is_selected_season_type = ["RS", "PO"].includes($scope.seasonTypeSelect) ? $scope.seasonTypeSelect === element.season_type : ["RS", "PO"].includes(element.season_type);
+        is_selected_season_type = ["RS", "PO"].includes(ctrl.seasonTypeSelect) ? ctrl.seasonTypeSelect === element.season_type : ["RS", "PO"].includes(element.season_type);
 
 
         // finally combining booleans of all previous tests
@@ -648,9 +647,9 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
     };
 
     ctrl.playerStatusFilter = $scope.playerStatusFilter = function(a) {
-        if (!$scope.playerStatusSelect)
+        if (!ctrl.playerStatusSelect)
             return true;
-        switch ($scope.playerStatusSelect) {
+        switch (ctrl.playerStatusSelect) {
             case 'u23':
                 if (a.u23) {
                     return true;
@@ -788,7 +787,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
     ctrl.teamFilter = $scope.teamFilter = function (a) {
         if ($scope.teamSelect) {
             if (['Nord', 'Süd', 'A', 'B'].includes($scope.teamSelect)) {
-                if ($scope.divisions[$scope.seasonTypeSelect][$scope.teamSelect] && $scope.divisions[$scope.seasonTypeSelect][$scope.teamSelect].includes(a.team)) {
+                if ($scope.divisions[ctrl.seasonTypeSelect][$scope.teamSelect] && $scope.divisions[ctrl.seasonTypeSelect][$scope.teamSelect].includes(a.team)) {
                     return true;
                 } else {
                     return false;

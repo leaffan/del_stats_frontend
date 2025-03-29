@@ -96,7 +96,7 @@
             </div>
 
             <div class="input-group col-4 pl-0" data-ng-if="ctrl.tableSelect != 'streaks' && ctrl.tableSelect != 'slumps' && ctrl.tableSelect != 'goalie_streaks'">
-                <select class="form-control" data-ng-model="$parent.playerStatusSelect">
+                <select class="form-control" data-ng-model="ctrl.playerStatusSelect">
                     <option data-ng-option value selected="selected">alle Spieler</option>
                     <option data-ng-option value="u23">U23-Spieler</option>
                     <option data-ng-option value="u20">U20-Spieler</option>
@@ -105,7 +105,7 @@
             </div>
 
             <!-- <div class="input-group col-3 pl-0" data-ng-if="ctrl.tableSelect == 'streaks' || ctrl.tableSelect == 'slumps'">
-                <select class="form-control" data-ng-model="$parent.playerStatusSelect">
+                <select class="form-control" data-ng-model="ctrl.playerStatusSelect">
                     <option data-ng-option value selected="selected">alle Spieler</option>
                     <option data-ng-option value="u23">U23-Spieler</option>
                     <option data-ng-option value="u20">U20-Spieler</option>
@@ -131,7 +131,7 @@
         </div>
         <div class="form-row mb-1" data-ng-if="ctrl.tableSelect != 'streaks' && ctrl.tableSelect != 'slumps' && ctrl.tableSelect != 'goalie_streaks' && ctrl.tableSelect != 'player_information'">
             <div class="col-3">
-                <select class="form-control" data-ng-model="$parent.seasonTypeSelect">
+                <select class="form-control" data-ng-model="ctrl.seasonTypeSelect">
                     <option data-ng-if="season == 2020" data-ng-option value="MSC">MagentaSport Cup</option>
                     <option data-ng-option value="RS" selected="selected">Hauptrunde</option>
                     <option data-ng-option value="PO">Playoffs</option>
@@ -204,10 +204,10 @@
                     <option data-ng-option value selected="selected">alle Teams</option>
                     <option data-ng-option data-ng-repeat="team in teams" value="{{team.abbr}}">{{team.full_name}}</option>
                     <option data-ng-if="season == 2020" data-ng-option>-----------</option>
-                    <option data-ng-if="season == 2020 && seasonTypeSelect == 'RS'" data-ng-option value="Nord">Gruppe Nord</option>
-                    <option data-ng-if="season == 2020 && seasonTypeSelect == 'RS'" data-ng-option value="Süd">Gruppe Süd</option>
-                    <option data-ng-if="season == 2020 && seasonTypeSelect == 'MSC'" data-ng-option value="A">Gruppe A</option>
-                    <option data-ng-if="season == 2020 && seasonTypeSelect == 'MSC'" data-ng-option value="B">Gruppe B</option>
+                    <option data-ng-if="season == 2020 && ctrl.seasonTypeSelect == 'RS'" data-ng-option value="Nord">Gruppe Nord</option>
+                    <option data-ng-if="season == 2020 && ctrl.seasonTypeSelect == 'RS'" data-ng-option value="Süd">Gruppe Süd</option>
+                    <option data-ng-if="season == 2020 && ctrl.seasonTypeSelect == 'MSC'" data-ng-option value="A">Gruppe A</option>
+                    <option data-ng-if="season == 2020 && ctrl.seasonTypeSelect == 'MSC'" data-ng-option value="B">Gruppe B</option>
                 </select>
             </div>
             <div class="input-group col-2 pl-0">

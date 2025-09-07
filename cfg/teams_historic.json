@@ -7,6 +7,14 @@
         "id": 22
     },
     {
+        "abbr": "DRE",
+        "url_name": "dresdner-eisloewen",
+        "full_name": "Dresdner Eislöwen",
+        "location": "Dresden",
+        "active": true,
+        "id": 62
+    },
+    {
         "abbr": "AEV",
         "url_name": "augsburger-panther",
         "full_name": "Augsburger Panther",
@@ -35,7 +43,7 @@
         "url_name": "duesseldorfer-eg",
         "full_name": "Düsseldorfer EG",
         "location": "Düsseldorf",
-        "active": true,
+        "active": false,
         "id": 4
     },
     {

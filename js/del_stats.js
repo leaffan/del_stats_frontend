@@ -1,7 +1,7 @@
 let app = angular.module('delStatsApp', ['ngResource', 'ngRoute', 'ngStorage', 'moment-picker', 'angularMoment'])
 
 app.constant('config', {
-    defaultSeason: 2024,
+    defaultSeason: 2025,
 });
 
 // main application configuration

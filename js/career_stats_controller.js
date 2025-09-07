@@ -58,6 +58,7 @@ app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'c
         $scope.players = res.data;
         let all_hands = new Set($scope.players.map(player => player['hand']));
         let all_countries = new Set($scope.players.map(player => player['country'].split(", ")).flat());
+        $scope.most_recent_season = Math.max(...$scope.players.map(player => player['last_season']));
         $http.get('./cfg/iso_countries.json').then(function (res) {
             let country_mapping = res.data;
             $scope.display_countries = []
@@ -117,7 +118,9 @@ app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'c
     $scope.filterPlayer = function(player) {
         if (!['skater_career_stats', 'goalie_career_stats'].includes($scope.table_type) && player['position'].includes('G'))
             return false;
-        if ($scope.show_only_active && player['last_season'] != config.defaultSeason)
+        if ($scope.show_only_active && config.defaultSeason == $scope.most_recent_season && player['last_season'] != config.defaultSeason)
+            return false;
+        if ($scope.show_only_active && config.defaultSeason != $scope.most_recent_season && player['last_season'] != config.defaultSeason - 1)
             return false;
         if ($scope.position) {
             if ($scope.position == 'DE' && !player['position'].includes('D'))
@@ -169,7 +172,7 @@ app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'c
 
     $scope.preparePlayer = function(player) {
         return {
-            'player_id': player['last_season'] < config.defaultSeason ? 'g' + player['g_id'] : player['c_id'], 
+            'player_id': player['last_season'] < config.defaultSeason && config.defaultSeason == $scope.most_recent_season ? 'g' + player['g_id'] : player['c_id'], 
             'first_name': player['first_name'],
             'last_name': player['last_name'],
             'position': player['position'],

@@ -634,7 +634,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
     }
 
     ctrl.goalieFilter = function(a) {
-        if (['player_information'].includes(ctrl.tableSelect)) {
+        if (['player_information', 'basic_stats', 'bottom_game_scores_per_game', 'top_game_scores_per_game'].includes(ctrl.tableSelect)) {
             return true;
         }
         if (ctrl.tableSelect.startsWith('goalie') && a.position == 'GK') {

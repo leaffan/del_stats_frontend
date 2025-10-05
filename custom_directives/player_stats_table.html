@@ -95,13 +95,21 @@
                 {{ svc.getShutouts(stat) }}
             </span> 
 
-            <span data-ng-if="col.data_key == 'iso_country'" class="flag-icon flag-icon-{{ stat.iso_country }}"></span>            
+            <span data-ng-if="col.data_key == 'iso_country'" class="flag-icon flag-icon-{{ stat.iso_country }}"></span>
 
             <span data-ng-if="col.data_key == 'date_of_birth'">
                 {{ stat.date_of_birth | date : 'yyyy-MM-dd' }}
             </span>
 
-            <span data-ng-if="!(['rank', 'last_name', 'team', 'game_id', 'type', 'multi_season', 'next_goal_timestamp', 'last_goal_timestamp', 'shoots', 'total_so', 'iso_country', 'date_of_birth'].includes(col.data_key))">
+            <span data-ng-if="col.data_key == 'weight'">
+                {{ stat.weight }} kg
+            </span>
+
+            <span data-ng-if="col.data_key == 'height'">
+                {{ stat.height }} cm
+            </span>
+
+            <span data-ng-if="!(['rank', 'last_name', 'team', 'game_id', 'type', 'multi_season', 'next_goal_timestamp', 'last_goal_timestamp', 'shoots', 'total_so', 'iso_country', 'date_of_birth', 'weight', 'height'].includes(col.data_key))">
                 {{ col.valid_to && ctrl.season > col.valid_to ? '-' : col.valid_from && ctrl.season < col.valid_from ? '-' : col.time ? (col.factor ? svc.formatTime(stat[col.data_key] * col.factor): svc.formatTime(stat[col.data_key])) : col.fixed ? stat[col.data_key].toFixed(col.fixed) : stat[col.data_key] }}
                 {{ !col.pctg ? '' : stat[col.data_key] != undefined ? '%' : '-' }}
             </span>

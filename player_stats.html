@@ -331,6 +331,10 @@
             </tbody>
         </table>
     </div>
+    
+    <div class="alert alert-info main-bg shadow" data-ng-if="ctrl.tableSelect == 'faceoff_stats'">
+        <span>Angezeigt werden nur Spieler mit durchschnittlich mindestens acht Bullies pro Spiel.</span>
+    </div>
 
     <player-stats-table data-ng-if="ctrl.tableSelect == 'basic_stats'" id="basic_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 

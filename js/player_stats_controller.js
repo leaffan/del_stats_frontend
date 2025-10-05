@@ -98,7 +98,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
 
     // starting to watch filter selection lists
     $scope.$watchGroup([
-        'tableSelect', 'homeAwaySelect', 'seasonTypeSelect', 'fromRoundSelect', 'toRoundSelect', 'weekdaySelect', 'gamesBackSelect'
+        'tableSelect', 'homeAwaySelect', 'ctrl.seasonTypeSelect', 'fromRoundSelect', 'toRoundSelect', 'weekdaySelect', 'gamesBackSelect'
     ], function (newValue, oldValue) {
         if ($scope.player_games && !ctrl.tableSelect.includes('goalie')) {
             $scope.filtered_player_stats = $scope.filterStats();
@@ -411,7 +411,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         is_prior_equal_to_round = !$scope.toRoundSelect || element.round <= parseFloat($scope.toRoundSelect);
         is_selected_games_back = !$scope.gamesBackSelect || element.games_back <= $scope.gamesBackSelect;
         // if seasonTypeSelect is set to "Hauptrunde und Playoffs" we just want games of these types but no pre-season games
-        is_selected_season_type = ["RS", "PO"].includes(ctrl.seasonTypeSelect) ? ctrl.seasonTypeSelect === element.season_type : ["RS", "PO"].includes(element.season_type);
+        is_selected_season_type = ["RS", "PO", "MSC"].includes(ctrl.seasonTypeSelect) ? ctrl.seasonTypeSelect === element.season_type : ["RS", "PO"].includes(element.season_type);
 
 
         // finally combining booleans of all previous tests

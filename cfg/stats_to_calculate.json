@@ -112,6 +112,12 @@
     ],
     "career_goalie_stats_to_calculate": [
         {
+            "name": "sv_pctg_5v5",
+            "type": "from_100_percentage",
+            "value": "ga_5v5",
+            "base": "sa_5v5"
+        },
+        {
             "name": "sv_pctg",
             "type": "from_100_percentage",
             "value": "ga",
@@ -156,6 +162,12 @@
         }
     ],
     "goalie_stats_to_calculate": [
+        {
+            "name": "sv_pctg_5v5",
+            "type": "from_100_percentage",
+            "value": "ga_5v5",
+            "base": "sa_5v5"
+        },
         {
             "name": "sv_pctg",
             "type": "from_100_percentage",

@@ -41,7 +41,6 @@
                     <option data-ng-if="!player_stats.position.startsWith('G')" data-ng-option value="skater_career_stats">Basisstatistiken</option>
                     <option data-ng-if="!player_stats.position.startsWith('G') && player_stats.last_season > 2017" data-ng-option value="skater_toi_shift_stats">Eiszeiten/Wechsel (seit 2018/19)</option>
                     <option data-ng-if="!player_stats.position.startsWith('G') && player_stats.last_season > 2017" data-ng-option value="skater_additional_stats">Zusatzstatistiken (seit 2018/19)</option>
-                    <option data-ng-if="player_stats.position.startsWith('G') && player_stats.last_season > 2017" data-ng-option value="goalie_toi_shift_stats">Goalie-Eiszeiten/Wechsel (seit 2018/19)</option>
                     <option data-ng-if="player_stats.position.startsWith('G') && player_stats.last_season > 2017" data-ng-option value="goalie_additional_stats">Goalie-Zusatzstatistiken (seit 2018/19)</option>
                 </select>
             </div>
@@ -107,5 +106,7 @@
     <player-career-table id="skater_toi_shift_stats" pid="player_stats.c_id" stats-cols="stats_cols['skater_toi_shift_stats']" filtered-seasons="filtered_seasons" ctrl="ctrl" season-type="season_type" data-ng-if="table_select == 'skater_toi_shift_stats'"></player-career-table>
     <!-- skater additional career stats -->
     <player-career-table id="skater_additional_stats" pid="player_stats.c_id" stats-cols="stats_cols['skater_additional_stats']" filtered-seasons="filtered_seasons" ctrl="ctrl" season-type="season_type" data-ng-if="table_select == 'skater_additional_stats'"></player-career-table>
+    <!-- goalie additional career stats -->
+    <player-career-table id="goalie_additional_stats" pid="player_stats.c_id" stats-cols="stats_cols['goalie_additional_stats']" filtered-seasons="filtered_seasons" ctrl="ctrl" season-type="season_type" data-ng-if="table_select == 'goalie_additional_stats'"></player-career-table>
 
 </div>

@@ -68,5 +68,20 @@
         {"data_key": "sv_pctg", "col_header": "SV%", "expl_de": "Fangquote", "expl_en": "Save Percentage", "fixed": 1, "pctg": true, "width": 8, "valid_from": 1999, "base_value": "sa", "part_value": "ga"},
         {"data_key": "gaa", "col_header": "GAA", "expl_de": "Gegentorschnitt", "expl_en": "Goals Against Average", "fixed": 2, "width": 8, "valid_from": 1999, "base_value": "sog", "part_value": "g", "rate_parameter": true},
         {"data_key": "total_so", "col_header": "SO", "expl_de": "Shutouts (Shutouts bei Niederlagen im Penaltyschießen)", "expl_en": "Shutouts (Shutouts in Shootout Losses)", "sortable": true, "width": 6}
+    ],
+    "goalie_additional_stats": [
+        {"data_key": "season", "col_header": "Saison", "expl_de": null, "expl_en": null, "sortable": true, "width": 6, "align": "center"},
+        {"data_key": "age", "col_header": "Alter", "expl_de": null, "expl_en": null, "sortable": false, "width": 4},
+        {"data_key": "c", "col_header": null, "expl_de": null, "expl_en": null, "sortable": false, "width": 3, "align": "center"},
+        {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null, "width": 7, "align": "left"},
+        {"data_key": "season_type", "col_header": "Phase", "expl_de": null, "expl_en": null, "width": 6, "align": "left"},
+        {"data_key": "gp", "col_header": "GP", "expl_de": "Spiele", "expl_en": "Games Played", "width": 6},
+        {"data_key": "g", "col_header": "G", "expl_de": "Tore", "expl_en": "Goals", "width": 6},
+        {"data_key": "a", "col_header": "A", "expl_de": "Vorlagen", "expl_en": "Assists", "width": 6},
+        {"data_key": "pts", "col_header": "P", "expl_de": "Punkte", "expl_en": "Points", "width": 6},
+        {"data_key": "pim", "col_header": "PIM", "expl_de": "Strafminuten", "expl_en": "Penalties in Minutes", "width": 6},
+        {"data_key": "sa_5v5", "col_header": "SA 5v5", "expl_de": "Abzuwehrende Torschüsse im 5-gegen-5", "expl_en": "Shots Against 5v5", "sortable": true, "width": 6},
+        {"data_key": "ga_5v5", "col_header": "GA 5v5", "expl_de": "Gegentore im 5-gegen-5", "expl_en": "Goals Against 5v5", "sortable": true, "width": 6},
+        {"data_key": "sv_pctg_5v5", "col_header": "SV% 5v5", "expl_de": "Fangquote im 5-gegen-5", "expl_en": "Save Percentage 5v5", "fixed": 1, "pctg": true, "width": 8}
     ]
 }

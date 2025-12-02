@@ -4,7 +4,7 @@
         <tr
             data-ng-if="!$parent.season.partial ? true : show_partial_seasons"
             class="{{season.partial ? 'table-info light' : season.season_type == 'RS' ? 'table-info' : 'table-warning'}}"
-            data-ng-repeat="season in filteredSeasons | filter:ctrl.partialSeasonFilter | orderBy:ctrl.sortConfig['sortCriteria']:ctrl.sortConfig['sortDescending']"
+            data-ng-repeat="season in filteredSeasons | filter:ctrl.additionalToiStatsFilter | filter:ctrl.partialSeasonFilter | orderBy:ctrl.sortConfig['sortCriteria']:ctrl.sortConfig['sortDescending']"
         >
             <td
                 ng-repeat="col in statsCols"

@@ -150,11 +150,11 @@ app.controller('playerCareerController', function ($scope, $http, $routeParams, 
         let statsToAggregate = [];
         let statsToCalculate = [];
         if ($scope.player_stats.position.startsWith('G')) {
-            statsToAggregate = ctrl.statsToAggregate['career_goalie_stats_to_aggregate']
-            statsToCalculate = ctrl.statsToCalculate['career_goalie_stats_to_calculate']
+            statsToAggregate = ctrl.statsToAggregate['career_goalie_stats_to_aggregate'];
+            statsToCalculate = ctrl.statsToCalculate['career_goalie_stats_to_calculate'];
         } else {
-            statsToAggregate = ctrl.statsToAggregate['career_skater_stats_to_aggregate']
-            statsToCalculate = ctrl.statsToCalculate['career_skater_stats_to_calculate']
+            statsToAggregate = ctrl.statsToAggregate['career_skater_stats_to_aggregate'];
+            statsToCalculate = ctrl.statsToCalculate['career_skater_stats_to_calculate'];
         }
         let playerTeams = Array.from(new Set(filteredSeasons.map(season => season.team)));
         playerTeams.forEach(team => {
@@ -298,5 +298,15 @@ app.controller('playerCareerController', function ($scope, $http, $routeParams, 
         }
     };
 
+    ctrl.additionalToiStatsFilter = function(a) {
+        if ($scope.table_select.includes('toi') || $scope.table_select.includes('additional')) {
+            if (a.season < 2018) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return true;
+    };
 
 });

@@ -254,7 +254,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
         filtered_team_stats.forEach(element => {
             // calcualting U23 team stats
             element['u23_plrs'] = element['u23_plrs'].size;
-            element['u23_shifts_per_game'] = svc.calculateRate(element['u23_shifts'], element['u23_plrs']);
+            element['u23_shifts_per_game'] = svc.calculateRate(element['u23_shifts'], element['u23_gp']);
             element['u23_toi_per_game'] = svc.calculateRate(element['u23_toi'], element['u23_gp']);
             element['u23_toi_pp_sh_per_game'] = svc.calculateRate(element['u23_toi_pp_sh'], element['u23_gp']);
             // calculating score and goal differentials

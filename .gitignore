@@ -132,3 +132,6 @@ po/*
 .ht*
 
 favicon.ico
+
+del-stats-angular/*
+del-stats-angular/node_modules/*

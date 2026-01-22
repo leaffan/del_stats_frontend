@@ -1,4 +1,4 @@
-app.controller('plrStatsController', function ($scope, $http, $window, $routeParams, $q, svc, $timeout) {
+app.controller('plrStatsController', function ($scope, $http, $window, $routeParams, svc, config) {
 
     $scope.svc = svc;
     var ctrl = this;
@@ -174,7 +174,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
     // we do so
     $http.get('data/del_players.json').then(function (res) {
         $scope.all_players = res.data;
-        $http.get('data/' + $scope.season + '/del_player_game_stats.csv').then($scope.preProcessData);
+        $http.get(config.cloudfrontBaseUrl + $scope.season + '/del_player_game_stats.csv').then($scope.preProcessData);
         $http.get('data/' + $scope.season + '/del_goalie_game_stats.json').then(function (res) {
             $scope.goalie_games = res.data;
             $scope.prep_goalie_stats = $scope.prepareGoalieStats($scope.goalie_games);

@@ -2,6 +2,7 @@ let app = angular.module('delStatsApp', ['ngResource', 'ngRoute', 'ngStorage', '
 
 app.constant('config', {
     defaultSeason: 2025,
+    cloudfrontBaseUrl: 'https://d1fqr5y2lyjylu.cloudfront.net/data/'
 });
 
 // main application configuration

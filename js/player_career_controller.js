@@ -175,6 +175,8 @@ app.controller('playerCareerController', function ($scope, $http, $routeParams, 
                     statsToAggregate.forEach(parameter => {
                         teamCareer[parameter] = teamSeasons.reduce((param, season) => {return param + (season[parameter] || 0);}, 0);
                     });
+                    teamCareer['ga_post_1998'] = teamSeasons.filter(season => season.season >= 1998).reduce((ga_sum, season) => {return ga_sum + (season.ga || 0);}, 0);
+                    teamCareer['sa_post_1998'] = teamSeasons.filter(season => season.season >= 1998).reduce((sa_sum, season) => {return sa_sum + (season.sa || 0);}, 0);
                 } else {
                     let teamTypeSeasons = teamSeasons.filter(season => season.season_type == seasonType);
                     teamCareer['no_of_seasons'] = new Set(teamTypeSeasons.map(season => season.season)).size;
@@ -182,6 +184,8 @@ app.controller('playerCareerController', function ($scope, $http, $routeParams, 
                     statsToAggregate.forEach(parameter => {
                         teamCareer[parameter] = teamTypeSeasons.reduce((param, season) => {return param + (season[parameter] || 0);}, 0);
                     });
+                    teamCareer['ga_post_1998'] = teamTypeSeasons.filter(season => season.season >= 1998 && season.season_type == seasonType).reduce((ga_sum, season) => {return ga_sum + (season.ga || 0);}, 0);
+                    teamCareer['sa_post_1998'] = teamTypeSeasons.filter(season => season.season >= 1998 && season.season_type == seasonType).reduce((sa_sum, season) => {return sa_sum + (season.sa || 0);}, 0);
                 };
 
                 $scope.svc.calculateDerivedStats(teamCareer, statsToCalculate);
@@ -215,10 +219,14 @@ app.controller('playerCareerController', function ($scope, $http, $routeParams, 
                 statsToAggregate.forEach(parameter => {
                     seasonTypeCareer[parameter] = filteredSeasons.reduce((param, season) => {return param + (season[parameter] || 0);}, 0);
                 })
+                seasonTypeCareer['ga_post_1998'] = filteredSeasons.filter(season => season.season >= 1998).reduce((ga_sum, season) => {return ga_sum + (season.ga || 0);}, 0);
+                seasonTypeCareer['sa_post_1998'] = filteredSeasons.filter(season => season.season >= 1998).reduce((sa_sum, season) => {return sa_sum + (season.sa || 0);}, 0);
             } else {
                 statsToAggregate.forEach(parameter => {
                     seasonTypeCareer[parameter] = filteredSeasons.filter(season => season.season_type == seasonType).reduce((param, season) => {return param + (season[parameter] || 0);}, 0);
                 })
+                seasonTypeCareer['ga_post_1998'] = filteredSeasons.filter(season => season.season >= 1998 && season.season_type == seasonType).reduce((ga_sum, season) => {return ga_sum + (season.ga || 0);}, 0);
+                seasonTypeCareer['sa_post_1998'] = filteredSeasons.filter(season => season.season >= 1998 && season.season_type == seasonType).reduce((sa_sum, season) => {return sa_sum + (season.sa || 0);}, 0);
             }
             $scope.svc.calculateDerivedStats(seasonTypeCareer, statsToCalculate);
             careers[seasonType] = seasonTypeCareer;

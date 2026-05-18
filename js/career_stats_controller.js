@@ -224,6 +224,8 @@ app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'c
                     })
                     if (filtered_stat_line['season'] > 1998)
                         filtered_stat_line['g_post_1998'] = filtered_stat_line['g'];
+                        filtered_stat_line['ga_post_1998'] = filtered_stat_line['ga'];
+                        filtered_stat_line['sa_post_1998'] = filtered_stat_line['sa'];
                     svc.calculateDerivedStats(filtered_stat_line, stats_to_calculate);
                     filtered_player_season_stats.push(filtered_stat_line);
                 });
@@ -304,6 +306,8 @@ app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'c
                 filtered_stat_line[parameter] = player_seasons.reduce((param, season) => {return param + (season[parameter] || 0);}, 0);
             })
             filtered_stat_line['g_post_1998'] = player_seasons.filter(season => season.season > 1998).reduce((param, season) => {return param + (season['g'] || 0);}, 0);
+            filtered_stat_line['ga_post_1998'] = player_seasons.filter(season => season.season > 1998).reduce((param, season) => {return param + (season['ga'] || 0);}, 0);
+            filtered_stat_line['sa_post_1998'] = player_seasons.filter(season => season.season > 1998).reduce((param, season) => {return param + (season['sa'] || 0);}, 0);
             svc.calculateDerivedStats(filtered_stat_line, stats_to_calculate);
             filtered_stat_line['championships'] = player_seasons.filter(season => season.c == 1).length;
             filtered_stat_line['teams'] = Array.from(filtered_stat_line['teams']);

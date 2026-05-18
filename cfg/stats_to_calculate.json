@@ -120,8 +120,8 @@
         {
             "name": "sv_pctg",
             "type": "from_100_percentage",
-            "value": "ga",
-            "base": "sa"
+            "value": "ga_post_1998",
+            "base": "sa_post_1998"
         },
         {
             "name": "gaa",

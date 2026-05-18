@@ -66,7 +66,7 @@
         {"data_key": "sa", "col_header": "SA", "expl_de": "Abzuwehrende Torschüsse", "expl_en": "Shots Against", "sortable": true, "width": 6},
         {"data_key": "ga", "col_header": "GA", "expl_de": "Gegentore", "expl_en": "Goals Against", "sortable": true, "width": 6},
         {"data_key": "sv_pctg", "col_header": "SV%", "expl_de": "Fangquote", "expl_en": "Save Percentage", "fixed": 1, "pctg": true, "width": 8, "valid_from": 1999, "base_value": "sa", "part_value": "ga"},
-        {"data_key": "gaa", "col_header": "GAA", "expl_de": "Gegentorschnitt", "expl_en": "Goals Against Average", "fixed": 2, "width": 8, "valid_from": 1999, "base_value": "sog", "part_value": "g", "rate_parameter": true},
+        {"data_key": "gaa", "col_header": "GAA", "expl_de": "Gegentorschnitt", "expl_en": "Goals Against Average", "fixed": 2, "width": 8, "base_value": "toi", "part_value": "g", "rate_parameter": true},
         {"data_key": "total_so", "col_header": "SO", "expl_de": "Shutouts (Shutouts bei Niederlagen im Penaltyschießen)", "expl_en": "Shutouts (Shutouts in Shootout Losses)", "sortable": true, "width": 6}
     ],
     "goalie_additional_stats": [

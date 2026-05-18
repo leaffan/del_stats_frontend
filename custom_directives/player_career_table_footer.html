@@ -15,7 +15,7 @@
         </th>
     </tr>
     <tr
-        data-ng-if="team_season['gp'] > 0"
+        data-ng-if="team_season['gp'] > 0 || team_season['championships'] > 0"
         data-ng-repeat="team_season in ctrl.filtered_seasons_by_team | filter:{season_type: seasonType} | orderBy:ctrl.teamSeasonSortConfig['sortCriteria']:ctrl.teamSeasonSortConfig['sortDescending']"
         class="{{ (seasonType == 'RS') ? 'table-info' : (seasonType == 'PO') ? 'table-warning' : '' }}"
     >
@@ -30,8 +30,18 @@
             data-ng-repeat="col in statsCols.slice(5)"
             class="w-{{ svc.pad(col.width, 2) }} text-{{ col.align ? col.align : 'right' }}"
         >
-            {{ col.time ? svc.formatTime(team_season[col.data_key]) : col.fixed ? team_season[col.data_key].toFixed(col.fixed) : team_season[col.data_key] }}
-            {{ col.pctg ? ' %' : '' }}
+            <span data-ng-if="col.data_key == 'gaa'">
+                {{ team_season[col.base_value] > 0 ? team_season[col.data_key].toFixed(col.fixed) : '-' }}                    
+            </span>
+
+            <span data-ng-if="col.data_key == 'sv_pctg'">
+                {{ team_season[col.base_value] > 0 ? team_season[col.data_key].toFixed(col.fixed) + ' %' : '-' }}                    
+            </span>
+
+            <span data-ng-if="!['gaa', 'sv_pctg'].includes(col.data_key)">
+                {{ col.time ? svc.formatTime(team_season[col.data_key]) : col.fixed ? team_season[col.data_key].toFixed(col.fixed) : team_season[col.data_key] }}
+                {{ col.pctg ? ' %' : '' }}
+            </span>
             <span data-ng-if="col.valid_from && ctrl.from_season < col.valid_from && ctrl.first_season < col.valid_from" title="Ohne Daten vor {{ svc.getSeasonIdentifier(col.valid_from) }}">*</span>
         </td>
     </tr>
@@ -52,6 +62,14 @@
         >
             <b>
                 {{
+                    ctrl.career_values[seasonType][col.data_key] == null
+                    ?
+                        '-'
+                    :
+                    col.base_value && ctrl.career_values[seasonType][col.base_value] == 0
+                    ?
+                        '-'
+                    :
                     col.time
                     ?
                         svc.formatTime(ctrl.career_values[seasonType][col.data_key])

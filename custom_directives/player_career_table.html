@@ -29,11 +29,16 @@
                     {{ season[col.data_key] == season['so'] ? season[col.data_key] : season[col.data_key] + ' (' + season['sl_so'] + ')' }}                    
                 </span>
 
-                <span data-ng-if="col.data_key == 'gaa'">
+                <span data-ng-if="['gaa', 'gpg', 'apg', 'ptspg'].includes(col.data_key)">
                     {{ season[col.base_value] > 0 ? season[col.data_key].toFixed(col.fixed) : '-' }}                    
                 </span>
 
-                <span data-ng-if="!(['gaa', 'season', 'c', 'team', 'season_type', 'total_so'].includes(col.data_key))">
+                <span data-ng-if="['sh_pctg'].includes(col.data_key)">
+                    {{ season[col.base_value] > 0 ? season[col.data_key].toFixed(col.fixed) + ' %' : '-' }}                    
+                </span>
+
+
+                <span data-ng-if="!(['gaa', 'gpg', 'apg', 'ptspg', 'sh_pctg', 'season', 'c', 'team', 'season_type', 'total_so'].includes(col.data_key))">
                     {{ col.valid_from && season.season < col.valid_from ? '-' : col.time ? svc.formatTime(season[col.data_key]) : col.fixed ? season[col.data_key].toFixed(col.fixed) : season[col.data_key] }}
                     {{ col.valid_from && season.season < col.valid_from ? '' : col.pctg ? (season[col.base_value] > 0 ? ' %' : '-') : '' }}
                 </span>

@@ -612,25 +612,6 @@ app.directive('previewSectionHeader', ['svc', function(svc) {
     }
 }]);
 
-app.directive('previewGameLogTable', ['svc', function(svc) {
-    return {
-        restrict: 'E',         
-        scope: {
-            statsCols: '=',
-            ctrl: '=',
-            tableTopic: '=',
-            displayStats: '=',
-            po: '=',
-            filter: '=',
-            limit: '='
-        },
-        templateUrl: 'custom_directives/preview_game_log_table.html',
-        link: function(scope) {
-            scope.svc = svc;
-        }
-    }
-}]);
-
 app.directive('playerInformation', ['svc', function(svc) {
     return {
         restrict: 'E',

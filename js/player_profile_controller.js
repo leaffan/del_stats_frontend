@@ -14,9 +14,10 @@ app.controller('plrProfileController', function($scope, $http, $routeParams, $lo
         $scope.stats_cols = res.data;
     });
 
-    // retrieving players
-    $http.get('./data/del_players.json').then(function (res) {
-        $scope.players = res.data;
+    $http.get('data/' + $scope.season + '/del_player_personal_data.json').then(function (res) {
+        $scope.last_modified = res.data[0];
+        $scope.personal_data = res.data[1];
+        $scope.current_player_data = $scope.personal_data.find(player => player.player_id == $scope.player_id);
     });
 
     // loading player ids with portraits

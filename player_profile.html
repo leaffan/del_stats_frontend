@@ -4,47 +4,15 @@
         <a href="#!"><b>Startseite</b></a>  | <a href="#!/team_stats/{{season}}"><b>Teamstatistiken</b></a> | <a href="#!/del_stats/{{season}}"><b>Spielerstatistiken</b></a> | <a href="#!/player_career/{{player_id}}"><b>Karriereverlauf</b></a> 
     </div>
 
-    <div class="alert alert-info main-bg shadow">
-        <div class="row align-items-center ml-1">
-            <h2 data-ng-if="player_name"><b><a href="https://www.eliteprospects.com/player/{{players[player_id].ep_id}}">{{ player_name}}</a></b> ({{ model.team }}) {{ svc.getSeasonIdentifier(season) }}&#160;</h2>
-            <span data-ng-repeat="iso_country in players[player_id].iso_country.split(', ')" class="ml-2">
-                <span class="flag-icon flag-icon-{{ iso_country }}"></span>
-            </span>
-
-            <span class="ml-2"><a href="https://www.eliteprospects.com/player/{{players[player_id].ep_id}}"><img height="20px" src="img/ep_icon.png" /></a></span>
-            <span class="ml-2" data-ng-if="player_stats[0].u23"><img class="test" height="20px" src="img/u23.png" /></span>
-            <span class="ml-2" data-ng-if="player_stats[0].u20"><img class="test" height="20px" src="img/u20.png" /></span>
-            <span class="ml-2" data-ng-if="player_stats[0].rookie"><img class="test" height="20px" src="img/rookie.png" /></span>
-        </div>
-        <div class="inline-headers row ml-1">
-            <div data-ng-if="hasPortrait" class="col-md-1 p-0 ml-0 mr-2">
-                <span><img height="90px" width="90px" ng-src="po/{{season}}/{{player_id}}.png" alt="{{player_name}} - Mit freundlicher Genehmigung der City-Press GmbH Bildagentur" title="{{player_name}} - Mit freundlicher Genehmigung der City-Press GmbH Bildagentur"/></span>
-            </div>
-            <div class="col-md-5 ml-0 p-0">
-                <ul class="list-group list-group-horizontal my-1">
-                    <li class="col-6 list-group-item border-0 bg-transparent p-0"><b>Geburtsdatum:</b> {{ player_stats[0].date_of_birth | date: 'dd.MM.yyyy' }}</li>
-                    <li data-ng-if="season == 2025" class="col-6 list-group-item border-0 bg-transparent p-0"><b>Alter:</b> {{ players[player_id].age.toFixed(3) }}</li>
-                    <li data-ng-if="season < 2025" class="col-6 list-group-item border-0 bg-transparent p-0"><b>Alter:</b> {{ svc.parseFloat(season) - svc.parseFloat(player_stats[0].date_of_birth | date: 'yyyy') }}</li>
-                </ul>
-                <ul class="list-group list-group-horizontal my-1">
-                    <li class="col-6 list-group-item border-0 bg-transparent p-0"><b>Größe:</b> {{player_stats[0].height }} cm</li>
-                    <li class="col-6 list-group-item border-0 bg-transparent p-0"><b>Gewicht:</b> {{player_stats[0].weight }} kg</li>
-                </ul>
-                <ul class="list-group list-group-horizontal my-1">
-                    <li class="col-6 list-group-item border-0 bg-transparent p-0"><b>Position:</b> {{player_stats[0].position.includes('D') ? 'Verteidiger' : player_stats[0].position.startsWith('G') ? 'Torhüter' : 'Stürmer'}}</li>
-                    <li class="col-6 list-group-item border-0 bg-transparent p-0"><b>Stockhand:</b> {{player_stats[0].shoots === 'left' ? 'links' : player_stats[0].shoots === 'right' ? 'rechts' : ''}}</li>
-                </ul>
-            </div>
-            <div class="col-md-1">
-                <svg data-ng-if="player_id != null" svg class="mt-1" viewbox="0 0 60 80">
-                    <rect x="0" y="0" height="80" width="60" stroke-width="0" fill="{{ colors[0] }}"></rect>
-                    <rect x="7" y="7" height="66" width="46" stroke-width="0" fill="{{ colors[1] }}"></rect>
-                    <text class="jersey" x="50%" y="50" height="40" fill="{{ colors[2] }}" font-size="3em" text-anchor="middle">{{ mainNumber }}</text>
-                </svg>
-            </div>
-        </div>        
-    
-    </div>
+    <player-information
+        current-player-data="current_player_data"
+        model="model"
+        season="season"
+        player-id="player_id"
+        has-portrait="hasPortrait"
+        colors="colors"
+        main-number="mainNumber">
+    </player-information>
 
     <div class="alert alert-info main-bg shadow">
         <span data-ng-click="toggle=!toggle"><b>Abkürzungsverzeichnis&#32;&#32;<span data-ng-show="toggle" class="fa fa-minus"></span><span data-ng-show="!toggle" class="fa fa-plus"></span></b></span>

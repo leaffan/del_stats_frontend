@@ -1,0 +1,38 @@
+<div class="alert alert-info main-bg shadow" id="player_information">
+    <div class="row align-items-center ml-1">
+        <h2 class="mb-0" data-ng-if="currentPlayerData"><b><a href="https://www.eliteprospects.com/player/{{currentPlayerData.ep_id}}">{{ currentPlayerData.full_name }}</a></b> ({{ model.team }}) {{ svc.getSeasonIdentifier(season) }}&#160;</h2>
+        <span data-ng-repeat="iso_country in currentPlayerData.iso_country.split(', ')" class="ml-2">
+            <span class="flag-icon flag-icon-{{ iso_country }}" style="width: 27px; height: 20px; vertical-align: middle;"></span>
+        </span>
+
+        <span class="ml-2"><a href="https://www.eliteprospects.com/player/{{currentPlayerData.ep_id}}"><img height="20px" src="img/ep_icon.png" alt="Elite Prospects Player Profile" title="Elite Prospects Player Profile" /></a></span>
+        <span class="ml-2" data-ng-if="currentPlayerData.u23"><img class="test" height="20px" src="img/u23.png" title="U23-Spieler" alt="U23-Spieler" /></span>
+        <span class="ml-2" data-ng-if="currentPlayerData.u20"><img class="test" height="20px" src="img/u20.png" title="U20-Spieler" alt="U20-Spieler" /></span>
+        <span class="ml-2" data-ng-if="currentPlayerData.rookie"><img class="test" height="20px" src="img/rookie.png" title="Rookie" alt="Rookie" /></span>
+    </div>
+    <div class="inline-headers row ml-1 align-items-start mt-2">
+        <div data-ng-if="hasPortrait" class="col-auto p-0 ml-0 mr-3 order-1">
+            <img height="90" width="90" ng-src="po/{{season}}/{{currentPlayerData.player_id}}.png" alt="{{ currentPlayerData.full_name }} - Mit freundlicher Genehmigung der City-Press GmbH Bildagentur" title="{{ currentPlayerData.full_name }} - Mit freundlicher Genehmigung der City-Press GmbH Bildagentur"/>
+        </div>
+        <div class="col-12 col-md ml-0 p-0 order-3 order-md-2">
+            <ul class="list-group list-group-horizontal-sm my-1">
+                <li class="col-12 col-sm-5 list-group-item border-0 bg-transparent p-0"><b>Geburtsdatum:</b> {{ currentPlayerData.date_of_birth | date: 'dd.MM.yyyy' }}</li>
+                <li class="col-12 col-sm-3 list-group-item border-0 bg-transparent p-0"><b>Größe:</b> {{ currentPlayerData.height }} cm</li>
+                <li class="col-12 col-sm-4 list-group-item border-0 bg-transparent p-0"><b>Position:</b> {{ currentPlayerData.position.includes('D') ? 'Verteidiger' : currentPlayerData.position.startsWith('G') ? 'Torhüter' : 'Stürmer'}}</li>
+            </ul>
+            <ul class="list-group list-group-horizontal-sm my-1">
+                <li data-ng-if="season == 2025" class="col-12 col-sm-5 list-group-item border-0 bg-transparent p-0"><b>Alter:</b> {{ svc.calculateAge(currentPlayerData.date_of_birth) }}</li>
+                <li data-ng-if="season < 2025" class="col-12 col-sm-5 list-group-item border-0 bg-transparent p-0"><b>Alter:</b> {{ svc.parseFloat(season) - svc.parseFloat(currentPlayerData.date_of_birth | date: 'yyyy') }}</li>
+                <li class="col-12 col-sm-3 list-group-item border-0 bg-transparent p-0"><b>Gewicht:</b> {{ currentPlayerData.weight }} kg</li>
+                <li class="col-12 col-sm-4 list-group-item border-0 bg-transparent p-0"><b>{{ currentPlayerData.position.includes('G') ? 'Fang' : 'Stock' }}hand:</b> {{currentPlayerData.shoots === 'left' ? 'links' : currentPlayerData.shoots === 'right' ? 'rechts' : ''}}</li>
+            </ul>
+        </div>
+        <div class="col-auto order-2 order-md-3">
+            <svg data-ng-if="currentPlayerData.player_id != null" svg class="mt-1" viewbox="0 0 60 80" width="60" height="80">
+                <rect x="0" y="0" height="80" width="60" stroke-width="0" fill="{{ colors[0] }}"></rect>
+                <rect x="7" y="7" height="66" width="46" stroke-width="0" fill="{{ colors[1] }}"></rect>
+                <text class="jersey" x="50%" y="50" height="40" fill="{{ colors[2] }}" font-size="3em" text-anchor="middle">{{ mainNumber }}</text>
+            </svg>
+        </div>
+    </div>
+</div>

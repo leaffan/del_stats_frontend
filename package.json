@@ -6,7 +6,7 @@
     "scripts": {
         "format": "prettier --write README.md CONTRIBUTING.md package.json package-lock.json .prettierrc.json .github/workflows/ci.yml",
         "format:check": "prettier --check README.md CONTRIBUTING.md package.json package-lock.json .prettierrc.json .github/workflows/ci.yml",
-        "check": "npm run format:check"
+        "check": "pnpm run format:check"
     },
     "repository": {
         "type": "git",

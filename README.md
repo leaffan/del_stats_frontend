@@ -38,7 +38,7 @@ pnpm install --frozen-lockfile
 pnpm check
 ```
 
-At the moment, the CI intentionally checks only the core repository and workflow files with Prettier. This keeps the setup small, understandable, and easy to port to `del_stats_frontend_ext`.
+At the moment, the CI intentionally checks only the core repository and workflow files with Prettier. The workflow in `.github/workflows/ci.yml` uses Node.js 22 together with pnpm and runs on pushes and pull requests. This keeps the setup small, understandable, and easy to port.
 
 The GitHub Action is located at `.github/workflows/ci.yml` and runs on pushes and pull requests.
 

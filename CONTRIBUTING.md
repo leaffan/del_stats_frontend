@@ -20,4 +20,4 @@ This repository is a public subset of `del_stats_frontend_ext`. Changes should t
 
 ## Validation
 
-This repository has a small standardized tooling baseline with `pnpm install --frozen-lockfile` and `pnpm check`. At the moment, it intentionally covers only the core repository and workflow files via Prettier. If additional validation is useful for a change, describe it clearly in the pull request.
+This repository has a small standardized tooling baseline with `pnpm install --frozen-lockfile` and `pnpm check`. The CI workflow in `.github/workflows/ci.yml` uses Node.js 22 with pnpm and currently validates only the core repository and workflow files via Prettier. If additional validation is useful for a change, describe it clearly in the pull request.

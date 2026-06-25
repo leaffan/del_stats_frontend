@@ -29,6 +29,19 @@ python3 -m http.server 8000
 
 Danach kann die Anwendung unter `http://localhost:8000/index.html` geöffnet werden.
 
+## Tooling und CI
+
+Für erste reproduzierbare Repository-Checks ist eine kleine Node-basierte Tooling-Schicht vorhanden.
+
+```bash
+npm ci
+npm run check
+```
+
+Derzeit prüft die CI bewusst nur die zentralen Repository- und Workflow-Dateien per Prettier. Das hält die Einführung klein, nachvollziehbar und leicht in `del_stats_frontend_ext` übertragbar. Die Abdeckung kann später schrittweise auf weitere Dateien erweitert werden.
+
+Die GitHub-Action liegt unter `.github/workflows/ci.yml` und läuft bei Pushes und Pull Requests.
+
 ## Datenhinweise
 
 - Das Repository enthält nicht alle laufzeitrelevanten Daten im Git-Tracking.

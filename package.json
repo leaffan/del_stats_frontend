@@ -1,0 +1,25 @@
+{
+  "name": "del_stats_frontend",
+  "version": "1.0.0",
+  "description": "Öffentliches Frontend für DEL-Hockeystatistiken. Das Repository enthält ein statisches AngularJS-Frontend zur Darstellung von Spieler-, Team- und Karrieredaten.",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write README.md CONTRIBUTING.md package.json package-lock.json .prettierrc.json .github/workflows/ci.yml",
+    "format:check": "prettier --check README.md CONTRIBUTING.md package.json package-lock.json .prettierrc.json .github/workflows/ci.yml",
+    "check": "npm run format:check"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leaffan/del_stats_frontend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leaffan/del_stats_frontend/issues"
+  },
+  "homepage": "https://github.com/leaffan/del_stats_frontend#readme",
+  "devDependencies": {
+    "prettier": "^3.8.4"
+  }
+}

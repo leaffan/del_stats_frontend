@@ -4,8 +4,8 @@
     "description": "Öffentliches Frontend für DEL-Hockeystatistiken. Das Repository enthält ein statisches AngularJS-Frontend zur Darstellung von Spieler-, Team- und Karrieredaten.",
     "private": true,
     "scripts": {
-        "format": "prettier --write README.md CONTRIBUTING.md package.json package-lock.json .prettierrc.json .github/workflows/ci.yml",
-        "format:check": "prettier --check README.md CONTRIBUTING.md package.json package-lock.json .prettierrc.json .github/workflows/ci.yml",
+        "format": "prettier --write README.md CONTRIBUTING.md package.json pnpm-lock.yaml .prettierrc.json .github/workflows/ci.yml",
+        "format:check": "prettier --check README.md CONTRIBUTING.md package.json pnpm-lock.yaml .prettierrc.json .github/workflows/ci.yml",
         "check": "pnpm run format:check"
     },
     "repository": {

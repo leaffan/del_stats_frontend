@@ -20,4 +20,4 @@ Dieses Repository ist ein öffentliches Subset von `del_stats_frontend_ext`. Än
 
 ## Validierung
 
-Derzeit ist im Repository keine standardisierte Build-, Lint- oder Test-Pipeline eingecheckt. Änderungen sollten daher mindestens auf offensichtliche Konsistenz geprüft werden, ohne die bestehende Laufzeitstruktur unnötig zu verändern.
+Für das Repository gibt es eine kleine standardisierte Tooling-Basis mit `npm ci` und `npm run check`. Aktuell deckt sie bewusst nur die zentralen Repository- und Workflow-Dateien per Prettier ab. Weitergehende Lint-, Build- oder Test-Prüfungen können später schrittweise ergänzt werden.

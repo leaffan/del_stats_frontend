@@ -34,8 +34,8 @@ You can then open the application at `http://localhost:8000/index.html`.
 A small Node-based tooling layer is available for initial reproducible repository checks.
 
 ```bash
-npm ci
-npm run check
+pnpm install --frozen-lockfile
+pnpm check
 ```
 
 At the moment, the CI intentionally checks only the core repository and workflow files with Prettier. This keeps the setup small, understandable, and easy to port to `del_stats_frontend_ext`.

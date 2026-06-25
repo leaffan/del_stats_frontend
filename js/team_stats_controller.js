@@ -1,4 +1,4 @@
-app.controller('teamStatsController', function($scope, $http, $routeParams, $q, svc) {
+app.controller('teamStatsController', function($scope, $http, $routeParams, $q, svc, config) {
 
     $scope.svc = svc;
     var ctrl = this;
@@ -11,7 +11,7 @@ app.controller('teamStatsController', function($scope, $http, $routeParams, $q, 
     // setting default table selection and sort keys and criteria/order
     $scope.tableSelect = 'standings';
     $scope.seasonTypeSelect = 'RS';
-    if ($scope.season == 2025) {
+    if ($scope.season == config.defaultSeason) {
         $scope.seasonTypeSelect = 'PO';
     }
     $scope.gamesBackSelect = '';

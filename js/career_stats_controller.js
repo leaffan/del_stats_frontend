@@ -28,12 +28,12 @@ app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'c
     });
 
     // loading sort criteria for displayed tables
-    $http.get('./js/sort_criteria_tables.json').then(function (res) {
+    $http.get('./cfg/sort_criteria_tables.json').then(function (res) {
         ctrl.tableSortCriteria = res.data;
     });
 
     // loading sort criteria for player stats
-    $http.get('./js/sort_criteria_players.json').then(function (res) {
+    $http.get('./cfg/sort_criteria_players.json').then(function (res) {
         ctrl.sortCriteria = res.data;
     });
 

@@ -8,7 +8,7 @@ app.controller('playerCareerController', function ($scope, $http, $routeParams, 
     $scope.show_partial_seasons = true;
 
     // loading sort criteria for player stats
-    $http.get('./js/sort_criteria_players.json').then(function (res) {
+    $http.get('./cfg/sort_criteria_players.json').then(function (res) {
         ctrl.sortCriteria = res.data;
         // defining default sort configuration, consisting of...
         ctrl.sortConfig = {

@@ -6,7 +6,8 @@
     "scripts": {
         "format": "prettier --write README.md CONTRIBUTING.md package.json pnpm-lock.yaml .prettierrc.json .github/workflows/ci.yml",
         "format:check": "prettier --check README.md CONTRIBUTING.md package.json pnpm-lock.yaml .prettierrc.json .github/workflows/ci.yml",
-        "check": "pnpm run format:check"
+        "validate:routes": "node scripts/validate-routes.js",
+        "check": "pnpm run format:check && pnpm run validate:routes"
     },
     "repository": {
         "type": "git",

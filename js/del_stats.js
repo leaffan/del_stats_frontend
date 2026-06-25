@@ -5,6 +5,16 @@ app.constant('config', {
     cloudfrontBaseUrl: 'https://d1fqr5y2lyjylu.cloudfront.net/data/'
 });
 
+app.factory('cfgLoader', ['$http', function ($http) {
+    return {
+        statsToAggregate:    function () { return $http.get('./cfg/stats_to_aggregate.json',    {cache: true}); },
+        statsToCalculate:    function () { return $http.get('./cfg/stats_to_calculate.json',    {cache: true}); },
+        teamsHistoric:       function () { return $http.get('./cfg/teams_historic.json',         {cache: true}); },
+        sortCriteriaPlayers: function () { return $http.get('./cfg/sort_criteria_players.json',  {cache: true}); },
+        sortCriteriaTables:  function () { return $http.get('./cfg/sort_criteria_tables.json',   {cache: true}); }
+    };
+}]);
+
 // main application configuration
 
 app.config(['$routeProvider', function($routeProvider){

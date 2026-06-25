@@ -1,4 +1,4 @@
-app.controller('playerCareerController', function ($scope, $http, $routeParams, svc) {
+app.controller('playerCareerController', function ($scope, $http, $routeParams, svc, cfgLoader) {
 
     let ctrl = this;
     $scope.svc = svc;
@@ -8,7 +8,7 @@ app.controller('playerCareerController', function ($scope, $http, $routeParams, 
     $scope.show_partial_seasons = true;
 
     // loading sort criteria for player stats
-    $http.get('./cfg/sort_criteria_players.json').then(function (res) {
+    cfgLoader.sortCriteriaPlayers().then(function (res) {
         ctrl.sortCriteria = res.data;
         // defining default sort configuration, consisting of...
         ctrl.sortConfig = {
@@ -28,12 +28,12 @@ app.controller('playerCareerController', function ($scope, $http, $routeParams, 
     });
 
     // loading list of stats to be aggregated
-    $http.get('./cfg/stats_to_aggregate.json').then(function (res) {
+    cfgLoader.statsToAggregate().then(function (res) {
         ctrl.statsToAggregate = res.data;
     });
 
     // loading criteria to calculate stats
-    $http.get('./cfg/stats_to_calculate.json').then(function (res) {
+    cfgLoader.statsToCalculate().then(function (res) {
         ctrl.statsToCalculate = res.data;
     });
 
@@ -43,7 +43,7 @@ app.controller('playerCareerController', function ($scope, $http, $routeParams, 
     });
 
     // loading all (including historic) teams
-    $http.get('./cfg/teams_historic.json').then(function (res) {
+    cfgLoader.teamsHistoric().then(function (res) {
         $scope.teams = res.data;
         // creating lookup from team abbreviation to full team name
         $scope.team_full_name_lookup = $scope.teams.reduce((o, key) => Object.assign(o, {[key.abbr]: key.full_name}), {});

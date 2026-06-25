@@ -23,7 +23,7 @@
 Da es sich um ein statisches Frontend handelt, reicht ein einfacher lokaler Webserver:
 
 ```bash
-cd /home/runner/work/del_stats_frontend/del_stats_frontend
+cd del_stats_frontend
 python3 -m http.server 8000
 ```
 
@@ -53,4 +53,4 @@ Um Änderungen zwischen dem öffentlichen und dem privaten Repository nachvollzi
 
 ## Beitragen
 
-Siehe `/home/runner/work/del_stats_frontend/del_stats_frontend/CONTRIBUTING.md`.
+Siehe `CONTRIBUTING.md`.

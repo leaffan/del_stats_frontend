@@ -47,13 +47,6 @@ app.config(['$routeProvider', function($routeProvider){
             controller: 'teamProfileController as ctrl',
             reloadOnSearch: false
         })
-        .when('/career_stats_old',
-        {
-            title: 'Karrierestatistiken',
-            templateUrl: 'career_stats_old.html',
-            controller: 'careerStatsControllerOld as ctrl',
-            reloadOnSearch: false
-        })
         .when('/career_stats',
         {
             title: 'Karrierestatistiken',

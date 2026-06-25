@@ -20,4 +20,23 @@ This repository is a public subset of `del_stats_frontend_ext`. Changes should t
 
 ## Validation
 
-This repository has a small standardized tooling baseline with `pnpm install --frozen-lockfile` and `pnpm check`. The CI workflow in `.github/workflows/ci.yml` uses Node.js 22 with pnpm and currently validates only the core repository and workflow files via Prettier. If additional validation is useful for a change, describe it clearly in the pull request.
+This repository has a small standardized tooling baseline with `pnpm install --frozen-lockfile` and `pnpm check`.
+
+### Local checks
+
+A pre-commit hook automatically formats staged files with Prettier before each commit (via `husky` and `lint-staged`). This ensures consistent formatting without manual steps.
+
+Run validation locally:
+
+```bash
+pnpm check
+```
+
+This runs:
+
+- `format:check` — Prettier formatting validation
+- `validate:routes` — Verifies that all defined routes have corresponding template files
+
+### CI workflow
+
+The CI workflow in `.github/workflows/ci.yml` uses Node.js 22 with pnpm and runs `pnpm check` on every push and pull request. If additional validation is useful for a change, describe it clearly in the pull request.

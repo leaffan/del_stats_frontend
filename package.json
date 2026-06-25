@@ -7,7 +7,12 @@
         "format": "prettier --write README.md CONTRIBUTING.md package.json pnpm-lock.yaml .prettierrc.json .github/workflows/ci.yml",
         "format:check": "prettier --check README.md CONTRIBUTING.md package.json pnpm-lock.yaml .prettierrc.json .github/workflows/ci.yml",
         "validate:routes": "node scripts/validate-routes.js",
-        "check": "pnpm run format:check && pnpm run validate:routes"
+        "check": "pnpm run format:check && pnpm run validate:routes",
+        "prepare": "husky install"
+    },
+    "lint-staged": {
+        "*.{md,json,yml,yaml}": "prettier --write",
+        "*.js": "prettier --write"
     },
     "repository": {
         "type": "git",
@@ -21,6 +26,8 @@
     },
     "homepage": "https://github.com/leaffan/del_stats_frontend#readme",
     "devDependencies": {
+        "husky": "^9.1.7",
+        "lint-staged": "^17.0.8",
         "prettier": "^3.8.4"
     }
 }

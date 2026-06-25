@@ -71,20 +71,6 @@ app.config(['$routeProvider', function($routeProvider){
             controller: 'playerCareerController as ctrl',
             reloadOnSearch: false
         })
-        .when('/skater_career/:player_id',
-        {
-            title: 'Karriereverlauf',
-            templateUrl: 'skater_career.html',
-            controller: 'skaterCareerController as ctrl',
-            reloadOnSearch: false
-        })
-        .when('/goalie_career/:player_id',
-        {
-            title: 'Karriereverlauf',
-            templateUrl: 'goalie_career.html',
-            controller: 'goalieCareerController as ctrl',
-            reloadOnSearch: false
-        })
         .otherwise({
             redirectTo: '/home'
         })
@@ -566,55 +552,6 @@ app.directive('tableHeader', ['svc', function(svc) {
     }
 }]);
 
-app.directive('previewTableHeader', ['svc', function(svc) {
-    return {
-        restrict: 'A',
-        scope: {
-            statsCols: '=',
-            ctrl: '=',
-            tableTopic: '=',
-            noRank: '='
-        },
-        templateUrl: 'custom_directives/preview_table_header.html',
-        link: function(scope) {
-            scope.svc = svc;
-        }
-    }
-}]);
-
-app.directive('previewHomeRoadSwitch', ['svc', function(svc) {
-    return {
-        restrict: 'E',
-        scope: {
-            // statsCols: '=',
-            ctrl: '=',
-            periods: '='
-        },
-        templateUrl: 'custom_directives/preview_home_road_switch.html',
-        link: function(scope) {
-            scope.svc = svc;
-        }
-    }
-}]);
-
-app.directive('previewSectionHeader', ['svc', function(svc) {
-    return {
-        restrict: 'E',
-        scope: {
-            ctrl: '=',
-            sectionId: '=',
-            sectionTitle: '=',
-            po: '=',
-            minGames: '=',
-            team: '='
-        },
-        templateUrl: 'custom_directives/preview_section_header.html',
-        link: function(scope) {
-            scope.svc = svc;
-        }
-    }
-}]);
-
 app.directive('playerInformation', ['svc', function(svc) {
     return {
         restrict: 'E',
@@ -628,28 +565,6 @@ app.directive('playerInformation', ['svc', function(svc) {
             mainNumber: '='
         },
         templateUrl: 'custom_directives/player_information.html',
-        link: function(scope) {
-            scope.svc = svc;
-        }
-    }
-}]);
-
-app.directive('previewTeamTable', ['svc', function(svc) {
-    return {
-        restrict: 'E',         
-        scope: {
-            // id: '@',
-            // pid: '=',
-            // filteredSeasons: '=',
-            statsCols: '=',
-            ctrl: '=',
-            tableTopic: '=',
-            displayStats: '=',
-            po: '=',
-            filter: '=',
-            limit: '='
-        },
-        templateUrl: 'custom_directives/preview_team_table.html',
         link: function(scope) {
             scope.svc = svc;
         }

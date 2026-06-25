@@ -61,16 +61,11 @@ test('My new flow', async ({ page }) => {
 
 ## Test Data
 
-Tests require the `data/` directory to be populated with season data files. Without data:
+Tests are designed to run gracefully with or without the `data/` directory populated:
 
-- Tests will gracefully skip or test page structure
-- CI tests run with `continue-on-error: true` to avoid blocking builds
+- **With data:** Tests verify page rendering, table loading, navigation, and configuration file access
+- **Without data (CI environment):** Tests verify page structure and that JavaScript errors are not thrown
+    - Network 404 errors for missing data files are expected and ignored
+    - Only real JavaScript errors (unhandled exceptions, ReferenceErrors, etc.) cause test failures
 
-## CI Integration
-
-Tests run automatically on:
-
-- Every push to the repository
-- Every pull request
-
-If test data is unavailable (e.g., in CI environment), tests skip gracefully and don't block CI.
+This design allows tests to run reliably in CI without requiring a full data backup.

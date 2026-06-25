@@ -105,11 +105,6 @@ venv.bak/
 
 # user-defined stuff
 */.ht*
-frontend/*.csv
-frontend/*.json
-frontend/index.php
-frontend/data/*
-frontend/data_bak/*
 .vscode
 
 angular-animate.min.js

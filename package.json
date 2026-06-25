@@ -1,7 +1,7 @@
 {
     "name": "del_stats_frontend",
     "version": "1.0.0",
-    "description": "Öffentliches Frontend für DEL-Hockeystatistiken. Das Repository enthält ein statisches AngularJS-Frontend zur Darstellung von Spieler-, Team- und Karrieredaten.",
+    "description": "Public frontend for DEL hockey statistics. Contains a static AngularJS frontend for presenting player, team, and career data.",
     "private": true,
     "scripts": {
         "format": "prettier --write README.md CONTRIBUTING.md package.json pnpm-lock.yaml .prettierrc.json .github/workflows/ci.yml",

@@ -37,6 +37,31 @@ This runs:
 - `format:check` — Prettier formatting validation
 - `validate:routes` — Verifies that all defined routes have corresponding template files
 
+### End-to-End Tests
+
+Critical user flows can be tested with Playwright. Tests verify that pages load correctly, navigation works, and configuration files are accessible.
+
+**Run tests locally:**
+
+```bash
+pnpm test
+```
+
+This starts a local HTTP server (requires `data/` directory populated) and runs all tests in `tests/`.
+
+**Interactive test development:**
+
+```bash
+pnpm test:ui      # Opens Playwright Inspector for debugging
+pnpm test:debug   # Run with verbose output
+```
+
+**Test results:**
+
+- HTML report: `playwright-report/index.html` (open in browser after test run)
+- Test files located in `tests/` directory
+- Add new flows to `tests/core-flows.spec.js` or create new test files
+
 ### CI workflow
 
-The CI workflow in `.github/workflows/ci.yml` uses Node.js 22 with pnpm and runs `pnpm check` on every push and pull request. If additional validation is useful for a change, describe it clearly in the pull request.
+The CI workflow in `.github/workflows/ci.yml` uses Node.js 22 with pnpm and runs `pnpm check` on every push and pull request. End-to-end tests are run separately to avoid blocking CI if test data is unavailable.

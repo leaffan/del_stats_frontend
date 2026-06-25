@@ -133,3 +133,8 @@ del-stats-angular/node_modules/*
 
 # Node-based repository tooling
 node_modules/
+
+# Playwright test results
+test-results/
+playwright-report/
+.auth/

@@ -7,6 +7,9 @@ settings:
 importers:
     .:
         devDependencies:
+            '@playwright/test':
+                specifier: ^1.61.1
+                version: 1.61.1
             husky:
                 specifier: ^9.1.7
                 version: 9.1.7
@@ -18,6 +21,14 @@ importers:
                 version: 3.8.4
 
 packages:
+    '@playwright/test@1.61.1':
+        resolution:
+            {
+                integrity: sha512-8nKv6+0RJSL9FE4jYOEGXnPeM/Hg12qZpmqzZjRh3qM0Y7c3z1mrOTfFLids72RDQYVh9WpLEfR5WdpNX4fkig==,
+            }
+        engines: { node: '>=18' }
+        hasBin: true
+
     ansi-escapes@7.3.0:
         resolution:
             {
@@ -71,6 +82,14 @@ packages:
             {
                 integrity: sha512-mlsTRyGaPBjPedk6Bvw+aqbsXDtoAyAzm5MO7JgU+yVRyMQ5O8bD4Kcci7BS85f93veegeCPkL8R4GLClnjLFw==,
             }
+
+    fsevents@2.3.2:
+        resolution:
+            {
+                integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==,
+            }
+        engines: { node: ^8.16.0 || ^10.6.0 || >=11.0.0 }
+        os: [darwin]
 
     get-east-asian-width@1.6.0:
         resolution:
@@ -136,6 +155,22 @@ packages:
                 integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==,
             }
         engines: { node: '>=12' }
+
+    playwright-core@1.61.1:
+        resolution:
+            {
+                integrity: sha512-h7Qlt6m4REp25qvIdvbDtVmD4LqVXfpRxhORv9L0jzETM05p4fuPJ3dKyuSXQxDSbXnmS79HAgi9589lGSpLkg==,
+            }
+        engines: { node: '>=18' }
+        hasBin: true
+
+    playwright@1.61.1:
+        resolution:
+            {
+                integrity: sha512-DWnY5o3YbLWK4GovuAVwpqL+1VwGNdUGrRr++8j8PtQQzvAVZUIMjKQ90fY689sEJZJBbZVw1rXaOKSTitkzPQ==,
+            }
+        engines: { node: '>=18' }
+        hasBin: true
 
     prettier@3.8.4:
         resolution:
@@ -237,6 +272,10 @@ packages:
         hasBin: true
 
 snapshots:
+    '@playwright/test@1.61.1':
+        dependencies:
+            playwright: 1.61.1
+
     ansi-escapes@7.3.0:
         dependencies:
             environment: 1.1.0
@@ -259,6 +298,9 @@ snapshots:
     environment@1.1.0: {}
 
     eventemitter3@5.0.4: {}
+
+    fsevents@2.3.2:
+        optional: true
 
     get-east-asian-width@1.6.0: {}
 
@@ -300,6 +342,14 @@ snapshots:
             mimic-function: 5.0.1
 
     picomatch@4.0.4: {}
+
+    playwright-core@1.61.1: {}
+
+    playwright@1.61.1:
+        dependencies:
+            playwright-core: 1.61.1
+        optionalDependencies:
+            fsevents: 2.3.2
 
     prettier@3.8.4: {}
 

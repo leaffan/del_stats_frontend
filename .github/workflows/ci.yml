@@ -31,3 +31,31 @@ jobs:
 
             - name: Run repository checks
               run: pnpm check
+
+    tests:
+        runs-on: ubuntu-latest
+        continue-on-error: true
+
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v6
+
+            - name: Set up pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 10
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: 22
+                  cache: pnpm
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Install Playwright browsers
+              run: npx playwright install --with-deps
+
+            - name: Run end-to-end tests
+              run: pnpm test

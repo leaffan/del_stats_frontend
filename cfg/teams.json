@@ -353,7 +353,7 @@
         },
         "valid_from": 1994,
         "valid_to": 2025,
-        "colors": ["#FFFFFF", "#000000", "#FFFFFF"],
+        "colors": ["#E2001A", "#0A183C", "#FFFFFF"],
         "msc_2020": false
     },
     {

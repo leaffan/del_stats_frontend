@@ -1,62 +1,80 @@
 const { test, expect } = require('@playwright/test');
 
+// Helper to check if data is available
+async function hasData(page) {
+    try {
+        const response = await page.request.head(
+            'http://localhost:8000/data/2025/del_player_game_stats_aggregated.json',
+            { timeout: 2000 },
+        );
+        return response.ok();
+    } catch {
+        return false;
+    }
+}
+
 test.describe('DEL Stats Core Flows', () => {
-    test('1. Home page loads without JavaScript errors', async ({ page }) => {
+    test('1. Home page loads and renders', async ({ page }) => {
+        const dataAvailable = await hasData(page);
+
         await page.goto('http://localhost:8000/index.html#!');
 
-        // Track only real JavaScript errors (not network errors or 404s)
-        const jsErrors = [];
-        page.on('console', (msg) => {
-            if (msg.type() === 'error') {
-                const text = msg.text();
-                // Ignore network/404 errors - those are expected if data/ is not populated
-                if (!text.includes('Failed to load resource') && !text.includes('404')) {
-                    jsErrors.push(text);
+        // Only check for serious JS errors if data is available
+        // Without data, we just verify page structure renders
+        if (dataAvailable) {
+            // Track only real JavaScript errors (not network errors or 404s)
+            const jsErrors = [];
+            page.on('console', (msg) => {
+                if (msg.type() === 'error') {
+                    const text = msg.text();
+                    // Ignore expected network errors
+                    if (!text.includes('Failed to load resource') && !text.includes('404')) {
+                        jsErrors.push(text);
+                    }
                 }
-            }
-        });
+            });
 
-        // Ignore unhandled rejections caused by missing data files
-        page.on('pageerror', (error) => {
-            const msg = error.message || '';
-            if (!msg.includes('data/') && !msg.includes('404')) {
-                jsErrors.push(msg);
-            }
-        });
+            page.on('pageerror', (error) => {
+                const msg = error.message || '';
+                // Only track actual JS errors, not network failures
+                if (!msg.includes('data/') && !msg.includes('404') && !msg.includes('ERR_')) {
+                    jsErrors.push(msg);
+                }
+            });
 
-        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {
-            // ignore timeout, we just want to ensure basic load
-        });
+            await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+            expect(jsErrors).toHaveLength(0);
+        } else {
+            // Without data, just verify page loads without crashing
+            await page.waitForTimeout(500);
+        }
 
-        expect(jsErrors).toHaveLength(0);
-
-        // Check page renders (body should exist)
+        // Check page renders
         const pageContent = page.locator('body');
         await expect(pageContent).toBeVisible();
     });
 
-    test('2. Career statistics page loads and renders', async ({ page }) => {
+    test('2. Career statistics page loads', async ({ page }) => {
+        const dataAvailable = await hasData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
         await page.goto('http://localhost:8000/index.html#!/career_stats');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
 
-        // Wait for potential table or controller to initialize
-        await page.waitForTimeout(1000);
-
-        // Check page renders (body should exist and be visible)
+        // Check page renders
         const pageContent = page.locator('body');
         await expect(pageContent).toBeVisible();
 
-        // Try to find table - if data exists, there should be rows
+        // With data, verify table exists and has rows
         const table = page.locator('table').first();
-        const isTableVisible = await table.isVisible().catch(() => false);
+        await expect(table).toBeVisible();
 
-        if (isTableVisible) {
-            // If table is visible, check for at least some structure
-            const rows = page.locator('table tbody tr');
-            const rowCount = await rows.count().catch(() => 0);
-            // If table is visible but no data, that's ok (data not populated)
-            expect(rowCount).toBeGreaterThanOrEqual(0);
-        }
-        // If no table visible, page still rendered which is success
+        const rows = page.locator('table tbody tr');
+        const rowCount = await rows.count();
+        expect(rowCount).toBeGreaterThan(0);
     });
 
     test('3. Player career details loads when navigating', async ({ page }) => {

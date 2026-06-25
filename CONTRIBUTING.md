@@ -1,23 +1,23 @@
 # Contributing
 
-## Ziel
+## Goal
 
-Dieses Repository ist ein öffentliches Subset von `del_stats_frontend_ext`. Änderungen sollten deshalb so erfolgen, dass sie im privaten Repository leicht nachvollzogen und bei Bedarf übernommen werden können.
+This repository is a public subset of `del_stats_frontend_ext`. Changes should therefore be made in a way that makes them easy to understand and, if needed, port to the private repository.
 
-## Grundregeln
+## Ground rules
 
-1. Änderungen klein halten und auf ein Thema begrenzen.
-2. Vorhandene Pfade, Dateinamen und Template-Strukturen nach Möglichkeit beibehalten.
-3. Keine unnötigen Umbenennungen oder großflächigen Verschiebungen durchführen.
-4. Dokumentieren, welche Dateien betroffen sind und warum die Änderung nötig ist.
+1. Keep changes small and limited to a single topic.
+2. Preserve existing paths, file names, and template structures whenever possible.
+3. Avoid unnecessary renames or large-scale moves.
+4. Document which files are affected and why the change is needed.
 
-## Praktische Hinweise
+## Practical guidance
 
-- Bevorzugt gezielte Änderungen statt breiter Umstrukturierungen
-- Bestehende AngularJS-Muster nur dann ändern, wenn der Nutzen klar ist
-- Bei öffentlichen Änderungen immer mitdenken, ob dieselbe Anpassung im privaten Superset nötig ist
-- Wenn ein Change schwer portierbar wäre, zuerst den Ansatz vereinfachen
+- Prefer targeted changes over broad restructurings.
+- Only change existing AngularJS patterns when there is a clear benefit.
+- For public changes, always consider whether the same adjustment is needed in the private superset.
+- If a change would be difficult to port, simplify the approach first.
 
-## Validierung
+## Validation
 
-Für das Repository gibt es eine kleine standardisierte Tooling-Basis mit `npm ci` und `npm run check`. Aktuell deckt sie bewusst nur die zentralen Repository- und Workflow-Dateien per Prettier ab. Weitergehende Lint-, Build- oder Test-Prüfungen können später schrittweise ergänzt werden.
+This repository has a small standardized tooling baseline with `npm ci` and `npm run check`. At the moment, it intentionally covers only the core repository and workflow files via Prettier. If additional validation is useful for a change, describe it clearly in the pull request.

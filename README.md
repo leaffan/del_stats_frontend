@@ -1,69 +1,69 @@
 # DEL Hockey Stats Frontend
 
-Öffentliches Frontend für DEL-Hockeystatistiken. Das Repository enthält ein statisches AngularJS-Frontend zur Darstellung von Spieler-, Team- und Karrieredaten.
+Public frontend for DEL hockey statistics. This repository contains a static AngularJS frontend for presenting player, team, and career data.
 
-## Projektstatus
+## Project status
 
-- Architektur: statische Single-Page-App mit AngularJS 1.7
-- Styling: Bootstrap 4, Angular Material, projektinterne CSS-Dateien
-- Datenquellen: JSON/CSV-Dateien aus `data/` sowie externe Assets
-- Besonderheit: Dieses Repository ist ein **öffentliches Subset** von `del_stats_frontend_ext`
+- Architecture: static single-page app with AngularJS 1.7
+- Styling: Bootstrap 4, Angular Material, and project-specific CSS files
+- Data sources: JSON/CSV files from `data/` as well as external assets
+- Special note: This repository is a **public subset** of `del_stats_frontend_ext`
 
-## Repository-Struktur
+## Repository structure
 
-- `/index.html` – Einstiegspunkt der Anwendung
-- `/js` – AngularJS-App, Routing und Controller
-- `/css` – Stylesheets
-- `/cfg` – Konfigurations- und Spaltendefinitionen
-- `/custom_directives` – AngularJS-Templates für wiederverwendete Tabellen und UI-Blöcke
-- `/*.html` – Routen-Templates
+- `/index.html` – application entry point
+- `/js` – AngularJS app, routing, and controllers
+- `/css` – stylesheets
+- `/cfg` – configuration and column definitions
+- `/custom_directives` – AngularJS templates for reusable tables and UI blocks
+- `/*.html` – route templates
 
-## Lokale Nutzung
+## Local usage
 
-Da es sich um ein statisches Frontend handelt, reicht ein einfacher lokaler Webserver:
+Since this is a static frontend, a simple local web server is sufficient:
 
 ```bash
 cd del_stats_frontend
 python3 -m http.server 8000
 ```
 
-Danach kann die Anwendung unter `http://localhost:8000/index.html` geöffnet werden.
+You can then open the application at `http://localhost:8000/index.html`.
 
-## Tooling und CI
+## Tooling and CI
 
-Für erste reproduzierbare Repository-Checks ist eine kleine Node-basierte Tooling-Schicht vorhanden.
+A small Node-based tooling layer is available for initial reproducible repository checks.
 
 ```bash
 npm ci
 npm run check
 ```
 
-Derzeit prüft die CI bewusst nur die zentralen Repository- und Workflow-Dateien per Prettier. Das hält die Einführung klein, nachvollziehbar und leicht in `del_stats_frontend_ext` übertragbar. Die Abdeckung kann später schrittweise auf weitere Dateien erweitert werden.
+At the moment, the CI intentionally checks only the core repository and workflow files with Prettier. This keeps the setup small, understandable, and easy to port to `del_stats_frontend_ext`.
 
-Die GitHub-Action liegt unter `.github/workflows/ci.yml` und läuft bei Pushes und Pull Requests.
+The GitHub Action is located at `.github/workflows/ci.yml` and runs on pushes and pull requests.
 
-## Datenhinweise
+## Data notes
 
-- Das Repository enthält nicht alle laufzeitrelevanten Daten im Git-Tracking.
-- Mehrere Seiten erwarten Dateien unter `data/`.
-- Änderungen an Datenexporten oder internen Datenquellen müssen mit dem privaten Repository `del_stats_frontend_ext` abgestimmt bleiben.
+- The repository does not contain all runtime-relevant data in Git tracking.
+- Several pages expect files under `data/`.
+- Changes to data exports or internal data sources must remain aligned with the private repository `del_stats_frontend_ext`.
 
-## Wartungsprinzipien
+## Maintenance principles
 
-Um Änderungen zwischen dem öffentlichen und dem privaten Repository nachvollziehbar zu halten:
+To keep changes traceable between the public and private repositories:
 
-1. Änderungen klein und thematisch klar halten.
-2. Bestehende Dateistruktur und Pfade möglichst beibehalten.
-3. Refactorings nur durchführen, wenn sie einen klaren Mehrwert haben und leicht portierbar sind.
-4. In Änderungsbeschreibungen immer angeben, welche Dateien und welches Verhalten betroffen sind.
+1. Keep changes small and clearly focused.
+2. Preserve the existing file structure and paths whenever possible.
+3. Only perform refactorings when they provide clear value and are easy to port.
+4. In change descriptions, always specify which files and behavior are affected.
 
-## Aktuelle Verbesserungspotenziale
+## Current improvement opportunities
 
-- README, Contributor-Dokumentation und Repository-Hygiene weiter ausbauen
-- Konfiguration wie Saisonwerte und Datenquellen stärker zentralisieren
-- Automatisierte Prüfungen und CI ergänzen
-- Große Controller schrittweise in kleinere Einheiten aufteilen
+- Continue improving the README, contributor documentation, and repository hygiene
+- Further centralize configuration such as season values and data sources
+- Add more automated checks and CI coverage
+- Gradually split large controllers into smaller units
 
-## Beitragen
+## Contributing
 
-Siehe `CONTRIBUTING.md`.
+See `CONTRIBUTING.md`.

@@ -1,4 +1,4 @@
-app.controller('schedulesController', function($scope, $routeParams, svc) {
+app.controller('schedulesController', function ($scope, svc, config) {
     $scope.svc = svc;
-    $scope.season = $routeParams.season;
+    $scope.season = config.defaultSeason;
 });

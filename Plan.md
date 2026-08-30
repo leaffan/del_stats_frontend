@@ -20,6 +20,7 @@ This file captures the remaining repository improvement plan after the documenta
 - ✅ Start with low-risk checks for additional documentation and configuration files before adding broader validation.
 - ✅ Keep local and CI commands lightweight, reproducible, and easy to understand.
 - ✅ Set up pre-commit hook for automatic code formatting before git commits.
+- ✅ Add end-to-end tests with Playwright for critical user flows (6 core flows).
 
 ## 4. Controller maintainability
 

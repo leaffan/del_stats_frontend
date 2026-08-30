@@ -11,7 +11,7 @@
         "test:ui": "playwright test --ui",
         "test:debug": "playwright test --debug",
         "check": "pnpm run format:check && pnpm run validate:routes",
-        "prepare": "husky install"
+        "prepare": "husky"
     },
     "lint-staged": {
         "*.{md,json,yml,yaml}": "prettier --write",

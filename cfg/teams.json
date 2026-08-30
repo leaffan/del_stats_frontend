@@ -23,9 +23,7 @@
         },
         "valid_from": 2025,
         "valid_to": 2025,
-        "colors": [
-            "#082355", "#FFFFFF", "#009FE3"
-        ],
+        "colors": ["#082355", "#FFFFFF", "#009FE3"],
         "msc_2020": false
     },
     {
@@ -44,7 +42,6 @@
             "2023": false,
             "2024": false,
             "2025": false
-
         },
         "division": {
             "2020": {
@@ -53,9 +50,7 @@
         },
         "valid_from": 2021,
         "valid_to": 2022,
-        "colors": [
-            "#A6A8A8", "#008953", "#FFFFFF"
-        ],
+        "colors": ["#A6A8A8", "#008953", "#FFFFFF"],
         "msc_2020": false
     },
     {
@@ -82,9 +77,7 @@
         },
         "valid_from": 1994,
         "valid_to": 2025,
-        "colors": [
-            "#C00D1E", "#32553B", "#FFFFFF"
-        ],
+        "colors": ["#C00D1E", "#32553B", "#FFFFFF"],
         "msc_2020": false
     },
     {
@@ -112,9 +105,7 @@
         },
         "valid_from": 1994,
         "valid_to": 2025,
-        "colors": [
-            "#D61825", "#1C2B64", "#FFFFFF"
-        ],
+        "colors": ["#D61825", "#1C2B64", "#FFFFFF"],
         "msc_2020": true
     },
     {
@@ -142,9 +133,7 @@
         },
         "valid_from": 1994,
         "valid_to": 2025,
-        "colors": [
-            "#C00D0E", "#FFFFFF", "#C00D0E"
-        ],
+        "colors": ["#C00D0E", "#FFFFFF", "#C00D0E"],
         "msc_2020": true
     },
     {
@@ -172,9 +161,7 @@
         },
         "valid_from": 1994,
         "valid_to": 2024,
-        "colors": [
-            "#E1051B", "#F9B800", "#E1051B"
-        ],
+        "colors": ["#E1051B", "#F9B800", "#E1051B"],
         "msc_2020": true
     },
     {
@@ -201,9 +188,7 @@
         },
         "valid_from": 1994,
         "valid_to": 2025,
-        "colors": [
-            "#27A6C4", "#0D2C5D", "#FFFFFF"
-        ],
+        "colors": ["#27A6C4", "#0D2C5D", "#FFFFFF"],
         "msc_2020": false
     },
     {
@@ -230,9 +215,7 @@
         },
         "valid_from": 1994,
         "valid_to": 2025,
-        "colors": [
-            "#1A3C85", "#FFFFFF", "#1A3C85"
-        ],
+        "colors": ["#1A3C85", "#FFFFFF", "#1A3C85"],
         "msc_2020": false
     },
     {
@@ -259,9 +242,7 @@
         },
         "valid_from": 1994,
         "valid_to": 2025,
-        "colors": [
-            "#000000", "#E30613", "#FFFFFF"
-        ],
+        "colors": ["#000000", "#E30613", "#FFFFFF"],
         "msc_2020": false
     },
     {
@@ -289,9 +270,7 @@
         },
         "valid_from": 1994,
         "valid_to": 2021,
-        "colors": [
-            "#000000", "#FFEC00", "#000000"
-        ],
+        "colors": ["#000000", "#FFEC00", "#000000"],
         "msc_2020": true
     },
     {
@@ -319,9 +298,7 @@
         },
         "valid_from": 1994,
         "valid_to": 2025,
-        "colors": [
-            "#F0192D", "#004289", "#FFFFFF"
-        ],
+        "colors": ["#F0192D", "#004289", "#FFFFFF"],
         "msc_2020": true
     },
     {
@@ -349,9 +326,7 @@
         },
         "valid_from": 1994,
         "valid_to": 2025,
-        "colors": [
-            "#BB0508", "#1A2E56", "#FFFFFF"
-        ],
+        "colors": ["#BB0508", "#1A2E56", "#FFFFFF"],
         "msc_2020": true
     },
     {
@@ -378,9 +353,7 @@
         },
         "valid_from": 1994,
         "valid_to": 2025,
-        "colors": [
-            "#FFFFFF", "#000000", "#FFFFFF"
-        ],
+        "colors": ["#E2001A", "#0A183C", "#FFFFFF"],
         "msc_2020": false
     },
     {
@@ -408,9 +381,7 @@
         },
         "valid_from": 1994,
         "valid_to": 2025,
-        "colors": [
-            "#1756AD", "#FFFFFF", "#1756AD"
-        ],
+        "colors": ["#1756AD", "#FFFFFF", "#1756AD"],
         "msc_2020": true
     },
     {
@@ -437,9 +408,7 @@
         },
         "valid_from": 1994,
         "valid_to": 2025,
-        "colors": [
-            "#0055A4", "#FFFFFF", "#0055A4"
-        ],
+        "colors": ["#0055A4", "#FFFFFF", "#0055A4"],
         "msc_2020": false
     },
     {
@@ -467,9 +436,7 @@
         },
         "valid_from": 1994,
         "valid_to": 2025,
-        "colors": [
-            "#000000", "#EB6911", "#000000"
-        ],
+        "colors": ["#000000", "#EB6911", "#000000"],
         "msc_2020": true
     },
     {
@@ -498,8 +465,6 @@
         },
         "valid_from": 2022,
         "valid_to": 2025,
-        "colors": [
-            "#000000", "#A5ACAF", "#FA4D09"
-        ]
+        "colors": ["#000000", "#A5ACAF", "#FA4D09"]
     }
 ]

@@ -105,11 +105,6 @@ venv.bak/
 
 # user-defined stuff
 */.ht*
-frontend/*.csv
-frontend/*.json
-frontend/index.php
-frontend/data/*
-frontend/data_bak/*
 .vscode
 
 angular-animate.min.js
@@ -135,3 +130,11 @@ favicon.ico
 
 del-stats-angular/*
 del-stats-angular/node_modules/*
+
+# Node-based repository tooling
+node_modules/
+
+# Playwright test results
+test-results/
+playwright-report/
+.auth/

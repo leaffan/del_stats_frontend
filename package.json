@@ -1,0 +1,37 @@
+{
+    "name": "del_stats_frontend",
+    "version": "1.0.0",
+    "description": "Public frontend for DEL hockey statistics. Contains a static AngularJS frontend for presenting player, team, and career data.",
+    "private": true,
+    "scripts": {
+        "format": "prettier --write README.md CONTRIBUTING.md package.json pnpm-lock.yaml .prettierrc.json .github/workflows/ci.yml",
+        "format:check": "prettier --check README.md CONTRIBUTING.md package.json pnpm-lock.yaml .prettierrc.json .github/workflows/ci.yml",
+        "validate:routes": "node scripts/validate-routes.js",
+        "test": "playwright test",
+        "test:ui": "playwright test --ui",
+        "test:debug": "playwright test --debug",
+        "check": "pnpm run format:check && pnpm run validate:routes",
+        "prepare": "husky"
+    },
+    "lint-staged": {
+        "*.{md,json,yml,yaml}": "prettier --write",
+        "*.js": "prettier --write"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/leaffan/del_stats_frontend.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/leaffan/del_stats_frontend/issues"
+    },
+    "homepage": "https://github.com/leaffan/del_stats_frontend#readme",
+    "devDependencies": {
+        "@playwright/test": "^1.61.1",
+        "husky": "^9.1.7",
+        "lint-staged": "^17.0.8",
+        "prettier": "^3.8.4"
+    }
+}

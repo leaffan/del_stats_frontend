@@ -1,4 +1,4 @@
-app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'config', function ($scope, $http, $window, svc, config) {
+app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'config', 'cfgLoader', function ($scope, $http, $window, svc, config, cfgLoader) {
     let ctrl = this;
     $scope.svc = svc;
     $scope.table_type = 'skater_career_stats';
@@ -18,22 +18,22 @@ app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'c
     };
 
     // loading list of stats to be aggregated
-    $http.get('./cfg/stats_to_aggregate.json').then(function (res) {
+    cfgLoader.statsToAggregate().then(function (res) {
         ctrl.statsToAggregate = res.data;
     });
 
     // loading criteria to calculate stats
-    $http.get('./cfg/stats_to_calculate.json').then(function (res) {
+    cfgLoader.statsToCalculate().then(function (res) {
         ctrl.statsToCalculate = res.data;
     });
 
     // loading sort criteria for displayed tables
-    $http.get('./js/sort_criteria_tables.json').then(function (res) {
+    cfgLoader.sortCriteriaTables().then(function (res) {
         ctrl.tableSortCriteria = res.data;
     });
 
     // loading sort criteria for player stats
-    $http.get('./js/sort_criteria_players.json').then(function (res) {
+    cfgLoader.sortCriteriaPlayers().then(function (res) {
         ctrl.sortCriteria = res.data;
     });
 
@@ -42,7 +42,7 @@ app.controller('careerStatsController', ['$scope', '$http', '$window', 'svc', 'c
         $scope.stats_cols = res.data;
     });
 
-    $http.get('./cfg/teams_historic.json').then(function (res) {
+    cfgLoader.teamsHistoric().then(function (res) {
         let orig_teams = res.data;
         // setting teams that are valid for current season as active ones
         let active_teams = orig_teams.filter(team => team.active).sort((a, b)=> (a.location > b.location ? 1 : -1)).map(team => team.abbr);

@@ -8,7 +8,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
     // default table selection and sort criterion for skater page
     ctrl.tableSelect = 'basic_stats';
     ctrl.seasonTypeSelect = 'RS';
-    if ($scope.season == 2025) {
+    if ($scope.season == config.defaultSeason) {
         ctrl.seasonTypeSelect = 'PO';
     }
     ctrl.scoringStreakTypeSelect = $scope.scoringStreakTypeSelect = 'points';

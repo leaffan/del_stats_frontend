@@ -182,6 +182,17 @@ app.factory('svc', function ($rootScope) {
         getSeasonIdentifier: function (season) {
             return season + '/' + (parseInt(season) + 1).toString().slice(-2);
         },
+        // checks if team is valid for a given season (supports multiple periods via valid_periods)
+        isTeamValidForSeason: function (team, season) {
+            // If valid_periods is defined, use that for teams with non-continuous presence
+            if (team.valid_periods && Array.isArray(team.valid_periods)) {
+                return team.valid_periods.some(
+                    (period) => season >= period.from && season <= period.to,
+                );
+            }
+            // Otherwise use the classic valid_from/valid_to for backwards compatibility
+            return team.valid_from <= season && team.valid_to >= season;
+        },
         // formats time (in seconds) as mm:ss
         formatTime: function (timeInSeconds, factor) {
             if (factor) timeInSeconds = timeInSeconds * factor;

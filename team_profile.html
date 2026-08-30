@@ -21,13 +21,13 @@
             <ul class="list-group list-group-horizontal">
                 <li class="col-6 list-group-item border-0 p-0 bg-transparent text-left">
                     <!-- <a data-ng-if="season - 1 >= 2017 && current_team_data.valid_from <= season - 1 && current_team_data.valid_to <= season - 1" data-ng-href="#!/team_profile/{{season - 1}}/{{::current_team}}"> -->
-                    <a data-ng-if="(season - 1) >= 2018 && current_team_data.valid_from <= (season - 1) && current_team_data.valid_to >= (season - 1)" data-ng-href="#!/team_profile/{{season - 1}}/{{::current_team}}">
+                    <a data-ng-if="(season - 1) >= 2018 && svc.isTeamValidForSeason(current_team_data, season - 1)" data-ng-href="#!/team_profile/{{season - 1}}/{{::current_team}}">
                         <i class="fas fa-arrow-left" aria-hidden="true" style="vertical-align: center;"></i>
                         <b>Saison {{ svc.getSeasonIdentifier(svc.parseInt(season) - 1) }}</b>
                     </a>
                 </li>
                 <li class="col-6 list-group-item border-0 p-0 bg-transparent text-right">
-                    <a data-ng-if="(svc.parseFloat(season)) + 1 <= 2025 && current_team_data.valid_from <= (svc.parseFloat(season) + 1) && current_team_data.valid_to >= (svc.parseFloat(season) + 1)" data-ng-href="#!/team_profile/{{svc.parseFloat(season) + 1}}/{{::current_team}}">
+                    <a data-ng-if="(svc.parseFloat(season)) + 1 <= 2025 && svc.isTeamValidForSeason(current_team_data, svc.parseFloat(season) + 1)" data-ng-href="#!/team_profile/{{svc.parseFloat(season) + 1}}/{{::current_team}}">
                         <b>Saison {{ svc.getSeasonIdentifier(svc.parseInt(season) + 1) }}</b>
                         <i class="fas fa-arrow-right" aria-hidden="true" style="vertical-align: center;"></i>
                     </a>

@@ -30,6 +30,8 @@ pnpm test -- --list
     4. Player game stats (season view)
     5. Navigation hash updates
     6. Configuration files load correctly
+    7. **Teams with valid_periods appear/disappear correctly** (KEV relegation/promotion)
+    8. **Team profile navigation respects valid_periods** (navigation blocked during absent years)
 
 ## Test Results
 

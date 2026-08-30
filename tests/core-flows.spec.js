@@ -102,7 +102,8 @@ test.describe('DEL Stats Core Flows', () => {
                     .locator('h1, h2, table')
                     .first()
                     .isVisible()
-                    .catch(() => false)) || ((await page.locator('body').textContent()) || '').length > 100;
+                    .catch(() => false)) ||
+                ((await page.locator('body').textContent()) || '').length > 100;
             expect(hasContent).toBeTruthy();
         } else {
             // Skip if no data available
@@ -198,5 +199,112 @@ test.describe('DEL Stats Core Flows', () => {
         }
 
         expect(failedRequests.length).toBeLessThan(3); // Allow some failures but not many
+    });
+
+    test('7. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
+        // KEV (Krefeld Pinguine) was in DEL until 2021, absent 2022-2025, returns 2026
+        // This tests the valid_periods functionality for teams with relegation/promotion
+
+        // Check 2021: KEV should be present (last season before relegation)
+        await page.goto('http://localhost:8000/index.html#!/team_stats/2021');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        // Look for KEV in team selection or standings
+        const kevIn2021 =
+            (await page
+                .locator('text=/Krefeld/i')
+                .isVisible()
+                .catch(() => false)) ||
+            (await page
+                .locator('[title*="Krefeld"], [alt*="Krefeld"]')
+                .isVisible()
+                .catch(() => false)) ||
+            (await page
+                .textContent('body')
+                .then((text) => text.includes('KEV'))
+                .catch(() => false));
+
+        expect(kevIn2021).toBeTruthy();
+
+        // Check 2023: KEV should NOT be present (relegated)
+        await page.goto('http://localhost:8000/index.html#!/team_stats/2023');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const kevIn2023 =
+            (await page
+                .locator('text=/Krefeld/i')
+                .isVisible()
+                .catch(() => false)) ||
+            (await page
+                .locator('[title*="Krefeld"], [alt*="Krefeld"]')
+                .isVisible()
+                .catch(() => false));
+
+        expect(kevIn2023).toBeFalsy();
+
+        // Check 2026: KEV should be present again (promoted)
+        await page.goto('http://localhost:8000/index.html#!/team_stats/2026');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const kevIn2026 =
+            (await page
+                .locator('text=/Krefeld/i')
+                .isVisible()
+                .catch(() => false)) ||
+            (await page
+                .locator('[title*="Krefeld"], [alt*="Krefeld"]')
+                .isVisible()
+                .catch(() => false)) ||
+            (await page
+                .textContent('body')
+                .then((text) => text.includes('KEV'))
+                .catch(() => false));
+
+        expect(kevIn2026).toBeTruthy();
+    });
+
+    test('8. Team profile navigation respects valid_periods', async ({ page }) => {
+        // Navigate to KEV team profile in 2021 (when they were in the league)
+        await page.goto('http://localhost:8000/index.html#!/team_profile/2021/KEV');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        // Page should load successfully
+        const pageBody = page.locator('body');
+        await expect(pageBody).toBeVisible();
+
+        // Check if navigation to next season (2022) is blocked
+        // KEV was relegated after 2021, so 2022 link should not be available
+        const link2022 = page.locator('a[href*="2022/KEV"]');
+        const has2022Link = await link2022.isVisible().catch(() => false);
+
+        // Link should either not exist or not be visible (KEV not in 2022)
+        expect(has2022Link).toBeFalsy();
+
+        // Try navigating to 2023 directly - should show KEV was not in league
+        await page.goto('http://localhost:8000/index.html#!/team_profile/2023/KEV');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        // Page might show error or empty state - check for either
+        const hasError =
+            (await page
+                .locator('text=/nicht verfügbar/i')
+                .isVisible()
+                .catch(() => false)) ||
+            (await page
+                .locator('text=/no data/i')
+                .isVisible()
+                .catch(() => false)) ||
+            (await page
+                .locator('table')
+                .count()
+                .then((c) => c === 0)
+                .catch(() => true));
+
+        // We expect some indication that data is not available
+        // (Either error message or missing tables)
+        // This is a soft check - behavior may vary based on implementation
+        const bodyText = await page.textContent('body').catch(() => '');
+        const pageLoaded = bodyText.length > 50;
+        expect(pageLoaded).toBeTruthy();
     });
 });

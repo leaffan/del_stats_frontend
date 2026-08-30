@@ -102,7 +102,7 @@ test.describe('DEL Stats Core Flows', () => {
                     .locator('h1, h2, table')
                     .first()
                     .isVisible()
-                    .catch(() => false)) || (await page.locator('body').textContent().length) > 100;
+                    .catch(() => false)) || ((await page.locator('body').textContent()) || '').length > 100;
             expect(hasContent).toBeTruthy();
         } else {
             // Skip if no data available

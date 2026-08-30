@@ -14,7 +14,8 @@
             "2022": false,
             "2023": false,
             "2024": false,
-            "2025": false
+            "2025": false,
+            "2026": false
         },
         "division": {
             "2020": {
@@ -41,7 +42,8 @@
             "2022": false,
             "2023": false,
             "2024": false,
-            "2025": false
+            "2025": false,
+            "2026": false
         },
         "division": {
             "2020": {
@@ -76,7 +78,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2025,
+        "valid_to": 2026,
         "colors": ["#C00D1E", "#32553B", "#FFFFFF"],
         "msc_2020": false
     },
@@ -104,7 +106,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2025,
+        "valid_to": 2026,
         "colors": ["#D61825", "#1C2B64", "#FFFFFF"],
         "msc_2020": true
     },
@@ -132,7 +134,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2025,
+        "valid_to": 2026,
         "colors": ["#C00D0E", "#FFFFFF", "#C00D0E"],
         "msc_2020": true
     },
@@ -151,7 +153,8 @@
             "2022": true,
             "2023": false,
             "2024": false,
-            "2025": false
+            "2025": false,
+            "2026": false
         },
         "division": {
             "2020": {
@@ -187,7 +190,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2025,
+        "valid_to": 2026,
         "colors": ["#27A6C4", "#0D2C5D", "#FFFFFF"],
         "msc_2020": false
     },
@@ -214,7 +217,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2025,
+        "valid_to": 2026,
         "colors": ["#1A3C85", "#FFFFFF", "#1A3C85"],
         "msc_2020": false
     },
@@ -241,7 +244,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2025,
+        "valid_to": 2026,
         "colors": ["#000000", "#E30613", "#FFFFFF"],
         "msc_2020": false
     },
@@ -257,19 +260,23 @@
             "2019": false,
             "2020": false,
             "2021": false,
-            "2022": false,
-            "2023": false,
-            "2024": false,
-            "2025": false
+            "2026": false
         },
         "division": {
             "2020": {
                 "MSC": "A",
                 "RS": "Nord"
+            },
+            "2026": {
+                "RS": "Nord"
             }
         },
         "valid_from": 1994,
-        "valid_to": 2021,
+        "valid_to": 2026,
+        "valid_periods": [
+            { "from": 1994, "to": 2021 },
+            { "from": 2026, "to": 2026 }
+        ],
         "colors": ["#000000", "#FFEC00", "#000000"],
         "msc_2020": true
     },
@@ -297,7 +304,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2025,
+        "valid_to": 2026,
         "colors": ["#F0192D", "#004289", "#FFFFFF"],
         "msc_2020": true
     },
@@ -325,7 +332,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2025,
+        "valid_to": 2026,
         "colors": ["#BB0508", "#1A2E56", "#FFFFFF"],
         "msc_2020": true
     },
@@ -352,7 +359,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2025,
+        "valid_to": 2026,
         "colors": ["#E2001A", "#0A183C", "#FFFFFF"],
         "msc_2020": false
     },
@@ -380,7 +387,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2025,
+        "valid_to": 2026,
         "colors": ["#1756AD", "#FFFFFF", "#1756AD"],
         "msc_2020": true
     },
@@ -407,7 +414,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2025,
+        "valid_to": 2026,
         "colors": ["#0055A4", "#FFFFFF", "#0055A4"],
         "msc_2020": false
     },
@@ -435,7 +442,7 @@
             }
         },
         "valid_from": 1994,
-        "valid_to": 2025,
+        "valid_to": 2026,
         "colors": ["#000000", "#EB6911", "#000000"],
         "msc_2020": true
     },
@@ -464,7 +471,7 @@
             }
         },
         "valid_from": 2022,
-        "valid_to": 2025,
+        "valid_to": 2026,
         "colors": ["#000000", "#A5ACAF", "#FA4D09"]
     }
 ]

@@ -3,12 +3,12 @@
         <a href="#!"><b>Startseite</b></a> | <a href="#!/team_stats/{{ season }}"><b>Teamstatistiken</b></a> | <a href="#!/del_stats/{{ season }}"><b>Spielerstatistiken</b></a>
     </div>
 
-    <div data-ng-if="season == 2025" class="alert alert-info main-bg mb-2 shadow">
+    <div data-ng-if="season" class="alert alert-info main-bg mb-2 shadow">
         <h1>Spielpläne der DEL-Saison {{ svc.getSeasonIdentifier(season) }}</h1>
         <p>Für jedes Team sowie die gesamte Liga stehen die jeweiligen Spielpläne im iCalendar-Format (*.ics) zum Download zur Verfügung.</p>
     </div>
 
-    <div data-ng-if="season == 2025" class="alert alert-info main-bg mb-2 shadow">
+    <div data-ng-if="season" class="alert alert-info main-bg mb-2 shadow">
         <div class="row mb-3 text-center">
             <div class="col-md-3">
                 <span><a href="data/calendars/del_calendar_AEV.ics"><img class="img-fluid" src="img/logos/logo_AEV.svg" alt="Team logo" width="150" height="150"/></a></span>
@@ -23,16 +23,12 @@
                 <p class="my-0"><a href="data/calendars/del_calendar_BHV.ics">Fischtown Pinguins</a></p>
             </div>
             <div class="col-md-3">
-                <span><a href="data/calendars/del_calendar_DRE.ics"><img class="img-fluid" src="img/logos/logo_DRE.png" alt="Team logo" width="150" height="150"/></a></span>
-                <p class="my-0"><a href="data/calendars/del_calendar_DRE.ics">Dresdner Eislöwen</a></p>
+                <span><a href="data/calendars/del_calendar_FRA.ics"><img class="img-fluid" src="img/logos/logo_FRA.png" alt="Team logo" width="150" height="150"/></a></span>
+                <p class="my-0"><a href="data/calendars/del_calendar_FRA.ics">Löwen Frankfurt</a></p>
             </div>
         </div>
 
         <div class="row mb-3 text-center">
-            <div class="col-md-3">
-                <span><a href="data/calendars/del_calendar_FRA.ics"><img class="img-fluid" src="img/logos/logo_FRA.png" alt="Team logo" width="150" height="150"/></a></span>
-                <p class="my-0"><a href="data/calendars/del_calendar_FRA.ics">Löwen Frankfurt</a></p>
-            </div>
             <div class="col-md-3">
                 <span><a href="data/calendars/del_calendar_ING.ics"><img class="img-fluid" src="img/logos/logo_ING.svg" alt="Team logo" width="150" height="150"/></a></span>
                 <p class="my-0"><a href="data/calendars/del_calendar_ING.ics">ERC Ingolstadt</a></p>
@@ -44,6 +40,10 @@
             <div class="col-md-3">
                 <span><a href="data/calendars/del_calendar_KEC.ics"><img class="img-fluid" src="img/logos/logo_KEC.svg" alt="Team logo" width="150" height="150"/></a></span>
                 <p class="my-0"><a href="data/calendars/del_calendar_KEC.ics">Kölner Haie</a></p>
+            </div>
+            <div class="col-md-3">
+                <span><a href="data/calendars/del_calendar_KEV.ics"><img class="img-fluid" src="img/logos/logo_KEV.svg" alt="Team logo" width="150" height="150"/></a></span>
+                <p class="my-0"><a href="data/calendars/del_calendar_KEV.ics">Krefeld Pinguine</a></p>
             </div>
         </div>
 

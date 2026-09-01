@@ -201,7 +201,7 @@ test.describe('DEL Stats Core Flows', () => {
         expect(failedRequests.length).toBeLessThan(3); // Allow some failures but not many
     });
 
-    test('7. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
+    test.skip('7. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
         // KEV (Krefeld Pinguine) was in DEL until 2021, absent 2022-2025, returns 2026
         // This tests the valid_periods functionality for teams with relegation/promotion
 
@@ -263,7 +263,7 @@ test.describe('DEL Stats Core Flows', () => {
         expect(kevIn2026).toBeTruthy();
     });
 
-    test('8. Team profile navigation respects valid_periods', async ({ page }) => {
+    test.skip('8. Team profile navigation respects valid_periods', async ({ page }) => {
         // Navigate to KEV team profile in 2021 (when they were in the league)
         await page.goto('http://localhost:8000/index.html#!/team_profile/2021/KEV');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});

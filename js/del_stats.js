@@ -88,6 +88,12 @@ app.config([
                 controller: 'playerCareerController as ctrl',
                 reloadOnSearch: false,
             })
+            .when('/team_trivia', {
+                title: 'Team-Trivia',
+                templateUrl: 'team_trivia.html',
+                controller: 'teamTriviaController as ctrl',
+                reloadOnSearch: false,
+            })
             .otherwise({
                 redirectTo: '/home',
             });

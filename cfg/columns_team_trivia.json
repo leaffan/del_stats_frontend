@@ -14,44 +14,51 @@
                         "col_header": "Saison",
                         "expl_de": null,
                         "expl_en": null,
-                        "align": "center"
+                        "align": "center",
+                        "width": "10"
                     },
                     {
                         "data_key": "team",
                         "col_header": "Team",
                         "expl_de": null,
                         "expl_en": null,
-                        "align": "left"
+                        "align": "left",
+                        "width": "15"
                     },
                     {
                         "data_key": "gp_overall",
                         "col_header": "GP",
                         "expl_de": "Spiele gesamt",
-                        "expl_en": "Games Played (Overall)"
+                        "expl_en": "Games Played (Overall)",
+                        "width": "15"
                     },
                     {
                         "data_key": "ot_overall",
                         "col_header": "OT",
                         "expl_de": "Overtime-Spiele gesamt",
-                        "expl_en": "Overtime Games (Overall)"
+                        "expl_en": "Overtime Games (Overall)",
+                        "width": "15"
                     },
                     {
                         "data_key": "ot_pctg",
                         "col_header": "OT%",
                         "expl_de": "OT-Anteil gesamt",
-                        "expl_en": "Overtime Percentage (Overall)"
+                        "expl_en": "Overtime Percentage (Overall)",
+                        "width": "15"
                     },
                     {
                         "data_key": "ot_w",
                         "col_header": "OT-W",
                         "expl_de": "Siege nach Overtime",
-                        "expl_en": "Overtime Wins"
+                        "expl_en": "Overtime Wins",
+                        "width": "15"
                     },
                     {
                         "data_key": "ot_l",
                         "col_header": "OT-L",
                         "expl_de": "Niederlagen nach Overtime",
-                        "expl_en": "Overtime Losses"
+                        "expl_en": "Overtime Losses",
+                        "width": "15"
                     }
                 ]
             },
@@ -65,44 +72,51 @@
                         "col_header": "Saison",
                         "expl_de": null,
                         "expl_en": null,
-                        "align": "center"
+                        "align": "center",
+                        "width": "10"
                     },
                     {
                         "data_key": "team",
                         "col_header": "Team",
                         "expl_de": null,
                         "expl_en": null,
-                        "align": "left"
+                        "align": "left",
+                        "width": "15"
                     },
                     {
                         "data_key": "gp_rs",
                         "col_header": "GP",
                         "expl_de": "Spiele Hauptrunde",
-                        "expl_en": "Games Played (RS)"
+                        "expl_en": "Games Played (RS)",
+                        "width": "15"
                     },
                     {
                         "data_key": "ot_rs",
                         "col_header": "OT",
                         "expl_de": "Overtime-Spiele Hauptrunde",
-                        "expl_en": "Overtime Games (RS)"
+                        "expl_en": "Overtime Games (RS)",
+                        "width": "15"
                     },
                     {
                         "data_key": "so_rs",
                         "col_header": "SO",
                         "expl_de": "Shootout-Spiele Hauptrunde",
-                        "expl_en": "Shootout Games (RS)"
+                        "expl_en": "Shootout Games (RS)",
+                        "width": "15"
                     },
                     {
                         "data_key": "ot_rs_pctg",
                         "col_header": "OT%",
                         "expl_de": "OT-Anteil Hauptrunde",
-                        "expl_en": "Overtime Percentage (RS)"
+                        "expl_en": "Overtime Percentage (RS)",
+                        "width": "15"
                     },
                     {
                         "data_key": "ot_so_pctg",
                         "col_header": "SO%",
                         "expl_de": "Shootout-Anteil Hauptrunde",
-                        "expl_en": "Shootout Percentage (RS)"
+                        "expl_en": "Shootout Percentage (RS)",
+                        "width": "15"
                     }
                 ]
             }

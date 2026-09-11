@@ -46,7 +46,9 @@
                         "col_header": "OT%",
                         "expl_de": "OT-Anteil gesamt",
                         "expl_en": "Overtime Percentage (Overall)",
-                        "width": "15"
+                        "width": "15",
+                        "fixed": 2,
+                        "percentage": true
                     },
                     {
                         "data_key": "ot_w",
@@ -111,14 +113,18 @@
                         "col_header": "OT%",
                         "expl_de": "OT-Anteil Hauptrunde",
                         "expl_en": "Overtime Percentage (RS)",
-                        "width": "15"
+                        "width": "15",
+                        "fixed": 2,
+                        "percentage": true
                     },
                     {
                         "data_key": "ot_so_pctg",
                         "col_header": "SO%",
                         "expl_de": "Shootout-Anteil Hauptrunde",
                         "expl_en": "Shootout Percentage (RS)",
-                        "width": "15"
+                        "width": "15",
+                        "fixed": 2,
+                        "percentage": true
                     }
                 ]
             }

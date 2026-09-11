@@ -1,14 +1,20 @@
-app.controller('teamTriviaController', function ($scope, $http, config, svc) {
+app.controller('teamTriviaController', function ($scope, $http, config, svc, cfgLoader) {
     let ctrl = this;
     $scope.svc = svc;
     svc.setTitle('DEL-Team-Trivia');
 
     ctrl.defaultSeason = config.defaultSeason;
     ctrl.dataCache = {};
-    ctrl.sortCriteria = {};
     ctrl.categorySelect = '';
     ctrl.seasonTypeSelect = '';
-    ctrl.teamSelect = '';
+
+    // sorting by the team column sorts by location rather than by abbreviation,
+    // since the table displays the full team name
+    ctrl.sortCriteria = {
+        team: function (row) {
+            return ctrl.team_location_lookup ? ctrl.team_location_lookup[row.team] : row.team;
+        },
+    };
 
     // retrieving category/column configuration, defaulting to the first defined category
     $http.get('./cfg/columns_team_trivia.json').then(function (res) {
@@ -18,8 +24,26 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc) {
     });
 
     // retrieving all teams that were ever active in the DEL, for the team filter
-    $http.get('./cfg/teams_historic.json').then(function (res) {
-        ctrl.all_teams = res.data;
+    // and for displaying full team names sorted by location
+    cfgLoader.teamsHistoric().then(function (res) {
+        let orig_teams = res.data;
+        let active_teams = orig_teams
+            .filter((team) => team.active)
+            .sort((a, b) => (a.location > b.location ? 1 : -1))
+            .map((team) => team.abbr);
+        let inactive_teams = orig_teams
+            .filter((team) => !team.active)
+            .sort((a, b) => (a.location > b.location ? 1 : -1))
+            .map((team) => team.abbr);
+        ctrl.all_teams = active_teams.concat(inactive_teams);
+        ctrl.team_full_name_lookup = orig_teams.reduce(
+            (o, team) => Object.assign(o, { [team.abbr]: team.full_name }),
+            {},
+        );
+        ctrl.team_location_lookup = orig_teams.reduce(
+            (o, team) => Object.assign(o, { [team.abbr]: team.location }),
+            {},
+        );
     });
 
     ctrl.currentCategory = function () {
@@ -41,16 +65,27 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc) {
         };
     };
 
+    // (re-)deriving the season range available in the currently loaded category
+    // data and resetting the season filter to that full range
+    ctrl.setSeasonBounds = function () {
+        if (!ctrl.trivia_data || !ctrl.trivia_data.length) return;
+        let seasons = ctrl.trivia_data.map((row) => row.season);
+        ctrl.first_season = ctrl.from_season = Math.min(...seasons);
+        ctrl.last_season = ctrl.to_season = Math.max(...seasons);
+    };
+
     ctrl.loadCategoryData = function () {
         let category = ctrl.currentCategory();
         if (!category) return;
         if (ctrl.dataCache[category.data_file]) {
             ctrl.trivia_data = ctrl.dataCache[category.data_file];
+            ctrl.setSeasonBounds();
             return;
         }
         $http.get('data/team_trivia/' + category.data_file).then(function (res) {
             ctrl.dataCache[category.data_file] = res.data;
             ctrl.trivia_data = res.data;
+            ctrl.setSeasonBounds();
         });
     };
 
@@ -70,5 +105,9 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc) {
 
     ctrl.teamFilter = function (row) {
         return !ctrl.teamSelect || row.team === ctrl.teamSelect;
+    };
+
+    ctrl.seasonFilter = function (row) {
+        return row.season >= ctrl.from_season && row.season <= ctrl.to_season;
     };
 });

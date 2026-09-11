@@ -2,6 +2,8 @@
     "overtime_games_per_season_pctg": {
         "label_de": "Overtime-Spiele pro Saison",
         "label_en": "Overtime Games per Season",
+        "description_de": "Anteil der Spiele einer Mannschaft in einer Saison, die nach der regulären Spielzeit in der Verlängerung oder im Penaltyschießen entschieden wurden (mindestens 10 Overtime-Spiele in der jeweiligen Saison).",
+        "description_en": "Share of a team's games in a season that were decided in overtime or a shootout (at least 10 overtime games in the given season).",
         "data_file": "overtime_games_per_season_pctg.json",
         "season_types": {
             "overall": {

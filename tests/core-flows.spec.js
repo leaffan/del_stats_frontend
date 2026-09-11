@@ -13,6 +13,19 @@ async function hasData(page) {
     }
 }
 
+// Helper to check if team trivia data is available
+async function hasTeamTriviaData(page) {
+    try {
+        const response = await page.request.head(
+            'http://localhost:8000/data/team_trivia/overtime_games_per_season_pctg.json',
+            { timeout: 2000 },
+        );
+        return response.ok();
+    } catch {
+        return false;
+    }
+}
+
 test.describe('DEL Stats Core Flows', () => {
     test('1. Home page loads and renders', async ({ page }) => {
         const dataAvailable = await hasData(page);
@@ -201,7 +214,75 @@ test.describe('DEL Stats Core Flows', () => {
         expect(failedRequests.length).toBeLessThan(3); // Allow some failures but not many
     });
 
-    test.skip('7. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
+    test('7. Team trivia page loads, category and season type switching, team filter', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasTeamTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/team_trivia');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        // page renders with a category select and a table
+        const pageBody = page.locator('body');
+        await expect(pageBody).toBeVisible();
+
+        const table = page.locator('table').first();
+        await expect(table).toBeVisible();
+
+        const rows = page.locator('table tbody tr');
+        const rowCountOverall = await rows.count();
+        expect(rowCountOverall).toBeGreaterThan(0);
+
+        // category explanation box is shown once a category is selected
+        await expect(page.locator('.category-explanation')).toBeVisible();
+
+        // switching season type (RS) narrows/changes the displayed columns and rows
+        const selects = page.locator('select');
+        await selects.nth(1).selectOption('rs');
+        await page.waitForTimeout(300);
+        const rowCountRs = await rows.count();
+        expect(rowCountRs).toBeGreaterThan(0);
+
+        // filtering by team narrows the table to that team's rows only and shows
+        // the full team name rather than its abbreviation
+        const teamSelect = selects.nth(2);
+        const teamOptions = await teamSelect
+            .locator('option')
+            .evaluateAll((els) =>
+                els.map((el) => ({ value: el.value, text: el.textContent.trim() })),
+            );
+        const realTeamOption = teamOptions.find((o) => o.text && o.text !== 'alle Teams');
+
+        if (realTeamOption) {
+            await teamSelect.selectOption(realTeamOption.value);
+            await page.waitForTimeout(300);
+
+            const teamCells = page.locator('table tbody tr td:nth-child(2)');
+            const cellCount = await teamCells.count();
+            expect(cellCount).toBeGreaterThan(0);
+            for (let i = 0; i < cellCount; i++) {
+                await expect(teamCells.nth(i)).toHaveText(realTeamOption.text);
+            }
+        }
+
+        // narrowing the season range filters out earlier seasons
+        const fromSeasonSelect = selects.nth(3);
+        const fromSeasonOptions = await fromSeasonSelect
+            .locator('option')
+            .evaluateAll((els) => els.map((el) => el.value));
+        if (fromSeasonOptions.length > 1) {
+            await fromSeasonSelect.selectOption(fromSeasonOptions[fromSeasonOptions.length - 1]);
+            await page.waitForTimeout(300);
+            const rowCountNarrowed = await rows.count();
+            expect(rowCountNarrowed).toBeLessThanOrEqual(rowCountRs);
+        }
+    });
+
+    test.skip('8. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
         // KEV (Krefeld Pinguine) was in DEL until 2021, absent 2022-2025, returns 2026
         // This tests the valid_periods functionality for teams with relegation/promotion
 
@@ -263,7 +344,7 @@ test.describe('DEL Stats Core Flows', () => {
         expect(kevIn2026).toBeTruthy();
     });
 
-    test.skip('8. Team profile navigation respects valid_periods', async ({ page }) => {
+    test.skip('9. Team profile navigation respects valid_periods', async ({ page }) => {
         // Navigate to KEV team profile in 2021 (when they were in the league)
         await page.goto('http://localhost:8000/index.html#!/team_profile/2021/KEV');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});

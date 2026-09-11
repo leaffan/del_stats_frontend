@@ -9,14 +9,11 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc, cfg
     ctrl.seasonTypeSelect = '';
 
     // sorting by the team column sorts by location rather than by abbreviation,
-    // since the table displays the full team name; different categories use
-    // different field names for the team abbreviation (e.g. "team" vs "team_abbr")
-    let sortByTeamLocation = function (row, field) {
-        return ctrl.team_location_lookup ? ctrl.team_location_lookup[row[field]] : row[field];
-    };
+    // since the table displays the full team name
     ctrl.sortCriteria = {
-        team: (row) => sortByTeamLocation(row, 'team'),
-        team_abbr: (row) => sortByTeamLocation(row, 'team_abbr'),
+        team: function (row) {
+            return ctrl.team_location_lookup ? ctrl.team_location_lookup[row.team] : row.team;
+        },
     };
 
     // retrieving category/column configuration, defaulting to the first defined category
@@ -49,6 +46,17 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc, cfg
         );
     });
 
+    // "season" is usually a single number, but a streak that ran across a season
+    // boundary (e.g. a winning streak starting in March and ending the following
+    // September) is recorded as a [firstSeason, lastSeason] pair instead
+    ctrl.seasonValues = function (season) {
+        return Array.isArray(season) ? season : [season];
+    };
+
+    ctrl.formatSeason = function (season) {
+        return ctrl.seasonValues(season).map(svc.getSeasonIdentifier).join('–');
+    };
+
     ctrl.currentCategory = function () {
         return ctrl.categories ? ctrl.categories[ctrl.categorySelect] : null;
     };
@@ -68,29 +76,33 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc, cfg
         };
     };
 
-    // (re-)deriving the season range available in the currently loaded category
-    // data and resetting the season filter to that full range; categories whose
-    // data has no single "season" field (e.g. streaks spanning a date range)
-    // simply don't get a season filter
+    // (re-)deriving the season range available in the currently loaded season type's
+    // data and resetting the season filter to that full range; data without a
+    // "season" field simply doesn't get a season filter
     ctrl.setSeasonBounds = function () {
         ctrl.first_season = ctrl.from_season = ctrl.last_season = ctrl.to_season = undefined;
         if (!ctrl.trivia_data || !ctrl.trivia_data.length) return;
-        if (typeof ctrl.trivia_data[0].season !== 'number') return;
-        let seasons = ctrl.trivia_data.map((row) => row.season);
+        if (ctrl.trivia_data[0].season === undefined) return;
+        let seasons = ctrl.trivia_data.reduce(
+            (all, row) => all.concat(ctrl.seasonValues(row.season)),
+            [],
+        );
         ctrl.first_season = ctrl.from_season = Math.min(...seasons);
         ctrl.last_season = ctrl.to_season = Math.max(...seasons);
     };
 
+    // loading the data file of the currently selected season type (each season type
+    // of a category, e.g. "Heimspiele"/"Auswärtsspiele", may point to its own file)
     ctrl.loadCategoryData = function () {
-        let category = ctrl.currentCategory();
-        if (!category) return;
-        if (ctrl.dataCache[category.data_file]) {
-            ctrl.trivia_data = ctrl.dataCache[category.data_file];
+        let seasonType = ctrl.currentSeasonType();
+        if (!seasonType) return;
+        if (ctrl.dataCache[seasonType.data_file]) {
+            ctrl.trivia_data = ctrl.dataCache[seasonType.data_file];
             ctrl.setSeasonBounds();
             return;
         }
-        $http.get('data/team_trivia/' + category.data_file).then(function (res) {
-            ctrl.dataCache[category.data_file] = res.data;
+        $http.get('data/team_trivia/' + seasonType.data_file).then(function (res) {
+            ctrl.dataCache[seasonType.data_file] = res.data;
             ctrl.trivia_data = res.data;
             ctrl.setSeasonBounds();
         });
@@ -105,31 +117,22 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc, cfg
         ctrl.loadCategoryData();
     };
 
-    // switching the season type view within the currently selected category
+    // switching the season type view within the currently selected category; this
+    // may point to a different data file, so data is (re-)loaded as well
     ctrl.changeSeasonType = function () {
         ctrl.applyDefaultSort();
-    };
-
-    // TODO: winning_streaks.json/losing_streaks.json currently store the full team
-    // name under "team" and the abbreviation under "team_abbr", unlike every other
-    // category where "team" already is the abbreviation. Once those data files are
-    // regenerated to consistently use "team" for the abbreviation, this lookup (and
-    // the "team_column" flag in cfg/columns_team_trivia.json) can be removed again
-    // in favor of a plain data_key == 'team' check.
-    // finding which field of the currently displayed columns holds the team
-    // abbreviation, since that field's name varies between categories
-    ctrl.teamAbbrField = function () {
-        let seasonType = ctrl.currentSeasonType();
-        let teamCol = seasonType && seasonType.columns.find((col) => col.team_column);
-        return teamCol ? teamCol.data_key : 'team';
+        ctrl.loadCategoryData();
     };
 
     ctrl.teamFilter = function (row) {
-        return !ctrl.teamSelect || row[ctrl.teamAbbrField()] === ctrl.teamSelect;
+        return !ctrl.teamSelect || row.team === ctrl.teamSelect;
     };
 
+    // a row matches the selected season range if its season(s) overlap it at all,
+    // so a streak spanning a season boundary still shows up on either end
     ctrl.seasonFilter = function (row) {
         if (ctrl.first_season === undefined) return true;
-        return row.season >= ctrl.from_season && row.season <= ctrl.to_season;
+        let seasons = ctrl.seasonValues(row.season);
+        return Math.max(...seasons) >= ctrl.from_season && Math.min(...seasons) <= ctrl.to_season;
     };
 });

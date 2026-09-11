@@ -25,7 +25,8 @@
                         "expl_de": null,
                         "expl_en": null,
                         "align": "left",
-                        "width": "15"
+                        "width": "15",
+                        "team_column": true
                     },
                     {
                         "data_key": "gp_overall",
@@ -85,7 +86,8 @@
                         "expl_de": null,
                         "expl_en": null,
                         "align": "left",
-                        "width": "15"
+                        "width": "15",
+                        "team_column": true
                     },
                     {
                         "data_key": "gp_rs",
@@ -125,6 +127,142 @@
                         "width": "15",
                         "fixed": 2,
                         "percentage": true
+                    }
+                ]
+            }
+        }
+    },
+    "winning_streaks": {
+        "label_de": "Längste Siegesserien",
+        "label_en": "Longest Winning Streaks",
+        "description_de": "Die längsten ununterbrochenen Siegesserien einer Mannschaft in der DEL-Geschichte (Hauptrunde und Playoffs).",
+        "description_en": "The longest consecutive winning streaks by a team in DEL history (regular season and playoffs).",
+        "data_file": "winning_streaks.json",
+        "season_types": {
+            "overall": {
+                "label_de": "Hauptrunde und Playoffs",
+                "label_en": "Regular Season & Playoffs",
+                "default_sort": { "data_key": "length", "direction": "desc" },
+                "columns": [
+                    {
+                        "data_key": "team_abbr",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Siegesserie in Spielen",
+                        "expl_en": "Length of the winning streak in games",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "start_season_full",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right"
+                    }
+                ]
+            }
+        }
+    },
+    "losing_streaks": {
+        "label_de": "Längste Niederlagenserien",
+        "label_en": "Longest Losing Streaks",
+        "description_de": "Die längsten ununterbrochenen Niederlagenserien einer Mannschaft in der DEL-Geschichte (Hauptrunde und Playoffs).",
+        "description_en": "The longest consecutive losing streaks by a team in DEL history (regular season and playoffs).",
+        "data_file": "losing_streaks.json",
+        "season_types": {
+            "overall": {
+                "label_de": "Hauptrunde und Playoffs",
+                "label_en": "Regular Season & Playoffs",
+                "default_sort": { "data_key": "length", "direction": "desc" },
+                "columns": [
+                    {
+                        "data_key": "team_abbr",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Niederlagenserie in Spielen",
+                        "expl_en": "Length of the losing streak in games",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "start_season_full",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right"
                     }
                 ]
             }

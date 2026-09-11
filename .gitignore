@@ -138,3 +138,7 @@ node_modules/
 test-results/
 playwright-report/
 .auth/
+
+
+.claude/*
+docs/*

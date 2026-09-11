@@ -9,11 +9,14 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc, cfg
     ctrl.seasonTypeSelect = '';
 
     // sorting by the team column sorts by location rather than by abbreviation,
-    // since the table displays the full team name
+    // since the table displays the full team name; different categories use
+    // different field names for the team abbreviation (e.g. "team" vs "team_abbr")
+    let sortByTeamLocation = function (row, field) {
+        return ctrl.team_location_lookup ? ctrl.team_location_lookup[row[field]] : row[field];
+    };
     ctrl.sortCriteria = {
-        team: function (row) {
-            return ctrl.team_location_lookup ? ctrl.team_location_lookup[row.team] : row.team;
-        },
+        team: (row) => sortByTeamLocation(row, 'team'),
+        team_abbr: (row) => sortByTeamLocation(row, 'team_abbr'),
     };
 
     // retrieving category/column configuration, defaulting to the first defined category
@@ -66,9 +69,13 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc, cfg
     };
 
     // (re-)deriving the season range available in the currently loaded category
-    // data and resetting the season filter to that full range
+    // data and resetting the season filter to that full range; categories whose
+    // data has no single "season" field (e.g. streaks spanning a date range)
+    // simply don't get a season filter
     ctrl.setSeasonBounds = function () {
+        ctrl.first_season = ctrl.from_season = ctrl.last_season = ctrl.to_season = undefined;
         if (!ctrl.trivia_data || !ctrl.trivia_data.length) return;
+        if (typeof ctrl.trivia_data[0].season !== 'number') return;
         let seasons = ctrl.trivia_data.map((row) => row.season);
         ctrl.first_season = ctrl.from_season = Math.min(...seasons);
         ctrl.last_season = ctrl.to_season = Math.max(...seasons);
@@ -103,11 +110,26 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc, cfg
         ctrl.applyDefaultSort();
     };
 
+    // TODO: winning_streaks.json/losing_streaks.json currently store the full team
+    // name under "team" and the abbreviation under "team_abbr", unlike every other
+    // category where "team" already is the abbreviation. Once those data files are
+    // regenerated to consistently use "team" for the abbreviation, this lookup (and
+    // the "team_column" flag in cfg/columns_team_trivia.json) can be removed again
+    // in favor of a plain data_key == 'team' check.
+    // finding which field of the currently displayed columns holds the team
+    // abbreviation, since that field's name varies between categories
+    ctrl.teamAbbrField = function () {
+        let seasonType = ctrl.currentSeasonType();
+        let teamCol = seasonType && seasonType.columns.find((col) => col.team_column);
+        return teamCol ? teamCol.data_key : 'team';
+    };
+
     ctrl.teamFilter = function (row) {
-        return !ctrl.teamSelect || row.team === ctrl.teamSelect;
+        return !ctrl.teamSelect || row[ctrl.teamAbbrField()] === ctrl.teamSelect;
     };
 
     ctrl.seasonFilter = function (row) {
+        if (ctrl.first_season === undefined) return true;
         return row.season >= ctrl.from_season && row.season <= ctrl.to_season;
     };
 });

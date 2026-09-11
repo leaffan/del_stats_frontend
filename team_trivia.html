@@ -53,8 +53,8 @@
         <tbody>
             <tr data-ng-repeat="row in ctrl.trivia_data | filter:ctrl.teamFilter | filter:ctrl.seasonFilter | orderBy:ctrl.sortConfig.sortCriteria:ctrl.sortConfig.sortDescending">
                 <td data-ng-repeat="col in ctrl.currentSeasonType().columns" class="{{col.align == 'left' ? 'text-left' : col.align == 'center' ? 'text-center' : 'text-right'}}">
-                    <span data-ng-if="col.data_key == 'team'">{{ ctrl.team_full_name_lookup[row.team] }}</span>
-                    <span data-ng-if="col.data_key != 'team'">{{ col.fixed !== undefined ? row[col.data_key].toFixed(col.fixed) : row[col.data_key] }}{{ col.percentage ? ' %' : '' }}</span>
+                    <span data-ng-if="col.team_column">{{ ctrl.team_full_name_lookup[row[col.data_key]] }}</span>
+                    <span data-ng-if="!col.team_column">{{ col.date ? (row[col.data_key] | date:'dd.MM.yyyy') : col.fixed !== undefined ? row[col.data_key].toFixed(col.fixed) : row[col.data_key] }}{{ col.percentage ? ' %' : '' }}</span>
                 </td>
             </tr>
         </tbody>

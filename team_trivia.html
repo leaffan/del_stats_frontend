@@ -10,30 +10,52 @@
 
     <form>
         <div class="form-row mb-1">
-            <div class="input-group col-6">
+            <div class="input-group col-12">
                 <select class="form-control" data-ng-model="ctrl.categorySelect" data-ng-change="ctrl.changeCategory()">
                     <option data-ng-repeat="(key, category) in ctrl.categories" value="{{key}}">{{category.label_de}}</option>
                 </select>
             </div>
-            <div class="input-group col-3 pl-0" data-ng-if="ctrl.currentCategory()">
+        </div>
+        <div class="form-row mb-1" data-ng-if="ctrl.first_season !== undefined">
+            <div class="input-group col-3" data-ng-if="ctrl.currentCategory()">
                 <select class="form-control" data-ng-model="ctrl.seasonTypeSelect" data-ng-change="ctrl.changeSeasonType()">
                     <option data-ng-repeat="(key, seasonType) in ctrl.currentCategory().season_types" value="{{key}}">{{seasonType.label_de}}</option>
                 </select>
             </div>
             <div class="input-group col-3 pl-0">
-                <select class="form-control" data-ng-model="ctrl.teamSelect">
-                    <option value="">alle Teams</option>
-                    <option data-ng-repeat="team in ctrl.all_teams" value="{{team.abbr}}">{{team.full_name}}</option>
+                <select class="form-control" data-ng-model="ctrl.teamSelect" data-ng-options="ctrl.team_full_name_lookup[team] for team in ctrl.all_teams">
+                    <option data-ng-option value selected="selected">alle Teams</option>
+                </select>
+            </div>
+            <div class="input-group col-3 pl-0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">von:</span>
+                </div>
+                <select class="form-control" data-ng-model="ctrl.from_season" data-ng-options="svc.getSeasonIdentifier(season) for season in svc.range(ctrl.first_season, ctrl.to_season)">
+                </select>
+            </div>
+            <div class="input-group col-3 pl-0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">bis:</span>
+                </div>
+                <select class="form-control" data-ng-model="ctrl.to_season" data-ng-options="svc.getSeasonIdentifier(season) for season in svc.range(ctrl.from_season, ctrl.last_season)">
                 </select>
             </div>
         </div>
     </form>
 
+    <div class="alert alert-info main-bg shadow category-explanation mb-2" data-ng-if="ctrl.currentCategory()">
+        {{ ctrl.currentCategory().description_de }}
+    </div>
+
     <table class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.currentSeasonType()">
         <thead table-header stats-cols="ctrl.currentSeasonType().columns" ctrl="ctrl" class="thead-light"></thead>
         <tbody>
-            <tr data-ng-repeat="row in ctrl.trivia_data | filter:ctrl.teamFilter | orderBy:ctrl.sortConfig.sortCriteria:ctrl.sortConfig.sortDescending">
-                <td data-ng-repeat="col in ctrl.currentSeasonType().columns" class="{{col.align == 'left' ? 'text-left' : col.align == 'center' ? 'text-center' : 'text-right'}}">{{ row[col.data_key] }}</td>
+            <tr data-ng-repeat="row in ctrl.trivia_data | filter:ctrl.teamFilter | filter:ctrl.seasonFilter | orderBy:ctrl.sortConfig.sortCriteria:ctrl.sortConfig.sortDescending">
+                <td data-ng-repeat="col in ctrl.currentSeasonType().columns" class="{{col.align == 'left' ? 'text-left' : col.align == 'center' ? 'text-center' : 'text-right'}}">
+                    <span data-ng-if="col.data_key == 'team'">{{ ctrl.team_full_name_lookup[row.team] }}</span>
+                    <span data-ng-if="col.data_key != 'team'">{{ col.fixed !== undefined ? row[col.data_key].toFixed(col.fixed) : row[col.data_key] }}{{ col.percentage ? ' %' : '' }}</span>
+                </td>
             </tr>
         </tbody>
     </table>

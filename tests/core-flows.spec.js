@@ -282,7 +282,45 @@ test.describe('DEL Stats Core Flows', () => {
         }
     });
 
-    test.skip('8. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
+    test('8. Team trivia streak category loads a separate data file per season type', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasTeamTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/team_trivia');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const selects = page.locator('select');
+        await selects.nth(0).selectOption('winning_streaks');
+        await page.waitForTimeout(300);
+
+        const rows = page.locator('table tbody tr');
+        expect(await rows.count()).toBeGreaterThan(0);
+
+        const seasonTypeSelect = selects.nth(1);
+        const seasonTypeOptions = await seasonTypeSelect
+            .locator('option')
+            .evaluateAll((els) => els.map((el) => el.value));
+        expect(seasonTypeOptions).toEqual(['overall', 'home', 'road']);
+
+        // switching to the "home" variant must fetch its own data file, not reuse
+        // ("overall"'s) or silently fail (this is the exact class of bug that
+        // slipped through when data_file lived on the category instead of the
+        // season type: the request would 404 against ".../undefined")
+        const [response] = await Promise.all([
+            page.waitForResponse((res) => res.url().includes('winning_streaks_home.json')),
+            seasonTypeSelect.selectOption('home'),
+        ]);
+        expect(response.ok()).toBeTruthy();
+        await page.waitForTimeout(300);
+        expect(await rows.count()).toBeGreaterThan(0);
+    });
+
+    test.skip('9. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
         // KEV (Krefeld Pinguine) was in DEL until 2021, absent 2022-2025, returns 2026
         // This tests the valid_periods functionality for teams with relegation/promotion
 
@@ -344,7 +382,7 @@ test.describe('DEL Stats Core Flows', () => {
         expect(kevIn2026).toBeTruthy();
     });
 
-    test.skip('9. Team profile navigation respects valid_periods', async ({ page }) => {
+    test.skip('10. Team profile navigation respects valid_periods', async ({ page }) => {
         // Navigate to KEV team profile in 2021 (when they were in the league)
         await page.goto('http://localhost:8000/index.html#!/team_profile/2021/KEV');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});

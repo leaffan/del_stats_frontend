@@ -91,3 +91,8 @@ caption {
     font-weight: bold;
     caption-side: top;
 }
+
+.category-explanation {
+    height: 80px;
+    overflow-y: auto;
+}

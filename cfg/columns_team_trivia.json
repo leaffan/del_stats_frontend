@@ -1613,12 +1613,13 @@
                         "align": "right"
                     },
                     {
-                        "data_key": "full_season",
+                        "data_key": "season",
                         "col_header": "Saison",
                         "expl_de": null,
                         "expl_en": null,
                         "align": "center",
-                        "width": "7"
+                        "width": "9",
+                        "season_identifier": true
                     },
                     {
                         "data_key": "team",
@@ -1626,52 +1627,73 @@
                         "expl_de": null,
                         "expl_en": null,
                         "align": "left",
-                        "width": "15"
+                        "width": "18"
                     },
                     {
-                        "data_key": "gp_overall",
+                        "data_key": "gp",
                         "col_header": "GP",
-                        "expl_de": "Spiele gesamt",
-                        "expl_en": "Games Played (Overall)",
-                        "width": "15"
+                        "expl_de": "Spiele",
+                        "expl_en": "Games Played",
+                        "width": "8"
                     },
                     {
-                        "data_key": "ot_overall",
+                        "data_key": "ot",
                         "col_header": "OT",
-                        "expl_de": "Overtime-Spiele gesamt",
-                        "expl_en": "Overtime Games (Overall)",
-                        "width": "15"
+                        "expl_de": "Spiele nach Verlängerung/Shootout entschieden",
+                        "expl_en": "Games decided in overtime or a shootout",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "so",
+                        "col_header": "SO",
+                        "expl_de": "davon im Shootout entschieden",
+                        "expl_en": "of which decided in a shootout",
+                        "width": "8"
                     },
                     {
                         "data_key": "ot_pctg",
                         "col_header": "OT%",
-                        "expl_de": "OT-Anteil gesamt",
-                        "expl_en": "Overtime Percentage (Overall)",
-                        "width": "15",
+                        "expl_de": "OT/SO-Anteil",
+                        "expl_en": "Overtime/Shootout Percentage",
+                        "width": "10",
+                        "fixed": 1,
+                        "percentage": true
+                    },
+                    {
+                        "data_key": "so_pctg",
+                        "col_header": "SO%",
+                        "expl_de": "Shootout-Anteil",
+                        "expl_en": "Shootout Percentage",
+                        "width": "10",
                         "fixed": 1,
                         "percentage": true
                     },
                     {
                         "data_key": "ot_w",
-                        "col_header": "OT-W",
-                        "expl_de": "Siege nach Overtime",
-                        "expl_en": "Overtime Wins",
-                        "width": "15"
+                        "record": ["ot_l"],
+                        "record_optional": ["ot_t"],
+                        "col_header": "OT-Bilanz",
+                        "expl_de": "Bilanz in reinen Overtime-Spielen (Siege-Niederlagen[-Unentschieden])",
+                        "expl_en": "Win-loss[-tie] record in pure overtime games",
+                        "width": "13",
+                        "sortable": false
                     },
                     {
-                        "data_key": "ot_l",
-                        "col_header": "OT-L",
-                        "expl_de": "Niederlagen nach Overtime",
-                        "expl_en": "Overtime Losses",
-                        "width": "15"
+                        "data_key": "so_w",
+                        "record": ["so_l"],
+                        "col_header": "SO-Bilanz",
+                        "expl_de": "Bilanz im Shootout (Siege-Niederlagen)",
+                        "expl_en": "Win-loss record in shootouts",
+                        "width": "13",
+                        "sortable": false
                     }
                 ]
             },
             "rs": {
                 "label_de": "Hauptrunde",
                 "label_en": "Regular Season",
-                "data_file": "overtime_games_per_season_pctg.json",
-                "default_sort": ["-ot_rs_pctg"],
+                "data_file": "overtime_games_per_season_pctg_rs.json",
+                "default_sort": ["-ot_pctg"],
                 "columns": [
                     {
                         "data_key": "rank",
@@ -1683,12 +1705,13 @@
                         "align": "right"
                     },
                     {
-                        "data_key": "full_season",
+                        "data_key": "season",
                         "col_header": "Saison",
                         "expl_de": null,
                         "expl_en": null,
                         "align": "center",
-                        "width": "7"
+                        "width": "9",
+                        "season_identifier": true
                     },
                     {
                         "data_key": "team",
@@ -1696,46 +1719,65 @@
                         "expl_de": null,
                         "expl_en": null,
                         "align": "left",
-                        "width": "15"
+                        "width": "18"
                     },
                     {
-                        "data_key": "gp_rs",
+                        "data_key": "gp",
                         "col_header": "GP",
-                        "expl_de": "Spiele Hauptrunde",
-                        "expl_en": "Games Played (RS)",
-                        "width": "15"
+                        "expl_de": "Spiele",
+                        "expl_en": "Games Played",
+                        "width": "8"
                     },
                     {
-                        "data_key": "ot_rs",
+                        "data_key": "ot",
                         "col_header": "OT",
-                        "expl_de": "Overtime-Spiele Hauptrunde",
-                        "expl_en": "Overtime Games (RS)",
-                        "width": "15"
+                        "expl_de": "Spiele nach Verlängerung/Shootout entschieden",
+                        "expl_en": "Games decided in overtime or a shootout",
+                        "width": "8"
                     },
                     {
-                        "data_key": "so_rs",
+                        "data_key": "so",
                         "col_header": "SO",
-                        "expl_de": "Shootout-Spiele Hauptrunde",
-                        "expl_en": "Shootout Games (RS)",
-                        "width": "15"
+                        "expl_de": "davon im Shootout entschieden",
+                        "expl_en": "of which decided in a shootout",
+                        "width": "8"
                     },
                     {
-                        "data_key": "ot_rs_pctg",
+                        "data_key": "ot_pctg",
                         "col_header": "OT%",
-                        "expl_de": "OT-Anteil Hauptrunde",
-                        "expl_en": "Overtime Percentage (RS)",
-                        "width": "15",
+                        "expl_de": "OT/SO-Anteil",
+                        "expl_en": "Overtime/Shootout Percentage",
+                        "width": "10",
                         "fixed": 1,
                         "percentage": true
                     },
                     {
-                        "data_key": "ot_so_pctg",
+                        "data_key": "so_pctg",
                         "col_header": "SO%",
-                        "expl_de": "Shootout-Anteil Hauptrunde",
-                        "expl_en": "Shootout Percentage (RS)",
-                        "width": "15",
+                        "expl_de": "Shootout-Anteil",
+                        "expl_en": "Shootout Percentage",
+                        "width": "10",
                         "fixed": 1,
                         "percentage": true
+                    },
+                    {
+                        "data_key": "ot_w",
+                        "record": ["ot_l"],
+                        "record_optional": ["ot_t"],
+                        "col_header": "OT-Bilanz",
+                        "expl_de": "Bilanz in reinen Overtime-Spielen (Siege-Niederlagen[-Unentschieden])",
+                        "expl_en": "Win-loss[-tie] record in pure overtime games",
+                        "width": "13",
+                        "sortable": false
+                    },
+                    {
+                        "data_key": "so_w",
+                        "record": ["so_l"],
+                        "col_header": "SO-Bilanz",
+                        "expl_de": "Bilanz im Shootout (Siege-Niederlagen)",
+                        "expl_en": "Win-loss record in shootouts",
+                        "width": "13",
+                        "sortable": false
                     }
                 ]
             }

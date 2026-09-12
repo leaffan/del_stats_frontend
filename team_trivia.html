@@ -57,7 +57,8 @@
                 <td data-ng-repeat="col in ctrl.currentSeasonType().columns" class="w-{{ svc.pad(col.width, 2) }} text-{{ col.align ? col.align : 'right' }} {{ col.diff_color ? (row[col.data_key] > 0 ? 'green' : row[col.data_key] < 0 ? 'red' : '') : '' }}">
                     <span data-ng-if="col.data_key == 'rank'">{{ rowIndex + 1 }}</span>
                     <span data-ng-if="col.data_key == 'team'">{{ ctrl.team_full_name_lookup[row.team] }}</span>
-                    <span data-ng-if="col.data_key != 'rank' && col.data_key != 'team'">{{ col.season_identifier ? ctrl.formatSeason(row[col.data_key]) : col.date ? (row[col.data_key] | date:'dd.MM.yyyy') : col.fixed !== undefined ? row[col.data_key].toFixed(col.fixed) : row[col.data_key] }}{{ col.percentage ? ' %' : '' }}</span>
+                    <span data-ng-if="col.record">{{ ctrl.formatRecord(row, col) }}</span>
+                    <span data-ng-if="col.data_key != 'rank' && col.data_key != 'team' && !col.record">{{ col.season_identifier ? ctrl.formatSeason(row[col.data_key]) : col.date ? (row[col.data_key] | date:'dd.MM.yyyy') : col.fixed !== undefined ? row[col.data_key].toFixed(col.fixed) : row[col.data_key] }}{{ col.percentage ? ' %' : '' }}</span>
                 </td>
             </tr>
         </tbody>

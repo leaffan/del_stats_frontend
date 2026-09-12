@@ -360,7 +360,62 @@ test.describe('DEL Stats Core Flows', () => {
         expect(scoreDiffText.startsWith('+')).toBeFalsy();
     });
 
-    test.skip('10. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
+    test('10. Team trivia overtime category formats W-L[-T] record columns', async ({ page }) => {
+        const dataAvailable = await hasTeamTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/team_trivia');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const selects = page.locator('select');
+        await selects.nth(0).selectOption('overtime_games_per_season_pctg');
+        await page.waitForTimeout(300);
+        await selects.nth(1).selectOption('rs');
+        await page.waitForTimeout(300);
+
+        const teamSelect = selects.nth(2);
+
+        // a modern season (Düsseldorfer EG, 2018/19) has no overtime ties, so the
+        // OT-record column must show a plain "W-L" without a trailing "-0"
+        const degValue = await teamSelect
+            .locator('option')
+            .evaluateAll((els) => els.find((el) => el.textContent.includes('Düsseldorf'))?.value);
+        await teamSelect.selectOption(degValue);
+        await page.waitForTimeout(300);
+        let rows = await page
+            .locator('table tbody tr')
+            .evaluateAll((trs) =>
+                trs.map((tr) =>
+                    Array.from(tr.querySelectorAll('td')).map((td) => td.textContent.trim()),
+                ),
+            );
+        let row = rows.find((r) => r[1] && r[1].startsWith('2018'));
+        expect(row[8]).toMatch(/^\d+-\d+$/);
+
+        // a historical pre-shootout season (Kassel Huskies, 1995/96) has overtime
+        // ties, so the OT-record column must append them as a third "-T" part
+        const kasValue = await teamSelect
+            .locator('option')
+            .evaluateAll((els) => els.find((el) => el.textContent.includes('Kassel'))?.value);
+        await teamSelect.selectOption(kasValue);
+        await page.waitForTimeout(300);
+        rows = await page
+            .locator('table tbody tr')
+            .evaluateAll((trs) =>
+                trs.map((tr) =>
+                    Array.from(tr.querySelectorAll('td')).map((td) => td.textContent.trim()),
+                ),
+            );
+        row = rows.find((r) => r[1] && r[1].startsWith('1995'));
+        expect(row[8]).toBe('1-2-12');
+        // the shootout-record column never has ties, regardless of the OT column
+        expect(row[9]).toMatch(/^\d+-\d+$/);
+    });
+
+    test.skip('11. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
         // KEV (Krefeld Pinguine) was in DEL until 2021, absent 2022-2025, returns 2026
         // This tests the valid_periods functionality for teams with relegation/promotion
 
@@ -422,7 +477,7 @@ test.describe('DEL Stats Core Flows', () => {
         expect(kevIn2026).toBeTruthy();
     });
 
-    test.skip('11. Team profile navigation respects valid_periods', async ({ page }) => {
+    test.skip('12. Team profile navigation respects valid_periods', async ({ page }) => {
         // Navigate to KEV team profile in 2021 (when they were in the league)
         await page.goto('http://localhost:8000/index.html#!/team_profile/2021/KEV');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});

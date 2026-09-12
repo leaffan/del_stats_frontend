@@ -77,6 +77,18 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc, cfg
         return ctrl.seasonValues(season).map(svc.getSeasonIdentifier).join('–');
     };
 
+    // combines a column's own field with its "record" companions (e.g. wins-losses)
+    // into a single "W-L" display; fields listed under "record_optional" (e.g. ties)
+    // are only appended when non-zero, so modern rows without ties stay "W-L"
+    // instead of always showing a trailing "-0"
+    ctrl.formatRecord = function (row, col) {
+        let parts = [row[col.data_key]].concat((col.record || []).map((field) => row[field]));
+        (col.record_optional || []).forEach((field) => {
+            if (row[field]) parts.push(row[field]);
+        });
+        return parts.join('-');
+    };
+
     ctrl.currentCategory = function () {
         return ctrl.categories ? ctrl.categories[ctrl.categorySelect] : null;
     };

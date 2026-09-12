@@ -321,7 +321,41 @@ test.describe('DEL Stats Core Flows', () => {
         expect(await rows.count()).toBeGreaterThan(0);
     });
 
-    test.skip('9. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
+    test('9. Team trivia streak table applies the length/score_diff/scores_for/season tie-break chain', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasTeamTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/team_trivia');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const selects = page.locator('select');
+        await selects.nth(0).selectOption('losing_streaks');
+        await page.waitForTimeout(300);
+
+        // two rows are tied at the longest losing streak (length 18): SWW
+        // (score_diff -39) and WFR (score_diff -48) - SWW must rank first since
+        // ties are broken by score_diff descending, not left in data order
+        const teamCells = await page.locator('table tbody tr td:nth-child(2)').allTextContents();
+        const swwIndex = teamCells.findIndex((t) => t.includes('Schwenninger'));
+        const wfrIndex = teamCells.findIndex((t) => t.includes('Freiburg'));
+        expect(swwIndex).toBeGreaterThanOrEqual(0);
+        expect(wfrIndex).toBeGreaterThanOrEqual(0);
+        expect(swwIndex).toBeLessThan(wfrIndex);
+
+        // the score_diff column (last column) is negative here and must be
+        // color-coded red, not shown with an explicit sign
+        const scoreDiffCell = page.locator('table tbody tr td:last-child').first();
+        await expect(scoreDiffCell).toHaveClass(/red/);
+        const scoreDiffText = (await scoreDiffCell.textContent()).trim();
+        expect(scoreDiffText.startsWith('+')).toBeFalsy();
+    });
+
+    test.skip('10. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
         // KEV (Krefeld Pinguine) was in DEL until 2021, absent 2022-2025, returns 2026
         // This tests the valid_periods functionality for teams with relegation/promotion
 
@@ -383,7 +417,7 @@ test.describe('DEL Stats Core Flows', () => {
         expect(kevIn2026).toBeTruthy();
     });
 
-    test.skip('10. Team profile navigation respects valid_periods', async ({ page }) => {
+    test.skip('11. Team profile navigation respects valid_periods', async ({ page }) => {
         // Navigate to KEV team profile in 2021 (when they were in the league)
         await page.goto('http://localhost:8000/index.html#!/team_profile/2021/KEV');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});

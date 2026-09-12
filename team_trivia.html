@@ -12,7 +12,9 @@
         <div class="form-row mb-1">
             <div class="input-group col-12">
                 <select class="form-control" data-ng-model="ctrl.categorySelect" data-ng-change="ctrl.changeCategory()">
-                    <option data-ng-repeat="(key, category) in ctrl.categories" value="{{key}}">{{category.label_de}}</option>
+                    <optgroup data-ng-repeat="group in ctrl.categoryGroups" label="{{group.label}}">
+                        <option data-ng-repeat="key in group.keys" value="{{key}}">{{ctrl.categories[key].label_de}}</option>
+                    </optgroup>
                 </select>
             </div>
         </div>

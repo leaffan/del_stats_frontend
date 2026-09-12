@@ -19,9 +19,26 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc, cfg
         length: ['-length', '-score_diff', '-scores_for', 'season'],
     };
 
+    // grouping consecutive categories sharing the same group_label_de into one
+    // <optgroup> each, in the order they appear in the config
+    ctrl.buildCategoryGroups = function (categories) {
+        let groups = [];
+        Object.keys(categories).forEach(function (key) {
+            let label = categories[key].group_label_de;
+            let lastGroup = groups[groups.length - 1];
+            if (!lastGroup || lastGroup.label !== label) {
+                groups.push({ label: label, keys: [key] });
+            } else {
+                lastGroup.keys.push(key);
+            }
+        });
+        return groups;
+    };
+
     // retrieving category/column configuration, defaulting to the first defined category
     $http.get('./cfg/columns_team_trivia.json').then(function (res) {
         ctrl.categories = res.data;
+        ctrl.categoryGroups = ctrl.buildCategoryGroups(res.data);
         ctrl.categorySelect = Object.keys(res.data)[0];
         ctrl.changeCategory();
     });

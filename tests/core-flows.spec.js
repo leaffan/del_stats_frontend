@@ -240,8 +240,12 @@ test.describe('DEL Stats Core Flows', () => {
         // category explanation box is shown once a category is selected
         await expect(page.locator('.category-explanation')).toBeVisible();
 
-        // switching season type (RS) narrows/changes the displayed columns and rows
+        // switching to the overtime category (the only one with an "rs" season
+        // type) and then switching season type (RS) narrows/changes the
+        // displayed columns and rows
         const selects = page.locator('select');
+        await selects.nth(0).selectOption('overtime_games_per_season_pctg');
+        await page.waitForTimeout(300);
         await selects.nth(1).selectOption('rs');
         await page.waitForTimeout(300);
         const rowCountRs = await rows.count();
@@ -338,14 +342,15 @@ test.describe('DEL Stats Core Flows', () => {
         await page.waitForTimeout(300);
 
         // two rows are tied at the longest losing streak (length 18): SWW
-        // (score_diff -39) and WFR (score_diff -48) - SWW must rank first since
-        // ties are broken by score_diff descending, not left in data order
+        // (score_diff -39) and WFR (score_diff -48) - for losing/opponent-shutout
+        // streaks ties are broken by score_diff ascending (most lopsided/extreme
+        // deficit ranks first), so WFR (-48) must rank before SWW (-39)
         const teamCells = await page.locator('table tbody tr td:nth-child(2)').allTextContents();
         const swwIndex = teamCells.findIndex((t) => t.includes('Schwenninger'));
         const wfrIndex = teamCells.findIndex((t) => t.includes('Freiburg'));
         expect(swwIndex).toBeGreaterThanOrEqual(0);
         expect(wfrIndex).toBeGreaterThanOrEqual(0);
-        expect(swwIndex).toBeLessThan(wfrIndex);
+        expect(wfrIndex).toBeLessThan(swwIndex);
 
         // the score_diff column (last column) is negative here and must be
         // color-coded red, not shown with an explicit sign

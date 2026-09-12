@@ -1,9 +1,11 @@
 {
     "winning_streaks": {
-        "label_de": "Siegesserien",
-        "label_en": "Winning Streaks",
-        "description_de": "Die längsten Siegesserien einer Mannschaft in der DEL-Geschichte (Hauptrunde und Playoffs).",
-        "description_en": "The longest consecutive winning streaks by a team in DEL history (regular season and playoffs).",
+        "label_de": "Siege",
+        "label_en": "Wins",
+        "group_label_de": "Sieges- und Niederlagenserien",
+        "group_label_en": "Winning & Losing Streaks",
+        "description_de": "Die längsten Siegesserien einer Mannschaft in der DEL-Geschichte (Hauptrunde und Playoffs). Enthalten sind Serien ab sieben Spielen.",
+        "description_en": "The longest consecutive winning streaks by a team in DEL history (regular season and playoffs). Only streaks of seven games or more are included.",
         "season_types": {
             "overall": {
                 "label_de": "Heim-/Auswärtsspiele",
@@ -263,10 +265,12 @@
         }
     },
     "losing_streaks": {
-        "label_de": "Niederlagenserien",
-        "label_en": "Losing Streaks",
-        "description_de": "Die längsten Niederlagenserien einer Mannschaft in der DEL-Geschichte (Hauptrunde und Playoffs).",
-        "description_en": "The longest consecutive losing streaks by a team in DEL history (regular season and playoffs).",
+        "label_de": "Niederlagen",
+        "label_en": "Losses",
+        "group_label_de": "Sieges- und Niederlagenserien",
+        "group_label_en": "Winning & Losing Streaks",
+        "description_de": "Die längsten Niederlagenserien einer Mannschaft in der DEL-Geschichte (Hauptrunde und Playoffs). Enthalten sind Serien ab sieben Spielen.",
+        "description_en": "The longest consecutive losing streaks by a team in DEL history (regular season and playoffs). Only streaks of seven games or more are included.",
         "season_types": {
             "overall": {
                 "label_de": "Heim-/Auswärtsspiele",
@@ -526,10 +530,12 @@
         }
     },
     "winning_streaks_season_start": {
-        "label_de": "Siegesserien (Saisonstart)",
-        "label_en": "Winning Streaks (Season Start)",
-        "description_de": "Die längsten Siegesserien einer Mannschaft direkt zu Saisonbeginn in der DEL-Geschichte.",
-        "description_en": "The longest winning streaks by a team right at the start of a season in DEL history.",
+        "label_de": "Siege (Saisonstart)",
+        "label_en": "Wins (Season Start)",
+        "group_label_de": "Sieges- und Niederlagenserien",
+        "group_label_en": "Winning & Losing Streaks",
+        "description_de": "Die längsten Siegesserien einer Mannschaft direkt zu Saisonbeginn in der DEL-Geschichte. Enthalten sind Serien ab fünf Spielen.",
+        "description_en": "The longest winning streaks by a team right at the start of a season in DEL history. Only streaks of five games or more are included.",
         "season_types": {
             "overall": {
                 "label_de": "Heim-/Auswärtsspiele",
@@ -789,10 +795,12 @@
         }
     },
     "losing_streaks_season_start": {
-        "label_de": "Niederlagenserien (Saisonstart)",
-        "label_en": "Losing Streaks (Season Start)",
-        "description_de": "Die längsten Niederlagenserien einer Mannschaft direkt zu Saisonbeginn in der DEL-Geschichte.",
-        "description_en": "The longest losing streaks by a team right at the start of a season in DEL history.",
+        "label_de": "Niederlagen (Saisonstart)",
+        "label_en": "Losses (Season Start)",
+        "group_label_de": "Sieges- und Niederlagenserien",
+        "group_label_en": "Winning & Losing Streaks",
+        "description_de": "Die längsten Niederlagenserien einer Mannschaft direkt zu Saisonbeginn in der DEL-Geschichte. Enthalten sind Serien ab fünf Spielen.",
+        "description_en": "The longest losing streaks by a team right at the start of a season in DEL history. Only streaks of five games or more are included.",
         "season_types": {
             "overall": {
                 "label_de": "Heim-/Auswärtsspiele",
@@ -1052,10 +1060,12 @@
         }
     },
     "shutout_streaks": {
-        "label_de": "Shutout-Serien",
-        "label_en": "Shutout Streaks",
-        "description_de": "Die längsten Serien von Zu-Null-Siegen einer Mannschaft in der DEL-Geschichte (Hauptrunde und Playoffs).",
-        "description_en": "The longest streaks of consecutive shutout wins by a team in DEL history (regular season and playoffs).",
+        "label_de": "Shutouts",
+        "label_en": "Shutouts",
+        "group_label_de": "Shutout-Serien",
+        "group_label_en": "Shutout Streaks",
+        "description_de": "Die längsten Serien von Zu-Null-Siegen einer Mannschaft in der DEL-Geschichte (Hauptrunde und Playoffs). Enthalten sind Serien ab drei Spielen.",
+        "description_en": "The longest streaks of consecutive shutout wins by a team in DEL history (regular season and playoffs). Only streaks of three games or more are included.",
         "season_types": {
             "overall": {
                 "label_de": "Heim-/Auswärtsspiele",
@@ -1315,10 +1325,12 @@
         }
     },
     "opponent_shutout_streaks": {
-        "label_de": "Serien ohne eigenes Tor",
-        "label_en": "Streaks Without Scoring",
-        "description_de": "Die längsten Serien, in denen eine Mannschaft in aufeinanderfolgenden Spielen ohne eigenes Tor blieb (Hauptrunde und Playoffs).",
-        "description_en": "The longest streaks of consecutive games in which a team failed to score (regular season and playoffs).",
+        "label_de": "Spiele ohne eigenes Tor",
+        "label_en": "Games without scoring",
+        "group_label_de": "Shutout-Serien",
+        "group_label_en": "Shutout Streaks",
+        "description_de": "Die längsten Serien, in denen eine Mannschaft in aufeinanderfolgenden Spielen ohne eigenes Tor blieb (Hauptrunde und Playoffs). Enthalten sind Serien ab drei Spielen.",
+        "description_en": "The longest streaks of consecutive games in which a team failed to score (regular season and playoffs). Only streaks of three games or more are included.",
         "season_types": {
             "overall": {
                 "label_de": "Heim-/Auswärtsspiele",
@@ -1409,7 +1421,7 @@
                 "label_de": "Heimspiele",
                 "label_en": "Home",
                 "data_file": "opponent_shutout_streaks_home.json",
-                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "default_sort": ["-length", "score_diff", "-scores_for", "season"],
                 "columns": [
                     {
                         "data_key": "rank",
@@ -1494,7 +1506,7 @@
                 "label_de": "Auswärtsspiele",
                 "label_en": "Road",
                 "data_file": "opponent_shutout_streaks_road.json",
-                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "default_sort": ["-length", "score_diff", "-scores_for", "season"],
                 "columns": [
                     {
                         "data_key": "rank",
@@ -1580,6 +1592,8 @@
     "overtime_games_per_season_pctg": {
         "label_de": "Overtime-Spiele pro Saison",
         "label_en": "Overtime Games per Season",
+        "group_label_de": "Overtime-Spiele",
+        "group_label_en": "Overtime Games",
         "description_de": "Anteil der Spiele einer Mannschaft in einer Saison, die nach der regulären Spielzeit in der Verlängerung oder im Penaltyschießen entschieden wurden (mindestens 10 Overtime-Spiele in der jeweiligen Saison).",
         "description_en": "Share of a team's games in a season that were decided in overtime or a shootout (at least 10 overtime games in the given season).",
         "season_types": {

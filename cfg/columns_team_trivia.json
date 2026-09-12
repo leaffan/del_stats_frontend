@@ -1,4 +1,1582 @@
 {
+    "winning_streaks": {
+        "label_de": "Siegesserien",
+        "label_en": "Winning Streaks",
+        "description_de": "Die längsten Siegesserien einer Mannschaft in der DEL-Geschichte (Hauptrunde und Playoffs).",
+        "description_en": "The longest consecutive winning streaks by a team in DEL history (regular season and playoffs).",
+        "season_types": {
+            "overall": {
+                "label_de": "Heim-/Auswärtsspiele",
+                "label_en": "Home & Road",
+                "data_file": "winning_streaks.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Siegesserie in Spielen",
+                        "expl_en": "Length of the winning streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            },
+            "home": {
+                "label_de": "Heimspiele",
+                "label_en": "Home",
+                "data_file": "winning_streaks_home.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Siegesserie in Spielen",
+                        "expl_en": "Length of the winning streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            },
+            "road": {
+                "label_de": "Auswärtsspiele",
+                "label_en": "Road",
+                "data_file": "winning_streaks_road.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Siegesserie in Spielen",
+                        "expl_en": "Length of the winning streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            }
+        }
+    },
+    "losing_streaks": {
+        "label_de": "Niederlagenserien",
+        "label_en": "Losing Streaks",
+        "description_de": "Die längsten Niederlagenserien einer Mannschaft in der DEL-Geschichte (Hauptrunde und Playoffs).",
+        "description_en": "The longest consecutive losing streaks by a team in DEL history (regular season and playoffs).",
+        "season_types": {
+            "overall": {
+                "label_de": "Heim-/Auswärtsspiele",
+                "label_en": "Home & Road",
+                "data_file": "losing_streaks.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Niederlagenserie in Spielen",
+                        "expl_en": "Length of the losing streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            },
+            "home": {
+                "label_de": "Heimspiele",
+                "label_en": "Home",
+                "data_file": "losing_streaks_home.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Niederlagenserie in Spielen",
+                        "expl_en": "Length of the losing streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            },
+            "road": {
+                "label_de": "Auswärtsspiele",
+                "label_en": "Road",
+                "data_file": "losing_streaks_road.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Niederlagenserie in Spielen",
+                        "expl_en": "Length of the losing streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            }
+        }
+    },
+    "winning_streaks_season_start": {
+        "label_de": "Siegesserien (Saisonstart)",
+        "label_en": "Winning Streaks (Season Start)",
+        "description_de": "Die längsten Siegesserien einer Mannschaft direkt zu Saisonbeginn in der DEL-Geschichte.",
+        "description_en": "The longest winning streaks by a team right at the start of a season in DEL history.",
+        "season_types": {
+            "overall": {
+                "label_de": "Heim-/Auswärtsspiele",
+                "label_en": "Home & Road",
+                "data_file": "winning_streaks_season_start.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Siegesserie in Spielen",
+                        "expl_en": "Length of the winning streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            },
+            "home": {
+                "label_de": "Heimspiele",
+                "label_en": "Home",
+                "data_file": "winning_streaks_season_start_home.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Siegesserie in Spielen",
+                        "expl_en": "Length of the winning streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            },
+            "road": {
+                "label_de": "Auswärtsspiele",
+                "label_en": "Road",
+                "data_file": "winning_streaks_season_start_road.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Siegesserie in Spielen",
+                        "expl_en": "Length of the winning streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            }
+        }
+    },
+    "losing_streaks_season_start": {
+        "label_de": "Niederlagenserien (Saisonstart)",
+        "label_en": "Losing Streaks (Season Start)",
+        "description_de": "Die längsten Niederlagenserien einer Mannschaft direkt zu Saisonbeginn in der DEL-Geschichte.",
+        "description_en": "The longest losing streaks by a team right at the start of a season in DEL history.",
+        "season_types": {
+            "overall": {
+                "label_de": "Heim-/Auswärtsspiele",
+                "label_en": "Home & Road",
+                "data_file": "losing_streaks_season_start.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Niederlagenserie in Spielen",
+                        "expl_en": "Length of the losing streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            },
+            "home": {
+                "label_de": "Heimspiele",
+                "label_en": "Home",
+                "data_file": "losing_streaks_season_start_home.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Niederlagenserie in Spielen",
+                        "expl_en": "Length of the losing streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            },
+            "road": {
+                "label_de": "Auswärtsspiele",
+                "label_en": "Road",
+                "data_file": "losing_streaks_season_start_road.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Niederlagenserie in Spielen",
+                        "expl_en": "Length of the losing streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            }
+        }
+    },
+    "shutout_streaks": {
+        "label_de": "Shutout-Serien",
+        "label_en": "Shutout Streaks",
+        "description_de": "Die längsten Serien von Zu-Null-Siegen einer Mannschaft in der DEL-Geschichte (Hauptrunde und Playoffs).",
+        "description_en": "The longest streaks of consecutive shutout wins by a team in DEL history (regular season and playoffs).",
+        "season_types": {
+            "overall": {
+                "label_de": "Heim-/Auswärtsspiele",
+                "label_en": "Home & Road",
+                "data_file": "shutout_streaks.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Shutout-Serie in Spielen",
+                        "expl_en": "Length of the shutout streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            },
+            "home": {
+                "label_de": "Heimspiele",
+                "label_en": "Home",
+                "data_file": "shutout_streaks_home.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Shutout-Serie in Spielen",
+                        "expl_en": "Length of the shutout streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            },
+            "road": {
+                "label_de": "Auswärtsspiele",
+                "label_en": "Road",
+                "data_file": "shutout_streaks_road.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Shutout-Serie in Spielen",
+                        "expl_en": "Length of the shutout streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            }
+        }
+    },
+    "opponent_shutout_streaks": {
+        "label_de": "Serien ohne eigenes Tor",
+        "label_en": "Streaks Without Scoring",
+        "description_de": "Die längsten Serien, in denen eine Mannschaft in aufeinanderfolgenden Spielen ohne eigenes Tor blieb (Hauptrunde und Playoffs).",
+        "description_en": "The longest streaks of consecutive games in which a team failed to score (regular season and playoffs).",
+        "season_types": {
+            "overall": {
+                "label_de": "Heim-/Auswärtsspiele",
+                "label_en": "Home & Road",
+                "data_file": "opponent_shutout_streaks.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Serie ohne eigenes Tor in Spielen",
+                        "expl_en": "Length of the scoreless streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            },
+            "home": {
+                "label_de": "Heimspiele",
+                "label_en": "Home",
+                "data_file": "opponent_shutout_streaks_home.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Serie ohne eigenes Tor in Spielen",
+                        "expl_en": "Length of the scoreless streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            },
+            "road": {
+                "label_de": "Auswärtsspiele",
+                "label_en": "Road",
+                "data_file": "opponent_shutout_streaks_road.json",
+                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18"
+                    },
+                    {
+                        "data_key": "length",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Serie ohne eigenes Tor in Spielen",
+                        "expl_en": "Length of the scoreless streak in games",
+                        "align": "right",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "season_identifier": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "start",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "end",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "date": true,
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "scores_for",
+                        "col_header": "Tore",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "scores_against",
+                        "col_header": "Gegentore",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "align": "right",
+                        "width": "11"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "Tordifferenz",
+                        "expl_de": "Erzielte Tore minus zugelassene Tore während der Serie",
+                        "expl_en": "Goals scored minus goals allowed during the streak",
+                        "align": "right",
+                        "width": "10",
+                        "diff_color": true
+                    }
+                ]
+            }
+        }
+    },
     "overtime_games_per_season_pctg": {
         "label_de": "Overtime-Spiele pro Saison",
         "label_en": "Overtime Games per Season",
@@ -9,10 +1587,7 @@
                 "label_de": "Hauptrunde und Playoffs",
                 "label_en": "Regular Season & Playoffs",
                 "data_file": "overtime_games_per_season_pctg.json",
-                "default_sort": {
-                    "data_key": "ot_pctg",
-                    "direction": "desc"
-                },
+                "default_sort": ["-ot_pctg"],
                 "columns": [
                     {
                         "data_key": "rank",
@@ -59,7 +1634,7 @@
                         "expl_de": "OT-Anteil gesamt",
                         "expl_en": "Overtime Percentage (Overall)",
                         "width": "15",
-                        "fixed": 2,
+                        "fixed": 1,
                         "percentage": true
                     },
                     {
@@ -82,10 +1657,7 @@
                 "label_de": "Hauptrunde",
                 "label_en": "Regular Season",
                 "data_file": "overtime_games_per_season_pctg.json",
-                "default_sort": {
-                    "data_key": "ot_rs_pctg",
-                    "direction": "desc"
-                },
+                "default_sort": ["-ot_rs_pctg"],
                 "columns": [
                     {
                         "data_key": "rank",
@@ -139,7 +1711,7 @@
                         "expl_de": "OT-Anteil Hauptrunde",
                         "expl_en": "Overtime Percentage (RS)",
                         "width": "15",
-                        "fixed": 2,
+                        "fixed": 1,
                         "percentage": true
                     },
                     {
@@ -148,1478 +1720,8 @@
                         "expl_de": "Shootout-Anteil Hauptrunde",
                         "expl_en": "Shootout Percentage (RS)",
                         "width": "15",
-                        "fixed": 2,
+                        "fixed": 1,
                         "percentage": true
-                    }
-                ]
-            }
-        }
-    },
-    "winning_streaks": {
-        "label_de": "Siegesserien",
-        "label_en": "Winning Streaks",
-        "description_de": "Die längsten Siegesserien einer Mannschaft in der DEL-Geschichte (Hauptrunde und Playoffs).",
-        "description_en": "The longest consecutive winning streaks by a team in DEL history (regular season and playoffs).",
-        "season_types": {
-            "overall": {
-                "label_de": "Heim-/Auswärtsspiele",
-                "label_en": "Home & Road",
-                "data_file": "winning_streaks.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Siegesserie in Spielen",
-                        "expl_en": "Length of the winning streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
-                    }
-                ]
-            },
-            "home": {
-                "label_de": "Heimspiele",
-                "label_en": "Home",
-                "data_file": "winning_streaks_home.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Siegesserie in Spielen",
-                        "expl_en": "Length of the winning streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
-                    }
-                ]
-            },
-            "road": {
-                "label_de": "Auswärtsspiele",
-                "label_en": "Road",
-                "data_file": "winning_streaks_road.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Siegesserie in Spielen",
-                        "expl_en": "Length of the winning streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
-                    }
-                ]
-            }
-        }
-    },
-    "losing_streaks": {
-        "label_de": "Niederlagenserien",
-        "label_en": "Losing Streaks",
-        "description_de": "Die längsten Niederlagenserien einer Mannschaft in der DEL-Geschichte (Hauptrunde und Playoffs).",
-        "description_en": "The longest consecutive losing streaks by a team in DEL history (regular season and playoffs).",
-        "season_types": {
-            "overall": {
-                "label_de": "Heim-/Auswärtsspiele",
-                "label_en": "Home & Road",
-                "data_file": "losing_streaks.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Niederlagenserie in Spielen",
-                        "expl_en": "Length of the losing streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
-                    }
-                ]
-            },
-            "home": {
-                "label_de": "Heimspiele",
-                "label_en": "Home",
-                "data_file": "losing_streaks_home.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Niederlagenserie in Spielen",
-                        "expl_en": "Length of the losing streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
-                    }
-                ]
-            },
-            "road": {
-                "label_de": "Auswärtsspiele",
-                "label_en": "Road",
-                "data_file": "losing_streaks_road.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Niederlagenserie in Spielen",
-                        "expl_en": "Length of the losing streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
-                    }
-                ]
-            }
-        }
-    },
-    "shutout_streaks": {
-        "label_de": "Shutout-Serien",
-        "label_en": "Shutout Streaks",
-        "description_de": "Die längsten Serien von Zu-Null-Siegen einer Mannschaft in der DEL-Geschichte (Hauptrunde und Playoffs).",
-        "description_en": "The longest streaks of consecutive shutout wins by a team in DEL history (regular season and playoffs).",
-        "season_types": {
-            "overall": {
-                "label_de": "Heim-/Auswärtsspiele",
-                "label_en": "Home & Road",
-                "data_file": "shutout_streaks.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Shutout-Serie in Spielen",
-                        "expl_en": "Length of the shutout streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
-                    }
-                ]
-            },
-            "home": {
-                "label_de": "Heimspiele",
-                "label_en": "Home",
-                "data_file": "shutout_streaks_home.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Shutout-Serie in Spielen",
-                        "expl_en": "Length of the shutout streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
-                    }
-                ]
-            },
-            "road": {
-                "label_de": "Auswärtsspiele",
-                "label_en": "Road",
-                "data_file": "shutout_streaks_road.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Shutout-Serie in Spielen",
-                        "expl_en": "Length of the shutout streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
-                    }
-                ]
-            }
-        }
-    },
-    "opponent_shutout_streaks": {
-        "label_de": "Serien ohne eigenes Tor",
-        "label_en": "Streaks Without Scoring",
-        "description_de": "Die längsten Serien, in denen eine Mannschaft in aufeinanderfolgenden Spielen ohne eigenes Tor blieb (Hauptrunde und Playoffs).",
-        "description_en": "The longest streaks of consecutive games in which a team failed to score (regular season and playoffs).",
-        "season_types": {
-            "overall": {
-                "label_de": "Heim-/Auswärtsspiele",
-                "label_en": "Home & Road",
-                "data_file": "opponent_shutout_streaks.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Serie ohne eigenes Tor in Spielen",
-                        "expl_en": "Length of the scoreless streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
-                    }
-                ]
-            },
-            "home": {
-                "label_de": "Heimspiele",
-                "label_en": "Home",
-                "data_file": "opponent_shutout_streaks_home.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Serie ohne eigenes Tor in Spielen",
-                        "expl_en": "Length of the scoreless streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
-                    }
-                ]
-            },
-            "road": {
-                "label_de": "Auswärtsspiele",
-                "label_en": "Road",
-                "data_file": "opponent_shutout_streaks_road.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Serie ohne eigenes Tor in Spielen",
-                        "expl_en": "Length of the scoreless streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
-                    }
-                ]
-            }
-        }
-    },
-    "winning_streaks_season_start": {
-        "label_de": "Siegesserien (Saisonstart)",
-        "label_en": "Winning Streaks (Season Start)",
-        "description_de": "Die längsten Siegesserien einer Mannschaft direkt zu Saisonbeginn in der DEL-Geschichte.",
-        "description_en": "The longest winning streaks by a team right at the start of a season in DEL history.",
-        "season_types": {
-            "overall": {
-                "label_de": "Heim-/Auswärtsspiele",
-                "label_en": "Home & Road",
-                "data_file": "winning_streaks_season_start.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Siegesserie in Spielen",
-                        "expl_en": "Length of the winning streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
-                    }
-                ]
-            },
-            "home": {
-                "label_de": "Heimspiele",
-                "label_en": "Home",
-                "data_file": "winning_streaks_season_start_home.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Siegesserie in Spielen",
-                        "expl_en": "Length of the winning streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
-                    }
-                ]
-            },
-            "road": {
-                "label_de": "Auswärtsspiele",
-                "label_en": "Road",
-                "data_file": "winning_streaks_season_start_road.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Siegesserie in Spielen",
-                        "expl_en": "Length of the winning streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
-                    }
-                ]
-            }
-        }
-    },
-    "losing_streaks_season_start": {
-        "label_de": "Niederlagenserien (Saisonstart)",
-        "label_en": "Losing Streaks (Season Start)",
-        "description_de": "Die längsten Niederlagenserien einer Mannschaft direkt zu Saisonbeginn in der DEL-Geschichte.",
-        "description_en": "The longest losing streaks by a team right at the start of a season in DEL history.",
-        "season_types": {
-            "overall": {
-                "label_de": "Heim-/Auswärtsspiele",
-                "label_en": "Home & Road",
-                "data_file": "losing_streaks_season_start.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Niederlagenserie in Spielen",
-                        "expl_en": "Length of the losing streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
-                    }
-                ]
-            },
-            "home": {
-                "label_de": "Heimspiele",
-                "label_en": "Home",
-                "data_file": "losing_streaks_season_start_home.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Niederlagenserie in Spielen",
-                        "expl_en": "Length of the losing streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
-                    }
-                ]
-            },
-            "road": {
-                "label_de": "Auswärtsspiele",
-                "label_en": "Road",
-                "data_file": "losing_streaks_season_start_road.json",
-                "default_sort": {
-                    "data_key": "length",
-                    "direction": "desc"
-                },
-                "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "20"
-                    },
-                    {
-                        "data_key": "length",
-                        "col_header": "Länge",
-                        "expl_de": "Länge der Niederlagenserie in Spielen",
-                        "expl_en": "Length of the losing streak in games",
-                        "align": "right",
-                        "width": "9"
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "season_identifier": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "start",
-                        "col_header": "Von",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "end",
-                        "col_header": "Bis",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "date": true,
-                        "width": "14"
-                    },
-                    {
-                        "data_key": "scores_for",
-                        "col_header": "Tore",
-                        "expl_de": "Erzielte Tore während der Serie",
-                        "expl_en": "Goals scored during the streak",
-                        "align": "right",
-                        "width": "13"
-                    },
-                    {
-                        "data_key": "scores_against",
-                        "col_header": "Gegentore",
-                        "expl_de": "Zugelassene Tore während der Serie",
-                        "expl_en": "Goals allowed during the streak",
-                        "align": "right",
-                        "width": "13"
                     }
                 ]
             }

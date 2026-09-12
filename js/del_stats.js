@@ -208,6 +208,15 @@ app.factory('svc', function ($rootScope) {
                 ('00' + (Math.floor(timeInSeconds) % 60)).slice(-2)
             );
         },
+        // formats a (potentially large, multi-game) duration in seconds as h:mm:ss,
+        // unlike formatTime this rolls minutes over into hours instead of just
+        // growing past 60
+        formatDuration: function (timeInSeconds) {
+            let hours = Math.floor(timeInSeconds / 3600);
+            let minutes = Math.floor((timeInSeconds % 3600) / 60);
+            let seconds = Math.floor(timeInSeconds % 60);
+            return hours + ':' + this.pad(minutes, 2) + ':' + this.pad(seconds, 2);
+        },
         // gets total sum of attribute values from provided list optionally starting at from season and for specified season type
         getFilteredTotal: function (list, attribute, dataSource, fromSeason, seasonType) {
             if (dataSource === undefined) return;

@@ -261,7 +261,8 @@ test.describe('DEL Stats Core Flows', () => {
             await teamSelect.selectOption(realTeamOption.value);
             await page.waitForTimeout(300);
 
-            const teamCells = page.locator('table tbody tr td:nth-child(2)');
+            // column 1 is the rank counter, column 2 is "Saison", column 3 is "Team"
+            const teamCells = page.locator('table tbody tr td:nth-child(3)');
             const cellCount = await teamCells.count();
             expect(cellCount).toBeGreaterThan(0);
             for (let i = 0; i < cellCount; i++) {

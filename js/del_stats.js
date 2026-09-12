@@ -88,7 +88,7 @@ app.config([
                 controller: 'playerCareerController as ctrl',
                 reloadOnSearch: false,
             })
-            .when('/team_trivia', {
+            .when('/team_trivia/:category?/:seasonType?', {
                 title: 'Team-Trivia',
                 templateUrl: 'team_trivia.html',
                 controller: 'teamTriviaController as ctrl',

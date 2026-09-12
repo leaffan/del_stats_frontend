@@ -9,11 +9,14 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc, cfg
     ctrl.seasonTypeSelect = '';
 
     // sorting by the team column sorts by location rather than by abbreviation,
-    // since the table displays the full team name
+    // since the table displays the full team name; sorting by the "length" column
+    // (re-)applies the full tie-break chain (also used as the default sort, see
+    // applyDefaultSort) rather than just comparing streak length in isolation
     ctrl.sortCriteria = {
         team: function (row) {
             return ctrl.team_location_lookup ? ctrl.team_location_lookup[row.team] : row.team;
         },
+        length: ['-length', '-score_diff', '-scores_for', 'season'],
     };
 
     // retrieving category/column configuration, defaulting to the first defined category
@@ -66,13 +69,16 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc, cfg
         return category ? category.season_types[ctrl.seasonTypeSelect] : null;
     };
 
+    // default_sort is an array of orderBy expressions, each optionally prefixed with
+    // "-" for descending (e.g. ["-length", "-score_diff", "-scores_for", "season"]),
+    // applied as-is with no additional reversal
     ctrl.applyDefaultSort = function () {
         let seasonType = ctrl.currentSeasonType();
         if (!seasonType) return;
         ctrl.sortConfig = {
-            sortKey: seasonType.default_sort.data_key,
-            sortCriteria: seasonType.default_sort.data_key,
-            sortDescending: seasonType.default_sort.direction === 'desc',
+            sortKey: seasonType.default_sort[0].replace(/^-/, ''),
+            sortCriteria: seasonType.default_sort,
+            sortDescending: false,
         };
     };
 

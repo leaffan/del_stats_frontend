@@ -460,7 +460,48 @@ test.describe('DEL Stats Core Flows', () => {
         expect(ranks.slice(0, 5).map((r) => r.trim())).toEqual(['1', '2', '3', '4', '5']);
     });
 
-    test.skip('12. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
+    test('12. Team trivia score-state category formats duration and multi-season ranges', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasTeamTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/team_trivia');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const groups = await page
+            .locator('select')
+            .nth(0)
+            .locator('optgroup')
+            .evaluateAll((ogs) => ogs.map((og) => og.label));
+        expect(groups).toContain('Spielstand-Serien');
+
+        const selects = page.locator('select');
+        await selects.nth(0).selectOption('no_deficit_streaks');
+        await page.waitForTimeout(300);
+
+        const rows = await page
+            .locator('table tbody tr')
+            .evaluateAll((trs) =>
+                trs.map((tr) =>
+                    Array.from(tr.querySelectorAll('td')).map((td) => td.textContent.trim()),
+                ),
+            );
+
+        // top row (Adler Mannheim, 44885s) must render as h:mm:ss, not raw seconds
+        // or the plain mm:ss from the pre-existing formatTime (which would show
+        // "748:05" instead of "12:28:05")
+        const manRow = rows.find((r) => r[2] === 'Adler Mannheim' && r[1].includes('2018/19'));
+        expect(manRow[4]).toBe('12:28:05');
+
+        // a streak spanning two seasons must show both, not just one
+        expect(manRow[1]).toBe('2018/19–2019/20');
+    });
+
+    test.skip('13. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
         // KEV (Krefeld Pinguine) was in DEL until 2021, absent 2022-2025, returns 2026
         // This tests the valid_periods functionality for teams with relegation/promotion
 
@@ -522,7 +563,7 @@ test.describe('DEL Stats Core Flows', () => {
         expect(kevIn2026).toBeTruthy();
     });
 
-    test.skip('13. Team profile navigation respects valid_periods', async ({ page }) => {
+    test.skip('14. Team profile navigation respects valid_periods', async ({ page }) => {
         // Navigate to KEV team profile in 2021 (when they were in the league)
         await page.goto('http://localhost:8000/index.html#!/team_profile/2021/KEV');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});

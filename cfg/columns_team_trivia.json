@@ -1778,5 +1778,253 @@
                 ]
             }
         }
+    },
+    "no_deficit_streaks": {
+        "label_de": "Ohne Rückstand",
+        "label_en": "Without Trailing",
+        "group_label_de": "Spielstand-Serien",
+        "group_label_en": "Score-State Streaks",
+        "description_de": "Die längsten Zeiträume, in denen eine Mannschaft ununterbrochen nicht im Rückstand lag (Hauptrunde und Playoffs). Dargestellt werden Serien mit mindestens fünf vollen Spielen.",
+        "description_en": "The longest periods during which a team was never trailing (regular season and playoffs). Only streaks with at least five full games are shown.",
+        "season_types": {
+            "overall": {
+                "label_de": "Hauptrunde und Playoffs",
+                "label_en": "Regular Season & Playoffs",
+                "data_file": "no_deficit_streaks.json",
+                "default_sort": ["-time_wo_deficit"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "14",
+                        "season_identifier": true
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "16"
+                    },
+                    {
+                        "data_key": "games_wo_deficit",
+                        "col_header": "Spiele",
+                        "expl_de": "Anzahl der vollen Spiele in der Serie",
+                        "expl_en": "Number of full games in the streak",
+                        "width": "6"
+                    },
+                    {
+                        "data_key": "time_wo_deficit",
+                        "col_header": "Zeit",
+                        "expl_de": "Spielzeit in der Serie (Std:Min:Sek)",
+                        "expl_en": "Time on the game clock during the streak (h:mm:ss)",
+                        "width": "6",
+                        "duration": true
+                    },
+                    {
+                        "data_key": "from_date",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "date": true
+                    },
+                    {
+                        "data_key": "to_date",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "date": true
+                    },
+                    {
+                        "data_key": "score",
+                        "col_header": "GF",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "width": "5"
+                    },
+                    {
+                        "data_key": "opp_score",
+                        "col_header": "GA",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "width": "5"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "GDiff",
+                        "expl_de": "Tordifferenz während der Serie",
+                        "expl_en": "Goal differential during the streak",
+                        "width": "5",
+                        "diff_color": true
+                    },
+                    {
+                        "data_key": "rw",
+                        "record": ["rl"],
+                        "record_optional": ["t"],
+                        "col_header": "Bilanz",
+                        "expl_de": "Bilanz in regulärer Spielzeit (Siege-Niederlagen[-Unentschieden])",
+                        "expl_en": "Win-loss[-tie] record in regulation",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "ow",
+                        "record": ["ol"],
+                        "col_header": "OT-Bilanz",
+                        "expl_de": "Bilanz in der Verlängerung (Siege-Niederlagen)",
+                        "expl_en": "Win-loss record in overtime",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "sw",
+                        "record": ["sl"],
+                        "col_header": "SO-Bilanz",
+                        "expl_de": "Bilanz im Shootout (Siege-Niederlagen)",
+                        "expl_en": "Win-loss record in shootouts",
+                        "width": "8"
+                    }
+                ]
+            }
+        }
+    },
+    "no_lead_streaks": {
+        "label_de": "Ohne Führung",
+        "label_en": "Without Leading",
+        "group_label_de": "Spielstand-Serien",
+        "group_label_en": "Score-State Streaks",
+        "description_de": "Die längsten Zeiträume, in denen eine Mannschaft ununterbrochen nicht in Führung lag (Hauptrunde und Playoffs). Dargestellt werden Serien mit mindestens fünf vollen Spielen.",
+        "description_en": "The longest periods during which a team was never leading (regular season and playoffs). Only streaks with at least five full games are shown.",
+        "season_types": {
+            "overall": {
+                "label_de": "Hauptrunde und Playoffs",
+                "label_en": "Regular Season & Playoffs",
+                "data_file": "no_lead_streaks.json",
+                "default_sort": ["-time_wo_lead"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "14",
+                        "season_identifier": true
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "16"
+                    },
+                    {
+                        "data_key": "games_wo_lead",
+                        "col_header": "Spiele",
+                        "expl_de": "Anzahl der vollen Spiele in der Serie",
+                        "expl_en": "Number of full games in the streak",
+                        "width": "6"
+                    },
+                    {
+                        "data_key": "time_wo_lead",
+                        "col_header": "Zeit",
+                        "expl_de": "Spielzeit in der Serie (Std:Min:Sek)",
+                        "expl_en": "Time on the game clock during the streak (h:mm:ss)",
+                        "width": "6",
+                        "duration": true
+                    },
+                    {
+                        "data_key": "from_date",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "date": true
+                    },
+                    {
+                        "data_key": "to_date",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "date": true
+                    },
+                    {
+                        "data_key": "score",
+                        "col_header": "GF",
+                        "expl_de": "Erzielte Tore während der Serie",
+                        "expl_en": "Goals scored during the streak",
+                        "width": "5"
+                    },
+                    {
+                        "data_key": "opp_score",
+                        "col_header": "GA",
+                        "expl_de": "Zugelassene Tore während der Serie",
+                        "expl_en": "Goals allowed during the streak",
+                        "width": "5"
+                    },
+                    {
+                        "data_key": "score_diff",
+                        "col_header": "GDiff",
+                        "expl_de": "Tordifferenz während der Serie",
+                        "expl_en": "Goal differential during the streak",
+                        "width": "5",
+                        "diff_color": true
+                    },
+                    {
+                        "data_key": "rw",
+                        "record": ["rl"],
+                        "record_optional": ["t"],
+                        "col_header": "Bilanz",
+                        "expl_de": "Bilanz in regulärer Spielzeit (Siege-Niederlagen[-Unentschieden])",
+                        "expl_en": "Win-loss[-tie] record in regulation",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "ow",
+                        "record": ["ol"],
+                        "col_header": "OT-Bilanz",
+                        "expl_de": "Bilanz in der Verlängerung (Siege-Niederlagen)",
+                        "expl_en": "Win-loss record in overtime",
+                        "width": "8"
+                    },
+                    {
+                        "data_key": "sw",
+                        "record": ["sl"],
+                        "col_header": "SO-Bilanz",
+                        "expl_de": "Bilanz im Shootout (Siege-Niederlagen)",
+                        "expl_en": "Win-loss record in shootouts",
+                        "width": "8"
+                    }
+                ]
+            }
+        }
     }
 }

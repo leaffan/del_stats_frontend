@@ -53,6 +53,15 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc, cfg
         so_w: function (row) {
             return row.so_w - row.so_l;
         },
+        rw: function (row) {
+            return row.rw - row.rl;
+        },
+        ow: function (row) {
+            return row.ow - row.ol;
+        },
+        sw: function (row) {
+            return row.sw - row.sl;
+        },
     };
 
     // grouping consecutive categories sharing the same group_label_de into one

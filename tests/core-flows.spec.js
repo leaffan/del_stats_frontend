@@ -501,7 +501,38 @@ test.describe('DEL Stats Core Flows', () => {
         expect(manRow[1]).toBe('2018/19–2019/20');
     });
 
-    test.skip('13. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
+    test('13. Team trivia deep link selects category and season type from the route', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasTeamTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        // a direct link to a specific category/season-type combination must land
+        // there immediately, without the user having to pick it from the dropdowns
+        await page.goto(
+            'http://localhost:8000/index.html#!/team_trivia/losing_streaks_season_start/home',
+        );
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        await page.waitForTimeout(300);
+
+        const selects = page.locator('select');
+        await expect(selects.nth(0)).toHaveValue('losing_streaks_season_start');
+        await expect(selects.nth(1)).toHaveValue('home');
+        expect(await page.locator('table tbody tr').count()).toBeGreaterThan(0);
+
+        // an unknown category in the URL must fall back to the default category
+        // rather than breaking the page
+        await page.goto('http://localhost:8000/index.html#!/team_trivia/does_not_exist');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        await page.waitForTimeout(300);
+        await expect(selects.nth(0)).toHaveValue('winning_streaks');
+        expect(await page.locator('table tbody tr').count()).toBeGreaterThan(0);
+    });
+
+    test.skip('14. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
         // KEV (Krefeld Pinguine) was in DEL until 2021, absent 2022-2025, returns 2026
         // This tests the valid_periods functionality for teams with relegation/promotion
 
@@ -563,7 +594,7 @@ test.describe('DEL Stats Core Flows', () => {
         expect(kevIn2026).toBeTruthy();
     });
 
-    test.skip('14. Team profile navigation respects valid_periods', async ({ page }) => {
+    test.skip('15. Team profile navigation respects valid_periods', async ({ page }) => {
         // Navigate to KEV team profile in 2021 (when they were in the league)
         await page.goto('http://localhost:8000/index.html#!/team_profile/2021/KEV');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});

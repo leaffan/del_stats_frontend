@@ -45,6 +45,14 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc, cfg
         },
         length: ctrl.buildSortConfig(['-length', '-score_diff', '-scores_for', 'season'])
             .sortCriteria,
+        // sorting the combined "W-L[-T]" record columns by win differential rather
+        // than raw win count, so a small-sample 1-0 record doesn't outrank a 20-10 one
+        ot_w: function (row) {
+            return row.ot_w - row.ot_l;
+        },
+        so_w: function (row) {
+            return row.so_w - row.so_l;
+        },
     };
 
     // grouping consecutive categories sharing the same group_label_de into one

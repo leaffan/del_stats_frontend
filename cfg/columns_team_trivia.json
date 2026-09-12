@@ -1675,8 +1675,7 @@
                         "col_header": "OT-Bilanz",
                         "expl_de": "Bilanz in reinen Overtime-Spielen (Siege-Niederlagen[-Unentschieden])",
                         "expl_en": "Win-loss[-tie] record in pure overtime games",
-                        "width": "13",
-                        "sortable": false
+                        "width": "13"
                     },
                     {
                         "data_key": "so_w",
@@ -1684,8 +1683,7 @@
                         "col_header": "SO-Bilanz",
                         "expl_de": "Bilanz im Shootout (Siege-Niederlagen)",
                         "expl_en": "Win-loss record in shootouts",
-                        "width": "13",
-                        "sortable": false
+                        "width": "13"
                     }
                 ]
             },
@@ -1767,8 +1765,7 @@
                         "col_header": "OT-Bilanz",
                         "expl_de": "Bilanz in reinen Overtime-Spielen (Siege-Niederlagen[-Unentschieden])",
                         "expl_en": "Win-loss[-tie] record in pure overtime games",
-                        "width": "13",
-                        "sortable": false
+                        "width": "13"
                     },
                     {
                         "data_key": "so_w",
@@ -1776,8 +1773,7 @@
                         "col_header": "SO-Bilanz",
                         "expl_de": "Bilanz im Shootout (Siege-Niederlagen)",
                         "expl_en": "Win-loss record in shootouts",
-                        "width": "13",
-                        "sortable": false
+                        "width": "13"
                     }
                 ]
             }

@@ -8,6 +8,33 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc, cfg
     ctrl.categorySelect = '';
     ctrl.seasonTypeSelect = '';
 
+    // turns a human-readable, fully-signed sort spec (e.g. ["-length",
+    // "-score_diff", "-scores_for", "season"], read as "length desc, score_diff
+    // desc, scores_for desc, season asc") into the shape Angular's orderBy needs
+    // to also get the sort-direction caret right. The shared table-header
+    // directive shows the caret purely from sortDescending, and orderBy applies
+    // that same boolean as a *global* reversal on top of whatever "-"/"+"
+    // prefixes are already in the array (confirmed empirically: flipping
+    // sortDescending on an already-prefixed array reverses the whole order, it
+    // doesn't just relabel it). So the primary key can never keep its own prefix
+    // - its direction has to come entirely from sortDescending, or the two would
+    // fight each other and the caret would show the opposite of the true order.
+    // Fix: store the primary key unprefixed and pre-invert every other key's
+    // prefix so that, once the global reversal (sortDescending) is applied, each
+    // one still lands on its originally-intended direction.
+    ctrl.buildSortConfig = function (defaultSort) {
+        let primaryDescending = defaultSort[0].startsWith('-');
+        let sortKey = defaultSort[0].replace(/^-/, '');
+        let sortCriteria = defaultSort.map(function (entry, index) {
+            let key = entry.replace(/^-/, '');
+            if (index === 0) return key;
+            let entryDescending = entry.startsWith('-');
+            let storedDescending = entryDescending !== primaryDescending;
+            return storedDescending ? '-' + key : key;
+        });
+        return { sortKey: sortKey, sortCriteria: sortCriteria, sortDescending: primaryDescending };
+    };
+
     // sorting by the team column sorts by location rather than by abbreviation,
     // since the table displays the full team name; sorting by the "length" column
     // (re-)applies the full tie-break chain (also used as the default sort, see
@@ -16,7 +43,8 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc, cfg
         team: function (row) {
             return ctrl.team_location_lookup ? ctrl.team_location_lookup[row.team] : row.team;
         },
-        length: ['-length', '-score_diff', '-scores_for', 'season'],
+        length: ctrl.buildSortConfig(['-length', '-score_diff', '-scores_for', 'season'])
+            .sortCriteria,
     };
 
     // grouping consecutive categories sharing the same group_label_de into one
@@ -98,17 +126,10 @@ app.controller('teamTriviaController', function ($scope, $http, config, svc, cfg
         return category ? category.season_types[ctrl.seasonTypeSelect] : null;
     };
 
-    // default_sort is an array of orderBy expressions, each optionally prefixed with
-    // "-" for descending (e.g. ["-length", "-score_diff", "-scores_for", "season"]),
-    // applied as-is with no additional reversal
     ctrl.applyDefaultSort = function () {
         let seasonType = ctrl.currentSeasonType();
         if (!seasonType) return;
-        ctrl.sortConfig = {
-            sortKey: seasonType.default_sort[0].replace(/^-/, ''),
-            sortCriteria: seasonType.default_sort,
-            sortDescending: false,
-        };
+        ctrl.sortConfig = ctrl.buildSortConfig(seasonType.default_sort);
     };
 
     // (re-)deriving the season range available in the currently loaded season type's

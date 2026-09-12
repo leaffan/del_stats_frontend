@@ -415,7 +415,52 @@ test.describe('DEL Stats Core Flows', () => {
         expect(row[9]).toMatch(/^\d+-\d+$/);
     });
 
-    test.skip('11. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
+    test('11. Team trivia sort-direction caret matches the actual row order, and rank stays live after re-sorting', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasTeamTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/team_trivia');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        // default view (winning_streaks) is sorted by length descending - the
+        // caret on "Länge" must show down, not up, even though the underlying
+        // sortCriteria array is built from prefixed tie-break expressions
+        const lengthHeader = page.locator('th', { hasText: 'Länge' }).first();
+        await expect(lengthHeader.locator('.fa-caret-down')).toBeVisible();
+        await expect(lengthHeader.locator('.fa-caret-up')).toBeHidden();
+
+        const firstRowLengthBefore = await page
+            .locator('table tbody tr td:nth-child(3)')
+            .first()
+            .textContent();
+
+        // clicking "Länge" toggles to ascending - caret and actual order must
+        // both flip together (the row with the longest streak was on top, now
+        // it must move to the bottom / a shorter streak takes the top spot)
+        await lengthHeader.locator('a').click();
+        await page.waitForTimeout(300);
+        await expect(lengthHeader.locator('.fa-caret-up')).toBeVisible();
+        await expect(lengthHeader.locator('.fa-caret-down')).toBeHidden();
+        const firstRowLengthAfter = await page
+            .locator('table tbody tr td:nth-child(3)')
+            .first()
+            .textContent();
+        expect(parseInt(firstRowLengthAfter.trim(), 10)).toBeLessThan(
+            parseInt(firstRowLengthBefore.trim(), 10),
+        );
+
+        // the rank column (still sorted ascending by length from the click above)
+        // must reflect the *current* row order, not the order at first render
+        const ranks = await page.locator('table tbody tr td:nth-child(1)').allTextContents();
+        expect(ranks.slice(0, 5).map((r) => r.trim())).toEqual(['1', '2', '3', '4', '5']);
+    });
+
+    test.skip('12. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
         // KEV (Krefeld Pinguine) was in DEL until 2021, absent 2022-2025, returns 2026
         // This tests the valid_periods functionality for teams with relegation/promotion
 
@@ -477,7 +522,7 @@ test.describe('DEL Stats Core Flows', () => {
         expect(kevIn2026).toBeTruthy();
     });
 
-    test.skip('12. Team profile navigation respects valid_periods', async ({ page }) => {
+    test.skip('13. Team profile navigation respects valid_periods', async ({ page }) => {
         // Navigate to KEV team profile in 2021 (when they were in the league)
         await page.goto('http://localhost:8000/index.html#!/team_profile/2021/KEV');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});

@@ -272,7 +272,7 @@
                 "label_de": "Heim-/Auswärtsspiele",
                 "label_en": "Home & Road",
                 "data_file": "losing_streaks.json",
-                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "default_sort": ["-length", "score_diff", "-scores_for", "season"],
                 "columns": [
                     {
                         "data_key": "rank",
@@ -357,7 +357,7 @@
                 "label_de": "Heimspiele",
                 "label_en": "Home",
                 "data_file": "losing_streaks_home.json",
-                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "default_sort": ["-length", "score_diff", "-scores_for", "season"],
                 "columns": [
                     {
                         "data_key": "rank",
@@ -442,7 +442,7 @@
                 "label_de": "Auswärtsspiele",
                 "label_en": "Road",
                 "data_file": "losing_streaks_road.json",
-                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "default_sort": ["-length", "score_diff", "-scores_for", "season"],
                 "columns": [
                     {
                         "data_key": "rank",
@@ -798,7 +798,7 @@
                 "label_de": "Heim-/Auswärtsspiele",
                 "label_en": "Home & Road",
                 "data_file": "losing_streaks_season_start.json",
-                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "default_sort": ["-length", "score_diff", "-scores_for", "season"],
                 "columns": [
                     {
                         "data_key": "rank",
@@ -883,7 +883,7 @@
                 "label_de": "Heimspiele",
                 "label_en": "Home",
                 "data_file": "losing_streaks_season_start_home.json",
-                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "default_sort": ["-length", "score_diff", "-scores_for", "season"],
                 "columns": [
                     {
                         "data_key": "rank",
@@ -968,7 +968,7 @@
                 "label_de": "Auswärtsspiele",
                 "label_en": "Road",
                 "data_file": "losing_streaks_season_start_road.json",
-                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "default_sort": ["-length", "score_diff", "-scores_for", "season"],
                 "columns": [
                     {
                         "data_key": "rank",
@@ -1324,7 +1324,7 @@
                 "label_de": "Heim-/Auswärtsspiele",
                 "label_en": "Home & Road",
                 "data_file": "opponent_shutout_streaks.json",
-                "default_sort": ["-length", "-score_diff", "-scores_for", "season"],
+                "default_sort": ["-length", "score_diff", "-scores_for", "season"],
                 "columns": [
                     {
                         "data_key": "rank",

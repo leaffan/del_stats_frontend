@@ -723,10 +723,13 @@ app.factory('triviaPageBehavior', [
                 };
             };
 
-            // sorting by "team"/"opp" sorts by location rather than by
-            // abbreviation, since the table displays the full team name;
-            // individual controllers extend this map with their own extras
-            // (e.g. Object.assign(ctrl.sortCriteria, {...})), never replace it
+            // sorting a "team_column"-flagged field (see below) sorts by
+            // location rather than by abbreviation, since the table displays
+            // the full team name; individual controllers extend this map with
+            // their own extras (e.g. Object.assign(ctrl.sortCriteria, {...})),
+            // never replace it. Populated once the config is loaded (see
+            // initFromRoute), since the actual field names ("team"/"opp",
+            // "home_abbr"/"road_abbr", ...) vary per category
             let sortByLocation = function (field) {
                 return function (row) {
                     return ctrl.team_location_lookup
@@ -734,9 +737,18 @@ app.factory('triviaPageBehavior', [
                         : row[field];
                 };
             };
-            ctrl.sortCriteria = {
-                team: sortByLocation('team'),
-                opp: sortByLocation('opp'),
+            ctrl.sortCriteria = {};
+
+            // a column is a "team column" when its data_key holds a team
+            // abbreviation that should render as the full team name and sort
+            // by location - regardless of what that field happens to be called
+            // in a given category's data (team/opp, home_abbr/road_abbr, ...)
+            ctrl.teamColumnFields = function () {
+                let seasonType = ctrl.currentSeasonType();
+                if (!seasonType) return [];
+                return seasonType.columns
+                    .filter((col) => col.team_column)
+                    .map((col) => col.data_key);
             };
 
             // grouping consecutive categories sharing the same group_label_de
@@ -862,7 +874,31 @@ app.factory('triviaPageBehavior', [
             };
 
             ctrl.teamFilter = function (row) {
-                return !ctrl.teamSelect || row.team === ctrl.teamSelect;
+                if (!ctrl.teamSelect) return true;
+                return ctrl.teamColumnFields().some((field) => row[field] === ctrl.teamSelect);
+            };
+
+            // combines a column's own field with its "record" companions (e.g.
+            // wins-losses, or a home-road score pairing) into a single "A-B"
+            // display; fields listed under "record_optional" (e.g. ties) are
+            // only appended when non-zero, so rows without them stay "A-B"
+            // instead of always showing a trailing "-0"
+            ctrl.formatRecord = function (row, col) {
+                let parts = [row[col.data_key]].concat(
+                    (col.record || []).map((field) => row[field]),
+                );
+                (col.record_optional || []).forEach((field) => {
+                    if (row[field]) parts.push(row[field]);
+                });
+                return parts.join('-');
+            };
+
+            // appends a "(VL)"/"(SO)" marker to a score when the game was
+            // decided in overtime or a shootout, based on the row's sibling
+            // "decided_by" field (REG/OT/SO)
+            ctrl.formatScore = function (row, col) {
+                let suffix = { OT: ' (VL)', SO: ' (SO)' }[row.decided_by] || '';
+                return row[col.data_key] + suffix;
             };
 
             // a row matches the selected season range if its season(s) overlap
@@ -886,6 +922,20 @@ app.factory('triviaPageBehavior', [
                 $http.get(options.configUrl).then(function (res) {
                     ctrl.categories = res.data;
                     ctrl.categoryGroups = ctrl.buildCategoryGroups(res.data);
+                    // registering location-based sorting for every "team
+                    // column" field name used anywhere in this page's config,
+                    // so a future category can introduce yet another field
+                    // name (team/opp, home_abbr/road_abbr, ...) without any
+                    // code change here
+                    Object.values(res.data).forEach((category) => {
+                        Object.values(category.season_types).forEach((seasonType) => {
+                            seasonType.columns
+                                .filter((col) => col.team_column)
+                                .forEach((col) => {
+                                    ctrl.sortCriteria[col.data_key] = sortByLocation(col.data_key);
+                                });
+                        });
+                    });
                     ctrl.categorySelect =
                         $routeParams.category && res.data[$routeParams.category]
                             ? $routeParams.category

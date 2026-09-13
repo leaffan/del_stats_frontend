@@ -710,6 +710,7 @@ test.describe('DEL Stats Core Flows', () => {
             );
         expect(groups).toEqual([
             { label: 'Einbrüche und Comebacks', options: ['blown_leads', 'comeback_wins'] },
+            { label: 'Drittel-Statistiken', options: ['goals_per_period'] },
         ]);
 
         // default category (blown_leads) is sorted by margin descending - the
@@ -798,5 +799,55 @@ test.describe('DEL Stats Core Flows', () => {
         // confirming the opponent filter didn't accidentally filter on "team"
         const teamCells = await page.locator('table tbody tr td:nth-child(2)').allTextContents();
         expect(teamCells.some((c) => c.trim() !== 'Adler Mannheim')).toBeTruthy();
+    });
+
+    test('20. Game trivia goals-per-period category switches variants and generalizes team_column', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasGameTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/game_trivia');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        await page.waitForTimeout(300);
+
+        const selects = page.locator('select');
+        await selects.nth(0).selectOption('goals_per_period');
+        await page.waitForTimeout(300);
+
+        // this category has 3 real variants, so (unlike blown_leads/comeback_wins)
+        // the season-type dropdown must actually be visible with period1-3,
+        // now placed right after the category select in the top row
+        const seasonTypeOptions = await selects
+            .nth(1)
+            .locator('option')
+            .evaluateAll((els) => els.map((el) => el.value));
+        expect(seasonTypeOptions).toEqual(['period1', 'period2', 'period3']);
+
+        // "Heim"/"Auswärts" use home_abbr/road_abbr (not team/opp) but must
+        // still render as full team names via the generic team_column flag
+        const homeCell = await page.locator('table tbody tr td:nth-child(5)').first().textContent();
+        expect(homeCell.trim()).not.toMatch(/^[A-Z]{2,4}$/);
+
+        // switching to period3 loads its own file and sorts by period_3_goals
+        const [response] = await Promise.all([
+            page.waitForResponse((res) => res.url().includes('goals_in_games_period_3.json')),
+            selects.nth(1).selectOption('period3'),
+        ]);
+        expect(response.ok()).toBeTruthy();
+        await page.waitForTimeout(300);
+
+        const rows = await page
+            .locator('table tbody tr')
+            .evaluateAll((trs) =>
+                trs.map((tr) =>
+                    Array.from(tr.querySelectorAll('td')).map((td) => td.textContent.trim()),
+                ),
+            );
+        const totals = rows.map((r) => parseInt(r[7], 10));
+        expect(totals[0]).toBeGreaterThanOrEqual(totals[totals.length - 1]);
     });
 });

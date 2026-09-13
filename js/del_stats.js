@@ -94,6 +94,12 @@ app.config([
                 controller: 'teamTriviaController as ctrl',
                 reloadOnSearch: false,
             })
+            .when('/game_trivia/:category?/:seasonType?', {
+                title: 'Spiel-Trivia',
+                templateUrl: 'game_trivia.html',
+                controller: 'gameTriviaController as ctrl',
+                reloadOnSearch: false,
+            })
             .when('/shot_explorer/:season/:player_id', {
                 title: 'Shot Explorer',
                 templateUrl: 'shot_explorer.html',

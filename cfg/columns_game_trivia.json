@@ -1,0 +1,224 @@
+{
+    "blown_leads": {
+        "label_de": "Einbrüche",
+        "label_en": "Blown Leads",
+        "group_label_de": "Einbrüche und Comebacks",
+        "group_label_en": "Blown Leads & Comebacks",
+        "description_de": "Spiele, in denen eine Mannschaft einen deutlichen Vorsprung nicht über die Zeit retten konnte und die Partie am Ende verlor (Hauptrunde und Playoffs).",
+        "description_en": "Games in which a team failed to hold on to a significant lead and ultimately lost (regular season and playoffs).",
+        "season_types": {
+            "overall": {
+                "label_de": "Hauptrunde und Playoffs",
+                "label_en": "Regular Season & Playoffs",
+                "data_file": "blown_leads.json",
+                "default_sort": ["-margin", "turnaround_duration"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14"
+                    },
+                    {
+                        "data_key": "opp",
+                        "col_header": "Gegner",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "9",
+                        "season_identifier": true
+                    },
+                    {
+                        "data_key": "game_date",
+                        "col_header": "Datum",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "9",
+                        "date": true
+                    },
+                    {
+                        "data_key": "score",
+                        "col_header": "Ergebnis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "9"
+                    },
+                    {
+                        "data_key": "margin",
+                        "col_header": "Marge",
+                        "expl_de": "Größter Vorsprung vor der Niederlage",
+                        "expl_en": "Biggest lead before the loss",
+                        "width": "7"
+                    },
+                    {
+                        "data_key": "max_margin_time",
+                        "col_header": "Zeitpunkt",
+                        "expl_de": "Spielzeit beim größten Vorsprung/Rückstand",
+                        "expl_en": "Game time at the peak lead/deficit",
+                        "align": "center",
+                        "width": "10",
+                        "time": true
+                    },
+                    {
+                        "data_key": "final_time",
+                        "col_header": "Spielende",
+                        "expl_de": "Spielzeit bei Spielende (inkl. Verlängerung/Shootout)",
+                        "expl_en": "Game time at the final buzzer (including overtime/shootout)",
+                        "align": "center",
+                        "width": "10",
+                        "time": true
+                    },
+                    {
+                        "data_key": "turnaround_duration",
+                        "col_header": "Wende-Dauer",
+                        "expl_de": "Spielzeit vom größten Vorsprung/Rückstand bis Spielende",
+                        "expl_en": "Game time from the peak lead/deficit to the final buzzer",
+                        "align": "center",
+                        "width": "10",
+                        "time": true
+                    },
+                    {
+                        "data_key": "decided_by",
+                        "col_header": "Entschieden",
+                        "expl_de": "Entschieden nach regulärer Spielzeit (REG), Verlängerung (OT) oder Shootout (SO)",
+                        "expl_en": "Decided in regulation (REG), overtime (OT), or a shootout (SO)",
+                        "align": "center",
+                        "width": "5"
+                    }
+                ]
+            }
+        }
+    },
+    "comeback_wins": {
+        "label_de": "Comebacks",
+        "label_en": "Comebacks",
+        "group_label_de": "Einbrüche und Comebacks",
+        "group_label_en": "Blown Leads & Comebacks",
+        "description_de": "Spiele, in denen eine Mannschaft einen deutlichen Rückstand aufholte und die Partie am Ende gewann (Hauptrunde und Playoffs).",
+        "description_en": "Games in which a team overcame a significant deficit and ultimately won (regular season and playoffs).",
+        "season_types": {
+            "overall": {
+                "label_de": "Hauptrunde und Playoffs",
+                "label_en": "Regular Season & Playoffs",
+                "data_file": "comeback_wins.json",
+                "default_sort": ["-margin", "turnaround_duration"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14"
+                    },
+                    {
+                        "data_key": "opp",
+                        "col_header": "Gegner",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "9",
+                        "season_identifier": true
+                    },
+                    {
+                        "data_key": "game_date",
+                        "col_header": "Datum",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "9",
+                        "date": true
+                    },
+                    {
+                        "data_key": "score",
+                        "col_header": "Ergebnis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "9"
+                    },
+                    {
+                        "data_key": "margin",
+                        "col_header": "Marge",
+                        "expl_de": "Größter Rückstand vor dem Sieg",
+                        "expl_en": "Biggest deficit before the win",
+                        "width": "7"
+                    },
+                    {
+                        "data_key": "max_margin_time",
+                        "col_header": "Zeitpunkt",
+                        "expl_de": "Spielzeit beim größten Vorsprung/Rückstand",
+                        "expl_en": "Game time at the peak lead/deficit",
+                        "align": "center",
+                        "width": "10",
+                        "time": true
+                    },
+                    {
+                        "data_key": "final_time",
+                        "col_header": "Spielende",
+                        "expl_de": "Spielzeit bei Spielende (inkl. Verlängerung/Shootout)",
+                        "expl_en": "Game time at the final buzzer (including overtime/shootout)",
+                        "align": "center",
+                        "width": "10",
+                        "time": true
+                    },
+                    {
+                        "data_key": "turnaround_duration",
+                        "col_header": "Wende-Dauer",
+                        "expl_de": "Spielzeit vom größten Vorsprung/Rückstand bis Spielende",
+                        "expl_en": "Game time from the peak lead/deficit to the final buzzer",
+                        "align": "center",
+                        "width": "10",
+                        "time": true
+                    },
+                    {
+                        "data_key": "decided_by",
+                        "col_header": "Entschieden",
+                        "expl_de": "Entschieden nach regulärer Spielzeit (REG), Verlängerung (OT) oder Shootout (SO)",
+                        "expl_en": "Decided in regulation (REG), overtime (OT), or a shootout (SO)",
+                        "align": "center",
+                        "width": "5"
+                    }
+                ]
+            }
+        }
+    }
+}

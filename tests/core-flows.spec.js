@@ -26,6 +26,19 @@ async function hasTeamTriviaData(page) {
     }
 }
 
+// Helper to check if game trivia data is available
+async function hasGameTriviaData(page) {
+    try {
+        const response = await page.request.head(
+            'http://localhost:8000/data/team_trivia/blown_leads.json',
+            { timeout: 2000 },
+        );
+        return response.ok();
+    } catch {
+        return false;
+    }
+}
+
 // Helper to check if shot explorer data is available
 async function hasShotExplorerData(page) {
     try {
@@ -670,5 +683,120 @@ test.describe('DEL Stats Core Flows', () => {
         const playerSelect = page.locator('select').first();
         await expect(playerSelect).toHaveValue('100');
         expect(await page.locator('table tbody tr').count()).toBeGreaterThan(0);
+    });
+
+    test('17. Game trivia page loads with both categories and sorts by margin', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasGameTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/game_trivia');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        await page.waitForTimeout(300);
+
+        const groups = await page
+            .locator('select')
+            .nth(0)
+            .locator('optgroup')
+            .evaluateAll((ogs) =>
+                ogs.map((og) => ({
+                    label: og.label,
+                    options: Array.from(og.querySelectorAll('option')).map((o) => o.value),
+                })),
+            );
+        expect(groups).toEqual([
+            { label: 'Spiel-Trivia', options: ['blown_leads', 'comeback_wins'] },
+        ]);
+
+        // default category (blown_leads) is sorted by margin descending - the
+        // largest blown leads (margin 4) must appear before the more common
+        // margin-3 ones, with both team and opponent shown as full names
+        const rows = await page
+            .locator('table tbody tr')
+            .evaluateAll((trs) =>
+                trs.map((tr) =>
+                    Array.from(tr.querySelectorAll('td')).map((td) => td.textContent.trim()),
+                ),
+            );
+        expect(parseInt(rows[0][6], 10)).toBeGreaterThanOrEqual(
+            parseInt(rows[rows.length - 1][6], 10),
+        );
+        expect(rows[0][1]).not.toMatch(/^[A-Z]{2,4}$/); // full name, not a bare abbreviation
+        expect(rows[0][2]).not.toMatch(/^[A-Z]{2,4}$/);
+
+        // switching to "comeback_wins" loads its own file and re-renders
+        const selects = page.locator('select');
+        const [response] = await Promise.all([
+            page.waitForResponse((res) => res.url().includes('comeback_wins.json')),
+            selects.nth(0).selectOption('comeback_wins'),
+        ]);
+        expect(response.ok()).toBeTruthy();
+        await page.waitForTimeout(300);
+        expect(await page.locator('table tbody tr').count()).toBeGreaterThan(0);
+    });
+
+    test('18. Game trivia RS/PO filter narrows rows and covers the full data set', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasGameTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/game_trivia');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        await page.waitForTimeout(300);
+
+        const rowCountAll = await page.locator('table tbody tr').count();
+
+        const gamePhaseSelect = page.locator('select').nth(1);
+        await gamePhaseSelect.selectOption('PO');
+        await page.waitForTimeout(300);
+        const rowCountPO = await page.locator('table tbody tr').count();
+        expect(rowCountPO).toBeGreaterThan(0);
+        expect(rowCountPO).toBeLessThan(rowCountAll);
+
+        await gamePhaseSelect.selectOption('RS');
+        await page.waitForTimeout(300);
+        const rowCountRS = await page.locator('table tbody tr').count();
+
+        // RS and PO together must account for every row - no game silently
+        // dropped or double-counted by the filter
+        expect(rowCountRS + rowCountPO).toBe(rowCountAll);
+    });
+
+    test('19. Game trivia opponent filter narrows rows independently of the team filter', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasGameTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/game_trivia');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        await page.waitForTimeout(300);
+
+        const oppSelect = page.locator('select').nth(3);
+        const oppValue = await oppSelect
+            .locator('option')
+            .evaluateAll((els) => els.find((el) => el.textContent.includes('Mannheim'))?.value);
+        await oppSelect.selectOption(oppValue);
+        await page.waitForTimeout(300);
+
+        const oppCells = await page.locator('table tbody tr td:nth-child(3)').allTextContents();
+        expect(oppCells.length).toBeGreaterThan(0);
+        expect(oppCells.every((c) => c.trim() === 'Adler Mannheim')).toBeTruthy();
+
+        // the team column (not filtered) should still contain other teams too,
+        // confirming the opponent filter didn't accidentally filter on "team"
+        const teamCells = await page.locator('table tbody tr td:nth-child(2)').allTextContents();
+        expect(teamCells.some((c) => c.trim() !== 'Adler Mannheim')).toBeTruthy();
     });
 });

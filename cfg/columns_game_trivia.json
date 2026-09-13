@@ -28,7 +28,8 @@
                         "expl_de": null,
                         "expl_en": null,
                         "align": "left",
-                        "width": "14"
+                        "width": "18",
+                        "team_column": true
                     },
                     {
                         "data_key": "opp",
@@ -36,7 +37,8 @@
                         "expl_de": null,
                         "expl_en": null,
                         "align": "left",
-                        "width": "14"
+                        "width": "18",
+                        "team_column": true
                     },
                     {
                         "data_key": "season",
@@ -44,7 +46,7 @@
                         "expl_de": null,
                         "expl_en": null,
                         "align": "center",
-                        "width": "9",
+                        "width": "7",
                         "season_identifier": true
                     },
                     {
@@ -53,23 +55,24 @@
                         "expl_de": null,
                         "expl_en": null,
                         "align": "center",
-                        "width": "9",
+                        "width": "7",
                         "date": true
                     },
                     {
                         "data_key": "score",
                         "col_header": "Ergebnis",
-                        "expl_de": null,
-                        "expl_en": null,
+                        "expl_de": "Endstand; (VL) bzw. (SO) markieren eine Entscheidung in Verlängerung bzw. im Shootout",
+                        "expl_en": "Final score; (VL)/(SO) mark a game decided in overtime/a shootout",
                         "align": "center",
-                        "width": "9"
+                        "width": "12",
+                        "decision_suffix": true
                     },
                     {
                         "data_key": "margin",
-                        "col_header": "Marge",
+                        "col_header": "Vorsprung",
                         "expl_de": "Größter Vorsprung vor der Niederlage",
                         "expl_en": "Biggest lead before the loss",
-                        "width": "7"
+                        "width": "8"
                     },
                     {
                         "data_key": "max_margin_time",
@@ -77,34 +80,26 @@
                         "expl_de": "Spielzeit beim größten Vorsprung/Rückstand",
                         "expl_en": "Game time at the peak lead/deficit",
                         "align": "center",
-                        "width": "10",
+                        "width": "9",
                         "time": true
                     },
                     {
                         "data_key": "final_time",
-                        "col_header": "Spielende",
-                        "expl_de": "Spielzeit bei Spielende (inkl. Verlängerung/Shootout)",
-                        "expl_en": "Game time at the final buzzer (including overtime/shootout)",
+                        "col_header": "Siegtreffer",
+                        "expl_de": "Zeitpunkt des Siegtreffers",
+                        "expl_en": "Time of the game-winning goal",
                         "align": "center",
-                        "width": "10",
+                        "width": "8",
                         "time": true
                     },
                     {
                         "data_key": "turnaround_duration",
-                        "col_header": "Wende-Dauer",
-                        "expl_de": "Spielzeit vom größten Vorsprung/Rückstand bis Spielende",
-                        "expl_en": "Game time from the peak lead/deficit to the final buzzer",
+                        "col_header": "Dauer",
+                        "expl_de": "Spielzeit vom größten Vorsprung bis zum Siegtreffer",
+                        "expl_en": "Game time from the peak lead to the game-winning goal",
                         "align": "center",
                         "width": "10",
                         "time": true
-                    },
-                    {
-                        "data_key": "decided_by",
-                        "col_header": "Entschieden",
-                        "expl_de": "Entschieden nach regulärer Spielzeit (REG), Verlängerung (OT) oder Shootout (SO)",
-                        "expl_en": "Decided in regulation (REG), overtime (OT), or a shootout (SO)",
-                        "align": "center",
-                        "width": "5"
                     }
                 ]
             }
@@ -139,7 +134,8 @@
                         "expl_de": null,
                         "expl_en": null,
                         "align": "left",
-                        "width": "14"
+                        "width": "18",
+                        "team_column": true
                     },
                     {
                         "data_key": "opp",
@@ -147,7 +143,8 @@
                         "expl_de": null,
                         "expl_en": null,
                         "align": "left",
-                        "width": "14"
+                        "width": "18",
+                        "team_column": true
                     },
                     {
                         "data_key": "season",
@@ -155,7 +152,7 @@
                         "expl_de": null,
                         "expl_en": null,
                         "align": "center",
-                        "width": "9",
+                        "width": "7",
                         "season_identifier": true
                     },
                     {
@@ -164,58 +161,325 @@
                         "expl_de": null,
                         "expl_en": null,
                         "align": "center",
-                        "width": "9",
+                        "width": "7",
                         "date": true
                     },
                     {
                         "data_key": "score",
                         "col_header": "Ergebnis",
-                        "expl_de": null,
-                        "expl_en": null,
+                        "expl_de": "Endstand; (VL) bzw. (SO) markieren eine Entscheidung in Verlängerung bzw. im Shootout",
+                        "expl_en": "Final score; (VL)/(SO) mark a game decided in overtime/a shootout",
                         "align": "center",
-                        "width": "9"
+                        "width": "12",
+                        "decision_suffix": true
                     },
                     {
                         "data_key": "margin",
-                        "col_header": "Marge",
+                        "col_header": "Rückstand",
                         "expl_de": "Größter Rückstand vor dem Sieg",
                         "expl_en": "Biggest deficit before the win",
-                        "width": "7"
+                        "width": "8"
                     },
                     {
                         "data_key": "max_margin_time",
                         "col_header": "Zeitpunkt",
-                        "expl_de": "Spielzeit beim größten Vorsprung/Rückstand",
-                        "expl_en": "Game time at the peak lead/deficit",
+                        "expl_de": "Spielzeit beim größten Rückstand",
+                        "expl_en": "Time of the peak deficit",
                         "align": "center",
-                        "width": "10",
+                        "width": "9",
                         "time": true
                     },
                     {
                         "data_key": "final_time",
-                        "col_header": "Spielende",
-                        "expl_de": "Spielzeit bei Spielende (inkl. Verlängerung/Shootout)",
-                        "expl_en": "Game time at the final buzzer (including overtime/shootout)",
+                        "col_header": "Siegtreffer",
+                        "expl_de": "Zeitpunkt des Siegtreffers",
+                        "expl_en": "Time of the game-winning goal",
                         "align": "center",
-                        "width": "10",
+                        "width": "8",
                         "time": true
                     },
                     {
                         "data_key": "turnaround_duration",
-                        "col_header": "Wende-Dauer",
-                        "expl_de": "Spielzeit vom größten Vorsprung/Rückstand bis Spielende",
-                        "expl_en": "Game time from the peak lead/deficit to the final buzzer",
+                        "col_header": "Dauer",
+                        "expl_de": "Spielzeit vom größten Rückstand bis zum Siegtreffer",
+                        "expl_en": "Time from the peak deficit to the game-winning goal",
                         "align": "center",
                         "width": "10",
                         "time": true
+                    }
+                ]
+            }
+        }
+    },
+    "goals_per_period": {
+        "label_de": "Torreichstes Drittel",
+        "label_en": "Highest-Scoring Period",
+        "group_label_de": "Drittel-Statistiken",
+        "group_label_en": "Period Statistics",
+        "description_de": "Spiele mit den meisten Toren in einem einzelnen Drittel (Hauptrunde und Playoffs).",
+        "description_en": "Games with the most goals scored in a single period (regular season and playoffs).",
+        "season_types": {
+            "period1": {
+                "label_de": "1. Drittel",
+                "label_en": "Period 1",
+                "data_file": "goals_in_games_period_1.json",
+                "default_sort": ["-period_1_goals"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
                     },
                     {
-                        "data_key": "decided_by",
-                        "col_header": "Entschieden",
-                        "expl_de": "Entschieden nach regulärer Spielzeit (REG), Verlängerung (OT) oder Shootout (SO)",
-                        "expl_en": "Decided in regulation (REG), overtime (OT), or a shootout (SO)",
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
                         "align": "center",
-                        "width": "5"
+                        "width": "8",
+                        "season_identifier": true
+                    },
+                    {
+                        "data_key": "game_date",
+                        "col_header": "Datum",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "date": true
+                    },
+                    {
+                        "data_key": "round",
+                        "col_header": "Spieltag",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "home_abbr",
+                        "col_header": "Heim",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "road_abbr",
+                        "col_header": "Auswärts",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "home_period_1",
+                        "record": ["road_period_1"],
+                        "col_header": "1. Drittel",
+                        "expl_de": "Tore im 1. Drittel (Heim-Auswärts)",
+                        "expl_en": "Goals in period 1 (home-road)",
+                        "align": "center",
+                        "width": "10",
+                        "sortable": false
+                    },
+                    {
+                        "data_key": "period_1_goals",
+                        "col_header": "Tore gesamt",
+                        "expl_de": "Tore insgesamt im 1. Drittel",
+                        "expl_en": "Total goals in period 1",
+                        "width": "10"
+                    },
+                    {
+                        "data_key": "home_score",
+                        "record": ["road_score"],
+                        "col_header": "Endstand",
+                        "expl_de": "Endstand (Heim-Auswärts)",
+                        "expl_en": "Final score (home-road)",
+                        "align": "center",
+                        "width": "12",
+                        "sortable": false
+                    }
+                ]
+            },
+            "period2": {
+                "label_de": "2. Drittel",
+                "label_en": "Period 2",
+                "data_file": "goals_in_games_period_2.json",
+                "default_sort": ["-period_2_goals"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "season_identifier": true
+                    },
+                    {
+                        "data_key": "game_date",
+                        "col_header": "Datum",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "date": true
+                    },
+                    {
+                        "data_key": "round",
+                        "col_header": "Spieltag",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "home_abbr",
+                        "col_header": "Heim",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "road_abbr",
+                        "col_header": "Auswärts",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "home_period_2",
+                        "record": ["road_period_2"],
+                        "col_header": "2. Drittel",
+                        "expl_de": "Tore im 2. Drittel (Heim-Auswärts)",
+                        "expl_en": "Goals in period 2 (home-road)",
+                        "align": "center",
+                        "width": "10",
+                        "sortable": false
+                    },
+                    {
+                        "data_key": "period_2_goals",
+                        "col_header": "Tore gesamt",
+                        "expl_de": "Tore insgesamt im 2. Drittel",
+                        "expl_en": "Total goals in period 2",
+                        "width": "10"
+                    },
+                    {
+                        "data_key": "home_score",
+                        "record": ["road_score"],
+                        "col_header": "Endstand",
+                        "expl_de": "Endstand (Heim-Auswärts)",
+                        "expl_en": "Final score (home-road)",
+                        "align": "center",
+                        "width": "12",
+                        "sortable": false
+                    }
+                ]
+            },
+            "period3": {
+                "label_de": "3. Drittel",
+                "label_en": "Period 3",
+                "data_file": "goals_in_games_period_3.json",
+                "default_sort": ["-period_3_goals"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "season_identifier": true
+                    },
+                    {
+                        "data_key": "game_date",
+                        "col_header": "Datum",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "date": true
+                    },
+                    {
+                        "data_key": "round",
+                        "col_header": "Spieltag",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "13"
+                    },
+                    {
+                        "data_key": "home_abbr",
+                        "col_header": "Heim",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "road_abbr",
+                        "col_header": "Auswärts",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "18",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "home_period_3",
+                        "record": ["road_period_3"],
+                        "col_header": "3. Drittel",
+                        "expl_de": "Tore im 3. Drittel (Heim-Auswärts)",
+                        "expl_en": "Goals in period 3 (home-road)",
+                        "align": "center",
+                        "width": "10",
+                        "sortable": false
+                    },
+                    {
+                        "data_key": "period_3_goals",
+                        "col_header": "Tore gesamt",
+                        "expl_de": "Tore insgesamt im 3. Drittel",
+                        "expl_en": "Total goals in period 3",
+                        "width": "10"
+                    },
+                    {
+                        "data_key": "home_score",
+                        "record": ["road_score"],
+                        "col_header": "Endstand",
+                        "expl_de": "Endstand (Heim-Auswärts)",
+                        "expl_en": "Final score (home-road)",
+                        "align": "center",
+                        "width": "12",
+                        "sortable": false
                     }
                 ]
             }

@@ -69,6 +69,7 @@ app.controller(
                     ? $routeParams.category
                     : Object.keys(res.data)[0];
             let category = ctrl.currentCategory();
+            if (!category) return;
             ctrl.seasonTypeSelect =
                 $routeParams.seasonType && category.season_types[$routeParams.seasonType]
                     ? $routeParams.seasonType

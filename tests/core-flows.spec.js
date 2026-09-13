@@ -709,7 +709,7 @@ test.describe('DEL Stats Core Flows', () => {
                 })),
             );
         expect(groups).toEqual([
-            { label: 'Spiel-Trivia', options: ['blown_leads', 'comeback_wins'] },
+            { label: 'Einbrüche und Comebacks', options: ['blown_leads', 'comeback_wins'] },
         ]);
 
         // default category (blown_leads) is sorted by margin descending - the

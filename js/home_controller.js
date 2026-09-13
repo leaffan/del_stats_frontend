@@ -12,7 +12,10 @@ app.controller('homeController', function ($scope, $http, $cacheFactory, config,
             var team_players = [
                 ...new Set(res.data[1].map((item) => item.team + '/' + item.player_id)),
             ];
+            var players = [...new Set(res.data[1].map((item) => item.player_id))];
             $scope.random_team_player_default_season =
                 team_players[Math.floor(Math.random() * team_players.length)];
+            $scope.random_player_default_season =
+                players[Math.floor(Math.random() * players.length)];
         });
 });

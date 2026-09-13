@@ -26,6 +26,19 @@ async function hasTeamTriviaData(page) {
     }
 }
 
+// Helper to check if shot explorer data is available
+async function hasShotExplorerData(page) {
+    try {
+        const response = await page.request.head(
+            'http://localhost:8000/data/2025/shots/per_player/100.json',
+            { timeout: 2000 },
+        );
+        return response.ok();
+    } catch {
+        return false;
+    }
+}
+
 test.describe('DEL Stats Core Flows', () => {
     test('1. Home page loads and renders', async ({ page }) => {
         const dataAvailable = await hasData(page);
@@ -637,5 +650,25 @@ test.describe('DEL Stats Core Flows', () => {
         const bodyText = await page.textContent('body').catch(() => '');
         const pageLoaded = bodyText.length > 50;
         expect(pageLoaded).toBeTruthy();
+    });
+
+    test('16. Shot explorer deep link selects season and player from the route', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasShotExplorerData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        // a direct link to a specific season/player combination must land there
+        // immediately, without the user having to pick it from the dropdowns
+        await page.goto('http://localhost:8000/index.html#!/shot_explorer/2025/100');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        await page.waitForTimeout(300);
+
+        const playerSelect = page.locator('select').first();
+        await expect(playerSelect).toHaveValue('100');
+        expect(await page.locator('table tbody tr').count()).toBeGreaterThan(0);
     });
 });

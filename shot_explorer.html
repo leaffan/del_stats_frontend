@@ -1,0 +1,464 @@
+<div class="container" data-ng-app="delStatsApp">
+
+    <!-- Navigation -->
+    <div class="alert alert-info main-bg shadow">
+        <a href="#!"><b>Startseite</b></a>  | <a href="#!/team_stats/{{season}}"><b>Teamstatistiken</b></a> | <a href="#!/del_stats/{{season}}"><b>Spielerstatistiken</b></a> | <a href="#!/player_career/{{player_id}}"><b>Karriereverlauf</b></a> 
+    </div>
+
+    <player-information
+        current-player-data="currentPlayerData"
+        model="model"
+        season="season"
+        player-id="player_id"
+        has-portrait="hasPortrait"
+        colors="colors"
+        main-number="mainNumber">
+    </player-information>
+
+    <!-- Filters -->
+    <form>
+        <div class="form-row mb-1">
+            <div class="input-group col-6">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Spieler:</span>
+                </div>
+                <select class="form-control" data-ng-model="model.new_player_id" data-ng-change="changePlayer()">
+                    <option data-ng-option data-ng-repeat="player in filtered_players =(all_players | orderBy:'last_name')" value="{{player.player_id}}">{{player.full_name}}</option>
+                </select>
+            </div>
+            <div class="input-group col-6 pl-0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Torhüter:</span>
+                </div>
+                <select class="form-control" data-ng-model="goalieFilter" data-ng-change="applyFilters()">
+                    <option data-ng-option value="all">alle Torhüter</option>
+                    <option data-ng-option data-ng-if="hasEmptyNetShots" value="empty_net">Leeres Tor</option>
+                    <option data-ng-option data-ng-repeat="g in goalieOptions" value="{{g.id}}">{{g.full_name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row mb-1">
+            <div class="input-group col-4">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Saisonphase:</span>
+                </div>
+                <select class="form-control" data-ng-model="seasonTypeFilter" data-ng-change="applyFilters()">
+                    <option data-ng-option value="RS">Hauptrunde</option>
+                    <option data-ng-option value="PO">Playoffs</option>
+                    <option data-ng-option value="all">Hauptrunde und Playoffs</option>
+                </select>
+            </div>
+            <div class="input-group col-4 pl-0">
+                <select class="form-control" data-ng-model="homeRoadFilter" data-ng-change="applyFilters()">
+                    <option data-ng-option value="all" selected="selected">Heim-/Auswärtsspiele</option>
+                    <option data-ng-option value="home">Heimspiele</option>
+                    <option data-ng-option value="road">Auswärtsspiele</option>
+                </select>
+            </div>
+            <div class="input-group col-4 pl-0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Gegner:</span>
+                </div>
+                <select class="form-control" data-ng-model="oppFilter" data-ng-change="applyFilters()">
+                    <option data-ng-option value="all">alle</option>
+                    <option data-ng-option data-ng-repeat="team in all_teams | filter:{abbr: '!' + model.team} | orderBy:'location'" value="{{team.abbr}}">{{team.full_name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row mb-1">
+            <div class="input-group col-4">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Situation:</span>
+                </div>
+                <select class="form-control" data-ng-model="situationFilter" data-ng-change="applyFilters()">
+                    <option data-ng-option value="all">alle</option>
+                    <option data-ng-option value="EV">Even Strength</option>
+                    <option data-ng-option value="PP">Überzahl</option>
+                    <option data-ng-option value="SH">Unterzahl</option>
+                </select>
+            </div>
+            <div class="input-group col-4 pl-0">
+                <div class="input-group-prepend"><span class="input-group-text">Schussausgang:</span></div>
+                <select class="form-control" data-ng-model="targetTypeFilter" data-ng-change="applyFilters()">
+                    <option value="all">alle</option>
+                    <option value="goals">Tor</option>
+                    <option value="on_goal">Torschuss</option>
+                    <option value="missed">Tor verfehlt</option>
+                    <option value="blocked">Schuss geblockt</option>
+                </select>
+            </div>
+            <div class="input-group col-4 pl-0">
+                <div class="input-group-prepend"><span class="input-group-text">Spielabschnitt:</span></div>
+                <select class="form-control" data-ng-model="periodFilter" data-ng-change="applyFilters()">
+                    <option value="all">alle</option>
+                    <option value="1">1. Drittel</option>
+                    <option value="2">2. Drittel</option>
+                    <option value="3">3. Drittel</option>
+                    <option value="OT">Verlängerung</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row mb-2">
+            <div class="input-group col-2">
+                <select class="form-control" data-ng-model="timespanSelect" data-ng-change="changeTimespan()">
+                    <option data-ng-option value selected="selected">alle Zeiträume</option>
+                    <option data-ng-option data-ng-repeat="month in monthsPlayed" value="{{month}}">{{svc.germanMonths()[month]}}</option>
+                </select>
+            </div>
+            <div class="input-group col-2 pl-0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                </div>
+                <input class="form-control" placeholder="Anfangsdatum" moment-picker="ctrl.stringFromDate" format="DD.MM.YYYY" start-date="minShotDate" data-ng-model="ctrl.fromDate" data-ng-model-options="{ updateOn: 'blur' }" data-ng-change="applyFilters()">
+            </div>
+            <div class="input-group col-2 pl-0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                </div>
+                <input class="form-control" placeholder="Enddatum" moment-picker="ctrl.stringToDate" format="DD.MM.YYYY" start-date="maxShotDate" data-ng-model="ctrl.toDate" data-ng-model-options="{ updateOn: 'blur' }" data-ng-change="applyFilters()">
+            </div>
+            <div class="input-group col-3 pl-0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">von:</span>
+                </div>
+                <select class="form-control" data-ng-model="fromRoundSelect" data-ng-change="applyFilters()">
+                    <option data-ng-option data-ng-repeat="r in roundsPlayed" value="{{r.key}}">{{r.po_round ? (poRoundLabels[r.po_round] || r.po_round) + ' / ' : ''}}Spieltag {{r.round}}</option>
+                </select>
+            </div>
+            <div class="input-group col-3 pl-0">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">bis:</span>
+                </div>
+                <select class="form-control" data-ng-model="toRoundSelect" data-ng-change="applyFilters()">
+                    <option data-ng-option data-ng-repeat="r in roundsPlayed" value="{{r.key}}">{{r.po_round ? (poRoundLabels[r.po_round] || r.po_round) + ' / ' : ''}}Spieltag {{r.round}}</option>
+                </select>
+            </div>
+        </div>
+    </form>
+
+    <!-- Main content: shot list left, portrait rink right -->
+    <div class="row">
+
+        <!-- Left: Stats summary + Shot list -->
+        <div class="col-md-8">
+
+            <!-- Stats summary -->
+            <div class="alert alert-info main-bg shadow py-2 mb-2" ng-if="shotStats">
+                <span class="mr-3"><strong>{{shotStats.total}}</strong> Schüsse</span>
+                <span class="mr-3"><strong>{{shotStats.goals}}</strong> Tore</span>
+                <span class="mr-3"><strong>{{shotStats.shooting_pct}} %</strong> Schussquote</span>
+                <span class="mr-3">{{shotStats.on_goal}} auf das Tor</span>
+                <span class="mr-3">{{shotStats.blocked}} geblockt</span>
+                <span>{{shotStats.missed}} daneben</span>
+            </div>
+
+            <!-- Shot list -->
+            <div class="alert alert-info main-bg shadow p-0">
+                <div class="p-3 text-muted" ng-if="!player_id">Kein Spieler ausgewählt.</div>
+                <div class="p-3 text-muted" ng-if="model.player_id && filteredShots.length === 0">No shots match the current filters.</div>
+                <div class="shot-list-wrapper" ng-if="filteredShots.length > 0">
+                    <table class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow mb-0">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="w-04">#</th>
+                                <th class="w-08">
+                                    <a href="" data-ng-click="setSortOrder('game_date')">
+                                        Datum
+                                        <span data-ng-show="sortConfig.sortKey == 'game_date' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
+                                        <span data-ng-show="sortConfig.sortKey == 'game_date' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
+                                    </a>
+                                </th>
+                                <th class="w-05">
+                                    <a href="" data-ng-click="setSortOrder('period')">
+                                        P
+                                        <span data-ng-show="sortConfig.sortKey == 'period' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
+                                        <span data-ng-show="sortConfig.sortKey == 'period' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
+                                    </a>
+                                </th>
+                                <th class="w-09">
+                                    <a href="" data-ng-click="setSortOrder('time')">
+                                        Min
+                                        <span data-ng-show="sortConfig.sortKey == 'time' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
+                                        <span data-ng-show="sortConfig.sortKey == 'time' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
+                                    </a>
+                                </th>
+                                <th class="w-09">
+                                    <a href="" data-ng-click="setSortOrder('plr_situation')">
+                                        Sit
+                                        <span data-ng-show="sortConfig.sortKey == 'plr_situation' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
+                                        <span data-ng-show="sortConfig.sortKey == 'plr_situation' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
+                                    </a>
+                                </th>
+                                <th class="w-09">
+                                    <a href="" data-ng-click="setSortOrder('opp_team')">
+                                        Opp
+                                        <span data-ng-show="sortConfig.sortKey == 'opp_team' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
+                                        <span data-ng-show="sortConfig.sortKey == 'opp_team' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
+                                    </a>
+                                </th>
+                                <th class="w-11">
+                                    <a href="" data-ng-click="setSortOrder('ne_shot_zone')">
+                                        NHL-Zone
+                                        <span data-ng-show="sortConfig.sortKey == 'ne_shot_zone' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
+                                        <span data-ng-show="sortConfig.sortKey == 'ne_shot_zone' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
+                                    </a>
+                                </th>
+                                <th class="w-11">
+                                    <a href="" data-ng-click="setSortOrder('shot_zone')">
+                                        DEL-Zone
+                                        <span data-ng-show="sortConfig.sortKey == 'shot_zone' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
+                                        <span data-ng-show="sortConfig.sortKey == 'shot_zone' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
+                                    </a>
+                                </th>
+                                <th class="w-08">
+                                    <a href="" data-ng-click="setSortOrder('distance')">
+                                        Dist
+                                        <span data-ng-show="sortConfig.sortKey == 'distance' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
+                                        <span data-ng-show="sortConfig.sortKey == 'distance' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
+                                    </a>
+                                </th>
+                                <th class="w-11">
+                                    <a href="" data-ng-click="setSortOrder('target_type')">
+                                        Typ
+                                        <span data-ng-show="sortConfig.sortKey == 'target_type' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
+                                        <span data-ng-show="sortConfig.sortKey == 'target_type' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
+                                    </a>
+                                </th>
+                                <th class="w-15">
+                                    <a href="" data-ng-click="setSortOrder('goalie_last_name')">
+                                        Goalie
+                                        <span data-ng-show="sortConfig.sortKey == 'goalie_last_name' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
+                                        <span data-ng-show="sortConfig.sortKey == 'goalie_last_name' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
+                                    </a>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="shot in filteredShots | orderBy:sortConfig.sortCriteria:sortConfig.sortDescending"
+                                ng-class="{'table-danger': shot.scored, 'table-info': !shot.scored && shot.home_road === 'home', 'table-warning': !shot.scored && shot.home_road === 'road', 'shot-row-active': hoveredShotIndex === $index}"
+                                ng-mouseenter="hoverShot($index)"
+                                ng-mouseleave="hoverShot(null)">
+                                <td>{{$index + 1}}</td>
+                                <td>{{shot.game_date}}</td>
+                                <td>{{shot.period === 'OT' ? 'OT' : shot.period}}</td>
+                                <td>{{shot.time_str}}</td>
+                                <td>{{shot.plr_situation}}</td>
+                                <td>{{shot.opp_team}}</td>
+                                <td>{{shot.ne_shot_zone}}</td>
+                                <td>{{shot.shot_zone}}</td>
+                                <td>{{shot.distance | number:1}} m</td>
+                                <td>
+                                    <span class="shot-legend-dot"
+                                        ng-class="{'shot-legend-square': shot.target_type === 'blocked', 'shot-legend-outline': shot.target_type === 'missed'}"
+                                        ng-style="shot.target_type === 'missed' ? {'border': '2px solid #e74c3c', 'background': 'transparent'} : {'background': shotColor(shot)}"></span>
+                                    {{shot.target_type}}
+                                </td>
+                                <td>{{shot.goalie_name}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Zone toggles + Vertical rink -->
+        <div class="col-md-4">
+
+            <!-- Zone toggles (no WH) -->
+            <div class="alert alert-info main-bg shadow mb-2 py-2">
+                <strong class="d-block mb-1">Shot Zones:</strong>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="zone-none" name="zoneOverlay" value="none" data-ng-model="zoneOverlay">
+                    <label class="form-check-label" for="zone-none">Keine</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="zone-edge" name="zoneOverlay" value="edge" data-ng-model="zoneOverlay">
+                    <label class="form-check-label" for="zone-edge">NHL-Edge</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="zone-es" name="zoneOverlay" value="es" data-ng-model="zoneOverlay">
+                    <label class="form-check-label" for="zone-es">DEL</label>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="mb-2 d-flex flex-wrap" ng-show="filteredShots.length > 0">
+                <span class="mr-3"><span class="shot-legend-dot" style="background:#1a1a1a;"></span> Goal</span>
+                <span class="mr-3"><span class="shot-legend-dot" style="background:#2980b9;"></span> On Goal</span>
+                <span class="mr-3"><span class="shot-legend-dot shot-legend-square" style="background:#f39c12;"></span> Blocked</span>
+                <span class="mr-3"><span class="shot-legend-dot shot-legend-outline" style="border:2px solid #e74c3c; background:transparent;"></span> Missed</span>
+            </div>
+
+<!-- Rink visualization wrapper (portrait: height = 121/61 * width) -->
+                <div class="rink-wrapper">
+                <!-- Inline SVG: full rink, portrait mode via group transform, viewBox "-0.5 -0.5 61 121" -->
+                <!-- Group transform translate(60,0) rotate(-90): (x,y) → (60-y, x) -->
+                <!-- Left goal (x=8) → y≈8 (top); right goal (x=112) → y≈112 (bottom) -->
+                <svg class="rink-svg" version="1.1" viewBox="-0.5 -0.5 61 121"
+                    xmlns="http://www.w3.org/2000/svg">
+
+                <g id="rink-rotated" transform="translate(60,0) rotate(90)">
+
+                    <!-- Rink outline (full path, clipped by viewBox) -->
+                    <path id="rink-frame" style="fill:#f2f5f9;stroke:#ff0000;stroke-width:0.2"
+                        d="m 14,0 h 92 a 14,14 0 0 1 14,14 V 46 A 14,14 0 0 1 106,60 H 14 A 14,14 0 0 1 0,46 V 14 A 14,14 0 0 1 14,0 Z" />
+
+                    <!-- Face-off dots -->
+                    <circle id="neutral-zone-middle-point" style="fill:#ff0000;stroke:#ff0000;stroke-width:0.1;stroke-miterlimit:1" cx="60" cy="30" r="0.65" />
+                    <circle id="neutral-zone-upperleft-point" style="fill:#ff0000;stroke:#ff0000;stroke-width:0.1;stroke-miterlimit:1" cx="48.75" cy="16" r="0.65" />
+                    <circle id="neutral-zone-lowerleft-point" style="fill:#ff0000;stroke:#ff0000;stroke-width:0.1;stroke-miterlimit:1" cx="48.75" cy="44" r="0.65" />
+                    <circle id="left-zone-upper-point" style="fill:#ff0000;stroke:#ff0000;stroke-width:0.1;stroke-miterlimit:1" cx="20" cy="16" r="0.65" />
+                    <circle id="left-zone-lower-point" style="fill:#ff0000;stroke:#ff0000;stroke-width:0.1;stroke-miterlimit:1" cx="20" cy="44" r="0.65" />
+
+                    <!-- Face-off circles -->
+                    <circle id="neutral-zone-circle" style="fill:none;stroke:#ff0000;stroke-width:0.3" cx="60" cy="30" r="9" />
+                    <circle id="left-zone-upper-circle" style="fill:none;stroke:#ff0000;stroke-width:0.3" cx="20" cy="16" r="9" />
+                    <circle id="left-zone-lower-circle" style="fill:none;stroke:#ff0000;stroke-width:0.3" cx="20" cy="44" r="9" />
+
+                    <!-- Goal crease and net -->
+                    <rect id="left-zone-goal" style="fill:none;stroke:#ff0000;stroke-width:0.2" x="5.76" y="28.17" width="2.24" height="3.66" />
+                    <path id="left-goalzone" style="fill:#739bcb;stroke:#ff0000;stroke-width:0.1"
+                        d="m 8,27.55 h 2.44 a 3.66,3.66 0 0 1 0,4.9 H 8 Z" />
+
+                    <!-- Lines -->
+                    <line id="left-blueline" style="fill:none;stroke:#2c8ccd;stroke-width:0.3" x1="45.75" y1="0" x2="45.75" y2="60" />
+                    <line id="neutral-zone-upper-redline" style="fill:none;stroke:#ff0000;stroke-width:0.3" x1="60" y1="0" x2="60" y2="28" />
+                    <line id="neutral-zone-lower-redline" style="fill:none;stroke:#ff0000;stroke-width:0.3" x1="60" y1="32" x2="60" y2="60" />
+                    <line id="left-zone-goalline" style="fill:none;stroke:#ff0000;stroke-width:0.3" x1="8" y1="1.3" x2="8" y2="58.7" />
+
+                    <!-- Right zone elements (mirror of left, x_right = 120 - x_left) -->
+                    <circle id="neutral-zone-upperright-point" style="fill:#ff0000;stroke:#ff0000;stroke-width:0.1;stroke-miterlimit:1" cx="71.25" cy="16" r="0.65" />
+                    <circle id="neutral-zone-lowerright-point" style="fill:#ff0000;stroke:#ff0000;stroke-width:0.1;stroke-miterlimit:1" cx="71.25" cy="44" r="0.65" />
+                    <circle id="right-zone-upper-point" style="fill:#ff0000;stroke:#ff0000;stroke-width:0.1;stroke-miterlimit:1" cx="100" cy="16" r="0.65" />
+                    <circle id="right-zone-lower-point" style="fill:#ff0000;stroke:#ff0000;stroke-width:0.1;stroke-miterlimit:1" cx="100" cy="44" r="0.65" />
+                    <circle id="right-zone-upper-circle" style="fill:none;stroke:#ff0000;stroke-width:0.3" cx="100" cy="16" r="9" />
+                    <circle id="right-zone-lower-circle" style="fill:none;stroke:#ff0000;stroke-width:0.3" cx="100" cy="44" r="9" />
+                    <rect id="right-zone-goal" style="fill:none;stroke:#ff0000;stroke-width:0.2" x="112" y="28.17" width="2.24" height="3.66" />
+                    <path id="right-goalzone" style="fill:#739bcb;stroke:#ff0000;stroke-width:0.1"
+                        d="m 112,27.55 h -2.44 a 3.66,3.66 0 0 0 0,4.9 H 112 Z" />
+                    <line id="right-blueline" style="fill:none;stroke:#2c8ccd;stroke-width:0.3" x1="74.25" y1="0" x2="74.25" y2="60" />
+                    <line id="right-zone-goalline" style="fill:none;stroke:#ff0000;stroke-width:0.3" x1="112" y1="1.3" x2="112" y2="58.7" />
+
+                    <!-- ── Edge Shot Zones (toggleable) ────────────────────── -->
+                    <g id="edge_shot_zones" ng-attr-display="{{zoneOverlay === 'edge' ? '' : 'none'}}">
+                        <path id="ne_behind_the_net" style="opacity:0.5;fill:#cccccc;stroke-width:0.1"
+                            d="M 0,39.816969 H 7.9333325 V 20.147373 H 0 Z"><title>Hinter dem Tor</title></path>
+                        <path id="ne_crease" style="opacity:0.5;fill:#aa8800;stroke-width:0.1"
+                            d="m 7.9268414,25.563372 0.0072,2.403365 v 6.401499 a 4.4615647,4.4038945 0 0 0 0,-8.807789 h -0.0072 z"><title>Torraum</title></path>
+                        <path id="ne_low_slot" style="opacity:0.5;fill:#ffcc00;stroke-width:0.1"
+                            d="m 7.9333325,25.560447 h 0.00212 a 4.4651773,4.4074604 0 0 1 3.2946655,7.374323 h 0.0072 A 4.4622872,4.4046077 0 0 1 7.9354495,34.368236 L 18.142464,42.306 a 21.862751,21.580153 0 0 0 3.142965,-6.618378 h -0.0072 A 21.947286,21.663595 0 0 0 22.05861,29.967963 21.877201,21.594417 0 0 0 21.314358,24.36949 21.958846,21.675006 0 0 0 18.149661,17.637031 Z"><title>Unterer Slot</title></path>
+                        <path id="ne_high_slot" style="opacity:0.5;fill:#ffdd55;stroke-width:0.1"
+                            d="m 32.419442,21.380786 -11.105098,2.988742 a 21.8772,21.594415 0 0 1 0.744232,5.598417 21.573742,21.294878 0 0 1 -0.780371,5.719644 l 0.0021,-0.0021 11.086929,3.039277 a 39.941655,39.425371 0 0 0 1,-8.799528 39.455399,38.9454 0 0 0 -0.93992,-8.544468 z"><title>Oberer Slot</title></path>
+                        <path id="ne_center_point" style="opacity:0.5;fill:#ffeeaa;stroke-width:0.1"
+                            d="m 45.749984,17.794736 -8.084882,2.174317 -5.245662,1.411717 a 39.455397,38.945397 0 0 1 0.93992,8.544467 39.941653,39.425368 0 0 1 -1,8.799528 l 5.232755,1.434552 8.150013,2.232497 z"><title>Center Point</title></path>
+                        <path id="ne_left_corner" style="opacity:0.5;fill:#ffd5d5;stroke-width:0.1"
+                            d="m 0,39.816986 v 0.228155 5.954846 A 14,14 0 0 0 7.9333619,58.610328 V 55.884985 39.816986 Z"><title>Linke Ecke</title></path>
+                        <path id="ne_left_net_side" style="opacity:0.5;fill:#aa0000;stroke-width:0.1"
+                            d="M 7.9333325,50.222312 A 22.221844,21.934604 0 0 0 18.142464,42.306 L 7.9333325,34.37534 Z"><title>Linke Torseite</title></path>
+                        <path id="ne_left_circle" style="opacity:0.5;fill:#ff0000;stroke-width:0.1"
+                            d="m 21.285453,35.687568 c -0.131179,0.481338 -0.27783,0.951487 -0.439232,1.411817 l 0.0015,4.06e-4 h -0.0016 c -0.656454,1.872134 -1.561304,3.580634 -2.703698,5.206247 l 9.732895,7.5694 c 1.832296,-2.987197 3.200725,-6.207466 4.132988,-9.716116 a 39.941651,39.425365 0 0 0 0.358811,-1.434254 z"><title>Linker Bullykreis</title></path>
+                        <path id="ne_left_outside" style="opacity:0.5;fill:#ff8080;stroke-width:0.1"
+                            d="M 18.135274,42.313082 A 22.187883,21.901084 0 0 1 7.9333619,50.222331 v 4.797695 0.872107 2.718195 a 14,14 0 0 0 6.0666401,1.389676 h 5.330451 v -0.02125 a 20.230575,19.969075 0 0 0 0.892959,0.02125 h 20.671294 z"><title>Linke Außenzone</title></path>
+                        <path id="ne_left_point" style="opacity:0.5;fill:#ffaaaa;stroke-width:0.1"
+                            d="m 32.367117,38.725047 a 39.941648,39.425363 0 0 1 -0.358812,1.434255 c -0.932263,3.508649 -2.300692,6.728918 -4.132988,9.716116 l 3.655532,2.842992 0.885016,0.688237 v 0.0043 h 0.0056 l 8.473281,6.589072 h 4.855278 v -17.60822 l -6.500908,-1.780755 -1.649105,-0.451742 z"><title>Linker Point</title></path>
+                        <path id="ne_right_corner" style="opacity:0.5;fill:#d7f4d7;stroke-width:0.1"
+                            d="M 7.9339577,1.3893714 A 14,14 0 0 0 0,14 v 5.961996 0.185363 H 7.9333619 7.9339577 Z"><title>Rechte Ecke</title></path>
+                        <path id="ne_right_net_side" style="opacity:0.5;fill:#217821;stroke-width:0.1"
+                            d="M 7.9333325,25.624661 18.149661,17.637031 C 15.64974,14.09252 12.087826,11.361091 7.9333325,9.7778285 Z"><title>Rechte Torseite</title></path>
+                        <path id="ne_right_circle" style="opacity:0.5;fill:#2ca02c;stroke-width:0.1"
+                            d="m 27.838582,10.113443 -9.688912,7.523631 a 21.796278,21.514538 0 0 1 3.164672,6.732438 L 32.41944,21.38077 a 39.455399,38.9454 0 0 0 -0.346005,-1.411717 37.460521,36.976307 0 0 0 -4.234853,-9.85561 z"><title>Rechter Bullykreis</title></path>
+                        <path id="ne_right_outside" style="opacity:0.5;fill:#5fd35f;stroke-width:0.1"
+                            d="M 14,0 A 14,14 0 0 0 7.933362,1.3896706 v 2.7254408 0.8216729 4.8338329 c 4.132817,1.5903948 7.716387,4.3148148 10.216308,7.8664578 L 40.865715,0.00724233 H 23.380539 V 0 Z"><title>Rechte Außenzone</title></path>
+                        <path id="ne_right_point" style="opacity:0.5;fill:#87de87;stroke-width:0.1"
+                            d="M 40.849234,0.00724121 31.49471,7.2744217 27.838582,10.113443 c 1.888491,3.065036 3.315056,6.385028 4.234853,9.85561 0.124215,0.468408 0.239571,0.939063 0.346005,1.411717 l 5.245662,-1.411717 8.084882,-2.174316 V 0.00724121 Z"><title>Rechter Point</title></path>
+                        <path id="ne_neutral_zone" style="opacity:0.5;fill:#aaccff;stroke-width:0.1"
+                            d="m 45.749984,60 h 14.25 V 0.00724334 h -14.25 z"><title>Neutrale Zone</title></path>
+                    </g>
+
+                    <!-- ── ES Shot Zones (toggleable) ──────────────────────── -->
+                    <g id="es_shot_zones" ng-attr-display="{{zoneOverlay === 'es' ? '' : 'none'}}">
+                        <path id="es_slot" style="opacity:0.5;stroke-width:0.431052;fill:#eeffaa"
+                            d="M 29.52,44.0208 H 19.1568 L 8.0316,32.4384 V 27.5616 L 19.1568,15.9792 H 29.52 Z"><title>Slot</title></path>
+                        <path id="es_blue_line" style="opacity:0.5;stroke-width:0.1;fill:#800000"
+                            d="M 45.8268,60.0228 H 29.52 V -0.0228 h 16.3068 z"><title>Blaue Linie</title></path>
+                        <path id="es_left" style="opacity:0.5;stroke-width:0.1;fill:#00ff00"
+                            d="M 14,0 A 14,14 0 0 0 8.0315544,1.335957 L 8.0315544,27.561589 L 19.156807,15.979233 L 29.519956,15.979233 L 29.519956,0 Z"><title>Linke Seite</title></path>
+                        <path id="es_right" style="opacity:0.5;stroke-width:0.1;fill:#00ffff"
+                            d="M 8.0315544,32.438411 L 8.0315544,58.664043 A 14,14 0 0 0 14,60 L 29.519956,60 L 29.519956,44.020767 L 19.156807,44.020767 Z"><title>Rechte Seite</title></path>
+                        <path id="es_neutral_zone" style="opacity:0.5;stroke-width:0.1;fill:#ff0000"
+                            d="M 60,60.0228 V -0.0228 H 45.8268 v 60.0456 z"><title>Neutrale Zone</title></path>
+                        <path id="es_behind_goal" style="opacity:0.5;stroke-width:0.1;fill:#ffaaaa"
+                            d="M 8.0315544,1.335957 A 14,14 0 0 0 0,14 L 0,46 A 14,14 0 0 0 8.0315544,58.664043 Z"><title>Hinter dem Tor</title></path>
+                    </g>
+
+                    <!-- ── Shot dots ──────────────────────────────────── -->
+                    <g id="shot-dots">
+                        <g ng-repeat="shot in filteredShots">
+                            <!-- Goal: dark filled circle -->
+                            <circle ng-if="shot.scored"
+                                cx="{{shot.svg_x}}" cy="{{shot.svg_y}}" r="0.75"
+                                fill="#1a1a1a" fill-opacity="0.85"
+                                stroke="#000" stroke-width="0.12">
+                                <title>{{shot.target_type}} – GOAL | {{shot.shot_zone}} | {{shot.distance | number:1}} m | P{{shot.period}} | {{shot.situation}} | {{shot.home_road}}</title>
+                            </circle>
+                            <!-- Blocked: square -->
+                            <rect ng-if="!shot.scored && shot.target_type === 'blocked'"
+                                x="{{shot.svg_x - 0.6}}" y="{{shot.svg_y - 0.6}}"
+                                width="1.2" height="1.2"
+                                fill="#f39c12" fill-opacity="0.7"
+                                stroke="#555" stroke-width="0.12">
+                                <title>blocked | {{shot.shot_zone}} | {{shot.distance | number:1}} m | P{{shot.period}} | {{shot.situation}} | {{shot.home_road}}</title>
+                            </rect>
+                            <!-- Missed: red outline circle, no fill -->
+                            <circle ng-if="!shot.scored && shot.target_type === 'missed'"
+                                cx="{{shot.svg_x}}" cy="{{shot.svg_y}}" r="0.7"
+                                fill="transparent"
+                                stroke="#e74c3c" stroke-width="0.28">
+                                <title>missed | {{shot.shot_zone}} | {{shot.distance | number:1}} m | P{{shot.period}} | {{shot.situation}} | {{shot.home_road}}</title>
+                            </circle>
+                            <!-- On goal: blue filled circle -->
+                            <circle ng-if="!shot.scored && shot.target_type === 'on_goal'"
+                                cx="{{shot.svg_x}}" cy="{{shot.svg_y}}" r="0.7"
+                                fill="#2980b9" fill-opacity="0.65"
+                                stroke="#555" stroke-width="0.12">
+                                <title>on goal | {{shot.shot_zone}} | {{shot.distance | number:1}} m | P{{shot.period}} | {{shot.situation}} | {{shot.home_road}}</title>
+                            </circle>
+                        </g>
+                    </g>
+
+                    <!-- ── Hover highlight ────────────────────────────────── -->
+                    <g ng-if="hoveredShotIndex !== null">
+                        <circle
+                            cx="{{filteredShots[hoveredShotIndex].svg_x}}"
+                            cy="{{filteredShots[hoveredShotIndex].svg_y}}"
+                            r="1.6"
+                            fill="none"
+                            stroke="#ffffff"
+                            stroke-width="0.5"
+                            pointer-events="none"/>
+                        <circle
+                            cx="{{filteredShots[hoveredShotIndex].svg_x}}"
+                            cy="{{filteredShots[hoveredShotIndex].svg_y}}"
+                            r="1.6"
+                            fill="none"
+                            stroke="#000000"
+                            stroke-width="0.2"
+                            stroke-dasharray="0.6 0.4"
+                            pointer-events="none"/>
+                    </g>
+
+                </g>
+
+                </svg>
+
+            <div class="mt-2">
+                <button class="btn btn-sm btn-outline-secondary" data-ng-click="downloadRink()" title="Grafik als PNG herunterladen">
+                    <span class="fa fa-download"></span> PNG
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

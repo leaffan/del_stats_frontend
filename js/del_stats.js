@@ -94,6 +94,12 @@ app.config([
                 controller: 'teamTriviaController as ctrl',
                 reloadOnSearch: false,
             })
+            .when('/shot_explorer/:season/:player_id', {
+                title: 'Shot Explorer',
+                templateUrl: 'shot_explorer.html',
+                controller: 'shotExplorerController',
+                reloadOnSearch: false,
+            })
             .otherwise({
                 redirectTo: '/home',
             });

@@ -96,3 +96,33 @@ caption {
     height: 80px;
     overflow-y: auto;
 }
+
+.rink-wrapper {
+    width: 100%;
+}
+.rink-svg {
+    display: block;
+    width: 100%;
+    aspect-ratio: 61 / 121;
+}
+.shot-row-active {
+    background-color: #fff3cd !important;
+}
+.shot-legend-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 3px;
+    vertical-align: middle;
+}
+.shot-legend-square {
+    border-radius: 0;
+}
+#edge_shot_zones path,
+#es_shot_zones path {
+    fill: #ddeeff !important;
+    stroke: #5588bb !important;
+    stroke-width: 0.7 !important;
+    opacity: 0.35 !important;
+}

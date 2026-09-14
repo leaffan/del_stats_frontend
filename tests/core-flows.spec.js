@@ -113,8 +113,22 @@ test.describe('DEL Stats Core Flows', () => {
             test.skip();
         }
 
-        await page.goto('http://localhost:8000/index.html#!/career_stats');
-        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        // this page loads two large JSON files (~4MB combined) before it can
+        // render any rows; waiting for the bigger one to actually finish
+        // (rather than just networkidle, which can settle early, or a fixed
+        // timeout, which occasionally wasn't enough under I/O latency spikes
+        // seen on this repo's /mnt/c-mounted WSL filesystem) is the
+        // deterministic fix for a flake that showed up under full-suite load
+        const [response] = await Promise.all([
+            page.waitForResponse(
+                (res) => res.url().includes('upd_full_career_stats_stripped.json'),
+                {
+                    timeout: 15000,
+                },
+            ),
+            page.goto('http://localhost:8000/index.html#!/career_stats'),
+        ]);
+        expect(response.ok()).toBeTruthy();
 
         // Check page renders
         const pageContent = page.locator('body');
@@ -125,6 +139,7 @@ test.describe('DEL Stats Core Flows', () => {
         await expect(table).toBeVisible();
 
         const rows = page.locator('table tbody tr');
+        await expect(rows.first()).toBeVisible({ timeout: 15000 });
         const rowCount = await rows.count();
         expect(rowCount).toBeGreaterThan(0);
     });
@@ -172,10 +187,22 @@ test.describe('DEL Stats Core Flows', () => {
             test.skip();
         }
 
-        await page.goto('http://localhost:8000/index.html#!/career_stats');
-        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        // same large-data-file render lag as test 2 - wait for the actual
+        // data response deterministically instead of racing networkidle/a
+        // fixed timeout against Angular's render
+        const [response] = await Promise.all([
+            page.waitForResponse(
+                (res) => res.url().includes('upd_full_career_stats_stripped.json'),
+                {
+                    timeout: 15000,
+                },
+            ),
+            page.goto('http://localhost:8000/index.html#!/career_stats'),
+        ]);
+        expect(response.ok()).toBeTruthy();
 
         const playerLinks = page.locator("a[href*='player_career']");
+        await expect(playerLinks.first()).toBeVisible({ timeout: 15000 });
         const linkCount = await playerLinks.count();
         expect(linkCount).toBeGreaterThan(0);
 
@@ -1140,5 +1167,151 @@ test.describe('DEL Stats Core Flows', () => {
         await nameInput.fill('');
         await page.waitForTimeout(300);
         expect(await page.locator('table tbody tr').count()).toBe(rowCountAll);
+    });
+
+    test('25. Player trivia age categories group correctly, hide the single season-type select, and sort by extremity', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasPlayerTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/player_trivia');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const groups = await page
+            .locator('select')
+            .nth(0)
+            .locator('optgroup')
+            .evaluateAll((ogs) =>
+                ogs.map((og) => ({
+                    label: og.label,
+                    options: Array.from(og.querySelectorAll('option')).map((o) => o.value),
+                })),
+            );
+        expect(groups).toEqual([
+            { label: 'Drittel-Statistiken', options: ['fastest_first_goal'] },
+            {
+                label: 'Spieler jünger als 18 Jahre',
+                options: ['first_game_player_ages_younger_18', 'first_goal_player_ages_younger_18'],
+            },
+            {
+                label: 'Spieler älter als 40 Jahre',
+                options: ['last_game_player_ages_older_40', 'last_goal_player_ages_older_40'],
+            },
+        ]);
+
+        // the season-type dropdown is a pointless single option for these
+        // categories (unlike fastest_first_goal's 4 variants), so it must be
+        // hidden rather than shown with only one choice
+        await page.locator('select').nth(0).selectOption('first_game_player_ages_younger_18');
+        await page.waitForTimeout(300);
+        const selectCount = await page.locator('select').count();
+        const models = await page
+            .locator('select')
+            .evaluateAll((els) => els.map((el) => el.getAttribute('data-ng-model')));
+        expect(models).not.toContain('ctrl.seasonTypeSelect');
+        expect(selectCount).toBe(6); // category, team, opp, position, from, to
+
+        // "younger than 18" categories rank the youngest (most extreme) age
+        // first - ascending order
+        const youngAges = await page.locator('table tbody tr td:nth-child(5)').allTextContents();
+        expect(youngAges.length).toBeGreaterThan(0);
+        const firstYoungYears = parseInt(youngAges[0].trim().split(' ')[0], 10);
+        const lastYoungYears = parseInt(youngAges[youngAges.length - 1].trim().split(' ')[0], 10);
+        expect(firstYoungYears).toBeLessThanOrEqual(lastYoungYears);
+        expect(youngAges[0].trim()).toMatch(/^\d+ Jahre \d+ Monate? \d+ Tage?$/);
+
+        // "older than 40" categories rank the oldest (most extreme) age
+        // first - descending order
+        await page.locator('select').nth(0).selectOption('last_game_player_ages_older_40');
+        await page.waitForTimeout(300);
+        const oldAges = await page.locator('table tbody tr td:nth-child(5)').allTextContents();
+        expect(oldAges.length).toBeGreaterThan(0);
+        const firstOldYears = parseInt(oldAges[0].trim().split(' ')[0], 10);
+        const lastOldYears = parseInt(oldAges[oldAges.length - 1].trim().split(' ')[0], 10);
+        expect(firstOldYears).toBeGreaterThanOrEqual(lastOldYears);
+    });
+
+    test('26. Player trivia age category links resolve both id shapes, and team/opponent/position filters work on fixed team/opp roles', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasPlayerTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/player_trivia');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        await page.locator('select').nth(0).selectOption('first_game_player_ages_younger_18');
+        await page.waitForTimeout(300);
+
+        // regression guard: this category's player_id was originally sourced
+        // from a different id scheme than career_stats' c_id/g_id and didn't
+        // resolve to any per_player file at all; it must now behave exactly
+        // like fastest_first_goal's scorer_id (numeric c_id as-is, string
+        // g_id needing its 'g' prefix added)
+        const links = await page
+            .locator("a[href*='player_career']")
+            .evaluateAll((els) => els.map((el) => el.getAttribute('href')));
+        const ids = links.map((h) => h.match(/player_career\/([^/]+)$/)?.[1]);
+        expect(ids.every((id) => !!id && id !== 'undefined')).toBeTruthy();
+        const numericIds = ids.filter((id) => /^\d+$/.test(id));
+        const gIds = ids.filter((id) => /^g\S+$/.test(id));
+        expect(numericIds.length).toBeGreaterThan(0);
+        expect(gIds.length).toBeGreaterThan(0);
+        for (const sampleId of [numericIds[0], gIds[0]]) {
+            const response = await page.request.head(
+                `http://localhost:8000/data/career_stats/per_player/${sampleId}.json`,
+            );
+            expect(response.ok(), `per_player/${sampleId}.json should exist`).toBeTruthy();
+        }
+
+        // team filter narrows to the player's own team only (a fixed "team"
+        // role, distinct from "opp" - unlike the generic shared teamFilter's
+        // any-field fallback for symmetric home/road categories)
+        const teamGroup = page
+            .locator('.input-group', { hasText: 'Team:' })
+            .filter({ has: page.locator('select') });
+        const teamSelect = teamGroup.locator('select');
+        const teamValue = await teamSelect
+            .locator('option')
+            .evaluateAll((els) => els.find((el) => el.textContent.includes('Mannheim'))?.value);
+        await teamSelect.selectOption(teamValue);
+        await page.waitForTimeout(300);
+        const teamCells = await page.locator('table tbody tr td:nth-child(3)').allTextContents();
+        expect(teamCells.length).toBeGreaterThan(0);
+        expect(teamCells.every((c) => c.trim() === 'Adler Mannheim')).toBeTruthy();
+        await teamSelect.selectOption('');
+        await page.waitForTimeout(300);
+
+        // opponent filter narrows to the dedicated "opp" field directly, even
+        // with no team selected (this is exactly the case that was broken
+        // before the role-aware oppFilter fix in game_trivia)
+        const oppGroup = page
+            .locator('.input-group', { hasText: 'Gegner:' })
+            .filter({ has: page.locator('select') });
+        const oppSelect = oppGroup.locator('select');
+        const oppValue = await oppSelect
+            .locator('option')
+            .evaluateAll((els) => els.find((el) => el.textContent.includes('Mannheim'))?.value);
+        await oppSelect.selectOption(oppValue);
+        await page.waitForTimeout(300);
+        const oppCells = await page.locator('table tbody tr td:nth-child(4)').allTextContents();
+        expect(oppCells.length).toBeGreaterThan(0);
+        expect(oppCells.every((c) => c.trim() === 'Adler Mannheim')).toBeTruthy();
+        await oppSelect.selectOption('');
+        await page.waitForTimeout(300);
+
+        // position filter buckets granular codes (C/D/F/G/LD/LW/RD/RW/...)
+        // into Torhüter/Verteidiger/Stürmer, mirroring career_stats
+        const positionGroup = page.locator('select').nth(3);
+        await positionGroup.selectOption('GK');
+        await page.waitForTimeout(300);
+        const gkRows = await page.locator('table tbody tr').count();
+        expect(gkRows).toBeGreaterThan(0);
     });
 });

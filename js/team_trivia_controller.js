@@ -5,7 +5,7 @@ app.controller('teamTriviaController', function ($scope, svc, triviaPageBehavior
 
     triviaPageBehavior(ctrl, {
         configUrl: './cfg/columns_team_trivia.json',
-        dataFolder: 'data/team_trivia/',
+        dataFolder: 'data/historic_trivia/',
     });
 
     // sorting the "length" column (re-)applies the full tie-break chain

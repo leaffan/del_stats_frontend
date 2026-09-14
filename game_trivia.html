@@ -1,7 +1,7 @@
 <div class="container" data-ng-app="delStatsApp">
 
     <div class="alert alert-info main-bg shadow">
-        <a href="#!"><b>Startseite</b></a> | <a href="#!/team_trivia"><b>Team-Trivia</b></a>
+        <a href="#!"><b>Startseite</b></a> | <a href="#!/team_trivia"><b>Team-Trivia</b></a> | <a href="#!/player_trivia"><b>Spieler-Trivia</b></a>
     </div>
 
     <div class="alert alert-info main-bg shadow">
@@ -75,7 +75,7 @@
                 <td data-ng-repeat="col in ctrl.currentSeasonType().columns" class="w-{{ svc.pad(col.width, 2) }} text-{{ col.align ? col.align : 'right' }}">
                     <span data-ng-if="col.data_key == 'rank'">{{ $parent.$parent.$index + 1 }}</span>
                     <span data-ng-if="col.team_column">{{ ctrl.team_full_name_lookup[row[col.data_key]] }}</span>
-                    <span data-ng-if="col.record">{{ ctrl.formatRecord(row, col) }}</span>
+                    <span data-ng-if="col.record && !col.decision_suffix">{{ ctrl.formatRecord(row, col) }}</span>
                     <span data-ng-if="col.decision_suffix">{{ ctrl.formatScore(row, col) }}</span>
                     <span data-ng-if="col.data_key != 'rank' && !col.team_column && !col.record && !col.decision_suffix">{{ col.season_identifier ? ctrl.formatSeason(row[col.data_key]) : col.time ? svc.formatTime(row[col.data_key]) : col.duration ? svc.formatDuration(row[col.data_key]) : col.date ? (row[col.data_key] | date:'dd.MM.yyyy') : col.fixed !== undefined ? row[col.data_key].toFixed(col.fixed) : row[col.data_key] }}{{ col.percentage ? ' %' : '' }}</span>
                 </td>

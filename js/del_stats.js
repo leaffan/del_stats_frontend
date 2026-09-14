@@ -100,6 +100,12 @@ app.config([
                 controller: 'gameTriviaController as ctrl',
                 reloadOnSearch: false,
             })
+            .when('/player_trivia/:category?/:seasonType?', {
+                title: 'Spieler-Trivia',
+                templateUrl: 'player_trivia.html',
+                controller: 'playerTriviaController as ctrl',
+                reloadOnSearch: false,
+            })
             .when('/shot_explorer/:season/:player_id', {
                 title: 'Shot Explorer',
                 templateUrl: 'shot_explorer.html',
@@ -873,9 +879,21 @@ app.factory('triviaPageBehavior', [
                 ctrl.loadCategoryData();
             };
 
+            // categories like blown_leads/comeback_wins have a dedicated
+            // "team" field with a fixed role (distinct from "opp"), so the
+            // team filter matches it directly, mirroring the oppFilter fix
+            // in game_trivia_controller.js - otherwise selecting a team also
+            // matched rows where it only appeared as the opponent. Symmetric
+            // pairs with no such role (e.g. goals_per_period's
+            // home_abbr/road_abbr) still match either field, since "team"
+            // there just means "this team played in the game", on either side
             ctrl.teamFilter = function (row) {
                 if (!ctrl.teamSelect) return true;
-                return ctrl.teamColumnFields().some((field) => row[field] === ctrl.teamSelect);
+                let fields = ctrl.teamColumnFields();
+                if (fields.includes('team')) {
+                    return row.team === ctrl.teamSelect;
+                }
+                return fields.some((field) => row[field] === ctrl.teamSelect);
             };
 
             // combines a column's own field with its "record" companions (e.g.
@@ -895,10 +913,13 @@ app.factory('triviaPageBehavior', [
 
             // appends a "(VL)"/"(SO)" marker to a score when the game was
             // decided in overtime or a shootout, based on the row's sibling
-            // "decided_by" field (REG/OT/SO)
+            // "decided_by" field (REG/OT/SO); a column combining "record" (e.g.
+            // home_score/road_score) with decision_suffix gets the "A-B" pair
+            // built here too, so the template only renders one of the two spans
             ctrl.formatScore = function (row, col) {
                 let suffix = { OT: ' (VL)', SO: ' (SO)' }[row.decided_by] || '';
-                return row[col.data_key] + suffix;
+                let value = col.record ? ctrl.formatRecord(row, col) : row[col.data_key];
+                return value + suffix;
             };
 
             // a row matches the selected season range if its season(s) overlap

@@ -17,7 +17,7 @@ async function hasData(page) {
 async function hasTeamTriviaData(page) {
     try {
         const response = await page.request.head(
-            'http://localhost:8000/data/team_trivia/overtime_games_per_season_pctg.json',
+            'http://localhost:8000/data/historic_trivia/overtime_games_per_season_pctg.json',
             { timeout: 2000 },
         );
         return response.ok();
@@ -30,7 +30,20 @@ async function hasTeamTriviaData(page) {
 async function hasGameTriviaData(page) {
     try {
         const response = await page.request.head(
-            'http://localhost:8000/data/team_trivia/blown_leads.json',
+            'http://localhost:8000/data/historic_trivia/blown_leads.json',
+            { timeout: 2000 },
+        );
+        return response.ok();
+    } catch {
+        return false;
+    }
+}
+
+// Helper to check if player trivia data is available
+async function hasPlayerTriviaData(page) {
+    try {
+        const response = await page.request.head(
+            'http://localhost:8000/data/historic_trivia/fastest_first_goal_period_1.json',
             { timeout: 2000 },
         );
         return response.ok();
@@ -852,6 +865,37 @@ test.describe('DEL Stats Core Flows', () => {
         expect(teamCells.some((c) => c.trim() !== 'Adler Mannheim')).toBeTruthy();
     });
 
+    test("19b. Game trivia team filter narrows to the team's own role, not the opponent", async ({
+        page,
+    }) => {
+        const dataAvailable = await hasGameTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/game_trivia');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        await page.waitForTimeout(300);
+
+        const teamSelect = page.locator('select').nth(2);
+        const teamValue = await teamSelect
+            .locator('option')
+            .evaluateAll((els) => els.find((el) => el.textContent.includes('Mannheim'))?.value);
+        await teamSelect.selectOption(teamValue);
+        await page.waitForTimeout(300);
+
+        // blown_leads/comeback_wins have a dedicated "team" role - selecting
+        // a team must never pull in rows where it only appears as "opp"
+        // (mirrors the analogous oppFilter bug fixed in test 19)
+        const teamCells = await page.locator('table tbody tr td:nth-child(2)').allTextContents();
+        expect(teamCells.length).toBeGreaterThan(0);
+        expect(teamCells.every((c) => c.trim() === 'Adler Mannheim')).toBeTruthy();
+
+        const oppCells = await page.locator('table tbody tr td:nth-child(3)').allTextContents();
+        expect(oppCells.some((c) => c.trim() !== 'Adler Mannheim')).toBeTruthy();
+    });
+
     test('20. Game trivia goals-per-period category switches variants and generalizes team_column', async ({
         page,
     }) => {
@@ -900,5 +944,201 @@ test.describe('DEL Stats Core Flows', () => {
             );
         const totals = rows.map((r) => parseInt(r[7], 10));
         expect(totals[0]).toBeGreaterThanOrEqual(totals[totals.length - 1]);
+    });
+
+    test('21. Player trivia page loads fastest-goal category with period/OT variants sorted ascending', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasPlayerTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/player_trivia');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const rows = page.locator('table tbody tr');
+        expect(await rows.count()).toBeGreaterThan(0);
+
+        // the fastest-goal category has 4 season-type variants: 3 periods and OT
+        const seasonTypeOptions = await page
+            .locator('select')
+            .nth(1)
+            .locator('option')
+            .evaluateAll((els) => els.map((el) => el.value));
+        expect(seasonTypeOptions).toEqual(['period1', 'period2', 'period3', 'OT']);
+
+        // default sort is by time ascending - the fastest goal must be on top
+        const times = await page.locator('table tbody tr td:nth-child(4)').allTextContents();
+        const toSeconds = (t) => {
+            const [m, s] = t.trim().split(':').map(Number);
+            return m * 60 + s;
+        };
+        expect(toSeconds(times[0])).toBeLessThanOrEqual(toSeconds(times[times.length - 1]));
+
+        // switching to OT loads its own file
+        const [response] = await Promise.all([
+            page.waitForResponse((res) => res.url().includes('fastest_first_goal_period_OT.json')),
+            page.locator('select').nth(1).selectOption('OT'),
+        ]);
+        expect(response.ok()).toBeTruthy();
+        await page.waitForTimeout(300);
+        expect(await rows.count()).toBeGreaterThan(0);
+
+        // the score column combines "record" (home_score/road_score) with
+        // decision_suffix - it must render as a single "A-B (VL)"/"A-B (SO)",
+        // not both the plain "A-B" and the suffixed score side by side (the
+        // template used to render both spans unconditionally)
+        const scores = await page.locator('table tbody tr td:last-child').allTextContents();
+        expect(scores.length).toBeGreaterThan(0);
+        for (const score of scores) {
+            expect(score.trim()).toMatch(/^\d+-\d+( \((VL|SO)\))?$/);
+        }
+        expect(scores.some((s) => s.includes('(VL)'))).toBeTruthy();
+    });
+
+    test('22. Player trivia scorer links resolve both numeric and letter-suffixed ids to the right player', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasPlayerTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/player_trivia');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const scorerLinks = page.locator("a[href*='player_career']");
+        const linkCount = await scorerLinks.count();
+        expect(linkCount).toBeGreaterThan(0);
+
+        const links = await scorerLinks.evaluateAll((els) =>
+            els.map((el) => ({ href: el.getAttribute('href'), text: el.textContent.trim() })),
+        );
+        const ids = links.map((l) => l.href.match(/player_career\/([^/]+)$/)?.[1]);
+
+        // every link must carry a resolvable id - never the bare, un-prefixed
+        // g_id (e.g. "91132af" instead of "g91132af"), which would 404 against
+        // per_player/<id>.json exactly like the career-stats bug fixed earlier
+        expect(ids.every((id) => !!id && id !== 'undefined')).toBeTruthy();
+
+        // this category mixes both id shapes (numeric c_id and letter-suffixed
+        // g_id) in the same table, so make sure both actually occur here...
+        const numericIds = ids.filter((id) => /^\d+$/.test(id));
+        const gIds = ids.filter((id) => /^g\S+$/.test(id));
+        expect(numericIds.length).toBeGreaterThan(0);
+        expect(gIds.length).toBeGreaterThan(0);
+
+        // ...and spot-check one of each: the underlying per-player file must
+        // exist, and following the link must land on the matching player
+        for (const sampleId of [numericIds[0], gIds[0]]) {
+            const response = await page.request.head(
+                `http://localhost:8000/data/career_stats/per_player/${sampleId}.json`,
+            );
+            expect(response.ok(), `per_player/${sampleId}.json should exist`).toBeTruthy();
+        }
+
+        const sampleLink = links.find((l) => gIds[0] && l.href.endsWith('/' + gIds[0]));
+        await scorerLinks.nth(links.findIndex((l) => l === sampleLink)).click();
+        await page.waitForURL(/player_career/, { timeout: 5000 }).catch(() => {});
+        await page
+            .waitForFunction(
+                () => (document.querySelector('h2')?.textContent || '').trim().length > 0,
+                {
+                    timeout: 5000,
+                },
+            )
+            .catch(() => {});
+        const heading = page.locator('h2').first();
+        await expect(heading).toContainText(sampleLink.text);
+    });
+
+    test("23. Player trivia team filter narrows to the scorer's own team, opponent filter narrows independently", async ({
+        page,
+    }) => {
+        const dataAvailable = await hasPlayerTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/player_trivia');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const rowCountAll = await page.locator('table tbody tr').count();
+
+        const selects = page.locator('select');
+        const teamSelect = selects.nth(2);
+        const oppSelect = selects.nth(3);
+
+        const teamValue = await teamSelect
+            .locator('option')
+            .evaluateAll((els) => els.find((el) => el.textContent.includes('Mannheim'))?.value);
+        await teamSelect.selectOption(teamValue);
+        await page.waitForTimeout(300);
+
+        // the "Team" column (the scorer's own team) must be narrowed to
+        // Mannheim on every row - a row where Mannheim only appears as the
+        // home/road opponent (not the team that actually scored) must be
+        // excluded, unlike the shared teamFilter used elsewhere
+        const teamCells = await page.locator('table tbody tr td:nth-child(3)').allTextContents();
+        expect(teamCells.length).toBeGreaterThan(0);
+        expect(teamCells.length).toBeLessThan(rowCountAll);
+        expect(teamCells.every((c) => c.trim() === 'Adler Mannheim')).toBeTruthy();
+        const rowCountTeam = teamCells.length;
+
+        // adding an opponent filter narrows further, independently of the
+        // team filter - matching whichever of home/road wasn't the scorer's
+        // own team
+        const oppValue = await oppSelect
+            .locator('option')
+            .evaluateAll((els) => els.find((el) => el.textContent.includes('Köln'))?.value);
+        await oppSelect.selectOption(oppValue);
+        await page.waitForTimeout(300);
+
+        const rows = await page
+            .locator('table tbody tr')
+            .evaluateAll((trs) =>
+                trs.map((tr) =>
+                    Array.from(tr.querySelectorAll('td')).map((td) => td.textContent.trim()),
+                ),
+            );
+        expect(rows.length).toBeGreaterThan(0);
+        expect(rows.length).toBeLessThanOrEqual(rowCountTeam);
+        for (const r of rows) {
+            expect(r[2]).toBe('Adler Mannheim');
+            expect([r[6], r[7]]).toContain('Kölner Haie');
+        }
+    });
+
+    test('24. Player trivia name search filters rows by the player_column field', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasPlayerTriviaData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/player_trivia');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const rowCountAll = await page.locator('table tbody tr').count();
+
+        const nameInput = page.locator("input[placeholder='Spieler filtern']");
+        await nameInput.fill('faust');
+        await page.waitForTimeout(300);
+
+        const scorerCells = await page.locator('table tbody tr td:nth-child(2)').allTextContents();
+        expect(scorerCells.length).toBeGreaterThan(0);
+        expect(scorerCells.length).toBeLessThan(rowCountAll);
+        expect(scorerCells.every((c) => c.toLowerCase().includes('faust'))).toBeTruthy();
+
+        // clearing the search restores the full row count
+        await nameInput.fill('');
+        await page.waitForTimeout(300);
+        expect(await page.locator('table tbody tr').count()).toBe(rowCountAll);
     });
 });

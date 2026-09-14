@@ -818,6 +818,15 @@ app.factory('triviaPageBehavior', [
                 return category ? category.season_types[ctrl.seasonTypeSelect] : null;
             };
 
+            // whether the current category has more than one season-type
+            // variant - used to hide the variant dropdown entirely for
+            // single-variant categories instead of showing a pointless
+            // one-option select
+            ctrl.hasMultipleSeasonTypes = function () {
+                let category = ctrl.currentCategory();
+                return !!category && Object.keys(category.season_types).length > 1;
+            };
+
             ctrl.applyDefaultSort = function () {
                 let seasonType = ctrl.currentSeasonType();
                 if (!seasonType) return;
@@ -855,8 +864,15 @@ app.factory('triviaPageBehavior', [
                     return;
                 }
                 $http.get(options.dataFolder + seasonType.data_file).then(function (res) {
-                    ctrl.dataCache[seasonType.data_file] = res.data;
-                    ctrl.trivia_data = res.data;
+                    // an optional per-page hook to derive extra fields a
+                    // category needs (e.g. a numeric sort key computed from
+                    // two date fields) that aren't worth precomputing and
+                    // shipping in the data file itself
+                    let data = options.postProcessData
+                        ? options.postProcessData(res.data)
+                        : res.data;
+                    ctrl.dataCache[seasonType.data_file] = data;
+                    ctrl.trivia_data = data;
                     ctrl.setSeasonBounds();
                 });
             };
@@ -881,10 +897,9 @@ app.factory('triviaPageBehavior', [
 
             // categories like blown_leads/comeback_wins have a dedicated
             // "team" field with a fixed role (distinct from "opp"), so the
-            // team filter matches it directly, mirroring the oppFilter fix
-            // in game_trivia_controller.js - otherwise selecting a team also
-            // matched rows where it only appeared as the opponent. Symmetric
-            // pairs with no such role (e.g. goals_per_period's
+            // team filter matches it directly - otherwise selecting a team
+            // also matched rows where it only appeared as the opponent.
+            // Symmetric pairs with no such role (e.g. goals_per_period's
             // home_abbr/road_abbr) still match either field, since "team"
             // there just means "this team played in the game", on either side
             ctrl.teamFilter = function (row) {
@@ -894,6 +909,36 @@ app.factory('triviaPageBehavior', [
                     return row.team === ctrl.teamSelect;
                 }
                 return fields.some((field) => row[field] === ctrl.teamSelect);
+            };
+
+            // the opponent filter, generalized across every team_column
+            // shape used by game_trivia and player_trivia categories:
+            //  - a dedicated "opp" field (blown_leads, comeback_wins, the
+            //    age-record categories) has a fixed role, so it's matched
+            //    directly, regardless of whether a team is also selected
+            //  - a dedicated "team" field without "opp" (fastest_first_goal:
+            //    team + home_abbr + road_abbr) tells us "our own side"
+            //    unconditionally - the opponent is whichever other
+            //    team_column field doesn't hold that same value
+            //  - with neither (goals_per_period: home_abbr/road_abbr only,
+            //    no fixed roles), "our own side" is only known once a team
+            //    is selected; without one, "opponent" is ambiguous and any
+            //    matching field counts
+            ctrl.oppFilter = function (row) {
+                if (!ctrl.oppSelect) return true;
+                let fields = ctrl.teamColumnFields();
+                if (fields.includes('opp')) {
+                    return row.opp === ctrl.oppSelect;
+                }
+                let ownField = fields.includes('team')
+                    ? 'team'
+                    : ctrl.teamSelect
+                      ? fields.find((f) => row[f] === ctrl.teamSelect)
+                      : null;
+                let ownValue = ownField ? row[ownField] : undefined;
+                return fields.some(
+                    (f) => f !== ownField && row[f] !== ownValue && row[f] === ctrl.oppSelect,
+                );
             };
 
             // combines a column's own field with its "record" companions (e.g.

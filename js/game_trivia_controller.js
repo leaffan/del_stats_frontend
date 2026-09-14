@@ -16,32 +16,6 @@ app.controller('gameTriviaController', function ($scope, svc, triviaPageBehavior
         return ctrl.categorySelect === 'goals_per_period';
     };
 
-    // categories like blown_leads/comeback_wins have a dedicated "opp" field
-    // with a fixed role (the team's opponent, never the team itself), so the
-    // opponent filter can - and must - match it directly, regardless of
-    // whether a team is also selected; without this, selecting only an
-    // opponent (no team) fell back to the "some field other than teamField"
-    // check below with teamField undefined, which made every team_column
-    // field count as a potential opponent match, including "team" itself
-    ctrl.oppFilter = function (row) {
-        if (!ctrl.oppSelect) return true;
-        var fields = ctrl.teamColumnFields();
-        if (fields.includes('opp')) {
-            return row.opp === ctrl.oppSelect;
-        }
-        // symmetric pairs (e.g. home_abbr/road_abbr) have no fixed "opponent"
-        // role, so it only makes sense relative to whichever field the team
-        // filter matched: the opponent is the other side of that same game
-        var teamField = ctrl.teamSelect
-            ? fields.find(function (f) {
-                  return row[f] === ctrl.teamSelect;
-              })
-            : null;
-        return fields.some(function (f) {
-            return f !== teamField && row[f] === ctrl.oppSelect;
-        });
-    };
-
     // filters by the game's own RS/PO phase - not to be confused with
     // seasonTypeSelect, which picks the category's variant (e.g. "overall")
     ctrl.gamePhaseFilter = function (row) {

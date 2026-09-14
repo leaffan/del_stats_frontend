@@ -10,14 +10,14 @@
 
     <form>
         <div class="form-row mb-1">
-            <div class="input-group col-9">
+            <div class="input-group {{ ctrl.hasMultipleSeasonTypes() ? 'col-9' : 'col-12' }}">
                 <select class="form-control" data-ng-model="ctrl.categorySelect" data-ng-change="ctrl.changeCategory()">
                     <optgroup data-ng-repeat="group in ctrl.categoryGroups" label="{{group.label}}">
                         <option data-ng-repeat="key in group.keys" value="{{key}}">{{ctrl.categories[key].label_de}}</option>
                     </optgroup>
                 </select>
             </div>
-            <div class="input-group col-3 pl-0" data-ng-if="ctrl.currentCategory()">
+            <div class="input-group col-3 pl-0" data-ng-if="ctrl.hasMultipleSeasonTypes()">
                 <select class="form-control" data-ng-model="ctrl.seasonTypeSelect" data-ng-change="ctrl.changeSeasonType()">
                     <option data-ng-repeat="(key, seasonType) in ctrl.currentCategory().season_types" value="{{key}}">{{seasonType.label_de}}</option>
                 </select>
@@ -48,14 +48,22 @@
                     <option data-ng-option value selected="selected">alle Teams</option>
                 </select>
             </div>
-            <div class="input-group col-3 pl-0">
+            <div class="input-group col-2 pl-0">
+                <select class="form-control" data-ng-model="ctrl.positionFilter">
+                    <option data-ng-option value selected="selected">alle Positionen</option>
+                    <option data-ng-option value="GK">Torhüter</option>
+                    <option data-ng-option value="DE">Verteidiger</option>
+                    <option data-ng-option value="FO">Stürmer</option>
+                </select>
+            </div>
+            <div class="input-group col-2 pl-0">
                 <div class="input-group-prepend">
                     <span class="input-group-text">von:</span>
                 </div>
                 <select class="form-control" data-ng-model="ctrl.from_season" data-ng-options="svc.getSeasonIdentifier(season) for season in svc.range(ctrl.first_season, ctrl.to_season)">
                 </select>
             </div>
-            <div class="input-group col-3 pl-0">
+            <div class="input-group col-2 pl-0">
                 <div class="input-group-prepend">
                     <span class="input-group-text">bis:</span>
                 </div>
@@ -72,14 +80,15 @@
     <table class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" data-ng-if="ctrl.currentSeasonType()">
         <thead table-header stats-cols="ctrl.currentSeasonType().columns" ctrl="ctrl" class="thead-light"></thead>
         <tbody>
-            <tr data-ng-repeat="row in ctrl.trivia_data | filter:ctrl.teamFilter | filter:ctrl.oppFilter | filter:ctrl.seasonFilter | filter:ctrl.nameFilterFn | orderBy:ctrl.sortConfig.sortCriteria:ctrl.sortConfig.sortDescending">
+            <tr data-ng-repeat="row in ctrl.trivia_data | filter:ctrl.teamFilter | filter:ctrl.oppFilter | filter:ctrl.seasonFilter | filter:ctrl.nameFilterFn | filter:ctrl.positionFilterFn | orderBy:ctrl.sortConfig.sortCriteria:ctrl.sortConfig.sortDescending">
                 <td data-ng-repeat="col in ctrl.currentSeasonType().columns" class="w-{{ svc.pad(col.width, 2) }} text-{{ col.align ? col.align : 'right' }}">
                     <span data-ng-if="col.data_key == 'rank'">{{ $parent.$parent.$index + 1 }}</span>
                     <span data-ng-if="col.player_column"><a href="#!/player_career/{{ ctrl.playerLinkId(row, col) }}">{{ row[col.data_key] }}</a></span>
                     <span data-ng-if="col.team_column">{{ ctrl.team_full_name_lookup[row[col.data_key]] }}</span>
                     <span data-ng-if="col.record && !col.decision_suffix">{{ ctrl.formatRecord(row, col) }}</span>
                     <span data-ng-if="col.decision_suffix">{{ ctrl.formatScore(row, col) }}</span>
-                    <span data-ng-if="col.data_key != 'rank' && !col.player_column && !col.team_column && !col.record && !col.decision_suffix">{{ col.season_identifier ? ctrl.formatSeason(row[col.data_key]) : col.time ? svc.formatTime(row[col.data_key]) : col.duration ? svc.formatDuration(row[col.data_key]) : col.date ? (row[col.data_key] | date:'dd.MM.yyyy') : col.fixed !== undefined ? row[col.data_key].toFixed(col.fixed) : row[col.data_key] }}{{ col.percentage ? ' %' : '' }}</span>
+                    <span data-ng-if="col.age_at_date">{{ ctrl.formatAge(row, col) }}</span>
+                    <span data-ng-if="col.data_key != 'rank' && !col.player_column && !col.team_column && !col.record && !col.decision_suffix && !col.age_at_date">{{ col.season_identifier ? ctrl.formatSeason(row[col.data_key]) : col.time ? svc.formatTime(row[col.data_key]) : col.duration ? svc.formatDuration(row[col.data_key]) : col.date ? (row[col.data_key] | date:'dd.MM.yyyy') : col.fixed !== undefined ? row[col.data_key].toFixed(col.fixed) : row[col.data_key] }}{{ col.percentage ? ' %' : '' }}</span>
                 </td>
             </tr>
         </tbody>

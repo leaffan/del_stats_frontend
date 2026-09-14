@@ -6,6 +6,19 @@ app.controller('playerTriviaController', function ($scope, svc, triviaPageBehavi
     triviaPageBehavior(ctrl, {
         configUrl: './cfg/columns_player_trivia.json',
         dataFolder: 'data/historic_trivia/',
+        // the age-record categories (youngest/oldest at a milestone game or
+        // goal) carry date_of_birth + game_date but no precomputed age, so a
+        // numeric sort key is derived here once per row instead of shipping
+        // a redundant field in the data; display still goes through
+        // svc.calculateAge for the human-readable "X Jahre Y Monate Z Tage"
+        postProcessData: function (data) {
+            return data.map(function (row) {
+                if (row.date_of_birth && row.game_date) {
+                    row._age_days = moment(row.game_date).diff(moment(row.date_of_birth), 'days');
+                }
+                return row;
+            });
+        },
     });
 
     // resolves a "player_column"'s id field to the id the player_career route
@@ -38,20 +51,23 @@ app.controller('playerTriviaController', function ($scope, svc, triviaPageBehavi
         return (row[field] || '').toLowerCase().indexOf(ctrl.nameFilter.toLowerCase()) !== -1;
     };
 
-    // unlike the shared teamFilter (which matches a team against ANY
-    // team_column field), the team filter here only narrows on the scorer's
-    // own team - a fastest-goal row's home_abbr/road_abbr describe the game,
-    // not necessarily who actually scored
-    ctrl.teamFilter = function (row) {
-        return !ctrl.teamSelect || row.team === ctrl.teamSelect;
+    // formats the age at a milestone (game_date/goal_date) as "X Jahre Y
+    // Monate Z Tage", reusing the same date-diff logic already used for a
+    // player's current age on player_career.html/player_information.html -
+    // just called with a historical second date instead of "now"
+    ctrl.formatAge = function (row, col) {
+        return svc.calculateAge(row.date_of_birth, new Date(row[col.age_reference_field]));
     };
 
-    // the opponent is whichever side of the game (home/road) wasn't the
-    // scoring team
-    ctrl.oppFilter = function (row) {
-        if (!ctrl.oppSelect) return true;
-        let opponent = row.home_abbr === row.team ? row.road_abbr : row.home_abbr;
-        return opponent === ctrl.oppSelect;
+    // buckets the raw position code (C, D, F, G, LD, LW, RD, RW, ...) into
+    // the same three groups used by the position filter on career_stats/
+    // player_stats (Torhüter/Verteidiger/Stürmer), since these categories
+    // use the granular position codes rather than career_stats' GK/DE/FO
+    ctrl.positionFilterFn = function (row) {
+        if (!ctrl.positionFilter || row.position === undefined) return true;
+        if (ctrl.positionFilter === 'GK') return row.position.startsWith('G');
+        if (ctrl.positionFilter === 'DE') return row.position.includes('D');
+        return !row.position.startsWith('G') && !row.position.includes('D');
     };
 
     ctrl.initFromRoute();

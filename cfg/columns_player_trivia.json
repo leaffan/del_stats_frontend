@@ -380,5 +380,395 @@
                 ]
             }
         }
+    },
+    "first_game_player_ages_younger_18": {
+        "label_de": "Erstes Spiel",
+        "label_en": "First Game",
+        "group_label_de": "Spieler jünger als 18 Jahre",
+        "group_label_en": "Players Younger Than 18",
+        "description_de": "Spieler, die ihr erstes DEL-Spiel im Alter von unter 18 Jahren bestritten haben.",
+        "description_en": "Players who played their first DEL game before turning 18.",
+        "season_types": {
+            "overall": {
+                "label_de": "Hauptrunde und Playoffs",
+                "label_en": "Regular Season & Playoffs",
+                "data_file": "first_game_player_ages_younger_18.json",
+                "default_sort": ["_age_days"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "name",
+                        "id_field": "player_id",
+                        "player_column": true,
+                        "col_header": "Spieler",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "16",
+                        "sortable": false
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "opp",
+                        "col_header": "Gegner",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "_age_days",
+                        "age_reference_field": "game_date",
+                        "age_at_date": true,
+                        "col_header": "Alter",
+                        "expl_de": "Alter beim ersten Spiel",
+                        "expl_en": "Age at the first game",
+                        "align": "center",
+                        "width": "16"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "season_identifier": true
+                    },
+                    {
+                        "data_key": "game_date",
+                        "col_header": "Datum",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "date": true
+                    },
+                    {
+                        "data_key": "score",
+                        "col_header": "Endstand",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "10",
+                        "sortable": false
+                    }
+                ]
+            }
+        }
+    },
+    "first_goal_player_ages_younger_18": {
+        "label_de": "Erstes Tor",
+        "label_en": "First Goal",
+        "group_label_de": "Spieler jünger als 18 Jahre",
+        "group_label_en": "Players Younger Than 18",
+        "description_de": "Spieler, die ihr erstes DEL-Tor im Alter von unter 18 Jahren erzielt haben.",
+        "description_en": "Players who scored their first DEL goal before turning 18.",
+        "season_types": {
+            "overall": {
+                "label_de": "Hauptrunde und Playoffs",
+                "label_en": "Regular Season & Playoffs",
+                "data_file": "first_goal_player_ages_younger_18.json",
+                "default_sort": ["_age_days"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "name",
+                        "id_field": "player_id",
+                        "player_column": true,
+                        "col_header": "Spieler",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "16",
+                        "sortable": false
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "opp",
+                        "col_header": "Gegner",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "_age_days",
+                        "age_reference_field": "game_date",
+                        "age_at_date": true,
+                        "col_header": "Alter",
+                        "expl_de": "Alter beim ersten Tor",
+                        "expl_en": "Age at the first goal",
+                        "align": "center",
+                        "width": "16"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "season_identifier": true
+                    },
+                    {
+                        "data_key": "game_date",
+                        "col_header": "Datum",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "date": true
+                    },
+                    {
+                        "data_key": "score",
+                        "col_header": "Endstand",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "9",
+                        "sortable": false
+                    },
+                    {
+                        "data_key": "goal_score",
+                        "col_header": "Spielstand beim Tor",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "9",
+                        "sortable": false
+                    }
+                ]
+            }
+        }
+    },
+    "last_game_player_ages_older_40": {
+        "label_de": "Letztes Spiel",
+        "label_en": "Last Game",
+        "group_label_de": "Spieler älter als 40 Jahre",
+        "group_label_en": "Players Older Than 40",
+        "description_de": "Spieler, die im Alter von über 40 Jahren noch ein DEL-Spiel bestritten haben.",
+        "description_en": "Players who played a DEL game past their 40th birthday.",
+        "season_types": {
+            "overall": {
+                "label_de": "Hauptrunde und Playoffs",
+                "label_en": "Regular Season & Playoffs",
+                "data_file": "last_game_player_ages_older_40.json",
+                "default_sort": ["-_age_days"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "name",
+                        "id_field": "player_id",
+                        "player_column": true,
+                        "col_header": "Spieler",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "16",
+                        "sortable": false
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "opp",
+                        "col_header": "Gegner",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "_age_days",
+                        "age_reference_field": "game_date",
+                        "age_at_date": true,
+                        "col_header": "Alter",
+                        "expl_de": "Alter beim letzten Spiel",
+                        "expl_en": "Age at the last game",
+                        "align": "center",
+                        "width": "16"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "season_identifier": true
+                    },
+                    {
+                        "data_key": "game_date",
+                        "col_header": "Datum",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "date": true
+                    },
+                    {
+                        "data_key": "score",
+                        "col_header": "Endstand",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "10",
+                        "sortable": false
+                    }
+                ]
+            }
+        }
+    },
+    "last_goal_player_ages_older_40": {
+        "label_de": "Letztes Tor",
+        "label_en": "Last Goal",
+        "group_label_de": "Spieler älter als 40 Jahre",
+        "group_label_en": "Players Older Than 40",
+        "description_de": "Spieler, die im Alter von über 40 Jahren noch ein DEL-Tor erzielt haben.",
+        "description_en": "Players who scored a DEL goal past their 40th birthday.",
+        "season_types": {
+            "overall": {
+                "label_de": "Hauptrunde und Playoffs",
+                "label_en": "Regular Season & Playoffs",
+                "data_file": "last_goal_player_ages_older_40.json",
+                "default_sort": ["-_age_days"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "name",
+                        "id_field": "player_id",
+                        "player_column": true,
+                        "col_header": "Spieler",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "16",
+                        "sortable": false
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "opp",
+                        "col_header": "Gegner",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "_age_days",
+                        "age_reference_field": "game_date",
+                        "age_at_date": true,
+                        "col_header": "Alter",
+                        "expl_de": "Alter beim letzten Tor",
+                        "expl_en": "Age at the last goal",
+                        "align": "center",
+                        "width": "16"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "season_identifier": true
+                    },
+                    {
+                        "data_key": "game_date",
+                        "col_header": "Datum",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "date": true
+                    },
+                    {
+                        "data_key": "score",
+                        "col_header": "Endstand",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "9",
+                        "sortable": false
+                    },
+                    {
+                        "data_key": "goal_score",
+                        "col_header": "Spielstand beim Tor",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "9",
+                        "sortable": false
+                    }
+                ]
+            }
+        }
     }
 }

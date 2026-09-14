@@ -107,7 +107,7 @@ app.config([
                 reloadOnSearch: false,
             })
             .when('/shot_explorer/:season/:player_id', {
-                title: 'Shot Explorer',
+                title: 'Schussanalyse',
                 templateUrl: 'shot_explorer.html',
                 controller: 'shotExplorerController',
                 reloadOnSearch: false,

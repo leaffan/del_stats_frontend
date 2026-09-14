@@ -7,7 +7,7 @@ app.controller(
         $scope.season = Number.parseInt($routeParams.season) || config.defaultSeason;
         $scope.player_id = $routeParams.player_id;
 
-        svc.setTitle('Shot Explorer ' + svc.getSeasonIdentifier($scope.season));
+        svc.setTitle('Schussanalyse ' + svc.getSeasonIdentifier($scope.season));
 
         // ── Filter defaults ──────────────────────────────────────────────────────
         $scope.seasonTypeFilter = 'all';
@@ -550,7 +550,7 @@ app.controller(
 
                 // Title
                 let title =
-                    'Shot Explorer – ' +
+                    'Schussanalyse – ' +
                     ($scope.player_name || 'Spieler ' + $scope.player_id) +
                     ' – Saison ' +
                     svc.getSeasonIdentifier($scope.season);
@@ -571,7 +571,7 @@ app.controller(
                     .replace(/[^a-z0-9]+/g, '_')
                     .replace(/^_+|_+$/g, '');
                 let link = document.createElement('a');
-                link.download = 'shot_explorer_' + namePart + '_' + $scope.season + '.png';
+                link.download = 'schussanalyse_' + namePart + '_' + $scope.season + '.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             };

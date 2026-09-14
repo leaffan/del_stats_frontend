@@ -776,6 +776,42 @@ test.describe('DEL Stats Core Flows', () => {
         expect(await page.locator('table tbody tr').count()).toBeGreaterThan(0);
     });
 
+    test('16b. Homepage links to Schussanalyse for a skater in the season that actually has shot data', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasShotExplorerData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        // the feature was renamed from "Shot Explorer" - no leftover English
+        // label should remain anywhere on the homepage
+        const bodyText = (await page.locator('body').textContent()) || '';
+        expect(bodyText).not.toContain('Shot Explorer');
+
+        const link = page.locator("a:has-text('Schussanalyse')");
+        await expect(link).toBeVisible({ timeout: 10000 });
+
+        // shot-tracking data currently only exists for season 2025 (unlike
+        // config.defaultSeason, which points at the not-yet-live upcoming
+        // season) - the homepage link must target that season specifically,
+        // with a real, non-empty player id
+        const href = await link.getAttribute('href');
+        expect(href).toMatch(/^#!\/shot_explorer\/2025\/\d+$/);
+
+        await link.click();
+        await page.waitForURL(/shot_explorer/, { timeout: 5000 }).catch(() => {});
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const rink = page.locator('svg').first();
+        await expect(rink).toBeVisible({ timeout: 10000 });
+        await expect(page).toHaveTitle(/Schussanalyse/);
+    });
+
     test('17. Game trivia page loads with both categories and sorts by margin', async ({
         page,
     }) => {

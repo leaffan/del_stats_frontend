@@ -1,0 +1,384 @@
+{
+    "fastest_first_goal": {
+        "label_de": "Schnellstes Tor",
+        "label_en": "Fastest Goal",
+        "group_label_de": "Drittel-Statistiken",
+        "group_label_en": "Period Statistics",
+        "description_de": "Die schnellsten Tore zu Beginn eines Drittels bzw. der Verlängerung (Hauptrunde und Playoffs).",
+        "description_en": "The fastest goals scored at the start of a period or overtime (regular season and playoffs).",
+        "season_types": {
+            "period1": {
+                "label_de": "1. Drittel",
+                "label_en": "Period 1",
+                "data_file": "fastest_first_goal_period_1.json",
+                "default_sort": ["time"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "scorer",
+                        "id_field": "scorer_id",
+                        "player_column": true,
+                        "col_header": "Torschütze",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "16",
+                        "sortable": false
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "time",
+                        "col_header": "Zeitpunkt",
+                        "expl_de": "Zeitpunkt des Tores im 1. Drittel",
+                        "expl_en": "Time of the goal in period 1",
+                        "align": "center",
+                        "width": "9",
+                        "time": true
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "season_identifier": true
+                    },
+                    {
+                        "data_key": "game_date",
+                        "col_header": "Datum",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "date": true
+                    },
+                    {
+                        "data_key": "home_abbr",
+                        "col_header": "Heim",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "road_abbr",
+                        "col_header": "Auswärts",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "home_score",
+                        "record": ["road_score"],
+                        "col_header": "Endstand",
+                        "expl_de": "Endstand (Heim-Auswärts); (VL) bzw. (SO) markieren eine Entscheidung in Verlängerung bzw. im Shootout",
+                        "expl_en": "Final score (home-road); (VL)/(SO) mark a game decided in overtime/a shootout",
+                        "align": "center",
+                        "width": "12",
+                        "decision_suffix": true,
+                        "sortable": false
+                    }
+                ]
+            },
+            "period2": {
+                "label_de": "2. Drittel",
+                "label_en": "Period 2",
+                "data_file": "fastest_first_goal_period_2.json",
+                "default_sort": ["time"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "scorer",
+                        "id_field": "scorer_id",
+                        "player_column": true,
+                        "col_header": "Torschütze",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "16",
+                        "sortable": false
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "time",
+                        "col_header": "Zeitpunkt",
+                        "expl_de": "Zeitpunkt des Tores im 2. Drittel",
+                        "expl_en": "Time of the goal in period 2",
+                        "align": "center",
+                        "width": "9",
+                        "time": true
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "season_identifier": true
+                    },
+                    {
+                        "data_key": "game_date",
+                        "col_header": "Datum",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "date": true
+                    },
+                    {
+                        "data_key": "home_abbr",
+                        "col_header": "Heim",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "road_abbr",
+                        "col_header": "Auswärts",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "home_score",
+                        "record": ["road_score"],
+                        "col_header": "Endstand",
+                        "expl_de": "Endstand (Heim-Auswärts); (VL) bzw. (SO) markieren eine Entscheidung in Verlängerung bzw. im Shootout",
+                        "expl_en": "Final score (home-road); (VL)/(SO) mark a game decided in overtime/a shootout",
+                        "align": "center",
+                        "width": "12",
+                        "decision_suffix": true,
+                        "sortable": false
+                    }
+                ]
+            },
+            "period3": {
+                "label_de": "3. Drittel",
+                "label_en": "Period 3",
+                "data_file": "fastest_first_goal_period_3.json",
+                "default_sort": ["time"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "scorer",
+                        "id_field": "scorer_id",
+                        "player_column": true,
+                        "col_header": "Torschütze",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "16",
+                        "sortable": false
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "time",
+                        "col_header": "Zeitpunkt",
+                        "expl_de": "Zeitpunkt des Tores im 3. Drittel",
+                        "expl_en": "Time of the goal in period 3",
+                        "align": "center",
+                        "width": "9",
+                        "time": true
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "season_identifier": true
+                    },
+                    {
+                        "data_key": "game_date",
+                        "col_header": "Datum",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "date": true
+                    },
+                    {
+                        "data_key": "home_abbr",
+                        "col_header": "Heim",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "road_abbr",
+                        "col_header": "Auswärts",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "home_score",
+                        "record": ["road_score"],
+                        "col_header": "Endstand",
+                        "expl_de": "Endstand (Heim-Auswärts); (VL) bzw. (SO) markieren eine Entscheidung in Verlängerung bzw. im Shootout",
+                        "expl_en": "Final score (home-road); (VL)/(SO) mark a game decided in overtime/a shootout",
+                        "align": "center",
+                        "width": "12",
+                        "decision_suffix": true,
+                        "sortable": false
+                    }
+                ]
+            },
+            "OT": {
+                "label_de": "Verlängerung",
+                "label_en": "Overtime",
+                "data_file": "fastest_first_goal_period_OT.json",
+                "default_sort": ["time"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "scorer",
+                        "id_field": "scorer_id",
+                        "player_column": true,
+                        "col_header": "Torschütze",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "16",
+                        "sortable": false
+                    },
+                    {
+                        "data_key": "team",
+                        "col_header": "Team",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "time",
+                        "col_header": "Zeitpunkt",
+                        "expl_de": "Zeitpunkt des Tores in der Verlängerung",
+                        "expl_en": "Time of the goal in overtime",
+                        "align": "center",
+                        "width": "9",
+                        "time": true
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "season_identifier": true
+                    },
+                    {
+                        "data_key": "game_date",
+                        "col_header": "Datum",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "8",
+                        "date": true
+                    },
+                    {
+                        "data_key": "home_abbr",
+                        "col_header": "Heim",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "road_abbr",
+                        "col_header": "Auswärts",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "14",
+                        "team_column": true
+                    },
+                    {
+                        "data_key": "home_score",
+                        "record": ["road_score"],
+                        "col_header": "Endstand",
+                        "expl_de": "Endstand (Heim-Auswärts); (VL) bzw. (SO) markieren eine Entscheidung in Verlängerung bzw. im Shootout",
+                        "expl_en": "Final score (home-road); (VL)/(SO) mark a game decided in overtime/a shootout",
+                        "align": "center",
+                        "width": "12",
+                        "decision_suffix": true,
+                        "sortable": false
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -150,6 +150,57 @@ test.describe('DEL Stats Core Flows', () => {
         }
     });
 
+    test('3b. Career stats player links use a valid player id and resolve to the right player', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/career_stats');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const playerLinks = page.locator("a[href*='player_career']");
+        const linkCount = await playerLinks.count();
+        expect(linkCount).toBeGreaterThan(0);
+
+        const links = await playerLinks.evaluateAll((els) =>
+            els.map((el) => ({ href: el.getAttribute('href'), text: el.textContent.trim() })),
+        );
+
+        // regression guard: a player row must never link with a missing/undefined
+        // id (this happened when the g_id/c_id choice was based on a season
+        // comparison instead of on which id field actually exists on the player)
+        const ids = links.map((l) => l.href.match(/player_career\/([^/]+)$/)?.[1]);
+        expect(ids.every((id) => !!id && id !== 'undefined')).toBeTruthy();
+
+        // spot-check a spread-out sample: the underlying per-player data file
+        // referenced by the id must actually exist...
+        const step = Math.max(1, Math.floor(ids.length / 10));
+        const sampleIndices = [];
+        for (let i = 0; i < ids.length; i += step) sampleIndices.push(i);
+
+        for (const i of sampleIndices) {
+            const id = ids[i];
+            const response = await page.request.head(
+                `http://localhost:8000/data/career_stats/per_player/${id}.json`,
+            );
+            expect(response.ok(), `per_player/${id}.json should exist`).toBeTruthy();
+        }
+
+        // ...and following the link must land on the same player, not a
+        // different one whose id happened to collide (g_id/c_id mismatch)
+        const sampleLink = links[sampleIndices[0]];
+        await playerLinks.nth(sampleIndices[0]).click();
+        await page.waitForURL(/player_career/, { timeout: 5000 }).catch(() => {});
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const heading = page.locator('h2').first();
+        await expect(heading).toContainText(sampleLink.text);
+    });
+
     test('4. Player stats season view loads', async ({ page }) => {
         await page.goto('http://localhost:8000/index.html#!/del_stats/2025');
 

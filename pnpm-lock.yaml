@@ -26,8 +26,8 @@ importers:
                 specifier: ^17.0.8
                 version: 17.0.8
             prettier:
-                specifier: ^3.8.4
-                version: 3.8.4
+                specifier: ^3.9.7
+                version: 3.9.7
 
 packages:
     '@cacheable/memory@2.2.0':
@@ -670,10 +670,10 @@ packages:
             }
         engines: { node: '>= 0.8.0' }
 
-    prettier@3.8.4:
+    prettier@3.9.7:
         resolution:
             {
-                integrity: sha512-N2MylSdi48+5N/6S5j+maeHbUSIzzZ5uOcX5Hm4QpV8Dkb1HFjfAKTKX6yNPJQD9AhcT3ifHNB66tWTTJDi11Q==,
+                integrity: sha512-T3mF5P7HFzZVLDQuCUNtJj6WK1pcpLMweMNUVwGb01bLNkH9AkKxtZvmInw8K6bnn2O3d6/5RHl6zSHiBAD0Og==,
             }
         engines: { node: '>=14' }
         hasBin: true
@@ -1190,7 +1190,7 @@ snapshots:
 
     prelude-ls@1.2.1: {}
 
-    prettier@3.8.4: {}
+    prettier@3.9.7: {}
 
     punycode@2.3.1: {}
 

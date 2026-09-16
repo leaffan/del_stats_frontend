@@ -17,7 +17,7 @@ app.controller('teamProfileController', function ($scope, $http, $routeParams, $
     $http.get('data/' + $scope.season + '/del_team_game_stats.json').then(function (res) {
         $scope.last_modified = res.data[0];
         $scope.team_stats = res.data[1];
-        $scope.game_log = $scope.team_stats.filter(function (value, index, arr) {
+        $scope.game_log = $scope.team_stats.filter(function (value) {
             return value['team'] == $scope.current_team;
         });
         // retrieving special game log with shootout games only
@@ -171,7 +171,7 @@ app.controller('teamProfileController', function ($scope, $http, $routeParams, $
         });
 
         // converting team points log to an actual array
-        team_table = Object.keys(team_points_log).map(function (key) {
+        let team_table = Object.keys(team_points_log).map(function (key) {
             return {
                 team_id: team_points_log[key].id,
                 team: key,
@@ -216,7 +216,7 @@ app.controller('teamProfileController', function ($scope, $http, $routeParams, $
     };
 
     $scope.dayFilter = function (a) {
-        date_to_test = moment(a.game_date);
+        const date_to_test = moment(a.game_date);
         if (ctrl.fromDate && ctrl.toDate) {
             if (
                 date_to_test >= ctrl.fromDate.startOf('day') &&
@@ -299,7 +299,8 @@ app.controller('teamProfileController', function ($scope, $http, $routeParams, $
             var nextSeason = parseFloat($scope.season) + 1;
             ctrl.toDate = moment(nextSeason + '-05-01');
         } else {
-            timespanSelect = parseInt($scope.timespanSelect) + 1;
+            const timespanSelect = parseInt($scope.timespanSelect) + 1;
+            let season;
             if (timespanSelect < 9) {
                 season = parseInt($scope.season) + 1;
             } else {

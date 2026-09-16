@@ -11,10 +11,23 @@ app.controller('playerTriviaController', function ($scope, svc, triviaPageBehavi
         // numeric sort key is derived here once per row instead of shipping
         // a redundant field in the data; display still goes through
         // svc.calculateAge for the human-readable "X Jahre Y Monate Z Tage"
+        //
+        // ir_streaks_full_seasons carries first_name/last_name instead of a
+        // combined "name" (unlike every other category here), and a
+        // from_season/to_season pair instead of a single "season" field -
+        // both are derived here so the shared player_column/season_identifier
+        // rendering and the season range filter work without special-casing
+        // this category in the template
         postProcessData: function (data) {
             return data.map(function (row) {
                 if (row.date_of_birth && row.game_date) {
                     row._age_days = moment(row.game_date).diff(moment(row.date_of_birth), 'days');
+                }
+                if (row.first_name && row.last_name) {
+                    row.name = row.first_name + ' ' + row.last_name;
+                }
+                if (row.from_season !== undefined && row.to_season !== undefined) {
+                    row.season = [row.from_season, row.to_season];
                 }
                 return row;
             });
@@ -29,6 +42,20 @@ app.controller('playerTriviaController', function ($scope, svc, triviaPageBehavi
     ctrl.playerLinkId = function (row, col) {
         let id = row[col.id_field];
         return typeof id === 'string' ? 'g' + id : id;
+    };
+
+    // renders a "team_column" cell that may hold either a single team
+    // abbreviation (every existing category, shown with its full name) or a
+    // list of them (ir_streaks_full_seasons: every team a player represented
+    // during the streak) - the array shape is also the signal to use the
+    // shorter location name instead, since up to four full names in one
+    // cell stop being scannable
+    ctrl.formatTeamColumn = function (row, col) {
+        let value = row[col.data_key];
+        if (Array.isArray(value)) {
+            return value.map((team) => ctrl.team_location_lookup[team]).join(', ');
+        }
+        return ctrl.team_full_name_lookup[value];
     };
 
     ctrl.nameFilter = '';

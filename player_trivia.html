@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="form-row mb-1" data-ng-if="ctrl.first_season !== undefined">
-            <div class="input-group col-3">
+            <div class="input-group {{ ctrl.hasOpponentConcept() ? 'col-3' : 'col-6' }}">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Team:</span>
                 </div>
@@ -40,7 +40,7 @@
                     <option data-ng-option value selected="selected">alle Teams</option>
                 </select>
             </div>
-            <div class="input-group col-3 pl-0">
+            <div class="input-group col-3 pl-0" data-ng-if="ctrl.hasOpponentConcept()">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Gegner:</span>
                 </div>
@@ -84,7 +84,7 @@
                 <td data-ng-repeat="col in ctrl.currentSeasonType().columns" class="w-{{ svc.pad(col.width, 2) }} text-{{ col.align ? col.align : 'right' }}">
                     <span data-ng-if="col.data_key == 'rank'">{{ $parent.$parent.$index + 1 }}</span>
                     <span data-ng-if="col.player_column"><a href="#!/player_career/{{ ctrl.playerLinkId(row, col) }}">{{ row[col.data_key] }}</a></span>
-                    <span data-ng-if="col.team_column">{{ ctrl.team_full_name_lookup[row[col.data_key]] }}</span>
+                    <span data-ng-if="col.team_column">{{ ctrl.formatTeamColumn(row, col) }}</span>
                     <span data-ng-if="col.record && !col.decision_suffix">{{ ctrl.formatRecord(row, col) }}</span>
                     <span data-ng-if="col.decision_suffix">{{ ctrl.formatScore(row, col) }}</span>
                     <span data-ng-if="col.age_at_date">{{ ctrl.formatAge(row, col) }}</span>

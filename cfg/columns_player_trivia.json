@@ -770,5 +770,96 @@
                 ]
             }
         }
+    },
+    "ir_streaks_full_seasons": {
+        "label_de": "Ironman-Serie",
+        "label_en": "Ironman Streak",
+        "group_label_de": "Ironman-Serien",
+        "group_label_en": "Ironman Streaks",
+        "description_de": "Spieler mit den längsten Serien ununterbrochen gespielter DEL-Spiele ihres Teams über mehrere volle Spielzeiten hinweg (Hauptrunde und Playoffs).",
+        "description_en": "Players with the longest streaks of consecutive DEL games played for their team across multiple full seasons (regular season and playoffs).",
+        "season_types": {
+            "overall": {
+                "label_de": "Hauptrunde und Playoffs",
+                "label_en": "Regular Season & Playoffs",
+                "data_file": "ir_streaks_full_seasons.json",
+                "default_sort": ["-streak_gp", "-season_cnt", "from_date"],
+                "columns": [
+                    {
+                        "data_key": "rank",
+                        "col_header": "#",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "sortable": false,
+                        "width": "3",
+                        "align": "right"
+                    },
+                    {
+                        "data_key": "name",
+                        "id_field": "player_id",
+                        "player_column": true,
+                        "col_header": "Spieler",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "left",
+                        "width": "16",
+                        "sortable": false
+                    },
+                    {
+                        "data_key": "teams",
+                        "team_column": true,
+                        "col_header": "Teams",
+                        "expl_de": "Teams, für die der Spieler während der Serie spielte",
+                        "expl_en": "Teams the player represented during the streak",
+                        "align": "left",
+                        "width": "20",
+                        "sortable": false
+                    },
+                    {
+                        "data_key": "streak_gp",
+                        "col_header": "Länge",
+                        "expl_de": "Länge der Ironman-Serie in Spielen",
+                        "expl_en": "Length of the Ironman streak in games",
+                        "align": "right",
+                        "width": "10"
+                    },
+                    {
+                        "data_key": "season_cnt",
+                        "col_header": "Volle Saisons",
+                        "expl_de": "Anzahl vollständig gespielter Spielzeiten innerhalb der Serie",
+                        "expl_en": "Number of full seasons played within the streak",
+                        "align": "right",
+                        "width": "10"
+                    },
+                    {
+                        "data_key": "season",
+                        "col_header": "Saison",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "13",
+                        "season_identifier": true
+                    },
+                    {
+                        "data_key": "from_date",
+                        "col_header": "Von",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "12",
+                        "date": true
+                    },
+                    {
+                        "data_key": "to_date",
+                        "col_header": "Bis",
+                        "expl_de": null,
+                        "expl_en": null,
+                        "align": "center",
+                        "width": "12",
+                        "date": true
+                    }
+                ]
+            }
+        }
     }
 }

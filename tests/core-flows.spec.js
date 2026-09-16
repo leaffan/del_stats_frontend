@@ -1237,6 +1237,7 @@ test.describe('DEL Stats Core Flows', () => {
                 label: 'Spieler älter als 40 Jahre',
                 options: ['last_game_player_ages_older_40', 'last_goal_player_ages_older_40'],
             },
+            { label: 'Ironman-Serien', options: ['ir_streaks_full_seasons'] },
         ]);
 
         // the season-type dropdown is a pointless single option for these

@@ -745,6 +745,15 @@ app.factory('triviaPageBehavior', [
             };
             ctrl.sortCriteria = {};
 
+            // a team_column field usually holds a single abbreviation, but a
+            // career-spanning streak (e.g. player_trivia's
+            // ir_streaks_full_seasons) can list every team a player
+            // represented during it - matching either shape mirrors how
+            // seasonValues already treats "season" as possibly-a-range
+            let matchesTeam = function (value, team) {
+                return Array.isArray(value) ? value.includes(team) : value === team;
+            };
+
             // a column is a "team column" when its data_key holds a team
             // abbreviation that should render as the full team name and sort
             // by location - regardless of what that field happens to be called
@@ -755,6 +764,15 @@ app.factory('triviaPageBehavior', [
                 return seasonType.columns
                     .filter((col) => col.team_column)
                     .map((col) => col.data_key);
+            };
+
+            // an "opponent" only makes sense when a row has at least two
+            // team_column fields to distinguish "our side" from "the other
+            // side" (see oppFilter below) - a category with just one, like
+            // player_trivia's ir_streaks_full_seasons "teams" list, has no
+            // such concept at all, so the page hides the Gegner filter for it
+            ctrl.hasOpponentConcept = function () {
+                return ctrl.teamColumnFields().length > 1;
             };
 
             // grouping consecutive categories sharing the same group_label_de
@@ -906,9 +924,9 @@ app.factory('triviaPageBehavior', [
                 if (!ctrl.teamSelect) return true;
                 let fields = ctrl.teamColumnFields();
                 if (fields.includes('team')) {
-                    return row.team === ctrl.teamSelect;
+                    return matchesTeam(row.team, ctrl.teamSelect);
                 }
-                return fields.some((field) => row[field] === ctrl.teamSelect);
+                return fields.some((field) => matchesTeam(row[field], ctrl.teamSelect));
             };
 
             // the opponent filter, generalized across every team_column
@@ -924,8 +942,13 @@ app.factory('triviaPageBehavior', [
             //    no fixed roles), "our own side" is only known once a team
             //    is selected; without one, "opponent" is ambiguous and any
             //    matching field counts
+            //  - with a single team_column field in total (ir_streaks_full_
+            //    seasons' "teams" list), there is no second side to be an
+            //    opponent of, so the filter is a no-op rather than matching
+            //    nothing
             ctrl.oppFilter = function (row) {
                 if (!ctrl.oppSelect) return true;
+                if (!ctrl.hasOpponentConcept()) return true;
                 let fields = ctrl.teamColumnFields();
                 if (fields.includes('opp')) {
                     return row.opp === ctrl.oppSelect;
@@ -933,7 +956,7 @@ app.factory('triviaPageBehavior', [
                 let ownField = fields.includes('team')
                     ? 'team'
                     : ctrl.teamSelect
-                      ? fields.find((f) => row[f] === ctrl.teamSelect)
+                      ? fields.find((f) => matchesTeam(row[f], ctrl.teamSelect))
                       : null;
                 let ownValue = ownField ? row[ownField] : undefined;
                 return fields.some(

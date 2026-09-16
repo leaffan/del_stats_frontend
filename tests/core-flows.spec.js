@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require('./support/test-base');
 
 // Helper to check if data is available
 async function hasData(page) {

@@ -66,8 +66,34 @@ test('My new flow', async ({ page }) => {
 Tests are designed to run gracefully with or without the `data/` directory populated:
 
 - **With data:** Tests verify page rendering, table loading, navigation, and configuration file access
-- **Without data (CI environment):** Tests verify page structure and that JavaScript errors are not thrown
+- **Without data:** Tests verify page structure and that JavaScript errors are not thrown
     - Network 404 errors for missing data files are expected and ignored
     - Only real JavaScript errors (unhandled exceptions, ReferenceErrors, etc.) cause test failures
 
-This design allows tests to run reliably in CI without requiring a full data backup.
+Locally, `data/` is populated by the `del_stats_backend` pipeline (see the
+repo README), so tests exercise real rendering. In CI, `data/` is fetched
+from a small fixture archive (see `docs/ROADMAP.md` for how that's wired up)
+rather than left empty, so the suite exercises the same real assertions
+there too instead of mostly skipping itself.
+
+### Regenerating the CI fixture
+
+If the data shape changes (new fields, a renamed file, a new page that reads
+a new `data/` file), the fixture can go stale. Regenerate it against your
+local, real `data/`:
+
+```bash
+pnpm run harvest-fixture
+```
+
+This runs the active test suite once, records exactly which `data/` files it
+requests, and copies just those into `fixture-out/`. Pack and upload the
+result:
+
+```bash
+tar -C fixture-out -czf fixture-data.tar.gz data
+```
+
+Upload `fixture-data.tar.gz` to the fixture S3 bucket, overwriting the
+previous version at the same key the `FIXTURE_DATA_URL` repo secret points
+to.

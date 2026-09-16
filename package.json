@@ -4,9 +4,11 @@
     "description": "Public frontend for DEL hockey statistics. Contains a static AngularJS frontend for presenting player, team, and career data.",
     "private": true,
     "scripts": {
-        "format": "prettier --write README.md CONTRIBUTING.md package.json pnpm-lock.yaml .prettierrc.json .github/workflows/ci.yml",
-        "format:check": "prettier --check README.md CONTRIBUTING.md package.json pnpm-lock.yaml .prettierrc.json .github/workflows/ci.yml",
+        "format": "prettier --write README.md CONTRIBUTING.md package.json pnpm-lock.yaml .prettierrc.json .github/workflows/ci.yml .github/dependabot.yml eslint.config.js",
+        "format:check": "prettier --check README.md CONTRIBUTING.md package.json pnpm-lock.yaml .prettierrc.json .github/workflows/ci.yml .github/dependabot.yml eslint.config.js",
         "validate:routes": "node scripts/validate-routes.js",
+        "lint": "eslint .",
+        "harvest-fixture": "node scripts/build-test-fixture.js",
         "test": "playwright test",
         "test:ui": "playwright test --ui",
         "test:debug": "playwright test --debug",
@@ -29,7 +31,10 @@
     },
     "homepage": "https://github.com/leaffan/del_stats_frontend#readme",
     "devDependencies": {
+        "@eslint/js": "^10.0.1",
         "@playwright/test": "^1.61.1",
+        "eslint": "^10.10.0",
+        "globals": "^17.12.0",
         "husky": "^9.1.7",
         "lint-staged": "^17.0.8",
         "prettier": "^3.8.4"

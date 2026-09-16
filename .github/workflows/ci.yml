@@ -32,9 +32,12 @@ jobs:
             - name: Run repository checks
               run: pnpm check
 
+            - name: Run linter (report only, does not fail the build)
+              run: pnpm lint
+              continue-on-error: true
+
     tests:
         runs-on: ubuntu-latest
-        continue-on-error: true
 
         steps:
             - name: Check out repository
@@ -53,6 +56,17 @@ jobs:
 
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
+
+            - name: Fetch test fixture data
+              env:
+                  FIXTURE_DATA_URL: ${{ secrets.FIXTURE_DATA_URL }}
+              run: |
+                  if [ -z "$FIXTURE_DATA_URL" ]; then
+                    echo "::warning::FIXTURE_DATA_URL is not set - data-dependent tests will skip themselves instead of running for real. See docs/ROADMAP.md."
+                  else
+                    curl -fsSL "$FIXTURE_DATA_URL" -o fixture-data.tar.gz
+                    tar -xzf fixture-data.tar.gz
+                  fi
 
             - name: Install Playwright browsers
               run: npx playwright install --with-deps

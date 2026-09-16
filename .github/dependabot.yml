@@ -1,0 +1,15 @@
+version: 2
+updates:
+    # Dev tooling only (Playwright, Prettier, Husky, ESLint, ...). Runtime
+    # libraries (AngularJS, Bootstrap, Angular Material, ...) are vendored
+    # static files under js/ and are not managed here.
+    - package-ecosystem: 'npm'
+      directory: '/'
+      schedule:
+          interval: 'weekly'
+      open-pull-requests-limit: 5
+
+    - package-ecosystem: 'github-actions'
+      directory: '/'
+      schedule:
+          interval: 'weekly'

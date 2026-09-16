@@ -168,7 +168,7 @@ app.controller('plrProfileController', function ($scope, $http, $routeParams, $l
     };
 
     $scope.dayFilter = function (a) {
-        date_to_test = moment(a.game_date);
+        const date_to_test = moment(a.game_date);
         if (ctrl.fromDate && ctrl.toDate) {
             if (
                 date_to_test >= ctrl.fromDate.startOf('day') &&
@@ -264,7 +264,8 @@ app.controller('plrProfileController', function ($scope, $http, $routeParams, $l
             ctrl.toDate = null;
             return;
         }
-        timespanSelect = parseInt($scope.timespanSelect) + 1;
+        const timespanSelect = parseInt($scope.timespanSelect) + 1;
+        let season;
         if (timespanSelect < 9) {
             season = parseInt($scope.season) + 1;
         } else {

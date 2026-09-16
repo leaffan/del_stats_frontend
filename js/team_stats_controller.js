@@ -113,12 +113,12 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
     });
 
     // TODO: move to out-of-controller location
-    $scope.filterStats = function (stats) {
-        filtered_team_stats = {};
-        streaks = {};
+    $scope.filterStats = function () {
+        let filtered_team_stats = {};
+        let streaks = {};
         if ($scope.team_stats === undefined) return filtered_team_stats;
         $scope.teams.forEach((team) => {
-            abbr = team['abbr'];
+            const abbr = team['abbr'];
             if (!filtered_team_stats[abbr]) {
                 // skipping teams not applicable for currently displayed season phase
                 if ($scope.seasonTypeSelect == 'MSC' && !team['msc_2020']) {
@@ -132,6 +132,7 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
                 // retrieving divisions from team definitions for special season 2020/21
                 if ($scope.season == 2020) {
                     // MSC had separate divisions
+                    let seasonType;
                     if ($scope.seasonTypeSelect == 'MSC') {
                         seasonType = 'MSC';
                     } else {
@@ -154,19 +155,19 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
         });
 
         $scope.team_stats.forEach((element) => {
-            team = element['team'];
-            is_equal_past_from_date = false;
-            is_prior_equal_to_date = false;
-            is_selected_home_away_type = false;
-            is_selected_game_situation = false;
-            is_selected_season_type = false;
-            is_selected_weekday = false;
-            is_equal_past_from_round = false;
-            is_prior_equal_to_round = false;
-            is_selected_games_back = false;
+            const team = element['team'];
+            let is_equal_past_from_date = false;
+            let is_prior_equal_to_date = false;
+            let is_selected_home_away_type = false;
+            let is_selected_game_situation = false;
+            let is_selected_season_type = false;
+            let is_selected_weekday = false;
+            let is_equal_past_from_round = false;
+            let is_prior_equal_to_round = false;
+            let is_selected_games_back = false;
 
             // retrieving game date as moment structure
-            date_to_test = moment(element.game_date);
+            const date_to_test = moment(element.game_date);
 
             if ($scope.gamesBackSelect) {
                 if (element.games_back <= $scope.gamesBackSelect) {
@@ -246,8 +247,7 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
             ) {
                 $scope.svc.stats_to_aggregate().forEach((category) => {
                     // skipping categories that possibly don't exist, e.g. for shootout-related data
-                    if (element[category] === undefined) {
-                    } else {
+                    if (element[category] !== undefined) {
                         filtered_team_stats[team][category] += element[category];
                     }
                 });
@@ -730,9 +730,10 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
     $scope.changeTable = function () {
         // retrieving sort key for current table from list of default table
         // sort criteria
-        sortKey = $scope.tableSortCriteria[$scope.tableSelect];
+        const sortKey = $scope.tableSortCriteria[$scope.tableSelect];
         // checking whether current sort key indicates default ascending
         // sort order
+        let sortDescending;
         if ($scope.ascendingAttrs.indexOf(sortKey) !== -1) {
             sortDescending = false;
         } else {
@@ -781,6 +782,7 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
             };
         } else {
             // ascending sort order for a few columns
+            let sort_descending;
             if ($scope.ascendingAttrs.indexOf(sortKey) !== -1) {
                 sort_descending = false;
                 // otherwise descending sort order
@@ -790,7 +792,7 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
             // retrieving actual (and minor) sort criteria from scope-wide
             // definition of sort criteria
             // use plain sort key if nothing has been defined otherwise
-            sort_criteria = $scope.sortCriteria[sortKey] || sortKey;
+            const sort_criteria = $scope.sortCriteria[sortKey] || sortKey;
             return {
                 sortKey: sortKey,
                 sortCriteria: sort_criteria,
@@ -832,7 +834,8 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
             $scope.gamesBackSelect = $scope.timespanSelect.split('_')[1];
             // games played in selected month
         } else {
-            timespanSelect = parseInt($scope.timespanSelect) + 1;
+            const timespanSelect = parseInt($scope.timespanSelect) + 1;
+            let season;
             if (timespanSelect < 9) {
                 season = parseInt($scope.season) + 1;
             } else {

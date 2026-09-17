@@ -21,8 +21,8 @@
                 <li class="col-12 col-sm-4 list-group-item border-0 bg-transparent p-0"><b>Position:</b> {{ currentPlayerData.position.includes('D') ? 'Verteidiger' : currentPlayerData.position.startsWith('G') ? 'Torhüter' : 'Stürmer'}}</li>
             </ul>
             <ul class="list-group list-group-horizontal-sm my-1">
-                <li data-ng-if="season == 2025" class="col-12 col-sm-5 list-group-item border-0 bg-transparent p-0"><b>Alter:</b> {{ svc.calculateAge(currentPlayerData.date_of_birth) }}</li>
-                <li data-ng-if="season < 2025" class="col-12 col-sm-5 list-group-item border-0 bg-transparent p-0"><b>Alter:</b> {{ svc.parseFloat(season) - svc.parseFloat(currentPlayerData.date_of_birth | date: 'yyyy') }}</li>
+                <li data-ng-if="season == 2026" class="col-12 col-sm-5 list-group-item border-0 bg-transparent p-0"><b>Alter:</b> {{ svc.calculateAge(currentPlayerData.date_of_birth) }}</li>
+                <li data-ng-if="season < 2026" class="col-12 col-sm-5 list-group-item border-0 bg-transparent p-0"><b>Alter:</b> {{ svc.parseFloat(season) - svc.parseFloat(currentPlayerData.date_of_birth | date: 'yyyy') }}</li>
                 <li class="col-12 col-sm-3 list-group-item border-0 bg-transparent p-0"><b>Gewicht:</b> {{ currentPlayerData.weight }} kg</li>
                 <li class="col-12 col-sm-4 list-group-item border-0 bg-transparent p-0"><b>{{ currentPlayerData.position.includes('G') ? 'Fang' : 'Stock' }}hand:</b> {{currentPlayerData.shoots === 'left' ? 'links' : currentPlayerData.shoots === 'right' ? 'rechts' : ''}}</li>
             </ul>

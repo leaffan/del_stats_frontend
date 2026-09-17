@@ -8,7 +8,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
     ctrl.tableSelect = 'basic_stats';
     ctrl.seasonTypeSelect = 'RS';
     if ($scope.season == config.defaultSeason) {
-        ctrl.seasonTypeSelect = 'PO';
+        ctrl.seasonTypeSelect = 'RS';
     }
     ctrl.scoringStreakTypeSelect = $scope.scoringStreakTypeSelect = 'points';
     $scope.minGamesPlayed = 1;

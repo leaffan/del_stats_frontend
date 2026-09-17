@@ -10,7 +10,7 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
     $scope.tableSelect = 'standings';
     $scope.seasonTypeSelect = 'RS';
     if ($scope.season == config.defaultSeason) {
-        $scope.seasonTypeSelect = 'PO';
+        $scope.seasonTypeSelect = 'RS';
     }
     $scope.gamesBackSelect = '';
     // initially setting indicators which view we're currently in

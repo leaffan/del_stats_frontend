@@ -793,7 +793,9 @@ test.describe('DEL Stats Core Flows', () => {
         const bodyText = (await page.locator('body').textContent()) || '';
         expect(bodyText).not.toContain('Shot Explorer');
 
-        const link = page.locator("a:has-text('Schussanalyse')");
+        // the homepage also has a defaultSeason-based Schussanalyse link, so
+        // target the 2025 one explicitly instead of matching by label alone
+        const link = page.locator("a[href*='shot_explorer/2025/']:has-text('Schussanalyse')");
         await expect(link).toBeVisible({ timeout: 10000 });
 
         // shot-tracking data currently only exists for season 2025 (unlike
@@ -1441,10 +1443,15 @@ test.describe('DEL Stats Core Flows', () => {
         expect(await rows.count()).toBeGreaterThan(0);
 
         // same dayFilter/setSortOrder path as team profile, exercised here for
-        // player_profile_controller.js's own copy of the same pattern
+        // player_profile_controller.js's own copy of the same pattern. Unlike
+        // team profile, the initial sort key here is 'game_date' while the
+        // column's key is 'date', so no caret shows until the first click.
         const dateHeader = table.locator('th', { hasText: 'Datum' }).first();
-        await expect(dateHeader.locator('.fa-caret-down')).toBeVisible();
         const topDateBefore = (await rows.first().locator('td').first().textContent()).trim();
+
+        await dateHeader.locator('a').click();
+        await page.waitForTimeout(300);
+        await expect(dateHeader.locator('.fa-caret-down')).toBeVisible();
 
         await dateHeader.locator('a').click();
         await page.waitForTimeout(300);

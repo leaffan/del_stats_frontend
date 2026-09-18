@@ -1351,4 +1351,105 @@ test.describe('DEL Stats Core Flows', () => {
         const gkRows = await page.locator('table tbody tr').count();
         expect(gkRows).toBeGreaterThan(0);
     });
+
+    // 27-29 close a coverage gap: team_stats/team_profile/player_profile had
+    // zero active test coverage (team_stats/team_profile were only reachable
+    // via the permanently-skipped valid_periods tests #14/#15, player_profile
+    // wasn't reachable at all), yet their controllers just had several
+    // variables that were implicit globals - shared across every <script>-tag
+    // loaded file - turned into properly scoped let/const. Each test below
+    // exercises the sort/filter path that touched, sorting twice (or relying
+    // on the already-sorted default plus one toggle) so a "state leaked from
+    // a previous call" regression would show up as rows failing to reorder.
+    test('27. Team stats page loads and sort order toggles correctly', async ({ page }) => {
+        const dataAvailable = await hasData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/team_stats/2025');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const table = page.locator('#standings');
+        await expect(table).toBeVisible();
+        const rows = table.locator('tbody tr');
+        await expect(rows.first()).toBeVisible();
+        expect(await rows.count()).toBeGreaterThan(0);
+
+        // default sort is PTS descending
+        const ptsHeader = table.locator('th', { hasText: 'PTS' }).first();
+        await expect(ptsHeader.locator('.fa-caret-down')).toBeVisible();
+        const topPtsBefore = (await rows.first().locator('td:nth-child(10)').textContent()).trim();
+
+        // clicking PTS again toggles to ascending - exercises $scope.filterStats
+        // and $scope.setSortOrder, both touched by the lint fix
+        await ptsHeader.locator('a').click();
+        await page.waitForTimeout(300);
+        await expect(ptsHeader.locator('.fa-caret-up')).toBeVisible();
+        const topPtsAfter = (await rows.first().locator('td:nth-child(10)').textContent()).trim();
+        expect(topPtsAfter).not.toBe(topPtsBefore);
+    });
+
+    test('28. Team profile page loads and date sort toggles the game log order', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/team_profile/2025/NIT');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const table = page.locator('#basic_game_by_game');
+        await expect(table).toBeVisible();
+        const rows = table.locator('tbody tr');
+        await expect(rows.first()).toBeVisible();
+        expect(await rows.count()).toBeGreaterThan(0);
+
+        // default sort is by date descending - exercises $scope.dayFilter's
+        // now block-scoped date_to_test alongside $scope.setSortOrder
+        const dateHeader = table.locator('th', { hasText: 'Datum' }).first();
+        await expect(dateHeader.locator('.fa-caret-down')).toBeVisible();
+        const topDateBefore = (await rows.first().locator('td').first().textContent()).trim();
+
+        await dateHeader.locator('a').click();
+        await page.waitForTimeout(300);
+        await expect(dateHeader.locator('.fa-caret-up')).toBeVisible();
+        const topDateAfter = (await rows.first().locator('td').first().textContent()).trim();
+        expect(topDateAfter).not.toBe(topDateBefore);
+    });
+
+    test('29. Player profile page loads and date sort toggles the game log order', async ({
+        page,
+    }) => {
+        const dataAvailable = await hasData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/player_profile/2025/NIT/4');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const table = page.locator('#basic_game_by_game');
+        await expect(table).toBeVisible();
+        const rows = table.locator('tbody tr');
+        await expect(rows.first()).toBeVisible();
+        expect(await rows.count()).toBeGreaterThan(0);
+
+        // same dayFilter/setSortOrder path as team profile, exercised here for
+        // player_profile_controller.js's own copy of the same pattern
+        const dateHeader = table.locator('th', { hasText: 'Datum' }).first();
+        await expect(dateHeader.locator('.fa-caret-down')).toBeVisible();
+        const topDateBefore = (await rows.first().locator('td').first().textContent()).trim();
+
+        await dateHeader.locator('a').click();
+        await page.waitForTimeout(300);
+        await expect(dateHeader.locator('.fa-caret-up')).toBeVisible();
+        const topDateAfter = (await rows.first().locator('td').first().textContent()).trim();
+        expect(topDateAfter).not.toBe(topDateBefore);
+    });
 });

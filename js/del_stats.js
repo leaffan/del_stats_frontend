@@ -554,7 +554,7 @@ app.factory('svc', function ($rootScope) {
                 return 0;
             }
         },
-        calculateAge: function (birthDate, today) {
+        calculateAge: function (birthDate, today, compact) {
             birthDate = new Date(birthDate);
             if (today === undefined) {
                 today = new Date();
@@ -598,6 +598,9 @@ app.factory('svc', function ($rootScope) {
                 days = today.getDate() - birthDate.getDate() + monthDays[birthDate.getMonth()];
             }
 
+            if (compact) {
+                return years + ' J. ' + months + ' M. ' + days + ' T.';
+            }
             return (
                 years +
                 ' Jahre ' +

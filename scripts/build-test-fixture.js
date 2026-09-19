@@ -47,15 +47,22 @@ if (harFiles.length === 0) {
 }
 
 const requested = new Set();
+function addIfLocalFile(rawUrl) {
+    const url = new URL(rawUrl, 'http://localhost:8000');
+    if (url.hostname !== 'localhost') return;
+    const relPath = decodeURIComponent(url.pathname).replace(/^\//, '');
+    if (relPath.startsWith('data/') || relPath.startsWith('cfg/')) {
+        requested.add(relPath);
+    }
+}
 for (const file of harFiles) {
     const har = JSON.parse(fs.readFileSync(path.join(harDir, file), 'utf8'));
-    for (const entry of har.log.entries) {
-        const url = new URL(entry.request.url);
-        if (url.hostname !== 'localhost') continue;
-        const relPath = decodeURIComponent(url.pathname).replace(/^\//, '');
-        if (relPath.startsWith('data/') || relPath.startsWith('cfg/')) {
-            requested.add(relPath);
-        }
+    for (const entry of har.log.entries) addIfLocalFile(entry.request.url);
+}
+// page.request.* calls (e.g. HEAD existence checks) aren't part of a HAR
+for (const file of fs.readdirSync(harDir).filter((f) => f.endsWith('.api.txt'))) {
+    for (const line of fs.readFileSync(path.join(harDir, file), 'utf8').split('\n')) {
+        if (line.trim()) addIfLocalFile(line.trim());
     }
 }
 

@@ -66,8 +66,7 @@ jobs:
                   else
                     curl -fsSL "$FIXTURE_DATA_URL" -o fixture-data.tar.gz
                     tar -xzf fixture-data.tar.gz
-                    echo "Extracted $(find data -type f | wc -l) fixture files (expecting 64)"
-                    ls data/2025/per_player/NIT_4.json data/2025/del_team_game_stats.json
+                    echo "Extracted $(find data -type f | wc -l) fixture files (expecting 76)"
                   fi
 
             - name: Install Playwright browsers

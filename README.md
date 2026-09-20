@@ -63,7 +63,7 @@ The following structure is expected at runtime:
 | Path                      | Description                                                   |
 | ------------------------- | ------------------------------------------------------------- |
 | `data/attendance.json`    | Season-wide attendance figures                                |
-| `data/clinched_data.json` | Clinching state per team and season                           |
+| `data/clinched_data.json` | Playoff clinching state per team (current season)             |
 | `data/del_players.json`   | Master player list                                            |
 | `data/po_series.json`     | Playoff series results                                        |
 | `data/{season}/`          | Per-season player, goalie, and team game stats (JSON and CSV) |

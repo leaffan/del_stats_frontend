@@ -2,6 +2,8 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
     $scope.svc = svc;
     var ctrl = this;
     $scope.season = $routeParams.season;
+    // playoff qualification markers only make sense for the current regular season
+    $scope.is_current_season = $scope.season == config.defaultSeason;
     svc.setTitle('DEL-Teamstatistiken ' + svc.getSeasonIdentifier($scope.season));
     // setting reference season for attendance stats display
     $scope.referenceSeasonSelect = ($scope.season - 1).toString();
@@ -48,7 +50,7 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
         $scope.avg_attendances = res.data;
     });
 
-    // retrieving attendance data from external file
+    // retrieving playoff qualification data from external file
     $http.get('./data/clinched_data.json').then(function (res) {
         $scope.clinched_data = res.data;
     });

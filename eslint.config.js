@@ -47,6 +47,8 @@ module.exports = [
                 // controller files via plain <script> tags (no module system)
                 app: 'writable',
                 moment: 'readonly',
+                // defined in clinched_status.js, loaded via <script> before del_stats.js
+                ClinchedStatus: 'readonly',
             },
         },
     },

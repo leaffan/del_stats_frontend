@@ -153,6 +153,8 @@ app.factory('svc', function ($rootScope) {
         setTitle: function (title) {
             $rootScope.title = title;
         },
+        // marker and tooltip for a team's playoff qualification state (or null)
+        getClinchedStatus: ClinchedStatus.getClinchedStatus,
         // sets sorting order according to selected sort criterion
         setSortOrder: function (
             sortCriterion,

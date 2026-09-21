@@ -1470,7 +1470,10 @@ test.describe('DEL Stats Core Flows', () => {
         await page.goto('http://localhost:8000/index.html#!/player_profile/2025/NIT/4');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
 
-        const table = page.locator('#basic_game_by_game');
+        // Linemates are only shown in the 'Reihenpartner' table, not the default one
+        await page.locator('select[data-ng-model="tableSelect"]:visible').selectOption('lines');
+
+        const table = page.locator('#lines');
         await expect(table).toBeVisible();
         const rows = table.locator('tbody tr');
         await expect(rows.first()).toBeVisible();
@@ -1479,7 +1482,11 @@ test.describe('DEL Stats Core Flows', () => {
         // Check that the linemate name cells contain actual player names
         // This test would have caught the "Remove loading of player registry" regression
         // where $scope.players was undefined, causing player names to display as "undefined undefined"
-        const firstRow = rows.first();
+        // Games without a line assignment render empty linemate links, so pick a row with names
+        const firstRow = rows
+            .filter({ has: page.locator('a[href*="player_profile"]', { hasText: /\S/ }) })
+            .first();
+        await expect(firstRow).toBeVisible();
         // Get linemate links (defense and forwards player profile links) in the row
         const linemateLinkCells = firstRow.locator('a[href*="player_profile"]');
         const lineMateCount = await linemateLinkCells.count();
@@ -1487,15 +1494,14 @@ test.describe('DEL Stats Core Flows', () => {
         // Should have at least 5 linemate links (defense[0,1] + forwards[0,1,2])
         expect(lineMateCount).toBeGreaterThanOrEqual(5);
 
-        // Check the first 5 linemate cells for actual player names
-        for (let i = 0; i < 5; i++) {
-            const linkText = (await linemateLinkCells.nth(i).textContent()).trim();
-            // Should contain a name (not empty)
-            expect(linkText.length).toBeGreaterThan(0);
+        // The profiled player occupies one of the five slots himself, so one link
+        // (forwards[2] for a forward, defense[1] for a defenseman) is empty
+        const texts = (await linemateLinkCells.allTextContents()).map((t) => t.trim());
+        const named = texts.filter((t) => t.length > 0);
+        expect(named.length).toBeGreaterThanOrEqual(4);
+        for (const text of texts) {
             // Should not contain error indicators
-            expect(linkText).not.toContain('undefined');
-            // Should contain at least one non-whitespace character (name)
-            expect(linkText).toMatch(/\S/);
+            expect(text).not.toContain('undefined');
         }
     });
 });

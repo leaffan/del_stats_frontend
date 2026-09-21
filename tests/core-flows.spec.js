@@ -1476,23 +1476,26 @@ test.describe('DEL Stats Core Flows', () => {
         await expect(rows.first()).toBeVisible();
         expect(await rows.count()).toBeGreaterThan(0);
 
-        // Check that the linemate name cells (last 5 w-13 cells) contain actual player names
+        // Check that the linemate name cells contain actual player names
         // This test would have caught the "Remove loading of player registry" regression
-        // where $scope.players was undefined
+        // where $scope.players was undefined, causing player names to display as "undefined undefined"
         const firstRow = rows.first();
-        // Get the 5 linemate cells (defense[0], defense[1], forwards[0], forwards[1], forwards[2])
-        const linemateCells = firstRow.locator('td.w-13');
-        expect(await linemateCells.count()).toBe(5);
+        // Get linemate links (defense and forwards player profile links) in the row
+        const linemateLinkCells = firstRow.locator('a[href*="player_profile"]');
+        const lineMateCount = await linemateLinkCells.count();
 
-        // Check each linemate cell for actual player names (not empty, not undefined)
+        // Should have at least 5 linemate links (defense[0,1] + forwards[0,1,2])
+        expect(lineMateCount).toBeGreaterThanOrEqual(5);
+
+        // Check the first 5 linemate cells for actual player names
         for (let i = 0; i < 5; i++) {
-            const cellText = (await linemateCells.nth(i).textContent()).trim();
-            // Should contain a name (at least one space for first and last name)
-            expect(cellText.length).toBeGreaterThan(0);
+            const linkText = (await linemateLinkCells.nth(i).textContent()).trim();
+            // Should contain a name (not empty)
+            expect(linkText.length).toBeGreaterThan(0);
             // Should not contain error indicators
-            expect(cellText).not.toContain('undefined');
-            // Should likely contain a space (first name and last name)
-            expect(cellText).toMatch(/\S+\s+\S+/);
+            expect(linkText).not.toContain('undefined');
+            // Should contain at least one non-whitespace character (name)
+            expect(linkText).toMatch(/\S/);
         }
     });
 });

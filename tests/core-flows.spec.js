@@ -1459,4 +1459,40 @@ test.describe('DEL Stats Core Flows', () => {
         const topDateAfter = (await rows.first().locator('td').first().textContent()).trim();
         expect(topDateAfter).not.toBe(topDateBefore);
     });
+
+    test('30. Player profile page renders linemate names correctly', async ({ page }) => {
+        const dataAvailable = await hasData(page);
+
+        if (!dataAvailable) {
+            test.skip();
+        }
+
+        await page.goto('http://localhost:8000/index.html#!/player_profile/2025/NIT/4');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const table = page.locator('#basic_game_by_game');
+        await expect(table).toBeVisible();
+        const rows = table.locator('tbody tr');
+        await expect(rows.first()).toBeVisible();
+        expect(await rows.count()).toBeGreaterThan(0);
+
+        // Check that the linemate name cells (last 5 w-13 cells) contain actual player names
+        // This test would have caught the "Remove loading of player registry" regression
+        // where $scope.players was undefined
+        const firstRow = rows.first();
+        // Get the 5 linemate cells (defense[0], defense[1], forwards[0], forwards[1], forwards[2])
+        const linemateCells = firstRow.locator('td.w-13');
+        expect(await linemateCells.count()).toBe(5);
+
+        // Check each linemate cell for actual player names (not empty, not undefined)
+        for (let i = 0; i < 5; i++) {
+            const cellText = (await linemateCells.nth(i).textContent()).trim();
+            // Should contain a name (at least one space for first and last name)
+            expect(cellText.length).toBeGreaterThan(0);
+            // Should not contain error indicators
+            expect(cellText).not.toContain('undefined');
+            // Should likely contain a space (first name and last name)
+            expect(cellText).toMatch(/\S+\s+\S+/);
+        }
+    });
 });

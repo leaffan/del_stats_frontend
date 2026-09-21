@@ -19,6 +19,11 @@ app.controller('plrProfileController', function ($scope, $http, $routeParams, $l
         $scope.current_player_data = $scope.personal_data.find(
             (player) => player.player_id == $scope.player_id,
         );
+        // Create players object indexed by player_id for quick lookup
+        $scope.players = {};
+        $scope.personal_data.forEach(function (player) {
+            $scope.players[player.player_id] = player;
+        });
     });
 
     // loading player ids with portraits

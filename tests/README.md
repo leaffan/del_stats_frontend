@@ -63,18 +63,21 @@ test('My new flow', async ({ page }) => {
 
 ## Test Data
 
-Tests are designed to run gracefully with or without the `data/` directory populated:
+Every data-dependent test first checks (via a HEAD request) that the one file
+its view actually loads is present, using the probe helpers at the top of
+`tests/core-flows.spec.js`.
 
-- **With data:** Tests verify page rendering, table loading, navigation, and configuration file access
-- **Without data:** Tests verify page structure and that JavaScript errors are not thrown
-    - Network 404 errors for missing data files are expected and ignored
-    - Only real JavaScript errors (unhandled exceptions, ReferenceErrors, etc.) cause test failures
+- **Locally:** a missing file skips the test, so the suite stays usable
+  without a populated `data/`.
+- **In CI** (`REQUIRE_FIXTURE=1`): a missing file fails the test with
+  `Fixture-Datei fehlt: <path>`. A run without fixture data must not go green
+  just because every test skipped itself.
 
 Locally, `data/` is populated by the `del_stats_backend` pipeline (see the
 repo README), so tests exercise real rendering. In CI, `data/` is fetched
 from a small fixture archive (see `docs/ROADMAP.md` for how that's wired up)
 rather than left empty, so the suite exercises the same real assertions
-there too instead of mostly skipping itself.
+there too.
 
 ### Regenerating the CI fixture
 

@@ -125,7 +125,7 @@ data/*
 # scripts/build-test-fixture.js working/output directories
 .fixture-harvest/
 fixture-out/
-fixture-data.tar.gz
+fixture-*.tar.gz
 
 po/*
 

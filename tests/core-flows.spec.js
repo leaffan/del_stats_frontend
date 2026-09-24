@@ -1,35 +1,15 @@
-const { test, expect, requireData } = require('./support/test-base');
-
-// Each probe HEADs one file the tested view actually loads. A missing file
-// skips the test locally and fails it in CI (see requireData), so a probe must
-// name the file its view needs, not a neighbouring one.
-function probe(file) {
-    const check = async (page) => {
-        try {
-            const response = await page.request.head(`http://localhost:8000/${file}`, {
-                timeout: 2000,
-            });
-            return response.ok();
-        } catch {
-            return false;
-        }
-    };
-    check.file = file;
-    return check;
-}
-
-async function requireFixture(page, check) {
-    requireData(await check(page), check.file);
-}
-
-const hasAggregatedPlayerStats = probe('data/2025/del_player_game_stats_aggregated.json');
-const hasCareerData = probe('data/career_stats/upd_full_career_stats_stripped.json');
-const hasTeamGameStats = (season) => probe(`data/${season}/del_team_game_stats.json`);
-const hasPlayerFile = (season, team, id) => probe(`data/${season}/per_player/${team}_${id}.json`);
-const hasTeamTriviaData = probe('data/historic_trivia/overtime_games_per_season_pctg.json');
-const hasGameTriviaData = probe('data/historic_trivia/blown_leads.json');
-const hasPlayerTriviaData = probe('data/historic_trivia/fastest_first_goal_period_1.json');
-const hasShotExplorerData = probe('data/2025/shots/per_player/100.json');
+const { test, expect } = require('./support/test-base');
+const {
+    requireFixture,
+    hasAggregatedPlayerStats,
+    hasCareerData,
+    hasTeamGameStats,
+    hasPlayerFile,
+    hasTeamTriviaData,
+    hasGameTriviaData,
+    hasPlayerTriviaData,
+    hasShotExplorerData,
+} = require('./support/probes');
 
 test.describe('DEL Stats Core Flows', () => {
     test('1. Home page loads and renders', async ({ page }) => {
@@ -567,113 +547,6 @@ test.describe('DEL Stats Core Flows', () => {
         await page.waitForTimeout(300);
         await expect(selects.nth(0)).toHaveValue('winning_streaks');
         expect(await page.locator('table tbody tr').count()).toBeGreaterThan(0);
-    });
-
-    test.skip('14. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
-        // KEV (Krefeld Pinguine) was in DEL until 2021, absent 2022-2025, returns 2026
-        // This tests the valid_periods functionality for teams with relegation/promotion
-
-        // Check 2021: KEV should be present (last season before relegation)
-        await page.goto('http://localhost:8000/index.html#!/team_stats/2021');
-        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
-
-        // Look for KEV in team selection or standings
-        const kevIn2021 =
-            (await page
-                .locator('text=/Krefeld/i')
-                .isVisible()
-                .catch(() => false)) ||
-            (await page
-                .locator('[title*="Krefeld"], [alt*="Krefeld"]')
-                .isVisible()
-                .catch(() => false)) ||
-            (await page
-                .textContent('body')
-                .then((text) => text.includes('KEV'))
-                .catch(() => false));
-
-        expect(kevIn2021).toBeTruthy();
-
-        // Check 2023: KEV should NOT be present (relegated)
-        await page.goto('http://localhost:8000/index.html#!/team_stats/2023');
-        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
-
-        const kevIn2023 =
-            (await page
-                .locator('text=/Krefeld/i')
-                .isVisible()
-                .catch(() => false)) ||
-            (await page
-                .locator('[title*="Krefeld"], [alt*="Krefeld"]')
-                .isVisible()
-                .catch(() => false));
-
-        expect(kevIn2023).toBeFalsy();
-
-        // Check 2026: KEV should be present again (promoted)
-        await page.goto('http://localhost:8000/index.html#!/team_stats/2026');
-        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
-
-        const kevIn2026 =
-            (await page
-                .locator('text=/Krefeld/i')
-                .isVisible()
-                .catch(() => false)) ||
-            (await page
-                .locator('[title*="Krefeld"], [alt*="Krefeld"]')
-                .isVisible()
-                .catch(() => false)) ||
-            (await page
-                .textContent('body')
-                .then((text) => text.includes('KEV'))
-                .catch(() => false));
-
-        expect(kevIn2026).toBeTruthy();
-    });
-
-    test.skip('15. Team profile navigation respects valid_periods', async ({ page }) => {
-        // Navigate to KEV team profile in 2021 (when they were in the league)
-        await page.goto('http://localhost:8000/index.html#!/team_profile/2021/KEV');
-        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
-
-        // Page should load successfully
-        const pageBody = page.locator('body');
-        await expect(pageBody).toBeVisible();
-
-        // Check if navigation to next season (2022) is blocked
-        // KEV was relegated after 2021, so 2022 link should not be available
-        const link2022 = page.locator('a[href*="2022/KEV"]');
-        const has2022Link = await link2022.isVisible().catch(() => false);
-
-        // Link should either not exist or not be visible (KEV not in 2022)
-        expect(has2022Link).toBeFalsy();
-
-        // Try navigating to 2023 directly - should show KEV was not in league
-        await page.goto('http://localhost:8000/index.html#!/team_profile/2023/KEV');
-        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
-
-        // Page might show error or empty state - check for either
-        const hasError =
-            (await page
-                .locator('text=/nicht verfügbar/i')
-                .isVisible()
-                .catch(() => false)) ||
-            (await page
-                .locator('text=/no data/i')
-                .isVisible()
-                .catch(() => false)) ||
-            (await page
-                .locator('table')
-                .count()
-                .then((c) => c === 0)
-                .catch(() => true));
-
-        // We expect some indication that data is not available
-        // (Either error message or missing tables)
-        // This is a soft check - behavior may vary based on implementation
-        const bodyText = await page.textContent('body').catch(() => '');
-        const pageLoaded = bodyText.length > 50;
-        expect(pageLoaded).toBeTruthy();
     });
 
     test('16. Shot explorer deep link selects season and player from the route', async ({
@@ -1224,8 +1097,8 @@ test.describe('DEL Stats Core Flows', () => {
 
     // 27-29 close a coverage gap: team_stats/team_profile/player_profile had
     // zero active test coverage (team_stats/team_profile were only reachable
-    // via the permanently-skipped valid_periods tests #14/#15, player_profile
-    // wasn't reachable at all), yet their controllers just had several
+    // via two long-skipped valid_periods tests, player_profile wasn't
+    // reachable at all), yet their controllers just had several
     // variables that were implicit globals - shared across every <script>-tag
     // loaded file - turned into properly scoped let/const. Each test below
     // exercises the sort/filter path that touched, sorting twice (or relying

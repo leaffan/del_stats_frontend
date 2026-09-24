@@ -30,8 +30,8 @@ pnpm test -- --list
     4. Player game stats (season view)
     5. Navigation hash updates
     6. Configuration files load correctly
-    7. **Teams with valid_periods appear/disappear correctly** (KEV relegation/promotion)
-    8. **Team profile navigation respects valid_periods** (navigation blocked during absent years)
+- **sorting.spec.js** — one generic test per table view that walks every sortable column and checks sorting invariants (see the comment at the top of the file)
+- **format-utils.spec.js**, **clinched-status.spec.js** — unit tests for the pure helpers in `js/format_utils.js` and `js/clinched_status.js`. They need neither `data/` nor a page, so new edge cases of formatting or ordering logic belong here rather than in an end-to-end test.
 
 ## Test Results
 

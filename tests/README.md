@@ -64,8 +64,8 @@ test('My new flow', async ({ page }) => {
 ## Test Data
 
 Every data-dependent test first checks (via a HEAD request) that the one file
-its view actually loads is present, using the probe helpers at the top of
-`tests/core-flows.spec.js`.
+its view actually loads is present, using the probe helpers in
+`tests/support/probes.js`.
 
 - **Locally:** a missing file skips the test, so the suite stays usable
   without a populated `data/`.

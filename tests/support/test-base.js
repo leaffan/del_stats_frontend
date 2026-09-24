@@ -37,4 +37,15 @@ const test = harvestDir
       })
     : base.test;
 
-module.exports = { test, expect: base.expect };
+// Skips the current test when its fixture file is missing - unless
+// REQUIRE_FIXTURE is set (CI), where a missing file must fail the test loudly
+// instead of letting a run go green without having checked anything.
+function requireData(available, what) {
+    if (available) return;
+    if (process.env.REQUIRE_FIXTURE) {
+        throw new Error(`Data fixtures missing: ${what}`);
+    }
+    test.skip();
+}
+
+module.exports = { test, expect: base.expect, requireData };

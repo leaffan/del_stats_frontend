@@ -64,4 +64,4 @@ pnpm test:debug   # Run with verbose output
 
 ### CI workflow
 
-The CI workflow in `.github/workflows/ci.yml` uses Node.js 22 with pnpm and runs `pnpm check` on every push and pull request. End-to-end tests are run separately to avoid blocking CI if test data is unavailable.
+The CI workflow in `.github/workflows/ci.yml` uses Node.js 22 with pnpm and runs `pnpm check` on every push and pull request. The end-to-end tests run against a test fixture that CI downloads using the `FIXTURE_DATA_URL` repository secret, and a missing fixture file fails the run instead of skipping the test. GitHub does not expose repository secrets to pull requests from forks, so the end-to-end job is expected to fail there; maintainers re-run those changes from a branch in this repository.

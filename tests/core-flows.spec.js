@@ -1,105 +1,45 @@
 const { test, expect } = require('./support/test-base');
-
-// Helper to check if data is available
-async function hasData(page) {
-    try {
-        const response = await page.request.head(
-            'http://localhost:8000/data/2025/del_player_game_stats_aggregated.json',
-            { timeout: 2000 },
-        );
-        return response.ok();
-    } catch {
-        return false;
-    }
-}
-
-// Helper to check if team trivia data is available
-async function hasTeamTriviaData(page) {
-    try {
-        const response = await page.request.head(
-            'http://localhost:8000/data/historic_trivia/overtime_games_per_season_pctg.json',
-            { timeout: 2000 },
-        );
-        return response.ok();
-    } catch {
-        return false;
-    }
-}
-
-// Helper to check if game trivia data is available
-async function hasGameTriviaData(page) {
-    try {
-        const response = await page.request.head(
-            'http://localhost:8000/data/historic_trivia/blown_leads.json',
-            { timeout: 2000 },
-        );
-        return response.ok();
-    } catch {
-        return false;
-    }
-}
-
-// Helper to check if player trivia data is available
-async function hasPlayerTriviaData(page) {
-    try {
-        const response = await page.request.head(
-            'http://localhost:8000/data/historic_trivia/fastest_first_goal_period_1.json',
-            { timeout: 2000 },
-        );
-        return response.ok();
-    } catch {
-        return false;
-    }
-}
-
-// Helper to check if shot explorer data is available
-async function hasShotExplorerData(page) {
-    try {
-        const response = await page.request.head(
-            'http://localhost:8000/data/2025/shots/per_player/100.json',
-            { timeout: 2000 },
-        );
-        return response.ok();
-    } catch {
-        return false;
-    }
-}
+const {
+    requireFixture,
+    hasAggregatedPlayerStats,
+    hasCareerData,
+    hasTeamGameStats,
+    hasPlayerFile,
+    hasTeamTriviaData,
+    hasGameTriviaData,
+    hasPlayerTriviaData,
+    hasShotExplorerData,
+} = require('./support/probes');
 
 test.describe('DEL Stats Core Flows', () => {
     test('1. Home page loads and renders', async ({ page }) => {
-        const dataAvailable = await hasData(page);
+        await requireFixture(page, hasAggregatedPlayerStats);
+
+        // Track only real JavaScript errors (not network errors or 404s). The
+        // listeners have to exist before goto, or errors thrown while the page
+        // loads are never seen.
+        const jsErrors = [];
+        page.on('console', (msg) => {
+            if (msg.type() === 'error') {
+                const text = msg.text();
+                // Ignore expected network errors
+                if (!text.includes('Failed to load resource') && !text.includes('404')) {
+                    jsErrors.push(text);
+                }
+            }
+        });
+
+        page.on('pageerror', (error) => {
+            const msg = error.message || '';
+            // Only track actual JS errors, not network failures
+            if (!msg.includes('data/') && !msg.includes('404') && !msg.includes('ERR_')) {
+                jsErrors.push(msg);
+            }
+        });
 
         await page.goto('http://localhost:8000/index.html#!');
-
-        // Only check for serious JS errors if data is available
-        // Without data, we just verify page structure renders
-        if (dataAvailable) {
-            // Track only real JavaScript errors (not network errors or 404s)
-            const jsErrors = [];
-            page.on('console', (msg) => {
-                if (msg.type() === 'error') {
-                    const text = msg.text();
-                    // Ignore expected network errors
-                    if (!text.includes('Failed to load resource') && !text.includes('404')) {
-                        jsErrors.push(text);
-                    }
-                }
-            });
-
-            page.on('pageerror', (error) => {
-                const msg = error.message || '';
-                // Only track actual JS errors, not network failures
-                if (!msg.includes('data/') && !msg.includes('404') && !msg.includes('ERR_')) {
-                    jsErrors.push(msg);
-                }
-            });
-
-            await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
-            expect(jsErrors).toHaveLength(0);
-        } else {
-            // Without data, just verify page loads without crashing
-            await page.waitForTimeout(500);
-        }
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        expect(jsErrors).toHaveLength(0);
 
         // Check page renders
         const pageContent = page.locator('body');
@@ -107,11 +47,7 @@ test.describe('DEL Stats Core Flows', () => {
     });
 
     test('2. Career statistics page loads', async ({ page }) => {
-        const dataAvailable = await hasData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasCareerData);
 
         // this page loads two large JSON files (~4MB combined) before it can
         // render any rows; waiting for the bigger one to actually finish
@@ -145,47 +81,39 @@ test.describe('DEL Stats Core Flows', () => {
     });
 
     test('3. Player career details loads when navigating', async ({ page }) => {
+        await requireFixture(page, hasCareerData);
+
         // First go to career stats to get a player link
         await page.goto('http://localhost:8000/index.html#!/career_stats');
 
-        // Try to find and click a player link (varies by data availability)
         const playerLinks = page.locator("a[href*='player_career'], a[ng-href*='player_career']");
-        const linkCount = await playerLinks.count().catch(() => 0);
+        await expect(playerLinks.first()).toBeVisible({ timeout: 15000 });
 
-        if (linkCount > 0) {
-            // Click first player link
-            await playerLinks.first().click();
+        // Click first player link
+        await playerLinks.first().click();
 
-            // Wait for URL change and page load
-            await page.waitForURL(/player_career/, { timeout: 5000 }).catch(() => {});
+        // Wait for URL change and page load
+        await page.waitForURL(/player_career/, { timeout: 5000 }).catch(() => {});
 
-            // Check page content loaded
-            const pageContent = page.locator('body');
-            await expect(pageContent).toBeVisible();
+        // Check page content loaded
+        const pageContent = page.locator('body');
+        await expect(pageContent).toBeVisible();
 
-            // Check for player info or statistics
-            const hasContent =
-                (await page
-                    .locator('h1, h2, table')
-                    .first()
-                    .isVisible()
-                    .catch(() => false)) ||
-                ((await page.locator('body').textContent()) || '').length > 100;
-            expect(hasContent).toBeTruthy();
-        } else {
-            // Skip if no data available
-            test.skip();
-        }
+        // Check for player info or statistics
+        const hasContent =
+            (await page
+                .locator('h1, h2, table')
+                .first()
+                .isVisible()
+                .catch(() => false)) ||
+            ((await page.locator('body').textContent()) || '').length > 100;
+        expect(hasContent).toBeTruthy();
     });
 
     test('3b. Career stats player links use a valid player id and resolve to the right player', async ({
         page,
     }) => {
-        const dataAvailable = await hasData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasCareerData);
 
         // same large-data-file render lag as test 2 - wait for the actual
         // data response deterministically instead of racing networkidle/a
@@ -334,11 +262,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('7. Team trivia page loads, category and season type switching, team filter', async ({
         page,
     }) => {
-        const dataAvailable = await hasTeamTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasTeamTriviaData);
 
         await page.goto('http://localhost:8000/index.html#!/team_trivia');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -407,11 +331,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('8. Team trivia streak category loads a separate data file per season type', async ({
         page,
     }) => {
-        const dataAvailable = await hasTeamTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasTeamTriviaData);
 
         await page.goto('http://localhost:8000/index.html#!/team_trivia');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -445,11 +365,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('9. Team trivia streak table applies the length/score_diff/scores_for/season tie-break chain', async ({
         page,
     }) => {
-        const dataAvailable = await hasTeamTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasTeamTriviaData);
 
         await page.goto('http://localhost:8000/index.html#!/team_trivia');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -478,11 +394,7 @@ test.describe('DEL Stats Core Flows', () => {
     });
 
     test('10. Team trivia overtime category formats W-L[-T] record columns', async ({ page }) => {
-        const dataAvailable = await hasTeamTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasTeamTriviaData);
 
         await page.goto('http://localhost:8000/index.html#!/team_trivia');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -535,11 +447,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('11. Team trivia sort-direction caret matches the actual row order, and rank stays live after re-sorting', async ({
         page,
     }) => {
-        const dataAvailable = await hasTeamTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasTeamTriviaData);
 
         await page.goto('http://localhost:8000/index.html#!/team_trivia');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -580,11 +488,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('12. Team trivia score-state category formats duration and multi-season ranges', async ({
         page,
     }) => {
-        const dataAvailable = await hasTeamTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasTeamTriviaData);
 
         await page.goto('http://localhost:8000/index.html#!/team_trivia');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -621,11 +525,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('13. Team trivia deep link selects category and season type from the route', async ({
         page,
     }) => {
-        const dataAvailable = await hasTeamTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasTeamTriviaData);
 
         // a direct link to a specific category/season-type combination must land
         // there immediately, without the user having to pick it from the dropdowns
@@ -649,121 +549,10 @@ test.describe('DEL Stats Core Flows', () => {
         expect(await page.locator('table tbody tr').count()).toBeGreaterThan(0);
     });
 
-    test.skip('14. Teams with valid_periods appear/disappear correctly (KEV)', async ({ page }) => {
-        // KEV (Krefeld Pinguine) was in DEL until 2021, absent 2022-2025, returns 2026
-        // This tests the valid_periods functionality for teams with relegation/promotion
-
-        // Check 2021: KEV should be present (last season before relegation)
-        await page.goto('http://localhost:8000/index.html#!/team_stats/2021');
-        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
-
-        // Look for KEV in team selection or standings
-        const kevIn2021 =
-            (await page
-                .locator('text=/Krefeld/i')
-                .isVisible()
-                .catch(() => false)) ||
-            (await page
-                .locator('[title*="Krefeld"], [alt*="Krefeld"]')
-                .isVisible()
-                .catch(() => false)) ||
-            (await page
-                .textContent('body')
-                .then((text) => text.includes('KEV'))
-                .catch(() => false));
-
-        expect(kevIn2021).toBeTruthy();
-
-        // Check 2023: KEV should NOT be present (relegated)
-        await page.goto('http://localhost:8000/index.html#!/team_stats/2023');
-        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
-
-        const kevIn2023 =
-            (await page
-                .locator('text=/Krefeld/i')
-                .isVisible()
-                .catch(() => false)) ||
-            (await page
-                .locator('[title*="Krefeld"], [alt*="Krefeld"]')
-                .isVisible()
-                .catch(() => false));
-
-        expect(kevIn2023).toBeFalsy();
-
-        // Check 2026: KEV should be present again (promoted)
-        await page.goto('http://localhost:8000/index.html#!/team_stats/2026');
-        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
-
-        const kevIn2026 =
-            (await page
-                .locator('text=/Krefeld/i')
-                .isVisible()
-                .catch(() => false)) ||
-            (await page
-                .locator('[title*="Krefeld"], [alt*="Krefeld"]')
-                .isVisible()
-                .catch(() => false)) ||
-            (await page
-                .textContent('body')
-                .then((text) => text.includes('KEV'))
-                .catch(() => false));
-
-        expect(kevIn2026).toBeTruthy();
-    });
-
-    test.skip('15. Team profile navigation respects valid_periods', async ({ page }) => {
-        // Navigate to KEV team profile in 2021 (when they were in the league)
-        await page.goto('http://localhost:8000/index.html#!/team_profile/2021/KEV');
-        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
-
-        // Page should load successfully
-        const pageBody = page.locator('body');
-        await expect(pageBody).toBeVisible();
-
-        // Check if navigation to next season (2022) is blocked
-        // KEV was relegated after 2021, so 2022 link should not be available
-        const link2022 = page.locator('a[href*="2022/KEV"]');
-        const has2022Link = await link2022.isVisible().catch(() => false);
-
-        // Link should either not exist or not be visible (KEV not in 2022)
-        expect(has2022Link).toBeFalsy();
-
-        // Try navigating to 2023 directly - should show KEV was not in league
-        await page.goto('http://localhost:8000/index.html#!/team_profile/2023/KEV');
-        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
-
-        // Page might show error or empty state - check for either
-        const hasError =
-            (await page
-                .locator('text=/nicht verfügbar/i')
-                .isVisible()
-                .catch(() => false)) ||
-            (await page
-                .locator('text=/no data/i')
-                .isVisible()
-                .catch(() => false)) ||
-            (await page
-                .locator('table')
-                .count()
-                .then((c) => c === 0)
-                .catch(() => true));
-
-        // We expect some indication that data is not available
-        // (Either error message or missing tables)
-        // This is a soft check - behavior may vary based on implementation
-        const bodyText = await page.textContent('body').catch(() => '');
-        const pageLoaded = bodyText.length > 50;
-        expect(pageLoaded).toBeTruthy();
-    });
-
     test('16. Shot explorer deep link selects season and player from the route', async ({
         page,
     }) => {
-        const dataAvailable = await hasShotExplorerData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasShotExplorerData);
 
         // a direct link to a specific season/player combination must land there
         // immediately, without the user having to pick it from the dropdowns
@@ -779,11 +568,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('16b. Homepage links to Schussanalyse for a skater in the season that actually has shot data', async ({
         page,
     }) => {
-        const dataAvailable = await hasShotExplorerData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasShotExplorerData);
 
         await page.goto('http://localhost:8000/index.html#!');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -817,11 +602,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('17. Game trivia page loads with both categories and sorts by margin', async ({
         page,
     }) => {
-        const dataAvailable = await hasGameTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasGameTriviaData);
 
         await page.goto('http://localhost:8000/index.html#!/game_trivia');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -872,11 +653,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('18. Game trivia RS/PO filter narrows rows and covers the full data set', async ({
         page,
     }) => {
-        const dataAvailable = await hasGameTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasGameTriviaData);
 
         await page.goto('http://localhost:8000/index.html#!/game_trivia');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -903,11 +680,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('19. Game trivia opponent filter narrows rows independently of the team filter', async ({
         page,
     }) => {
-        const dataAvailable = await hasGameTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasGameTriviaData);
 
         await page.goto('http://localhost:8000/index.html#!/game_trivia');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -933,11 +706,7 @@ test.describe('DEL Stats Core Flows', () => {
     test("19b. Game trivia team filter narrows to the team's own role, not the opponent", async ({
         page,
     }) => {
-        const dataAvailable = await hasGameTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasGameTriviaData);
 
         await page.goto('http://localhost:8000/index.html#!/game_trivia');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -964,11 +733,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('20. Game trivia goals-per-period category switches variants and generalizes team_column', async ({
         page,
     }) => {
-        const dataAvailable = await hasGameTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasGameTriviaData);
 
         await page.goto('http://localhost:8000/index.html#!/game_trivia');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -1014,11 +779,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('21. Player trivia page loads fastest-goal category with period/OT variants sorted ascending', async ({
         page,
     }) => {
-        const dataAvailable = await hasPlayerTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasPlayerTriviaData);
 
         await page.goto('http://localhost:8000/index.html#!/player_trivia');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -1066,11 +827,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('22. Player trivia scorer links resolve both numeric and letter-suffixed ids to the right player', async ({
         page,
     }) => {
-        const dataAvailable = await hasPlayerTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasPlayerTriviaData);
 
         await page.goto('http://localhost:8000/index.html#!/player_trivia');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -1123,11 +880,7 @@ test.describe('DEL Stats Core Flows', () => {
     test("23. Player trivia team filter narrows to the scorer's own team, opponent filter narrows independently", async ({
         page,
     }) => {
-        const dataAvailable = await hasPlayerTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasPlayerTriviaData);
 
         await page.goto('http://localhost:8000/index.html#!/player_trivia');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -1181,11 +934,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('24. Player trivia name search filters rows by the player_column field', async ({
         page,
     }) => {
-        const dataAvailable = await hasPlayerTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasPlayerTriviaData);
 
         await page.goto('http://localhost:8000/index.html#!/player_trivia');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -1210,11 +959,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('25. Player trivia age categories group correctly, hide the single season-type select, and sort by extremity', async ({
         page,
     }) => {
-        const dataAvailable = await hasPlayerTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasPlayerTriviaData);
 
         await page.goto('http://localhost:8000/index.html#!/player_trivia');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -1277,11 +1022,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('26. Player trivia age category links resolve both id shapes, and team/opponent/position filters work on fixed team/opp roles', async ({
         page,
     }) => {
-        const dataAvailable = await hasPlayerTriviaData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasPlayerTriviaData);
 
         await page.goto('http://localhost:8000/index.html#!/player_trivia');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -1356,19 +1097,15 @@ test.describe('DEL Stats Core Flows', () => {
 
     // 27-29 close a coverage gap: team_stats/team_profile/player_profile had
     // zero active test coverage (team_stats/team_profile were only reachable
-    // via the permanently-skipped valid_periods tests #14/#15, player_profile
-    // wasn't reachable at all), yet their controllers just had several
+    // via two long-skipped valid_periods tests, player_profile wasn't
+    // reachable at all), yet their controllers just had several
     // variables that were implicit globals - shared across every <script>-tag
     // loaded file - turned into properly scoped let/const. Each test below
     // exercises the sort/filter path that touched, sorting twice (or relying
     // on the already-sorted default plus one toggle) so a "state leaked from
     // a previous call" regression would show up as rows failing to reorder.
     test('27. Team stats page loads and sort order toggles correctly', async ({ page }) => {
-        const dataAvailable = await hasData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasTeamGameStats('2025'));
 
         await page.goto('http://localhost:8000/index.html#!/team_stats/2025');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -1396,11 +1133,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('28. Team profile page loads and date sort toggles the game log order', async ({
         page,
     }) => {
-        const dataAvailable = await hasData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasTeamGameStats('2025'));
 
         await page.goto('http://localhost:8000/index.html#!/team_profile/2025/NIT');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -1427,11 +1160,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('29. Player profile page loads and date sort toggles the game log order', async ({
         page,
     }) => {
-        const dataAvailable = await hasData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasPlayerFile('2025', 'NIT', '4'));
 
         await page.goto('http://localhost:8000/index.html#!/player_profile/2025/NIT/4');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -1461,11 +1190,7 @@ test.describe('DEL Stats Core Flows', () => {
     });
 
     test('30. Player profile page renders linemate names correctly', async ({ page }) => {
-        const dataAvailable = await hasData(page);
-
-        if (!dataAvailable) {
-            test.skip();
-        }
+        await requireFixture(page, hasPlayerFile('2025', 'NIT', '4'));
 
         await page.goto('http://localhost:8000/index.html#!/player_profile/2025/NIT/4');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});

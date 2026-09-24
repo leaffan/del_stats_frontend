@@ -30,8 +30,8 @@ pnpm test -- --list
     4. Player game stats (season view)
     5. Navigation hash updates
     6. Configuration files load correctly
-    7. **Teams with valid_periods appear/disappear correctly** (KEV relegation/promotion)
-    8. **Team profile navigation respects valid_periods** (navigation blocked during absent years)
+- **sorting.spec.js** — one generic test per table view that walks every sortable column and checks sorting invariants (see the comment at the top of the file)
+- **format-utils.spec.js**, **clinched-status.spec.js** — unit tests for the pure helpers in `js/format_utils.js` and `js/clinched_status.js`. They need neither `data/` nor a page, so new edge cases of formatting or ordering logic belong here rather than in an end-to-end test.
 
 ## Test Results
 
@@ -63,23 +63,39 @@ test('My new flow', async ({ page }) => {
 
 ## Test Data
 
-Tests are designed to run gracefully with or without the `data/` directory populated:
+Every data-dependent test first checks (via a HEAD request) that the one file
+its view actually loads is present, using the probe helpers in
+`tests/support/probes.js`.
 
-- **With data:** Tests verify page rendering, table loading, navigation, and configuration file access
-- **Without data:** Tests verify page structure and that JavaScript errors are not thrown
-    - Network 404 errors for missing data files are expected and ignored
-    - Only real JavaScript errors (unhandled exceptions, ReferenceErrors, etc.) cause test failures
+- **Locally:** a missing file skips the test, so the suite stays usable
+  without a populated `data/`.
+- **In CI** (`REQUIRE_FIXTURE=1`): a missing file fails the test with
+  `Data fixtures missing: <path>`. A run without fixture data must not go green
+  just because every test skipped itself.
 
 Locally, `data/` is populated by the `del_stats_backend` pipeline (see the
 repo README), so tests exercise real rendering. In CI, `data/` is fetched
 from a small fixture archive (see `docs/ROADMAP.md` for how that's wired up)
 rather than left empty, so the suite exercises the same real assertions
-there too instead of mostly skipping itself.
+there too.
+
+### The fixture manifest
+
+`fixture-manifest.json` (committed) lists every `data/` file the end-to-end
+tests need, with its sha256, and names the archive that holds them:
+`fixture-<hash>.tar.gz`. The name is derived from the file list, so a manifest
+always points at exactly the data it was harvested with. CI downloads that
+archive from `$FIXTURE_DATA_URL/<archive>` (the secret is the bucket base URL,
+without a file name), extracts it and runs `node scripts/verify-fixture.js`,
+which fails on any missing, changed or extra file.
+
+Each branch has its own manifest, because the app code differs between them
+and so does the set of files it loads.
 
 ### Regenerating the CI fixture
 
 If the data shape changes (new fields, a renamed file, a new page that reads
-a new `data/` file), the fixture can go stale. Regenerate it against your
+a new `data/` file), the fixture goes stale. Regenerate it against your
 local, real `data/`:
 
 ```bash
@@ -87,13 +103,19 @@ pnpm run harvest-fixture
 ```
 
 This runs the active test suite once, records exactly which `data/` files it
-requests, and copies just those into `fixture-out/`. Pack and upload the
-result:
+requests, copies just those into `fixture-out/`, rewrites
+`fixture-manifest.json` and packs `fixture-out/fixture-<hash>.tar.gz`. Then:
 
-```bash
-tar -C fixture-out -czf fixture-data.tar.gz data
-```
+1. Upload that archive to the fixture S3 bucket, under exactly the name the
+   script printed. Never overwrite an existing archive: older commits still
+   point at theirs.
+2. Commit the new `fixture-manifest.json`.
 
-Upload `fixture-data.tar.gz` to the fixture S3 bucket, overwriting the
-previous version at the same key the `FIXTURE_DATA_URL` repo secret points
-to.
+Archives that no manifest needs any more can be listed with
+`node scripts/prune-fixtures.js s3://<bucket>`; it prints `aws s3 rm` commands
+for archives no branch tip and no commit from the last 90 days refers to, and
+deletes nothing itself.
+
+`pnpm run verify:fixture` checks `data/` against the manifest. It is meant for
+a clean extraction of the archive; against a real, locally populated `data/`
+it reports the backend's newer files as changed or extra.

@@ -62,15 +62,19 @@ jobs:
                   FIXTURE_DATA_URL: ${{ secrets.FIXTURE_DATA_URL }}
               run: |
                   if [ -z "$FIXTURE_DATA_URL" ]; then
-                    echo "::warning::FIXTURE_DATA_URL is not set - data-dependent tests will skip themselves instead of running for real. See docs/ROADMAP.md."
-                  else
-                    curl -fsSL "$FIXTURE_DATA_URL" -o fixture-data.tar.gz
-                    tar -xzf fixture-data.tar.gz
-                    echo "Extracted $(find data -type f | wc -l) fixture files (expecting 76)"
+                    echo "::error::FIXTURE_DATA_URL is not set, so the data-dependent tests cannot run for real. Repository secrets are not available to pull requests from forks, and Dependabot needs the secret under Settings > Secrets > Dependabot."
+                    exit 1
                   fi
+                  ARCHIVE=$(node -p "require('./fixture-manifest.json').archive")
+                  echo "Fetching $ARCHIVE (named in fixture-manifest.json)"
+                  curl -fsSL "${FIXTURE_DATA_URL%/}/$ARCHIVE" -o "$ARCHIVE"
+                  tar -xzf "$ARCHIVE"
+                  node scripts/verify-fixture.js
 
             - name: Install Playwright browsers
               run: npx playwright install --with-deps
 
             - name: Run end-to-end tests
+              env:
+                  REQUIRE_FIXTURE: '1'
               run: pnpm test

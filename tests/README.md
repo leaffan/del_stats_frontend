@@ -70,7 +70,7 @@ its view actually loads is present, using the probe helpers in
 - **Locally:** a missing file skips the test, so the suite stays usable
   without a populated `data/`.
 - **In CI** (`REQUIRE_FIXTURE=1`): a missing file fails the test with
-  `Fixture-Datei fehlt: <path>`. A run without fixture data must not go green
+  `Data fixtures missing: <path>`. A run without fixture data must not go green
   just because every test skipped itself.
 
 Locally, `data/` is populated by the `del_stats_backend` pipeline (see the

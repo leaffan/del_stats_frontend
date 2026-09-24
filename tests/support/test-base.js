@@ -43,7 +43,7 @@ const test = harvestDir
 function requireData(available, what) {
     if (available) return;
     if (process.env.REQUIRE_FIXTURE) {
-        throw new Error(`Fixture-Datei fehlt: ${what}`);
+        throw new Error(`Data fixtures missing: ${what}`);
     }
     test.skip();
 }

@@ -156,6 +156,18 @@
         {"data_key": "right_side_faceoffs_lost", "col_header": "R-", "expl_de": "Verlorene Bullies auf der rechten Seite", "expl_en": "Right Side Faceoffs Lost"},
         {"data_key": "right_side_faceoff_pctg", "col_header": "Right FAC%", "expl_de": "Anteil der gewonnenen Bullies auf der rechten Seite", "expl_en": "Right Side Faceoff Percentage"}
     ],
+    "zone_starts": [
+        {"data_key": "date", "col_header": "Datum", "expl_de": null, "expl_en": null},
+        {"data_key": "round", "col_header": "Spieltag", "expl_de": null, "expl_en": null},
+        {"data_key": "opp_team", "col_header": "Gegner", "expl_de": null, "expl_en": null},
+        {"data_key": "zone_starts", "col_header": "Gesamt", "expl_de": "Zone-Starts insgesamt", "expl_en": "Total Zone Starts"},
+        {"data_key": "nzone_starts", "col_header": "NZS", "expl_de": "Neutral-Zone-Starts", "expl_en": "Neutral Zone Starts"},
+        {"data_key": "nzone_start_pctg", "col_header": "NZS%", "expl_de": "Anteil der Neutral-Zone-Starts an allen Zone-Starts", "expl_en": "Neutral Zone Start Percentage"},
+        {"data_key": "ozone_starts", "col_header": "OZS", "expl_de": "Offensiv-Zone-Starts", "expl_en": "Offensive Zone Starts"},
+        {"data_key": "ozone_start_pctg", "col_header": "OZS%", "expl_de": "Anteil der Offensiv-Zone-Starts an allen Zone-Starts", "expl_en": "Offensive Zone Start Percentage"},
+        {"data_key": "dzone_starts", "col_header": "DZS", "expl_de": "Defensiv-Zone-Starts", "expl_en": "Defensive Zone Starts"},
+        {"data_key": "dzone_start_pctg", "col_header": "DZS%", "expl_de": "Anteil der Defensiv-Zone-Starts an allen Zone-Starts", "expl_en": "Defensive Zone Start Percentage"}
+    ],
     "lines": [
         {"data_key": "date", "col_header": "Datum", "expl_de": null, "expl_en": null},
         {"data_key": "round", "col_header": "Spieltag", "expl_de": null, "expl_en": null},

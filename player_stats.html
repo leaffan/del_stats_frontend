@@ -83,6 +83,7 @@
                     <option data-ng-option value="faceoff_stats">Bullystatistiken (allgemein)</option>
                     <option data-ng-option value="faceoff_by_zone_stats">Bullystatistiken (nach Zone)</option>
                     <option data-ng-option value="faceoff_by_side_stats">Bullystatistiken (nach Seite)</option>
+                    <option data-ng-if="season == 2026" data-ng-option value="zone_starts">Zonenstart-Statistiken</option>
                     <option data-ng-option value="goalie_stats">Torhüterstatistiken</option>
                     <option data-ng-option value="goalie_against_avg_stats">Torhüterwerte über Ligaschnitt</option>
                     <option data-ng-option value="goalie_stats_ev">Torhüterstatistiken (Fangquoten)</option>
@@ -397,6 +398,8 @@
     <player-stats-table data-ng-if="ctrl.tableSelect == 'faceoff_by_zone_stats'" id="faceoff_by_zone_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
     <player-stats-table data-ng-if="ctrl.tableSelect == 'faceoff_by_side_stats'" id="faceoff_by_side_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
+
+    <player-stats-table data-ng-if="ctrl.tableSelect == 'zone_starts'" id="zone_starts" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_player_stats" ctrl="ctrl"></player-stats-table>
 
     <player-stats-table data-ng-if="ctrl.tableSelect == 'goalie_stats'" id="goalie_stats" stats-cols="stats_cols[ctrl.tableSelect]" filtered-player-stats="filtered_goalie_stats" ctrl="ctrl"></player-stats-table>
 

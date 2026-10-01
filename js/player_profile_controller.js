@@ -279,175 +279,48 @@ app.controller('plrProfileController', function ($scope, $http, $routeParams, $l
         }
     };
 
-    // aggregates per-game shared-ice-time rows (toi_teammates_raw / toi_opponents_raw) into one
-    // summary row per teammate/opponent, applying the same filter chain used by the other
-    // game-by-game tables on this page. Pure function - must not be called directly from
-    // ng-repeat (it allocates a new array/objects every call, which combined with orderBy
-    // caused an Angular $rootScope:infdig loop); callers must stash the result in a plain
-    // scope var instead, refreshed explicitly via refreshToiStats().
-    $scope.getToiPartnerStats = function (toiRaw) {
-        if (
-            !toiRaw ||
-            !$scope.game_context_by_id ||
-            !$scope.players ||
-            !$scope.team_location_lookup
-        ) {
-            return [];
-        }
-        var colIndex = {};
-        toiRaw.columns.forEach(function (col, i) {
-            colIndex[col] = i;
-        });
-        var ppCols = ['toi_5v4', 'toi_4v3', 'toi_5v3'].map((c) => colIndex[c]);
-        var shCols = ['toi_4v5', 'toi_3v4', 'toi_3v5'].map((c) => colIndex[c]);
-
-        var result = [];
-        Object.keys(toiRaw.others).forEach(function (otherId) {
-            var games = 0;
-            var totalToi = 0;
-            var toi5v5 = 0;
-            var toi3v3 = 0;
-            var toiPp = 0;
-            var toiSh = 0;
-            var toi5v4 = 0;
-            var toi5v3 = 0;
-            var toi4v5 = 0;
-            var toi3v5 = 0;
-            toiRaw.others[otherId].forEach(function (row) {
-                var context = $scope.game_context_by_id[row[colIndex.game_id]];
-                if (!context) {
-                    return;
-                }
-                if (
-                    !$scope.dayFilter(context) ||
-                    !$scope.fromRoundFilter(context) ||
-                    !$scope.toRoundFilter(context) ||
-                    !$scope.weekdayFilter(context) ||
-                    ($scope.homeRoadFilter && context.home_road != $scope.homeRoadFilter) ||
-                    ($scope.oppFilter && context.opp_team != $scope.oppFilter) ||
-                    ($scope.seasonTypeFilter && context.season_type != $scope.seasonTypeFilter)
-                ) {
-                    return;
-                }
-                games += 1;
-                totalToi += row[colIndex.toi];
-                toi5v5 += row[colIndex.toi_5v5];
-                toi3v3 += row[colIndex.toi_3v3];
-                toi5v4 += row[colIndex.toi_5v4];
-                toi5v3 += row[colIndex.toi_5v3];
-                toi4v5 += row[colIndex.toi_4v5];
-                toi3v5 += row[colIndex.toi_3v5];
-                ppCols.forEach(function (i) {
-                    toiPp += row[i];
-                });
-                shCols.forEach(function (i) {
-                    toiSh += row[i];
-                });
-            });
-            if (games > 0) {
-                var other = $scope.players[otherId];
-                result.push({
-                    player_id: otherId,
-                    full_name: other ? other.full_name : otherId,
-                    last_name: other ? other.last_name : otherId,
-                    first_name: other ? other.first_name : '',
-                    position: other
-                        ? other.position == 'DE'
-                            ? 'D'
-                            : other.position == 'FO'
-                              ? 'F'
-                              : other.position
-                        : '',
-                    team: other ? other.team : '',
-                    team_location: other
-                        ? $scope.team_location_lookup[other.team] || other.team
-                        : '',
-                    games_together: games,
-                    toi: totalToi,
-                    toi_5v5: toi5v5,
-                    toi_3v3: toi3v3,
-                    toi_pp: toiPp,
-                    toi_5v4: toi5v4,
-                    toi_5v3: toi5v3,
-                    toi_sh: toiSh,
-                    toi_4v5: toi4v5,
-                    toi_3v5: toi3v5,
-                });
-            }
-        });
-        return result;
-    };
-
-    // tie-break chains for the toi_teammates/toi_opponents tables, since this page (unlike
-    // player_stats.html's sort_criteria_player_stats.json) has no config-driven tie-break system
-    var toiTieBreaks = {
-        last_name: 'first_name',
-        position: 'last_name',
-        team_location: 'last_name',
-        games_together: 'toi',
-        toi: 'toi_5v5',
-        toi_5v5: 'toi_3v3',
-        toi_3v3: 'toi_5v5',
-        toi_pp: 'toi_5v4',
-        toi_5v4: 'toi_5v3',
-        toi_5v3: 'toi_5v4',
-        toi_sh: 'toi_4v5',
-        toi_4v5: 'toi_3v5',
-        toi_3v5: 'toi_4v5',
-    };
-    var toiColumns = Object.keys(toiTieBreaks);
-
-    // sorts a toi_*_stats array by sortCriterion, breaking ties using toiTieBreaks. Implemented
-    // by hand (rather than passing a [criterion, tieBreak] array to Angular's orderBy filter)
-    // so the comparison logic is simple to verify directly. Safe to call from ng-repeat: toiRows
-    // is only reordered (new wrapper array), the row objects themselves keep their identity, so
-    // this can't reproduce the infdig loop that calling getToiPartnerStats() directly from a
-    // template caused.
-    //
-    // sortCriterion/sortDescending are passed in as arguments rather than read from $scope here
-    // on purpose: each toi_* table lives inside its own <table data-ng-if="...">, which Angular
-    // gives its own child scope, and the column header's $parent.sortCriterion = ... click
-    // handler writes into THAT child scope, not the controller's root $scope. Template
-    // expressions evaluated inside the same table (like the call below) see that shadowed value
-    // through the normal scope chain; a function reading $scope.sortCriterion directly would
-    // only ever see the (never updated) root value.
-    $scope.getSortedToiStats = function (toiRows, sortCriterion, sortDescending) {
-        var tieBreakKey = toiTieBreaks[sortCriterion];
-        var dir = sortDescending ? -1 : 1;
-        return toiRows.slice().sort(function (a, b) {
-            if (a[sortCriterion] !== b[sortCriterion]) {
-                return a[sortCriterion] > b[sortCriterion] ? dir : -dir;
-            }
-            if (tieBreakKey && a[tieBreakKey] !== b[tieBreakKey]) {
-                return a[tieBreakKey] > b[tieBreakKey] ? dir : -dir;
-            }
-            return 0;
-        });
-    };
-
-    // heatmap background for the headline TOI/TOI-5v5 cells: white at 0, solid blue
-    // (matching the #5588bb accent already used for shot-zone highlighting) at the current
-    // maximum for that field within statsArray - i.e. relative to whatever's currently
-    // filtered/shown, not a fixed scale, so it reacts live like everything else on this page
-    $scope.getHeatStyle = function (value, statsArray, field) {
-        if (!statsArray || !statsArray.length) {
-            return {};
-        }
-        var max = Math.max.apply(
-            Math,
-            statsArray.map(function (s) {
-                return s[field];
-            }),
+    // combines the existing filter chain (shared with every other table on this page) into a
+    // single predicate over a game's context, for ToiStats.getPartnerStats to apply per shared
+    // game. Pure aggregation/sort/heatmap logic lives in js/toi_stats.js (ToiStats) so it can be
+    // unit-tested without $scope/Angular - this closure is the one bit that has to stay here,
+    // since it reads live filter state.
+    function toiGameFilter(context) {
+        return !(
+            !$scope.dayFilter(context) ||
+            !$scope.fromRoundFilter(context) ||
+            !$scope.toRoundFilter(context) ||
+            !$scope.weekdayFilter(context) ||
+            ($scope.homeRoadFilter && context.home_road != $scope.homeRoadFilter) ||
+            ($scope.oppFilter && context.opp_team != $scope.oppFilter) ||
+            ($scope.seasonTypeFilter && context.season_type != $scope.seasonTypeFilter)
         );
-        if (!max) {
-            return {};
-        }
-        var ratio = value / max;
-        var r = Math.round(255 + (85 - 255) * ratio);
-        var g = Math.round(255 + (136 - 255) * ratio);
-        var b = Math.round(255 + (187 - 255) * ratio);
-        return { 'background-color': 'rgb(' + r + ',' + g + ',' + b + ')' };
+    }
+
+    // aggregates per-game shared-ice-time rows (toi_teammates_raw / toi_opponents_raw) into one
+    // summary row per teammate/opponent. Must not be called directly from ng-repeat (it
+    // allocates a new array/objects every call, which combined with orderBy caused an Angular
+    // $rootScope:infdig loop); callers must stash the result in a plain scope var instead,
+    // refreshed explicitly via refreshToiStats().
+    $scope.getToiPartnerStats = function (toiRaw) {
+        return ToiStats.getPartnerStats(
+            toiRaw,
+            $scope.game_context_by_id,
+            $scope.players,
+            $scope.team_location_lookup,
+            toiGameFilter,
+        );
     };
+
+    // sortCriterion/sortDescending are passed in as arguments (see player_profile.html's
+    // toi_teammates/toi_opponents rows) rather than read from $scope here on purpose: each
+    // toi_* table lives inside its own <table data-ng-if="...">, which Angular gives its own
+    // child scope, and the column header's $parent.sortCriterion = ... click handler writes
+    // into THAT child scope, not the controller's root $scope. Template expressions evaluated
+    // inside the same table see that shadowed value through the normal scope chain; a function
+    // reading $scope.sortCriterion directly would only ever see the (never updated) root value.
+    $scope.getSortedToiStats = ToiStats.getSortedToiStats;
+
+    $scope.getHeatStyle = ToiStats.getHeatStyle;
 
     // resetting to a sensible default sort when switching into a toi_* table from a table
     // whose sortCriterion doesn't exist on toi_* rows (e.g. 'game_date'). The seasonTypeFilter
@@ -457,7 +330,7 @@ app.controller('plrProfileController', function ($scope, $http, $routeParams, $l
         if (
             oldSortCriterion !== undefined &&
             ($scope.tableSelect == 'toi_teammates' || $scope.tableSelect == 'toi_opponents') &&
-            toiColumns.indexOf(oldSortCriterion) === -1
+            ToiStats.TOI_COLUMNS.indexOf(oldSortCriterion) === -1
         ) {
             $scope.sortCriterion = 'toi_5v5';
             $scope.statsSortDescending = true;

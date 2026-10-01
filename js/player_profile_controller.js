@@ -119,25 +119,34 @@ app.controller('plrProfileController', function ($scope, $http, $routeParams, $l
                 $scope.game_context_by_id[game.game_id] = game;
             });
             $scope.refreshToiStats();
-        });
 
-    // loading shared ice-time with teammates/opponents, broken down by game and skater-strength
-    // situation; available for every season with ice-time tracking (2018 onward), same as the
-    // other TOI-dependent tables on this page
-    if ($scope.season != 2017) {
-        $http
-            .get('data/' + $scope.season + '/per_player_toi/' + $scope.player_id + '.json')
-            .then(function (res) {
-                $scope.toi_teammates_raw = res.data;
-                $scope.refreshToiStats();
-            });
-        $http
-            .get('data/' + $scope.season + '/per_player_toi_opp/' + $scope.player_id + '.json')
-            .then(function (res) {
-                $scope.toi_opponents_raw = res.data;
-                $scope.refreshToiStats();
-            });
-    }
+            // loading shared ice-time with teammates/opponents, broken down by game and
+            // skater-strength situation; available for every season with ice-time tracking
+            // (2018 onward), same as the other TOI-dependent tables on this page. Only skaters
+            // have these files at all (goalies never appear as a shared-TOI subject or partner),
+            // so this is gated on position here, now that it's known, rather than firing the
+            // request up front and 404ing for every goalie profile.
+            if ($scope.season != 2017 && $scope.player_stats[0]['position'] != 'GK') {
+                $http
+                    .get('data/' + $scope.season + '/per_player_toi/' + $scope.player_id + '.json')
+                    .then(function (res) {
+                        $scope.toi_teammates_raw = res.data;
+                        $scope.refreshToiStats();
+                    });
+                $http
+                    .get(
+                        'data/' +
+                            $scope.season +
+                            '/per_player_toi_opp/' +
+                            $scope.player_id +
+                            '.json',
+                    )
+                    .then(function (res) {
+                        $scope.toi_opponents_raw = res.data;
+                        $scope.refreshToiStats();
+                    });
+            }
+        });
 
     // loading goalie stats
     $http.get('./data/' + $scope.season + '/del_goalie_game_stats.json').then(function (res) {
@@ -179,6 +188,7 @@ app.controller('plrProfileController', function ($scope, $http, $routeParams, $l
             'round',
             'opp_team',
             'last_name',
+            'position',
             'team_location',
         ]);
     };
@@ -341,6 +351,13 @@ app.controller('plrProfileController', function ($scope, $http, $routeParams, $l
                     full_name: other ? other.full_name : otherId,
                     last_name: other ? other.last_name : otherId,
                     first_name: other ? other.first_name : '',
+                    position: other
+                        ? other.position == 'DE'
+                            ? 'D'
+                            : other.position == 'FO'
+                              ? 'F'
+                              : other.position
+                        : '',
                     team: other ? other.team : '',
                     team_location: other
                         ? $scope.team_location_lookup[other.team] || other.team
@@ -365,6 +382,7 @@ app.controller('plrProfileController', function ($scope, $http, $routeParams, $l
     // player_stats.html's sort_criteria_player_stats.json) has no config-driven tie-break system
     var toiTieBreaks = {
         last_name: 'first_name',
+        position: 'last_name',
         team_location: 'last_name',
         games_together: 'toi',
         toi: 'toi_5v5',
@@ -405,6 +423,30 @@ app.controller('plrProfileController', function ($scope, $http, $routeParams, $l
             }
             return 0;
         });
+    };
+
+    // heatmap background for the headline TOI/TOI-5v5 cells: white at 0, solid blue
+    // (matching the #5588bb accent already used for shot-zone highlighting) at the current
+    // maximum for that field within statsArray - i.e. relative to whatever's currently
+    // filtered/shown, not a fixed scale, so it reacts live like everything else on this page
+    $scope.getHeatStyle = function (value, statsArray, field) {
+        if (!statsArray || !statsArray.length) {
+            return {};
+        }
+        var max = Math.max.apply(
+            Math,
+            statsArray.map(function (s) {
+                return s[field];
+            }),
+        );
+        if (!max) {
+            return {};
+        }
+        var ratio = value / max;
+        var r = Math.round(255 + (85 - 255) * ratio);
+        var g = Math.round(255 + (136 - 255) * ratio);
+        var b = Math.round(255 + (187 - 255) * ratio);
+        return { 'background-color': 'rgb(' + r + ',' + g + ',' + b + ')' };
     };
 
     // resetting to a sensible default sort when switching into a toi_* table from a table

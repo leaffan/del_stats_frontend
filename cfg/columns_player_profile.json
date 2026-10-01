@@ -182,6 +182,7 @@
     "toi_teammates": [
         {"data_key": "rank", "col_header": "Rang", "expl_de": null, "expl_en": null, "sortable": false},
         {"data_key": "last_name", "col_header": "Mitspieler", "expl_de": null, "expl_en": null},
+        {"data_key": "position", "col_header": "Pos.", "expl_de": null, "expl_en": null},
         {"data_key": "team_location", "col_header": "Team", "expl_de": null, "expl_en": null},
         {"data_key": "games_together", "col_header": "Sp.", "expl_de": "Gemeinsam bestrittene Spiele", "expl_en": "Games Played Together"},
         {"data_key": "toi", "col_header": "TOI", "expl_de": "Gemeinsame Eiszeit insgesamt", "expl_en": "Total Shared Time On Ice"},
@@ -197,6 +198,7 @@
     "toi_opponents": [
         {"data_key": "rank", "col_header": "Rang", "expl_de": null, "expl_en": null, "sortable": false},
         {"data_key": "last_name", "col_header": "Gegenspieler", "expl_de": null, "expl_en": null},
+        {"data_key": "position", "col_header": "Pos.", "expl_de": null, "expl_en": null},
         {"data_key": "team_location", "col_header": "Team", "expl_de": null, "expl_en": null},
         {"data_key": "games_together", "col_header": "Sp.", "expl_de": "Gemeinsam bestrittene Spiele", "expl_en": "Games Played Against Each Other"},
         {"data_key": "toi", "col_header": "TOI", "expl_de": "Gemeinsame Eiszeit insgesamt", "expl_en": "Total Shared Time On Ice"},

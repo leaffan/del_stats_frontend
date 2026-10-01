@@ -13,94 +13,16 @@
                 "data_file": "blown_leads.json",
                 "default_sort": ["-margin", "turnaround_duration"],
                 "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "18",
-                        "team_column": true
-                    },
-                    {
-                        "data_key": "opp",
-                        "col_header": "Gegner",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "18",
-                        "team_column": true
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "width": "7",
-                        "season_identifier": true
-                    },
-                    {
-                        "data_key": "game_date",
-                        "col_header": "Datum",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "width": "7",
-                        "date": true
-                    },
-                    {
-                        "data_key": "score",
-                        "col_header": "Ergebnis",
-                        "expl_de": "Endstand; (VL) bzw. (SO) markieren eine Entscheidung in Verlängerung bzw. im Shootout",
-                        "expl_en": "Final score; (VL)/(SO) mark a game decided in overtime/a shootout",
-                        "align": "center",
-                        "width": "12",
-                        "decision_suffix": true
-                    },
-                    {
-                        "data_key": "margin",
-                        "col_header": "Vorsprung",
-                        "expl_de": "Größter Vorsprung vor der Niederlage",
-                        "expl_en": "Biggest lead before the loss",
-                        "width": "8"
-                    },
-                    {
-                        "data_key": "max_margin_time",
-                        "col_header": "Zeitpunkt",
-                        "expl_de": "Spielzeit beim größten Vorsprung/Rückstand",
-                        "expl_en": "Game time at the peak lead/deficit",
-                        "align": "center",
-                        "width": "9",
-                        "time": true
-                    },
-                    {
-                        "data_key": "final_time",
-                        "col_header": "Siegtreffer",
-                        "expl_de": "Zeitpunkt des Siegtreffers",
-                        "expl_en": "Time of the game-winning goal",
-                        "align": "center",
-                        "width": "8",
-                        "time": true
-                    },
-                    {
-                        "data_key": "turnaround_duration",
-                        "col_header": "Dauer",
-                        "expl_de": "Spielzeit vom größten Vorsprung bis zum Siegtreffer",
-                        "expl_en": "Game time from the peak lead to the game-winning goal",
-                        "align": "center",
-                        "width": "10",
-                        "time": true
-                    }
+                    {"data_key": "rank", "col_header": "#", "expl_de": null, "expl_en": null, "sortable": false, "width": "3", "align": "right"},
+                    {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null, "align": "left", "width": "18", "team_column": true},
+                    {"data_key": "opp", "col_header": "Gegner", "expl_de": null, "expl_en": null, "align": "left", "width": "18", "team_column": true},
+                    {"data_key": "season", "col_header": "Saison", "expl_de": null, "expl_en": null, "align": "center", "width": "7", "season_identifier": true},
+                    {"data_key": "game_date", "col_header": "Datum", "expl_de": null, "expl_en": null, "align": "center", "width": "7", "date": true},
+                    {"data_key": "score", "col_header": "Ergebnis", "expl_de": "Endstand; (VL) bzw. (SO) markieren eine Entscheidung in Verlängerung bzw. im Shootout", "expl_en": "Final score; (VL)/(SO) mark a game decided in overtime/a shootout", "align": "center", "width": "12", "decision_suffix": true},
+                    {"data_key": "margin", "col_header": "Vorsprung", "expl_de": "Größter Vorsprung vor der Niederlage", "expl_en": "Biggest lead before the loss", "width": "8"},
+                    {"data_key": "max_margin_time", "col_header": "Zeitpunkt", "expl_de": "Spielzeit beim größten Vorsprung/Rückstand", "expl_en": "Game time at the peak lead/deficit", "align": "center", "width": "9", "time": true},
+                    {"data_key": "final_time", "col_header": "Siegtreffer", "expl_de": "Zeitpunkt des Siegtreffers", "expl_en": "Time of the game-winning goal", "align": "center", "width": "8", "time": true},
+                    {"data_key": "turnaround_duration", "col_header": "Dauer", "expl_de": "Spielzeit vom größten Vorsprung bis zum Siegtreffer", "expl_en": "Game time from the peak lead to the game-winning goal", "align": "center", "width": "10", "time": true}
                 ]
             }
         }
@@ -119,94 +41,16 @@
                 "data_file": "comeback_wins.json",
                 "default_sort": ["-margin", "turnaround_duration"],
                 "columns": [
-                    {
-                        "data_key": "rank",
-                        "col_header": "#",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "sortable": false,
-                        "width": "3",
-                        "align": "right"
-                    },
-                    {
-                        "data_key": "team",
-                        "col_header": "Team",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "18",
-                        "team_column": true
-                    },
-                    {
-                        "data_key": "opp",
-                        "col_header": "Gegner",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "left",
-                        "width": "18",
-                        "team_column": true
-                    },
-                    {
-                        "data_key": "season",
-                        "col_header": "Saison",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "width": "7",
-                        "season_identifier": true
-                    },
-                    {
-                        "data_key": "game_date",
-                        "col_header": "Datum",
-                        "expl_de": null,
-                        "expl_en": null,
-                        "align": "center",
-                        "width": "7",
-                        "date": true
-                    },
-                    {
-                        "data_key": "score",
-                        "col_header": "Ergebnis",
-                        "expl_de": "Endstand; (VL) bzw. (SO) markieren eine Entscheidung in Verlängerung bzw. im Shootout",
-                        "expl_en": "Final score; (VL)/(SO) mark a game decided in overtime/a shootout",
-                        "align": "center",
-                        "width": "12",
-                        "decision_suffix": true
-                    },
-                    {
-                        "data_key": "margin",
-                        "col_header": "Rückstand",
-                        "expl_de": "Größter Rückstand vor dem Sieg",
-                        "expl_en": "Biggest deficit before the win",
-                        "width": "8"
-                    },
-                    {
-                        "data_key": "max_margin_time",
-                        "col_header": "Zeitpunkt",
-                        "expl_de": "Spielzeit beim größten Rückstand",
-                        "expl_en": "Time of the peak deficit",
-                        "align": "center",
-                        "width": "9",
-                        "time": true
-                    },
-                    {
-                        "data_key": "final_time",
-                        "col_header": "Siegtreffer",
-                        "expl_de": "Zeitpunkt des Siegtreffers",
-                        "expl_en": "Time of the game-winning goal",
-                        "align": "center",
-                        "width": "8",
-                        "time": true
-                    },
-                    {
-                        "data_key": "turnaround_duration",
-                        "col_header": "Dauer",
-                        "expl_de": "Spielzeit vom größten Rückstand bis zum Siegtreffer",
-                        "expl_en": "Time from the peak deficit to the game-winning goal",
-                        "align": "center",
-                        "width": "10",
-                        "time": true
-                    }
+                    {"data_key": "rank", "col_header": "#", "expl_de": null, "expl_en": null, "sortable": false, "width": "3", "align": "right"},
+                    {"data_key": "team", "col_header": "Team", "expl_de": null, "expl_en": null, "align": "left", "width": "18", "team_column": true},
+                    {"data_key": "opp", "col_header": "Gegner", "expl_de": null, "expl_en": null, "align": "left", "width": "18", "team_column": true},
+                    {"data_key": "season", "col_header": "Saison", "expl_de": null, "expl_en": null, "align": "center", "width": "7", "season_identifier": true},
+                    {"data_key": "game_date", "col_header": "Datum", "expl_de": null, "expl_en": null, "align": "center", "width": "7", "date": true},
+                    {"data_key": "score", "col_header": "Ergebnis", "expl_de": "Endstand; (VL) bzw. (SO) markieren eine Entscheidung in Verlängerung bzw. im Shootout", "expl_en": "Final score; (VL)/(SO) mark a game decided in overtime/a shootout", "align": "center", "width": "12", "decision_suffix": true},
+                    {"data_key": "margin", "col_header": "Rückstand", "expl_de": "Größter Rückstand vor dem Sieg", "expl_en": "Biggest deficit before the win", "width": "8"},
+                    {"data_key": "max_margin_time", "col_header": "Zeitpunkt", "expl_de": "Spielzeit beim größten Rückstand", "expl_en": "Time of the peak deficit", "align": "center", "width": "9", "time": true},
+                    {"data_key": "final_time", "col_header": "Siegtreffer", "expl_de": "Zeitpunkt des Siegtreffers", "expl_en": "Time of the game-winning goal", "align": "center", "width": "8", "time": true},
+                    {"data_key": "turnaround_duration", "col_header": "Dauer", "expl_de": "Spielzeit vom größten Rückstand bis zum Siegtreffer", "expl_en": "Time from the peak deficit to the game-winning goal", "align": "center", "width": "10", "time": true}
                 ]
             }
         }

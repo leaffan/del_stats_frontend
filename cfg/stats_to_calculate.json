@@ -324,6 +324,36 @@
             "base": "dzone_faceoffs"
         },
         {
+            "name": "oz_dz_zone_starts",
+            "type": "sum",
+            "summand_1": "ozone_starts",
+            "summand_2": "dzone_starts"
+        },
+        {
+            "name": "zone_starts",
+            "type": "sum",
+            "summand_1": "oz_dz_zone_starts",
+            "summand_2": "nzone_starts"
+        },
+        {
+            "name": "ozone_start_pctg",
+            "type": "percentage",
+            "value": "ozone_starts",
+            "base": "zone_starts"
+        },
+        {
+            "name": "dzone_start_pctg",
+            "type": "percentage",
+            "value": "dzone_starts",
+            "base": "zone_starts"
+        },
+        {
+            "name": "nzone_start_pctg",
+            "type": "percentage",
+            "value": "nzone_starts",
+            "base": "zone_starts"
+        },
+        {
             "name": "left_side_faceoff_pctg",
             "type": "percentage",
             "value": "left_side_faceoffs_won",

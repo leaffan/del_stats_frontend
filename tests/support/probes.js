@@ -31,7 +31,8 @@ const hasPlayerFile = (season, team, id) => probe(`data/${season}/per_player/${t
 const hasTeamTriviaData = probe('data/historic_trivia/overtime_games_per_season_pctg.json');
 const hasGameTriviaData = probe('data/historic_trivia/blown_leads.json');
 const hasPlayerTriviaData = probe('data/historic_trivia/fastest_first_goal_period_1.json');
-const hasShotExplorerData = probe('data/2025/shots/per_player/100.json');
+const hasShotExplorerData = (season, playerId) =>
+    probe(`data/${season}/shots/per_player/${playerId}.json`);
 
 module.exports = {
     requireFixture,

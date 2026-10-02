@@ -23,6 +23,20 @@
     };
     const TOI_COLUMNS = Object.keys(TOI_TIE_BREAKS);
 
+    // the columns the heatmap applies to (see getHeatStyle/getColumnMaxes below) - just the
+    // time fields, not games_together/last_name/etc.
+    const TOI_HEAT_FIELDS = [
+        'toi',
+        'toi_5v5',
+        'toi_3v3',
+        'toi_pp',
+        'toi_5v4',
+        'toi_5v3',
+        'toi_sh',
+        'toi_4v5',
+        'toi_3v5',
+    ];
+
     // aggregates per-game shared-ice-time rows (one of toiRaw per subject player, shaped
     // {columns, others: {<otherPlayerId>: [[game_id, toi, toi_5v5, ...], ...]}}) into one summary
     // row per teammate/opponent. gameContextById resolves a row's bare game_id to that game's
@@ -128,19 +142,31 @@
         });
     }
 
+    // the current maximum of each heat-mapped field within statsArray, computed once (e.g. per
+    // refreshToiStats() call) so getHeatStyle can do an O(1) lookup per cell instead of
+    // rescanning the whole array on every call - with 9 heat columns re-evaluated per row on
+    // every Angular digest, rescanning per cell made the page redo this work O(rows) times too
+    // often. fields defaults to TOI_HEAT_FIELDS; pass a subset if you only need some.
+    function getColumnMaxes(statsArray, fields) {
+        const maxes = {};
+        (fields || TOI_HEAT_FIELDS).forEach(function (field) {
+            maxes[field] = statsArray.length
+                ? Math.max.apply(
+                      Math,
+                      statsArray.map(function (s) {
+                          return s[field];
+                      }),
+                  )
+                : 0;
+        });
+        return maxes;
+    }
+
     // heatmap background for a TOI cell: white at 0, solid blue (matching the #5588bb accent
-    // already used for shot-zone highlighting) at the current maximum for that field within
-    // statsArray - i.e. relative to whatever's currently filtered/shown, not a fixed scale.
-    function getHeatStyle(value, statsArray, field) {
-        if (!statsArray || !statsArray.length) {
-            return {};
-        }
-        const max = Math.max.apply(
-            Math,
-            statsArray.map(function (s) {
-                return s[field];
-            }),
-        );
+    // already used for shot-zone highlighting) at max - i.e. relative to whatever's currently
+    // filtered/shown, not a fixed scale. max is the column's current maximum (from
+    // getColumnMaxes), not the whole stats array, so this is an O(1) lookup per cell.
+    function getHeatStyle(value, max) {
         if (!max) {
             return {};
         }
@@ -154,8 +180,10 @@
     const api = {
         TOI_TIE_BREAKS: TOI_TIE_BREAKS,
         TOI_COLUMNS: TOI_COLUMNS,
+        TOI_HEAT_FIELDS: TOI_HEAT_FIELDS,
         getPartnerStats: getPartnerStats,
         getSortedToiStats: getSortedToiStats,
+        getColumnMaxes: getColumnMaxes,
         getHeatStyle: getHeatStyle,
     };
     if (typeof module !== 'undefined' && module.exports) module.exports = api;

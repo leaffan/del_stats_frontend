@@ -866,15 +866,15 @@
                 <td class="w-05 text-center">{{ stat.position }}</td>
                 <td class="w-09 text-left">{{ stat.team_location }}</td>
                 <td class="w-06 text-right">{{ stat.games_together }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi, toi_teammates_stats, 'toi')">{{ svc.formatTime(stat.toi) }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_5v5, toi_teammates_stats, 'toi_5v5')">{{ svc.formatTime(stat.toi_5v5) }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_3v3, toi_teammates_stats, 'toi_3v3')">{{ svc.formatTime(stat.toi_3v3) }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_pp, toi_teammates_stats, 'toi_pp')">{{ svc.formatTime(stat.toi_pp) }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_5v4, toi_teammates_stats, 'toi_5v4')">{{ svc.formatTime(stat.toi_5v4) }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_5v3, toi_teammates_stats, 'toi_5v3')">{{ svc.formatTime(stat.toi_5v3) }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_sh, toi_teammates_stats, 'toi_sh')">{{ svc.formatTime(stat.toi_sh) }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_4v5, toi_teammates_stats, 'toi_4v5')">{{ svc.formatTime(stat.toi_4v5) }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_3v5, toi_teammates_stats, 'toi_3v5')">{{ svc.formatTime(stat.toi_3v5) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi, toi_teammates_maxes.toi)">{{ svc.formatTime(stat.toi) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_5v5, toi_teammates_maxes.toi_5v5)">{{ svc.formatTime(stat.toi_5v5) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_3v3, toi_teammates_maxes.toi_3v3)">{{ svc.formatTime(stat.toi_3v3) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_pp, toi_teammates_maxes.toi_pp)">{{ svc.formatTime(stat.toi_pp) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_5v4, toi_teammates_maxes.toi_5v4)">{{ svc.formatTime(stat.toi_5v4) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_5v3, toi_teammates_maxes.toi_5v3)">{{ svc.formatTime(stat.toi_5v3) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_sh, toi_teammates_maxes.toi_sh)">{{ svc.formatTime(stat.toi_sh) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_4v5, toi_teammates_maxes.toi_4v5)">{{ svc.formatTime(stat.toi_4v5) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_3v5, toi_teammates_maxes.toi_3v5)">{{ svc.formatTime(stat.toi_3v5) }}</td>
             </tr>
         </tbody>
     </table>
@@ -899,15 +899,15 @@
                 <td class="w-05 text-center">{{ stat.position }}</td>
                 <td class="w-09 text-left">{{ stat.team_location }}</td>
                 <td class="w-06 text-right">{{ stat.games_together }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi, toi_opponents_stats, 'toi')">{{ svc.formatTime(stat.toi) }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_5v5, toi_opponents_stats, 'toi_5v5')">{{ svc.formatTime(stat.toi_5v5) }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_3v3, toi_opponents_stats, 'toi_3v3')">{{ svc.formatTime(stat.toi_3v3) }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_pp, toi_opponents_stats, 'toi_pp')">{{ svc.formatTime(stat.toi_pp) }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_5v4, toi_opponents_stats, 'toi_5v4')">{{ svc.formatTime(stat.toi_5v4) }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_5v3, toi_opponents_stats, 'toi_5v3')">{{ svc.formatTime(stat.toi_5v3) }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_sh, toi_opponents_stats, 'toi_sh')">{{ svc.formatTime(stat.toi_sh) }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_4v5, toi_opponents_stats, 'toi_4v5')">{{ svc.formatTime(stat.toi_4v5) }}</td>
-                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_3v5, toi_opponents_stats, 'toi_3v5')">{{ svc.formatTime(stat.toi_3v5) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi, toi_opponents_maxes.toi)">{{ svc.formatTime(stat.toi) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_5v5, toi_opponents_maxes.toi_5v5)">{{ svc.formatTime(stat.toi_5v5) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_3v3, toi_opponents_maxes.toi_3v3)">{{ svc.formatTime(stat.toi_3v3) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_pp, toi_opponents_maxes.toi_pp)">{{ svc.formatTime(stat.toi_pp) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_5v4, toi_opponents_maxes.toi_5v4)">{{ svc.formatTime(stat.toi_5v4) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_5v3, toi_opponents_maxes.toi_5v3)">{{ svc.formatTime(stat.toi_5v3) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_sh, toi_opponents_maxes.toi_sh)">{{ svc.formatTime(stat.toi_sh) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_4v5, toi_opponents_maxes.toi_4v5)">{{ svc.formatTime(stat.toi_4v5) }}</td>
+                <td class="w-07 text-right" data-ng-style="getHeatStyle(stat.toi_3v5, toi_opponents_maxes.toi_3v5)">{{ svc.formatTime(stat.toi_3v5) }}</td>
             </tr>
         </tbody>
     </table>

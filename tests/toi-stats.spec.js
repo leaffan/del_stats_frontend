@@ -2,8 +2,10 @@ const { test, expect } = require('@playwright/test');
 const {
     TOI_TIE_BREAKS,
     TOI_COLUMNS,
+    TOI_HEAT_FIELDS,
     getPartnerStats,
     getSortedToiStats,
+    getColumnMaxes,
     getHeatStyle,
 } = require('../js/toi_stats.js');
 
@@ -360,35 +362,79 @@ test.describe('TOI_COLUMNS', () => {
     });
 });
 
-test.describe('getHeatStyle', () => {
+test.describe('getColumnMaxes', () => {
     const stats = [{ toi: 0 }, { toi: 50 }, { toi: 100 }];
 
-    test('returns no style when the stats array is missing or empty', () => {
-        expect(getHeatStyle(50, undefined, 'toi')).toEqual({});
-        expect(getHeatStyle(50, [], 'toi')).toEqual({});
+    test('computes the max of every TOI_HEAT_FIELDS field by default', () => {
+        const rows = [
+            {
+                toi: 10,
+                toi_5v5: 5,
+                toi_3v3: 1,
+                toi_pp: 2,
+                toi_5v4: 2,
+                toi_5v3: 0,
+                toi_sh: 1,
+                toi_4v5: 1,
+                toi_3v5: 0,
+            },
+            {
+                toi: 20,
+                toi_5v5: 3,
+                toi_3v3: 4,
+                toi_pp: 1,
+                toi_5v4: 1,
+                toi_5v3: 0,
+                toi_sh: 2,
+                toi_4v5: 2,
+                toi_3v5: 1,
+            },
+        ];
+        expect(getColumnMaxes(rows)).toEqual({
+            toi: 20,
+            toi_5v5: 5,
+            toi_3v3: 4,
+            toi_pp: 2,
+            toi_5v4: 2,
+            toi_5v3: 0,
+            toi_sh: 2,
+            toi_4v5: 2,
+            toi_3v5: 1,
+        });
+        expect(Object.keys(getColumnMaxes(rows)).sort()).toEqual([...TOI_HEAT_FIELDS].sort());
     });
 
-    test('returns no style when every value in the column is zero (would otherwise divide by zero)', () => {
-        expect(getHeatStyle(0, [{ toi: 0 }, { toi: 0 }], 'toi')).toEqual({});
+    test('an empty array maxes every field at 0, not -Infinity', () => {
+        const maxes = getColumnMaxes([]);
+        TOI_HEAT_FIELDS.forEach((field) => expect(maxes[field]).toBe(0));
+    });
+
+    test('can be restricted to a subset of fields', () => {
+        expect(getColumnMaxes(stats, ['toi'])).toEqual({ toi: 100 });
+    });
+});
+
+test.describe('getHeatStyle', () => {
+    test('returns no style when max is 0 (would otherwise divide by zero), including for an empty source array', () => {
+        expect(getHeatStyle(50, 0)).toEqual({});
+        expect(getHeatStyle(0, getColumnMaxes([]).toi)).toEqual({});
     });
 
     test('the current maximum gets full-intensity blue', () => {
-        expect(getHeatStyle(100, stats, 'toi')).toEqual({ 'background-color': 'rgb(85,136,187)' });
+        expect(getHeatStyle(100, 100)).toEqual({ 'background-color': 'rgb(85,136,187)' });
     });
 
     test('zero gets plain white', () => {
-        expect(getHeatStyle(0, stats, 'toi')).toEqual({ 'background-color': 'rgb(255,255,255)' });
+        expect(getHeatStyle(0, 100)).toEqual({ 'background-color': 'rgb(255,255,255)' });
     });
 
     test('a value halfway to the max is interpolated halfway between white and the accent blue', () => {
-        expect(getHeatStyle(50, stats, 'toi')).toEqual({ 'background-color': 'rgb(170,196,221)' });
+        expect(getHeatStyle(50, 100)).toEqual({ 'background-color': 'rgb(170,196,221)' });
     });
 
-    test('scales relative to the max of the given field only, ignoring other fields on the same rows', () => {
-        const mixed = [
-            { toi: 10, toi_5v5: 1000 },
-            { toi: 20, toi_5v5: 1 },
-        ];
-        expect(getHeatStyle(20, mixed, 'toi')).toEqual({ 'background-color': 'rgb(85,136,187)' });
+    test('scales relative to whatever max is passed in, independent of any other column', () => {
+        // the caller is responsible for passing the right column's max (e.g. via
+        // getColumnMaxes(rows).toi) - getHeatStyle itself no longer looks at other fields
+        expect(getHeatStyle(20, 20)).toEqual({ 'background-color': 'rgb(85,136,187)' });
     });
 });

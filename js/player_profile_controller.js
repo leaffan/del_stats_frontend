@@ -339,13 +339,20 @@ app.controller('plrProfileController', function ($scope, $http, $routeParams, $l
 
     $scope.toi_teammates_stats = [];
     $scope.toi_opponents_stats = [];
+    $scope.toi_teammates_maxes = {};
+    $scope.toi_opponents_maxes = {};
 
     // recomputes the stable toi_*_stats arrays the templates actually bind to; call this
     // after any filter change or whenever new source data (raw TOI files, game context,
-    // player lookup) finishes loading - never bind getToiPartnerStats() directly in a template
+    // player lookup) finishes loading - never bind getToiPartnerStats() directly in a template.
+    // Also recomputes each heat-mapped column's current max once here, rather than letting
+    // getHeatStyle rescan the whole (set of up to ~90 rows) array on every one of its 9-per-row
+    // template calls on every digest.
     $scope.refreshToiStats = function () {
         $scope.toi_teammates_stats = $scope.getToiPartnerStats($scope.toi_teammates_raw);
         $scope.toi_opponents_stats = $scope.getToiPartnerStats($scope.toi_opponents_raw);
+        $scope.toi_teammates_maxes = ToiStats.getColumnMaxes($scope.toi_teammates_stats);
+        $scope.toi_opponents_maxes = ToiStats.getColumnMaxes($scope.toi_opponents_stats);
     };
 
     // re-running the TOI aggregation whenever one of the shared filter controls changes

@@ -179,6 +179,38 @@
         {"data_key": "forwards[1]", "col_header": "C", "expl_de": "Center", "expl_en": "Center"},
         {"data_key": "forwards[2]", "col_header": "RW", "expl_de": "rechter Flügel", "expl_en": "Right Wing"}
     ],
+    "toi_teammates": [
+        {"data_key": "rank", "col_header": "Rang", "expl_de": null, "expl_en": null, "sortable": false},
+        {"data_key": "last_name", "col_header": "Mitspieler", "expl_de": null, "expl_en": null},
+        {"data_key": "position", "col_header": "Pos.", "expl_de": null, "expl_en": null},
+        {"data_key": "team_location", "col_header": "Team", "expl_de": null, "expl_en": null},
+        {"data_key": "games_together", "col_header": "Sp.", "expl_de": "Gemeinsam bestrittene Spiele", "expl_en": "Games Played Together"},
+        {"data_key": "toi", "col_header": "TOI", "expl_de": "Gemeinsame Eiszeit insgesamt", "expl_en": "Total Shared Time On Ice"},
+        {"data_key": "toi_5v5", "col_header": "TOI 5v5", "expl_de": "Gemeinsame Eiszeit im 5-gegen-5", "expl_en": "Shared Time On Ice at 5v5"},
+        {"data_key": "toi_3v3", "col_header": "TOI 3v3", "expl_de": "Gemeinsame Eiszeit im 3-gegen-3", "expl_en": "Shared Time On Ice at 3v3"},
+        {"data_key": "toi_pp", "col_header": "TOI PP", "expl_de": "Gemeinsame Eiszeit in Überzahl", "expl_en": "Shared Time On Ice on the Power Play"},
+        {"data_key": "toi_5v4", "col_header": "TOI 5v4", "expl_de": "Gemeinsame Eiszeit im Powerplay 5-gegen-4", "expl_en": "Shared Time On Ice on the 5v4 Power Play"},
+        {"data_key": "toi_5v3", "col_header": "TOI 5v3", "expl_de": "Gemeinsame Eiszeit im Powerplay 5-gegen-3", "expl_en": "Shared Time On Ice on the 5v3 Power Play"},
+        {"data_key": "toi_sh", "col_header": "TOI SH", "expl_de": "Gemeinsame Eiszeit in Unterzahl", "expl_en": "Shared Time On Ice Shorthanded"},
+        {"data_key": "toi_4v5", "col_header": "TOI 4v5", "expl_de": "Gemeinsame Eiszeit im Unterzahlspiel 4-gegen-5", "expl_en": "Shared Time On Ice on the 4v5 Penalty Kill"},
+        {"data_key": "toi_3v5", "col_header": "TOI 3v5", "expl_de": "Gemeinsame Eiszeit im Unterzahlspiel 3-gegen-5", "expl_en": "Shared Time On Ice on the 3v5 Penalty Kill"}
+    ],
+    "toi_opponents": [
+        {"data_key": "rank", "col_header": "Rang", "expl_de": null, "expl_en": null, "sortable": false},
+        {"data_key": "last_name", "col_header": "Gegenspieler", "expl_de": null, "expl_en": null},
+        {"data_key": "position", "col_header": "Pos.", "expl_de": null, "expl_en": null},
+        {"data_key": "team_location", "col_header": "Team", "expl_de": null, "expl_en": null},
+        {"data_key": "games_together", "col_header": "Sp.", "expl_de": "Gemeinsam bestrittene Spiele", "expl_en": "Games Played Against Each Other"},
+        {"data_key": "toi", "col_header": "TOI", "expl_de": "Gemeinsame Eiszeit insgesamt", "expl_en": "Total Shared Time On Ice"},
+        {"data_key": "toi_5v5", "col_header": "TOI 5v5", "expl_de": "Gemeinsame Eiszeit im 5-gegen-5", "expl_en": "Shared Time On Ice at 5v5"},
+        {"data_key": "toi_3v3", "col_header": "TOI 3v3", "expl_de": "Gemeinsame Eiszeit im 3-gegen-3", "expl_en": "Shared Time On Ice at 3v3"},
+        {"data_key": "toi_pp", "col_header": "TOI PP", "expl_de": "Gemeinsame Eiszeit in Überzahl (aus Sicht des Profilspielers)", "expl_en": "Shared Time On Ice on the Power Play (from the profile player's perspective)"},
+        {"data_key": "toi_5v4", "col_header": "TOI 5v4", "expl_de": "Gemeinsame Eiszeit im Powerplay 5-gegen-4 (aus Sicht des Profilspielers)", "expl_en": "Shared Time On Ice on the 5v4 Power Play (from the profile player's perspective)"},
+        {"data_key": "toi_5v3", "col_header": "TOI 5v3", "expl_de": "Gemeinsame Eiszeit im Powerplay 5-gegen-3 (aus Sicht des Profilspielers)", "expl_en": "Shared Time On Ice on the 5v3 Power Play (from the profile player's perspective)"},
+        {"data_key": "toi_sh", "col_header": "TOI SH", "expl_de": "Gemeinsame Eiszeit in Unterzahl (aus Sicht des Profilspielers)", "expl_en": "Shared Time On Ice Shorthanded (from the profile player's perspective)"},
+        {"data_key": "toi_4v5", "col_header": "TOI 4v5", "expl_de": "Gemeinsame Eiszeit im Unterzahlspiel 4-gegen-5 (aus Sicht des Profilspielers)", "expl_en": "Shared Time On Ice on the 4v5 Penalty Kill (from the profile player's perspective)"},
+        {"data_key": "toi_3v5", "col_header": "TOI 3v5", "expl_de": "Gemeinsame Eiszeit im Unterzahlspiel 3-gegen-5 (aus Sicht des Profilspielers)", "expl_en": "Shared Time On Ice on the 3v5 Penalty Kill (from the profile player's perspective)"}
+    ],
     "goalie_stats": [
         {"data_key": "game_date", "col_header": "Datum", "expl_de": null, "expl_en": null},
         {"data_key": "round", "col_header": "Spieltag", "expl_de": null, "expl_en": null},

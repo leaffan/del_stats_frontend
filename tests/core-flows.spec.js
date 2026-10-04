@@ -9,6 +9,7 @@ const {
     hasGameTriviaData,
     hasPlayerTriviaData,
     hasShotExplorerData,
+    hasToiData,
 } = require('./support/probes');
 
 test.describe('DEL Stats Core Flows', () => {
@@ -1258,6 +1259,60 @@ test.describe('DEL Stats Core Flows', () => {
         for (const text of texts) {
             // Should not contain error indicators
             expect(text).not.toContain('undefined');
+        }
+    });
+
+    test('31. Player profile page renders shared ice-time with teammates and opponents', async ({
+        page,
+    }) => {
+        // shared-ice-time data only exists for season 2026 so far; player 100 is a skater
+        // (defenseman) on NIT that season
+        await requireFixture(page, hasToiData);
+
+        await page.goto('http://localhost:8000/index.html#!/player_profile/2026/NIT/100');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        for (const [tableSelectValue, tableId] of [
+            ['toi_teammates', '#toi_teammates'],
+            ['toi_opponents', '#toi_opponents'],
+        ]) {
+            await page
+                .locator('select[data-ng-model="tableSelect"]:visible')
+                .selectOption(tableSelectValue);
+
+            const table = page.locator(tableId);
+            await expect(table).toBeVisible();
+            const rows = table.locator('tbody tr');
+            await expect(rows.first()).toBeVisible();
+            expect(await rows.count()).toBeGreaterThan(0);
+
+            // "Rang" is just the row's position ($index + 1) in whatever order the other
+            // columns produced, not a backed data field - sequential numbering regardless
+            // of sort column is the only thing worth asserting about it
+            expect((await rows.nth(0).locator('td').first().textContent()).trim()).toBe('1');
+            if ((await rows.count()) > 1) {
+                expect((await rows.nth(1).locator('td').first().textContent()).trim()).toBe('2');
+            }
+
+            const firstRow = rows.first();
+
+            // the partner's name must resolve to a real link/name, not "undefined"
+            const nameLink = firstRow.locator('a[href*="player_profile"]').first();
+            await expect(nameLink).toBeVisible();
+            const nameText = (await nameLink.textContent()).trim();
+            expect(nameText.length).toBeGreaterThan(0);
+            expect(nameText).not.toContain('undefined');
+
+            // every TOI cell should render as mm:ss, not "undefined"/"NaN", and (since this
+            // player definitely shares ice time with at least one partner) the heatmap style
+            // must be a real color, not the "no style" {} fallback
+            const toiCell = firstRow.locator('td').nth(5); // Rang, Name, Pos., Team, Spiele, TOI
+            const toiText = (await toiCell.textContent()).trim();
+            // minutes are zero-padded to at least 2 digits but not capped, so a season total
+            // can legitimately read e.g. "134:07"
+            expect(toiText).toMatch(/^\d{2,}:\d{2}$/);
+            const backgroundColor = await toiCell.evaluate((el) => el.style.backgroundColor);
+            expect(backgroundColor).not.toBe('');
         }
     });
 });

@@ -33,6 +33,8 @@ const hasGameTriviaData = probe('data/historic_trivia/blown_leads.json');
 const hasPlayerTriviaData = probe('data/historic_trivia/fastest_first_goal_period_1.json');
 const hasShotExplorerData = (season, playerId) =>
     probe(`data/${season}/shots/per_player/${playerId}.json`);
+// shared ice-time data only exists for season 2026 so far (not yet copied to any other season)
+const hasToiData = probe('data/2026/per_player_toi/100.json');
 
 module.exports = {
     requireFixture,
@@ -44,4 +46,5 @@ module.exports = {
     hasGameTriviaData,
     hasPlayerTriviaData,
     hasShotExplorerData,
+    hasToiData,
 };

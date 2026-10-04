@@ -7,6 +7,7 @@ const {
     hasTeamTriviaData,
     hasGameTriviaData,
     hasPlayerTriviaData,
+    hasToiData,
 } = require('./support/probes');
 
 // Generic, data-driven sorting checks.
@@ -81,6 +82,34 @@ const VIEWS = [
         maxColumns: 5,
         windowed: true,
     },
+    // toi_teammates/toi_opponents aren't the default tableSelect, so (unlike every other view
+    // here) they need an extra dropdown switch before their table even exists in the DOM; only
+    // 2026 has shared-ice-time data so far. "Rang" is a real sort link (same shared <th> markup
+    // as every other table on this page) but has no backing data field - it's just the row's
+    // position in whatever order the other columns produced - so it's excluded rather than
+    // clicked.
+    {
+        name: 'Player profile shared ice time (teammates)',
+        url: `${BASE}/index.html#!/player_profile/2026/NIT/100`,
+        table: '#toi_teammates',
+        probe: hasToiData,
+        excludeColumns: ['Rang'],
+        setup: (page) =>
+            page
+                .locator('select[data-ng-model="tableSelect"]:visible')
+                .selectOption('toi_teammates'),
+    },
+    {
+        name: 'Player profile shared ice time (opponents)',
+        url: `${BASE}/index.html#!/player_profile/2026/NIT/100`,
+        table: '#toi_opponents',
+        probe: hasToiData,
+        excludeColumns: ['Rang'],
+        setup: (page) =>
+            page
+                .locator('select[data-ng-model="tableSelect"]:visible')
+                .selectOption('toi_opponents'),
+    },
 ];
 
 // 'down' | 'up' | null - ng-show hides the inactive caret via display:none,
@@ -144,6 +173,10 @@ for (const view of VIEWS) {
             await page.goto(view.url);
         }
 
+        if (view.setup) {
+            await view.setup(page);
+        }
+
         const table = page.locator(view.table).first();
         await expect(table).toBeVisible({ timeout: 15000 });
 
@@ -162,12 +195,16 @@ for (const view of VIEWS) {
         const canReadColumns = bodyCellCount === headerCount;
 
         // a header is sortable exactly when the shared table_header directive
-        // wrapped it in a link
+        // wrapped it in a link. excludeColumns lists headers that are links but
+        // aren't really sortable (e.g. a "Rang" column with no backing data field,
+        // just the row's position) - skip those entirely rather than clicking them.
         const sortable = [];
         for (let i = 0; i < headerCount; i++) {
             const th = headers.nth(i);
             if (await th.locator('a').count()) {
-                sortable.push({ index: i, label: (await th.innerText()).trim() });
+                const label = (await th.innerText()).trim();
+                if ((view.excludeColumns || []).includes(label)) continue;
+                sortable.push({ index: i, label });
             }
         }
         expect(sortable.length, `${view.name}: no sortable columns found`).toBeGreaterThan(0);

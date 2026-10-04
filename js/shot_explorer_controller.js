@@ -588,7 +588,9 @@ app.controller(
                 on_goal: onGoal,
                 blocked: blocked,
                 missed: missed,
-                shooting_pct: ((goals / shots.length) * 100).toFixed(1),
+                // every scored shot also carries target_type 'on_goal', so onGoal is
+                // the shots-on-goal count the rest of the site bases SH% on
+                shooting_pct: svc.calculatePercentage(goals, onGoal).toFixed(1),
                 on_goal_pct: ((onGoal / shots.length) * 100).toFixed(1),
                 avg_distance: (totalDistance / shots.length).toFixed(1),
                 zones: zoneList,

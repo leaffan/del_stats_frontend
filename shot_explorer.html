@@ -248,8 +248,8 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="shot in filteredShots | orderBy:sortConfig.sortCriteria:sortConfig.sortDescending"
-                                ng-class="{'table-danger': shot.scored, 'table-info': !shot.scored && shot.home_road === 'home', 'table-warning': !shot.scored && shot.home_road === 'road', 'shot-row-active': hoveredShotIndex === $index}"
-                                ng-mouseenter="hoverShot($index)"
+                                ng-class="{'table-danger': shot.scored, 'table-info': !shot.scored && shot.home_road === 'home', 'table-warning': !shot.scored && shot.home_road === 'road', 'shot-row-active': hoveredShot === shot}"
+                                ng-mouseenter="hoverShot(shot)"
                                 ng-mouseleave="hoverShot(null)">
                                 <td>{{$index + 1}}</td>
                                 <td>{{shot.game_date}}</td>
@@ -440,18 +440,18 @@
                     </g>
 
                     <!-- ── Hover highlight ────────────────────────────────── -->
-                    <g ng-if="hoveredShotIndex !== null">
+                    <g ng-if="hoveredShot">
                         <circle
-                            cx="{{filteredShots[hoveredShotIndex].svg_x}}"
-                            cy="{{filteredShots[hoveredShotIndex].svg_y}}"
+                            cx="{{hoveredShot.svg_x}}"
+                            cy="{{hoveredShot.svg_y}}"
                             r="1.6"
                             fill="none"
                             stroke="#ffffff"
                             stroke-width="0.5"
                             pointer-events="none"/>
                         <circle
-                            cx="{{filteredShots[hoveredShotIndex].svg_x}}"
-                            cy="{{filteredShots[hoveredShotIndex].svg_y}}"
+                            cx="{{hoveredShot.svg_x}}"
+                            cy="{{hoveredShot.svg_y}}"
                             r="1.6"
                             fill="none"
                             stroke="#000000"

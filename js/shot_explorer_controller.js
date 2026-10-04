@@ -135,10 +135,12 @@ app.controller(
         $scope.maxRoundPlayed = 52;
         $scope.filteredShots = [];
         $scope.shotStats = null;
-        $scope.hoveredShotIndex = null;
+        $scope.hoveredShot = null;
 
-        $scope.hoverShot = function (index) {
-            $scope.hoveredShotIndex = index;
+        // The shot itself, not its row index: the table is sorted while the rink
+        // dots are not, so an index would point at a different shot once sorted
+        $scope.hoverShot = function (shot) {
+            $scope.hoveredShot = shot;
         };
 
         // Cache for per-player shot files, keyed as "season_playerId"

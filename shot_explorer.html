@@ -66,7 +66,7 @@
             </div>
         </div>
         <div class="form-row mb-1">
-            <div class="input-group col-4">
+            <div class="input-group col-6 col-lg-3 mb-1 mb-lg-0">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Situation:</span>
                 </div>
@@ -77,8 +77,8 @@
                     <option data-ng-option value="SH">Unterzahl</option>
                 </select>
             </div>
-            <div class="input-group col-4 pl-0">
-                <div class="input-group-prepend"><span class="input-group-text">Schussausgang:</span></div>
+            <div class="input-group col-6 col-lg-3 pl-0 mb-1 mb-lg-0">
+                <div class="input-group-prepend"><span class="input-group-text">Ausgang:</span></div>
                 <select class="form-control" data-ng-model="targetTypeFilter" data-ng-change="applyFilters()">
                     <option value="all">alle</option>
                     <option value="goals">Tor</option>
@@ -87,14 +87,26 @@
                     <option value="blocked">Schuss geblockt</option>
                 </select>
             </div>
-            <div class="input-group col-4 pl-0">
-                <div class="input-group-prepend"><span class="input-group-text">Spielabschnitt:</span></div>
+            <div class="input-group col-6 col-lg-3 pl-lg-0">
+                <div class="input-group-prepend"><span class="input-group-text">Abschnitt:</span></div>
                 <select class="form-control" data-ng-model="periodFilter" data-ng-change="applyFilters()">
                     <option value="all">alle</option>
                     <option value="1">1. Drittel</option>
                     <option value="2">2. Drittel</option>
                     <option value="3">3. Drittel</option>
                     <option value="OT">Verlängerung</option>
+                </select>
+            </div>
+            <div class="input-group col-6 col-lg-3 pl-0">
+                <div class="input-group-prepend"><span class="input-group-text">Zone:</span></div>
+                <select class="form-control" data-ng-model="zoneFilter" data-ng-change="changeZoneFilter()">
+                    <option value="all">alle</option>
+                    <optgroup label="NHL-Edge">
+                        <option data-ng-repeat="opt in edgeZoneOptions" value="{{opt.value}}">{{opt.label}}</option>
+                    </optgroup>
+                    <optgroup label="DEL">
+                        <option data-ng-repeat="(code, label) in delZoneLabels" value="{{'es:' + code}}">{{label}}</option>
+                    </optgroup>
                 </select>
             </div>
         </div>
@@ -245,8 +257,8 @@
                                 <td>{{shot.time_str}}</td>
                                 <td>{{shot.plr_situation}}</td>
                                 <td>{{shot.opp_team}}</td>
-                                <td>{{shot.ne_shot_zone}}</td>
-                                <td>{{shot.shot_zone}}</td>
+                                <td title="{{edgeZoneLabels[shot.ne_shot_zone]}}">{{shot.ne_shot_zone}}</td>
+                                <td title="{{delZoneLabels[shot.shot_zone]}}">{{shot.shot_zone}}</td>
                                 <td>{{shot.distance | number:1}} m</td>
                                 <td>
                                     <span class="shot-legend-dot"
@@ -283,7 +295,7 @@
             </div>
 
             <!-- Legend -->
-            <div class="mb-2 d-flex flex-wrap" ng-show="filteredShots.length > 0">
+            <div class="mb-2 d-flex flex-wrap">
                 <span class="mr-3"><span class="shot-legend-dot" style="background:#1a1a1a;"></span> Goal</span>
                 <span class="mr-3"><span class="shot-legend-dot" style="background:#2980b9;"></span> On Goal</span>
                 <span class="mr-3"><span class="shot-legend-dot shot-legend-square" style="background:#f39c12;"></span> Blocked</span>
@@ -383,9 +395,9 @@
                         <path id="es_blue_line" style="opacity:0.5;stroke-width:0.1;fill:#800000"
                             d="M 45.8268,60.0228 H 29.52 V -0.0228 h 16.3068 z"><title>Blaue Linie</title></path>
                         <path id="es_left" style="opacity:0.5;stroke-width:0.1;fill:#00ff00"
-                            d="M 14,0 A 14,14 0 0 0 8.0315544,1.335957 L 8.0315544,27.561589 L 19.156807,15.979233 L 29.519956,15.979233 L 29.519956,0 Z"><title>Linke Seite</title></path>
+                            d="M 14,0 A 14,14 0 0 0 8.0315544,1.335957 L 8.0315544,27.561589 L 19.156807,15.979233 L 29.519956,15.979233 L 29.519956,0 Z"><title>Rechte Seite</title></path>
                         <path id="es_right" style="opacity:0.5;stroke-width:0.1;fill:#00ffff"
-                            d="M 8.0315544,32.438411 L 8.0315544,58.664043 A 14,14 0 0 0 14,60 L 29.519956,60 L 29.519956,44.020767 L 19.156807,44.020767 Z"><title>Rechte Seite</title></path>
+                            d="M 8.0315544,32.438411 L 8.0315544,58.664043 A 14,14 0 0 0 14,60 L 29.519956,60 L 29.519956,44.020767 L 19.156807,44.020767 Z"><title>Linke Seite</title></path>
                         <path id="es_neutral_zone" style="opacity:0.5;stroke-width:0.1;fill:#ff0000"
                             d="M 60,60.0228 V -0.0228 H 45.8268 v 60.0456 z"><title>Neutrale Zone</title></path>
                         <path id="es_behind_goal" style="opacity:0.5;stroke-width:0.1;fill:#ffaaaa"

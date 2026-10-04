@@ -29,6 +29,75 @@ app.controller(
         // ── Zone overlay visibility (mutually exclusive: 'none', 'edge', or 'es') ──
         $scope.zoneOverlay = 'edge';
 
+        // ── Zone filter ──────────────────────────────────────────────────────────
+        $scope.delZoneLabels = {
+            SLOT: 'Slot',
+            BLUE_LINE: 'Blaue Linie',
+            LEFT: 'Linke Seite',
+            RIGHT: 'Rechte Seite',
+            NEUTRAL_ZONE: 'Neutrale Zone',
+            BEHIND_GOAL: 'Hinter dem Tor',
+        };
+        $scope.edgeZoneGroupLabels = {
+            left: 'Links',
+            right: 'Rechts',
+            point: 'Point',
+            slot: 'Slot',
+            tornah: 'Tornah',
+            neutral: 'Neutral',
+        };
+        $scope.edgeZoneGroups = {
+            left: ['LCN', 'LNS', 'LCI', 'LOS'],
+            right: ['RCN', 'RNS', 'RCI', 'ROS'],
+            point: ['CPT', 'LPT', 'RPT'],
+            slot: ['LSL', 'HSL'],
+            tornah: ['BTN', 'CRS'],
+            neutral: ['NZ'],
+        };
+        $scope.edgeZoneLabels = {
+            LCN: 'Linke Ecke',
+            LNS: 'Linke Torseite',
+            LCI: 'Linker Bullykreis',
+            LOS: 'Linke Außenzone',
+            RCN: 'Rechte Ecke',
+            RNS: 'Rechte Torseite',
+            RCI: 'Rechter Bullykreis',
+            ROS: 'Rechte Außenzone',
+            CPT: 'Center Point',
+            LPT: 'Linker Point',
+            RPT: 'Rechter Point',
+            LSL: 'Unterer Slot',
+            HSL: 'Oberer Slot',
+            BTN: 'Hinter dem Tor',
+            CRS: 'Torraum',
+            NZ: 'Neutrale Zone',
+        };
+        // Each Edge group, followed by its own zones indented underneath
+        $scope.edgeZoneOptions = [];
+        Object.keys($scope.edgeZoneGroupLabels).forEach(function (group) {
+            $scope.edgeZoneOptions.push({
+                value: 'edge:' + group,
+                label: $scope.edgeZoneGroupLabels[group],
+            });
+            $scope.edgeZoneGroups[group].forEach(function (code) {
+                $scope.edgeZoneOptions.push({
+                    value: 'ne:' + code,
+                    label: '  · ' + $scope.edgeZoneLabels[code],
+                });
+            });
+        });
+
+        // 'all', or a scheme-prefixed zone key: 'es:' a DEL zone, 'edge:' a whole
+        // Edge group, 'ne:' a single Edge zone - the prefix keeps zone names that
+        // exist in more than one scheme apart
+        $scope.zoneFilter = 'all';
+        $scope.changeZoneFilter = function () {
+            if ($scope.zoneFilter !== 'all') {
+                $scope.zoneOverlay = $scope.zoneFilter.startsWith('es:') ? 'es' : 'edge';
+            }
+            $scope.applyFilters();
+        };
+
         // ── Shot list sorting ────────────────────────────────────────────────────
         // Each entry is the tie-break chain passed to orderBy for that column
         // (Angular's own leading "-" reverses just that one field; the whole
@@ -353,6 +422,24 @@ app.controller(
                 } else {
                     shots = shots.filter(function (s) {
                         return s.goalie == $scope.goalieFilter;
+                    });
+                }
+            }
+
+            if ($scope.zoneFilter !== 'all') {
+                let [scheme, key] = $scope.zoneFilter.split(':');
+                if (scheme === 'es') {
+                    shots = shots.filter(function (s) {
+                        return s.shot_zone === key;
+                    });
+                } else if (scheme === 'edge') {
+                    let groupCodes = new Set($scope.edgeZoneGroups[key]);
+                    shots = shots.filter(function (s) {
+                        return groupCodes.has(s.ne_shot_zone);
+                    });
+                } else {
+                    shots = shots.filter(function (s) {
+                        return s.ne_shot_zone === key;
                     });
                 }
             }

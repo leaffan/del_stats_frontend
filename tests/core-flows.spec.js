@@ -553,7 +553,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('16. Shot explorer deep link selects season and player from the route', async ({
         page,
     }) => {
-        await requireFixture(page, hasShotExplorerData);
+        await requireFixture(page, hasShotExplorerData('2025', '100'));
 
         // a direct link to a specific season/player combination must land there
         // immediately, without the user having to pick it from the dropdowns
@@ -569,7 +569,7 @@ test.describe('DEL Stats Core Flows', () => {
     test('16b. Homepage links to Schussanalyse for a skater in the season that actually has shot data', async ({
         page,
     }) => {
-        await requireFixture(page, hasShotExplorerData);
+        await requireFixture(page, hasShotExplorerData('2025', '100'));
 
         await page.goto('http://localhost:8000/index.html#!');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
@@ -584,10 +584,11 @@ test.describe('DEL Stats Core Flows', () => {
         const link = page.locator("a[href*='shot_explorer/2025/']:has-text('Schussanalyse')");
         await expect(link).toBeVisible({ timeout: 10000 });
 
-        // shot-tracking data currently only exists for season 2025 (unlike
-        // config.defaultSeason, which points at the not-yet-live upcoming
-        // season) - the homepage link must target that season specifically,
-        // with a real, non-empty player id
+        // shot-tracking data exists per player for every season since 2018, but the
+        // homepage's hard-coded historical-seasons link still specifically targets
+        // 2025 (unlike config.defaultSeason, which points at the not-yet-live
+        // upcoming season) - assert it targets that exact season, with a real,
+        // non-empty player id
         const href = await link.getAttribute('href');
         expect(href).toMatch(/^#!\/shot_explorer\/2025\/\d+$/);
 
@@ -598,6 +599,36 @@ test.describe('DEL Stats Core Flows', () => {
         const rink = page.locator('svg').first();
         await expect(rink).toBeVisible({ timeout: 10000 });
         await expect(page).toHaveTitle(/Schussanalyse/);
+    });
+
+    test('16c. Shot explorer loads per-player shot data for seasons before 2025 too', async ({
+        page,
+    }) => {
+        // per-player shot files exist for every season from 2018 on, not just 2025 - this
+        // guards against regressing back to the old per-season del_shots.json (up to 35 MB)
+        await requireFixture(page, hasShotExplorerData('2020', '100'));
+
+        await page.goto('http://localhost:8000/index.html#!/shot_explorer/2020/100');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        await page.waitForTimeout(300);
+
+        const playerSelect = page.locator('select').first();
+        await expect(playerSelect).toHaveValue('100');
+        expect(await page.locator('table tbody tr').count()).toBeGreaterThan(0);
+    });
+
+    test('16d. Shot explorer shows no shots for season 2017 without erroring', async ({ page }) => {
+        // 2017 predates shot tracking entirely (no per-player files, no del_shots.json) - the
+        // page must degrade to an empty shot list instead of erroring on a 404
+        const jsErrors = [];
+        page.on('pageerror', (error) => jsErrors.push(error.message));
+
+        await page.goto('http://localhost:8000/index.html#!/shot_explorer/2017/100');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        await page.waitForTimeout(300);
+
+        expect(jsErrors).toEqual([]);
+        expect(await page.locator('table tbody tr').count()).toBe(0);
     });
 
     test('17. Game trivia page loads with both categories and sorts by margin', async ({

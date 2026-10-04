@@ -72,7 +72,7 @@ app.controller(
             $scope.hoveredShotIndex = index;
         };
 
-        // Cache: for per-player files keyed as "season_playerId"; for legacy big file keyed as season number
+        // Cache for per-player shot files, keyed as "season_playerId"
         let shotCache = {};
         // All shots for the currently selected player (before UI filters)
         let playerShots = [];
@@ -160,41 +160,29 @@ app.controller(
             let season = $scope.season;
             let playerId = Number.parseInt($scope.model.player_id);
 
-            // Season 2025+: per-player files available under shots/per_player/
-            if (season >= 2025) {
-                let cacheKey = season + '_' + playerId;
-                if (shotCache[cacheKey]) {
-                    playerShots = shotCache[cacheKey];
-                    updateShotMetadata();
-                    $scope.applyFilters();
-                } else {
-                    $http
-                        .get('./data/' + season + '/shots/per_player/' + playerId + '.json')
-                        .then(function (res) {
-                            shotCache[cacheKey] = res.data;
-                            playerShots = res.data;
-                            updateShotMetadata();
-                            $scope.applyFilters();
-                        });
-                }
+            // 2017 has no shot tracking at all (same cutoff used elsewhere for
+            // shift-level data) - skip the fetch rather than let it 404
+            if (season == 2017) {
+                playerShots = [];
+                updateShotMetadata();
+                $scope.applyFilters();
+                return;
+            }
+
+            let cacheKey = season + '_' + playerId;
+            if (shotCache[cacheKey]) {
+                playerShots = shotCache[cacheKey];
+                updateShotMetadata();
+                $scope.applyFilters();
             } else {
-                // Legacy: load full season file and filter by player
-                if (shotCache[season]) {
-                    playerShots = shotCache[season].filter(function (s) {
-                        return s.player_id === playerId;
-                    });
-                    updateShotMetadata();
-                    $scope.applyFilters();
-                } else {
-                    $http.get('./data/' + season + '/del_shots.json').then(function (res) {
-                        shotCache[season] = res.data;
-                        playerShots = res.data.filter(function (s) {
-                            return s.player_id === playerId;
-                        });
+                $http
+                    .get('./data/' + season + '/shots/per_player/' + playerId + '.json')
+                    .then(function (res) {
+                        shotCache[cacheKey] = res.data;
+                        playerShots = res.data;
                         updateShotMetadata();
                         $scope.applyFilters();
                     });
-                }
             }
         };
 

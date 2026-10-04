@@ -143,13 +143,14 @@
         <div class="col-md-8">
 
             <!-- Stats summary -->
-            <div class="alert alert-info main-bg shadow py-2 mb-2" ng-if="shotStats">
-                <span class="mr-3"><strong>{{shotStats.total}}</strong> Schüsse</span>
-                <span class="mr-3"><strong>{{shotStats.goals}}</strong> Tore</span>
+            <div class="alert alert-info main-bg shadow py-2 mb-2 small" ng-if="shotStats">
+                <span class="mr-3"><strong>{{shotStats.total}}</strong> {{shotStats.total === 1 ? 'Schuss' : 'Schüsse'}}</span>
+                <span class="mr-3"><strong>{{shotStats.goals}}</strong> {{shotStats.goals === 1 ? 'Tor' : 'Tore'}}</span>
                 <span class="mr-3"><strong>{{shotStats.shooting_pct}} %</strong> Schussquote</span>
                 <span class="mr-3">{{shotStats.on_goal}} auf das Tor</span>
                 <span class="mr-3">{{shotStats.blocked}} geblockt</span>
-                <span>{{shotStats.missed}} daneben</span>
+                <span class="mr-3">{{shotStats.missed}} daneben</span>
+                <span><strong>{{shotStats.avg_distance}} m</strong> Ø Distanz</span>
             </div>
 
             <!-- Shot list -->

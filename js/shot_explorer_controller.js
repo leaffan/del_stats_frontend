@@ -489,6 +489,10 @@ app.controller(
                     return b.count - a.count;
                 });
 
+            let totalDistance = shots.reduce(function (sum, s) {
+                return sum + s.distance;
+            }, 0);
+
             return {
                 total: shots.length,
                 goals: goals,
@@ -497,6 +501,7 @@ app.controller(
                 missed: missed,
                 shooting_pct: ((goals / shots.length) * 100).toFixed(1),
                 on_goal_pct: ((onGoal / shots.length) * 100).toFixed(1),
+                avg_distance: (totalDistance / shots.length).toFixed(1),
                 zones: zoneList,
             };
         }

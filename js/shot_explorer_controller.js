@@ -396,235 +396,46 @@ app.controller(
             $scope.applyFilters();
         };
 
-        // ── Filtering + coordinate transform ─────────────────────────────────────
-        $scope.applyFilters = function () {
-            let shots = playerShots.slice();
-
-            if ($scope.seasonTypeFilter !== 'all') {
-                shots = shots.filter(function (s) {
-                    return s.season_type === $scope.seasonTypeFilter;
-                });
-            }
-            if ($scope.situationFilter !== 'all') {
-                shots = shots.filter(function (s) {
-                    return s.situation === $scope.situationFilter;
-                });
-            }
-            if ($scope.targetTypeFilter !== 'all') {
-                if ($scope.targetTypeFilter === 'goals') {
-                    shots = shots.filter(function (s) {
-                        return s.scored;
-                    });
-                } else {
-                    shots = shots.filter(function (s) {
-                        return s.target_type === $scope.targetTypeFilter;
-                    });
-                }
-            }
-            if ($scope.periodFilter !== 'all') {
-                shots = shots.filter(function (s) {
-                    return s.period == $scope.periodFilter;
-                });
-            }
-            if ($scope.homeRoadFilter !== 'all') {
-                shots = shots.filter(function (s) {
-                    return s.home_road === $scope.homeRoadFilter;
-                });
-            }
-            if ($scope.oppFilter !== 'all') {
-                shots = shots.filter(function (s) {
-                    return s.opp_team === $scope.oppFilter;
-                });
-            }
-            if ($scope.goalieFilter !== 'all') {
-                if ($scope.goalieFilter === 'empty_net') {
-                    shots = shots.filter(function (s) {
-                        return s.goalie === null || s.goalie === undefined;
-                    });
-                } else {
-                    shots = shots.filter(function (s) {
-                        return s.goalie == $scope.goalieFilter;
-                    });
-                }
-            }
-
-            if ($scope.zoneFilter !== 'all') {
-                let [scheme, key] = $scope.zoneFilter.split(':');
-                if (scheme === 'es') {
-                    shots = shots.filter(function (s) {
-                        return s.shot_zone === key;
-                    });
-                } else if (scheme === 'edge') {
-                    let groupCodes = new Set($scope.edgeZoneGroups[key]);
-                    shots = shots.filter(function (s) {
-                        return groupCodes.has(s.ne_shot_zone);
-                    });
-                } else {
-                    shots = shots.filter(function (s) {
-                        return s.ne_shot_zone === key;
-                    });
-                }
-            }
-
-            // Date range (set either by month selector or directly)
-            if ($scope.ctrl.fromDate) {
-                let from = $scope.ctrl.fromDate.format('YYYY-MM-DD');
-                shots = shots.filter(function (s) {
-                    return s.game_date >= from;
-                });
-            }
-            if ($scope.ctrl.toDate) {
-                let to = $scope.ctrl.toDate.format('YYYY-MM-DD');
-                shots = shots.filter(function (s) {
-                    return s.game_date <= to;
-                });
-            }
-
-            // Round range
-            let fromIdx = $scope.roundsPlayed.findIndex(function (r) {
-                return r.key === $scope.fromRoundSelect;
-            });
-            let toIdx = $scope.roundsPlayed.findIndex(function (r) {
-                return r.key === $scope.toRoundSelect;
-            });
-            if (fromIdx === -1) {
-                fromIdx = 0;
-            }
-            if (toIdx === -1) {
-                toIdx = $scope.roundsPlayed.length - 1;
-            }
-            if (fromIdx > 0 || toIdx < $scope.roundsPlayed.length - 1) {
-                let validKeys = new Set(
-                    $scope.roundsPlayed.slice(fromIdx, toIdx + 1).map(function (r) {
-                        return r.key;
-                    }),
-                );
-                shots = shots.filter(function (s) {
-                    return validKeys.has(s.round + '|' + (s.po_round || ''));
-                });
-            }
-
-            // Transform to SVG coords (full rink, goal on left, viewBox "-0.5 -0.5 121 61")
-            // Road teams attack left (x<0 = attacking zone); home teams attack right (x>0 = attacking zone) → mirror to left
-            $scope.filteredShots = shots.map(function (s) {
-                let sx, sy;
-                if (s.home_road === 'home') {
-                    // home attacks right → mirror to show attacking left
-                    sx = 60 - s.x * 2;
-                    sy = 30 + s.y * 2;
-                } else {
-                    // road attacks left → already correct
-                    sx = 60 + s.x * 2;
-                    sy = 30 - s.y * 2;
-                }
-                let mins = Math.floor(s.time / 60);
-                let secs = s.time % 60;
-
-                // table dot color: table-sm row dots don't distinguish beyond
-                // scored/on_goal/blocked (missed has no fill, see .shot-legend-outline)
-                let dotColor = s.scored
-                    ? '#1a1a1a'
-                    : s.target_type === 'on_goal'
-                      ? '#2980b9'
-                      : s.target_type === 'blocked'
-                        ? '#f39c12'
-                        : 'transparent';
-
-                // Precomputed once here rather than inside the SVG tooltip
-                // interpolation, which would otherwise re-run this zone lookup
-                // and distance formatting on every digest for every visible dot
-                let kindLabel = s.scored
-                    ? 'Tor'
-                    : $scope.targetTypeLabels[s.target_type] || s.target_type;
-                let tooltip =
-                    kindLabel +
-                    ' | ' +
-                    ($scope.delZoneLabels[s.shot_zone] || s.shot_zone) +
-                    ' | ' +
-                    s.distance.toFixed(1) +
-                    ' m | P' +
-                    s.period +
-                    ' | ' +
-                    s.situation +
-                    ' | ' +
-                    s.home_road;
-
-                return {
-                    svg_x: sx,
-                    svg_y: sy,
-                    scored: s.scored,
-                    target_type: s.target_type,
-                    shot_zone: s.shot_zone,
-                    ne_shot_zone: s.ne_shot_zone,
-                    opp_team: s.opp_team,
-                    game_date: s.game_date,
-                    goalie_name:
-                        s.goalie === null || s.goalie === undefined
-                            ? 'Leeres Tor'
-                            : goalieShortNameById[s.goalie] || 'Torhüter ' + s.goalie,
-                    goalie_last_name:
-                        s.goalie === null || s.goalie === undefined
-                            ? 'Leeres Tor'
-                            : goalieLastNameById[s.goalie] || 'Torhüter ' + s.goalie,
-                    distance: s.distance,
-                    period: s.period,
-                    situation: s.situation,
-                    plr_situation: s.plr_situation,
-                    home_road: s.home_road,
-                    time: s.time,
-                    time_str: mins + ':' + (secs < 10 ? '0' : '') + secs,
-                    dotColor: dotColor,
-                    tooltip: tooltip,
-                };
-            });
-
-            $scope.shotStats = computeStats(shots);
-        };
-
         // target_type is 'on_goal' for goals too, so scored is checked first
         $scope.targetTypeLabels = { on_goal: 'Torschuss', blocked: 'geblockt', missed: 'daneben' };
 
-        // ── Statistics ───────────────────────────────────────────────────────────
+        // ── Filtering + coordinate transform ─────────────────────────────────────
         // Idea for later: a display mode showing aggregate shot counts per zone
         // (grouped by whichever scheme - DEL or Edge - is active) instead of
         // individual dots on the rink. A per-shot_zone count aggregation used to
-        // live here (removed October 2026 as dead code, since it was computed but
-        // never displayed); re-add a similar grouping, keyed by the active
-        // zoneOverlay scheme, when building that feature.
-        function computeStats(shots) {
-            if (!shots || shots.length === 0) {
-                return null;
-            }
+        // live in ShotFilters.computeStats() (removed October 2026 as dead code,
+        // since it was computed but never displayed); re-add a similar grouping,
+        // keyed by the active zoneOverlay scheme, when building that feature.
+        $scope.applyFilters = function () {
+            let shots = ShotFilters.filterShots(playerShots, {
+                seasonType: $scope.seasonTypeFilter,
+                situation: $scope.situationFilter,
+                targetType: $scope.targetTypeFilter,
+                period: $scope.periodFilter,
+                homeRoad: $scope.homeRoadFilter,
+                opp: $scope.oppFilter,
+                goalie: $scope.goalieFilter,
+                zoneFilter: $scope.zoneFilter,
+                edgeZoneGroups: $scope.edgeZoneGroups,
+                fromDate: $scope.ctrl.fromDate ? $scope.ctrl.fromDate.format('YYYY-MM-DD') : null,
+                toDate: $scope.ctrl.toDate ? $scope.ctrl.toDate.format('YYYY-MM-DD') : null,
+                roundsPlayed: $scope.roundsPlayed,
+                fromRoundKey: $scope.fromRoundSelect,
+                toRoundKey: $scope.toRoundSelect,
+            });
 
-            let goals = shots.filter(function (s) {
-                return s.scored;
-            }).length;
-            let onGoal = shots.filter(function (s) {
-                return s.target_type === 'on_goal';
-            }).length;
-            let blocked = shots.filter(function (s) {
-                return s.target_type === 'blocked';
-            }).length;
-            let missed = shots.filter(function (s) {
-                return s.target_type === 'missed';
-            }).length;
-
-            let totalDistance = shots.reduce(function (sum, s) {
-                return sum + s.distance;
-            }, 0);
-
-            return {
-                total: shots.length,
-                goals: goals,
-                on_goal: onGoal,
-                blocked: blocked,
-                missed: missed,
-                // every scored shot also carries target_type 'on_goal', so onGoal is
-                // the shots-on-goal count the rest of the site bases SH% on
-                shooting_pct: svc.calculatePercentage(goals, onGoal).toFixed(1),
-                avg_distance: (totalDistance / shots.length).toFixed(1),
+            let transformContext = {
+                goalieShortNameById: goalieShortNameById,
+                goalieLastNameById: goalieLastNameById,
+                delZoneLabels: $scope.delZoneLabels,
+                targetTypeLabels: $scope.targetTypeLabels,
             };
-        }
+            $scope.filteredShots = shots.map(function (s) {
+                return ShotFilters.transformShot(s, transformContext);
+            });
+
+            $scope.shotStats = ShotFilters.computeStats(shots);
+        };
 
         // Download the current rink view as PNG, kept in the same portrait
         // orientation as it's shown on screen (viewBox 61 x 121), with a title

@@ -631,6 +631,69 @@ test.describe('DEL Stats Core Flows', () => {
         expect(await page.locator('table tbody tr').count()).toBe(0);
     });
 
+    test('16e. Shot explorer zone filter narrows to a single DEL zone and switches the overlay to DEL', async ({
+        page,
+    }) => {
+        await requireFixture(page, hasShotExplorerData('2025', '100'));
+
+        await page.goto('http://localhost:8000/index.html#!/shot_explorer/2025/100');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        await page.waitForTimeout(300);
+
+        const totalRows = await page.locator('table tbody tr').count();
+        expect(totalRows).toBeGreaterThan(0);
+
+        const zoneSelect = page.locator('select[data-ng-model="zoneFilter"]');
+        await zoneSelect.selectOption('es:SLOT');
+        await page.waitForTimeout(300);
+
+        // DEL zones are shown as a single option each (unlike Edge groups), so
+        // selecting one must also narrow the list, not just tick the radio
+        await expect(page.locator('#zone-es')).toBeChecked();
+        const delZoneCells = page.locator('table tbody tr td:nth-child(8)');
+        const narrowedRows = await delZoneCells.count();
+        expect(narrowedRows).toBeGreaterThan(0);
+        expect(narrowedRows).toBeLessThan(totalRows);
+        for (const text of await delZoneCells.allTextContents()) {
+            expect(text.trim()).toBe('SLOT');
+        }
+
+        // clearing the filter again must restore the full list
+        await zoneSelect.selectOption('all');
+        await page.waitForTimeout(300);
+        expect(await page.locator('table tbody tr').count()).toBe(totalRows);
+    });
+
+    test('16f. Shot explorer zone filter narrows to a whole Edge group and switches the overlay to NHL-Edge', async ({
+        page,
+    }) => {
+        await requireFixture(page, hasShotExplorerData('2025', '100'));
+
+        await page.goto('http://localhost:8000/index.html#!/shot_explorer/2025/100');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        await page.waitForTimeout(300);
+
+        const totalRows = await page.locator('table tbody tr').count();
+
+        // start from the DEL scheme so switching to an Edge group is a real,
+        // observable scheme change rather than a no-op
+        await page.locator('#zone-es').check();
+        await page.waitForTimeout(300);
+
+        const zoneSelect = page.locator('select[data-ng-model="zoneFilter"]');
+        await zoneSelect.selectOption('edge:point');
+        await page.waitForTimeout(300);
+
+        await expect(page.locator('#zone-edge')).toBeChecked();
+        const edgeZoneCells = page.locator('table tbody tr td:nth-child(7)');
+        const narrowedRows = await edgeZoneCells.count();
+        expect(narrowedRows).toBeGreaterThan(0);
+        expect(narrowedRows).toBeLessThan(totalRows);
+        for (const text of await edgeZoneCells.allTextContents()) {
+            expect(['CPT', 'LPT', 'RPT']).toContain(text.trim());
+        }
+    });
+
     test('17. Game trivia page loads with both categories and sorts by margin', async ({
         page,
     }) => {

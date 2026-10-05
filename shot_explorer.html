@@ -2,7 +2,11 @@
 
     <!-- Navigation -->
     <div class="alert alert-info main-bg shadow">
-        <a href="#!"><b>Startseite</b></a>  | <a href="#!/team_stats/{{season}}"><b>Teamstatistiken</b></a> | <a href="#!/del_stats/{{season}}"><b>Spielerstatistiken</b></a> | <a href="#!/player_career/{{player_id}}"><b>Karriereverlauf</b></a> 
+        <a href="#!"><b>Startseite</b></a>  | <a href="#!/team_stats/{{season}}"><b>Teamstatistiken</b></a> | <a href="#!/del_stats/{{season}}"><b>Spielerstatistiken</b></a> | <a href="#!/player_career/{{player_id}}"><b>Karriereverlauf</b></a>
+    </div>
+
+    <div class="alert alert-warning" ng-if="loadErrors.length > 0">
+        <div ng-repeat="err in loadErrors">{{err}}</div>
     </div>
 
     <player-information
@@ -119,13 +123,13 @@
             </div>
             <div class="input-group col-2 pl-0">
                 <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                    <span class="input-group-text"><i class="far fa-calendar-alt" aria-hidden="true"></i></span>
                 </div>
                 <input class="form-control" placeholder="Anfangsdatum" moment-picker="ctrl.stringFromDate" format="DD.MM.YYYY" start-date="minShotDate" data-ng-model="ctrl.fromDate" data-ng-model-options="{ updateOn: 'blur' }" data-ng-change="applyFilters()">
             </div>
             <div class="input-group col-2 pl-0">
                 <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                    <span class="input-group-text"><i class="far fa-calendar-alt" aria-hidden="true"></i></span>
                 </div>
                 <input class="form-control" placeholder="Enddatum" moment-picker="ctrl.stringToDate" format="DD.MM.YYYY" start-date="maxShotDate" data-ng-model="ctrl.toDate" data-ng-model-options="{ updateOn: 'blur' }" data-ng-change="applyFilters()">
             </div>
@@ -168,7 +172,7 @@
             <!-- Shot list -->
             <div class="alert alert-info main-bg shadow p-0">
                 <div class="p-3 text-muted" ng-if="!player_id">Kein Spieler ausgewählt.</div>
-                <div class="p-3 text-muted" ng-if="model.player_id && filteredShots.length === 0">Keine Daten für diese Auswahl vorhanden.</div>
+                <div class="p-3 text-muted" ng-if="model.player_id && shotsLoaded && !shotsLoadFailed && filteredShots.length === 0">Keine Daten für diese Auswahl vorhanden.</div>
                 <div class="shot-list-wrapper" ng-if="filteredShots.length > 0">
                     <table class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow mb-0">
                         <thead class="thead-light">
@@ -246,7 +250,8 @@
                 <!-- Group transform translate(60,0) rotate(-90): (x,y) → (60-y, x) -->
                 <!-- Left goal (x=8) → y≈8 (top); right goal (x=112) → y≈112 (bottom) -->
                 <svg class="rink-svg" version="1.1" viewBox="-0.5 -0.5 61 121"
-                    xmlns="http://www.w3.org/2000/svg">
+                    xmlns="http://www.w3.org/2000/svg"
+                    role="img" aria-label="Eishockey-Spielfeld mit den Positionen der gefilterten Schüsse">
 
                 <g id="rink-rotated" transform="translate(60,0) rotate(90)">
 
@@ -404,7 +409,7 @@
 
             <div class="mt-2">
                 <button class="btn btn-sm btn-outline-secondary" data-ng-click="downloadRink()" title="Grafik als PNG herunterladen">
-                    <span class="fa fa-download"></span> PNG
+                    <span class="fa fa-download" aria-hidden="true"></span> PNG
                 </button>
             </div>
 

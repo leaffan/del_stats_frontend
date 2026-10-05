@@ -3,9 +3,21 @@ app.controller(
     function ($scope, $http, $routeParams, $location, $timeout, config, svc) {
         $scope.svc = svc;
 
-        $http.get('./cfg/columns_shot_explorer.json').then(function (res) {
-            $scope.shotColumns = res.data;
-        });
+        // Collects a German message for each failed request below, shown as a
+        // dismissable list instead of leaving the page silently incomplete
+        $scope.loadErrors = [];
+        function reportLoadError(message) {
+            $scope.loadErrors.push(message);
+        }
+
+        $http
+            .get('./cfg/columns_shot_explorer.json')
+            .then(function (res) {
+                $scope.shotColumns = res.data;
+            })
+            .catch(function () {
+                reportLoadError('Tabellenspalten konnten nicht geladen werden.');
+            });
 
         // ── Season / Player from URL ─────────────────────────────────────────────
         $scope.season = Number.parseInt($routeParams.season) || config.defaultSeason;
@@ -158,17 +170,27 @@ app.controller(
 
         // ── Static data loads ────────────────────────────────────────────────────
         // loading player ids with portraits
-        $http.get('./po/' + $scope.season + '/_portraits.json').then(function (res) {
-            $scope.portraits = res.data;
-            $scope.hasPortrait = $scope.portraits.includes($scope.player_id);
-        });
-
-        $http.get('./cfg/teams.json').then(function (res) {
-            $scope.all_teams = res.data.filter(function (t) {
-                return svc.isTeamValidForSeason(t, $scope.season);
+        $http
+            .get('./po/' + $scope.season + '/_portraits.json')
+            .then(function (res) {
+                $scope.portraits = res.data;
+                $scope.hasPortrait = $scope.portraits.includes($scope.player_id);
+            })
+            .catch(function () {
+                reportLoadError('Porträt-Liste konnte nicht geladen werden.');
             });
-            maybeSetColors();
-        });
+
+        $http
+            .get('./cfg/teams.json')
+            .then(function (res) {
+                $scope.all_teams = res.data.filter(function (t) {
+                    return svc.isTeamValidForSeason(t, $scope.season);
+                });
+                maybeSetColors();
+            })
+            .catch(function () {
+                reportLoadError('Teamliste konnte nicht geladen werden.');
+            });
 
         $http
             .get('./data/' + $scope.season + '/del_player_personal_data.json')
@@ -180,6 +202,9 @@ app.controller(
                     $scope.currentPlayerData = pd;
                     $scope.mainNumber = pd.no;
                 }
+            })
+            .catch(function () {
+                reportLoadError('Spielerdaten konnten nicht geladen werden.');
             });
 
         $http
@@ -202,7 +227,9 @@ app.controller(
                     $scope.model.team = currentPlayer.team;
                     maybeSetColors();
                 }
-                $scope.loadShots();
+            })
+            .catch(function () {
+                reportLoadError('Spielerliste konnte nicht geladen werden.');
             });
 
         function maybeSetColors() {
@@ -217,6 +244,11 @@ app.controller(
         }
 
         // ── Shot loading ─────────────────────────────────────────────────────────
+        // Only true once loading has actually finished (success or failure) -
+        // guards the "no data" message against flashing while still loading
+        $scope.shotsLoaded = false;
+        $scope.shotsLoadFailed = false;
+
         $scope.loadShots = function () {
             if (!$scope.model.player_id) {
                 return;
@@ -229,6 +261,7 @@ app.controller(
             // shift-level data) - skip the fetch rather than let it 404
             if (season == 2017) {
                 playerShots = [];
+                $scope.shotsLoaded = true;
                 updateShotMetadata();
                 $scope.applyFilters();
                 return;
@@ -240,8 +273,20 @@ app.controller(
                     playerShots = res.data;
                     updateShotMetadata();
                     $scope.applyFilters();
+                })
+                .catch(function () {
+                    $scope.shotsLoadFailed = true;
+                    reportLoadError('Schussdaten konnten nicht geladen werden.');
+                })
+                .finally(function () {
+                    $scope.shotsLoaded = true;
                 });
         };
+
+        // Independent of the fetches above - it only needs model.player_id,
+        // which is already known from the route, so a slow/failing portrait
+        // or roster request can no longer delay or block the shot data itself
+        $scope.loadShots();
 
         // ── Shot metadata (months / rounds) derived from loaded shots ────────────
         function updateShotMetadata() {

@@ -168,81 +168,19 @@
             <!-- Shot list -->
             <div class="alert alert-info main-bg shadow p-0">
                 <div class="p-3 text-muted" ng-if="!player_id">Kein Spieler ausgewählt.</div>
-                <div class="p-3 text-muted" ng-if="model.player_id && filteredShots.length === 0">No shots match the current filters.</div>
+                <div class="p-3 text-muted" ng-if="model.player_id && filteredShots.length === 0">Keine Daten für diese Auswahl vorhanden.</div>
                 <div class="shot-list-wrapper" ng-if="filteredShots.length > 0">
                     <table class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow mb-0">
                         <thead class="thead-light">
                             <tr>
-                                <th class="w-04">#</th>
-                                <th class="w-08">
-                                    <a href="" data-ng-click="setSortOrder('game_date')">
-                                        Datum
-                                        <span data-ng-show="sortConfig.sortKey == 'game_date' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
-                                        <span data-ng-show="sortConfig.sortKey == 'game_date' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
+                                <th scope="col" class="w-{{ svc.pad(col.width, 2) }}" data-ng-repeat="col in shotColumns">
+                                    <a data-ng-if="col.sortable !== false" href="" data-ng-click="setSortOrder(col.data_key)">
+                                        <abbr title="{{col.expl_de}}" data-ng-if="col.expl_de">{{col.col_header}}</abbr>
+                                        <span data-ng-if="!col.expl_de">{{col.col_header}}</span>
+                                        <span data-ng-show="sortConfig.sortKey == col.data_key && sortConfig.sortDescending" class="fa fa-caret-down"></span>
+                                        <span data-ng-show="sortConfig.sortKey == col.data_key && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
                                     </a>
-                                </th>
-                                <th class="w-05">
-                                    <a href="" data-ng-click="setSortOrder('period')">
-                                        P
-                                        <span data-ng-show="sortConfig.sortKey == 'period' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
-                                        <span data-ng-show="sortConfig.sortKey == 'period' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
-                                    </a>
-                                </th>
-                                <th class="w-09">
-                                    <a href="" data-ng-click="setSortOrder('time')">
-                                        Min
-                                        <span data-ng-show="sortConfig.sortKey == 'time' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
-                                        <span data-ng-show="sortConfig.sortKey == 'time' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
-                                    </a>
-                                </th>
-                                <th class="w-09">
-                                    <a href="" data-ng-click="setSortOrder('plr_situation')">
-                                        Sit
-                                        <span data-ng-show="sortConfig.sortKey == 'plr_situation' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
-                                        <span data-ng-show="sortConfig.sortKey == 'plr_situation' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
-                                    </a>
-                                </th>
-                                <th class="w-09">
-                                    <a href="" data-ng-click="setSortOrder('opp_team')">
-                                        Opp
-                                        <span data-ng-show="sortConfig.sortKey == 'opp_team' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
-                                        <span data-ng-show="sortConfig.sortKey == 'opp_team' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
-                                    </a>
-                                </th>
-                                <th class="w-11">
-                                    <a href="" data-ng-click="setSortOrder('ne_shot_zone')">
-                                        NHL-Zone
-                                        <span data-ng-show="sortConfig.sortKey == 'ne_shot_zone' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
-                                        <span data-ng-show="sortConfig.sortKey == 'ne_shot_zone' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
-                                    </a>
-                                </th>
-                                <th class="w-11">
-                                    <a href="" data-ng-click="setSortOrder('shot_zone')">
-                                        DEL-Zone
-                                        <span data-ng-show="sortConfig.sortKey == 'shot_zone' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
-                                        <span data-ng-show="sortConfig.sortKey == 'shot_zone' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
-                                    </a>
-                                </th>
-                                <th class="w-08">
-                                    <a href="" data-ng-click="setSortOrder('distance')">
-                                        Dist
-                                        <span data-ng-show="sortConfig.sortKey == 'distance' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
-                                        <span data-ng-show="sortConfig.sortKey == 'distance' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
-                                    </a>
-                                </th>
-                                <th class="w-11">
-                                    <a href="" data-ng-click="setSortOrder('target_type')">
-                                        Typ
-                                        <span data-ng-show="sortConfig.sortKey == 'target_type' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
-                                        <span data-ng-show="sortConfig.sortKey == 'target_type' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
-                                    </a>
-                                </th>
-                                <th class="w-15">
-                                    <a href="" data-ng-click="setSortOrder('goalie_last_name')">
-                                        Goalie
-                                        <span data-ng-show="sortConfig.sortKey == 'goalie_last_name' && sortConfig.sortDescending" class="fa fa-caret-down"></span>
-                                        <span data-ng-show="sortConfig.sortKey == 'goalie_last_name' && !sortConfig.sortDescending" class="fa fa-caret-up"></span>
-                                    </a>
+                                    <span data-ng-if="col.sortable === false">{{col.col_header}}</span>
                                 </th>
                             </tr>
                         </thead>
@@ -264,7 +202,7 @@
                                     <span class="shot-legend-dot"
                                         ng-class="{'shot-legend-square': shot.target_type === 'blocked', 'shot-legend-outline': shot.target_type === 'missed'}"
                                         ng-style="shot.target_type === 'missed' ? {'border': '2px solid #e74c3c', 'background': 'transparent'} : {'background': shotColor(shot)}"></span>
-                                    {{shot.target_type}}
+                                    {{shot.scored ? 'Tor' : targetTypeLabels[shot.target_type]}}
                                 </td>
                                 <td>{{shot.goalie_name}}</td>
                             </tr>
@@ -279,7 +217,7 @@
 
             <!-- Zone toggles (no WH) -->
             <div class="alert alert-info main-bg shadow mb-2 py-2">
-                <strong class="d-block mb-1">Shot Zones:</strong>
+                <strong class="d-block mb-1">Schusszonen:</strong>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" id="zone-none" name="zoneOverlay" value="none" data-ng-model="zoneOverlay">
                     <label class="form-check-label" for="zone-none">Keine</label>
@@ -296,10 +234,10 @@
 
             <!-- Legend -->
             <div class="mb-2 d-flex flex-wrap">
-                <span class="mr-3"><span class="shot-legend-dot" style="background:#1a1a1a;"></span> Goal</span>
-                <span class="mr-3"><span class="shot-legend-dot" style="background:#2980b9;"></span> On Goal</span>
-                <span class="mr-3"><span class="shot-legend-dot shot-legend-square" style="background:#f39c12;"></span> Blocked</span>
-                <span class="mr-3"><span class="shot-legend-dot shot-legend-outline" style="border:2px solid #e74c3c; background:transparent;"></span> Missed</span>
+                <span class="mr-3"><span class="shot-legend-dot" style="background:#1a1a1a;"></span> Tor</span>
+                <span class="mr-3"><span class="shot-legend-dot" style="background:#2980b9;"></span> auf das Tor</span>
+                <span class="mr-3"><span class="shot-legend-dot shot-legend-square" style="background:#f39c12;"></span> geblockt</span>
+                <span class="mr-3"><span class="shot-legend-dot shot-legend-outline" style="border:2px solid #e74c3c; background:transparent;"></span> daneben</span>
             </div>
 
 <!-- Rink visualization wrapper (portrait: height = 121/61 * width) -->
@@ -412,7 +350,7 @@
                                 cx="{{shot.svg_x}}" cy="{{shot.svg_y}}" r="0.75"
                                 fill="#1a1a1a" fill-opacity="0.85"
                                 stroke="#000" stroke-width="0.12">
-                                <title>{{shot.target_type}} – GOAL | {{shot.shot_zone}} | {{shot.distance | number:1}} m | P{{shot.period}} | {{shot.situation}} | {{shot.home_road}}</title>
+                                <title>Tor | {{delZoneLabels[shot.shot_zone]}} | {{shot.distance | number:1}} m | P{{shot.period}} | {{shot.situation}} | {{shot.home_road}}</title>
                             </circle>
                             <!-- Blocked: square -->
                             <rect ng-if="!shot.scored && shot.target_type === 'blocked'"
@@ -420,21 +358,21 @@
                                 width="1.2" height="1.2"
                                 fill="#f39c12" fill-opacity="0.7"
                                 stroke="#555" stroke-width="0.12">
-                                <title>blocked | {{shot.shot_zone}} | {{shot.distance | number:1}} m | P{{shot.period}} | {{shot.situation}} | {{shot.home_road}}</title>
+                                <title>geblockt | {{delZoneLabels[shot.shot_zone]}} | {{shot.distance | number:1}} m | P{{shot.period}} | {{shot.situation}} | {{shot.home_road}}</title>
                             </rect>
                             <!-- Missed: red outline circle, no fill -->
                             <circle ng-if="!shot.scored && shot.target_type === 'missed'"
                                 cx="{{shot.svg_x}}" cy="{{shot.svg_y}}" r="0.7"
                                 fill="transparent"
                                 stroke="#e74c3c" stroke-width="0.28">
-                                <title>missed | {{shot.shot_zone}} | {{shot.distance | number:1}} m | P{{shot.period}} | {{shot.situation}} | {{shot.home_road}}</title>
+                                <title>daneben | {{delZoneLabels[shot.shot_zone]}} | {{shot.distance | number:1}} m | P{{shot.period}} | {{shot.situation}} | {{shot.home_road}}</title>
                             </circle>
                             <!-- On goal: blue filled circle -->
                             <circle ng-if="!shot.scored && shot.target_type === 'on_goal'"
                                 cx="{{shot.svg_x}}" cy="{{shot.svg_y}}" r="0.7"
                                 fill="#2980b9" fill-opacity="0.65"
                                 stroke="#555" stroke-width="0.12">
-                                <title>on goal | {{shot.shot_zone}} | {{shot.distance | number:1}} m | P{{shot.period}} | {{shot.situation}} | {{shot.home_road}}</title>
+                                <title>Torschuss | {{delZoneLabels[shot.shot_zone]}} | {{shot.distance | number:1}} m | P{{shot.period}} | {{shot.situation}} | {{shot.home_road}}</title>
                             </circle>
                         </g>
                     </g>

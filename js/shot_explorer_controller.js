@@ -3,6 +3,10 @@ app.controller(
     function ($scope, $http, $routeParams, $location, $timeout, config, svc) {
         $scope.svc = svc;
 
+        $http.get('./cfg/columns_shot_explorer.json').then(function (res) {
+            $scope.shotColumns = res.data;
+        });
+
         // ── Season / Player from URL ─────────────────────────────────────────────
         $scope.season = Number.parseInt($routeParams.season) || config.defaultSeason;
         $scope.player_id = $routeParams.player_id;
@@ -545,6 +549,9 @@ app.controller(
         $scope.shotOpacity = function (shot) {
             return shot.scored ? 0.9 : 0.55;
         };
+
+        // target_type is 'on_goal' for goals too, so scored is checked first
+        $scope.targetTypeLabels = { on_goal: 'Torschuss', blocked: 'geblockt', missed: 'daneben' };
 
         // ── Statistics ───────────────────────────────────────────────────────────
         function computeStats(shots) {

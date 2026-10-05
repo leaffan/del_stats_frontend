@@ -1,0 +1,13 @@
+[
+    { "data_key": "rank", "col_header": "#", "expl_de": null, "sortable": false, "width": 4 },
+    { "data_key": "game_date", "col_header": "Datum", "expl_de": null, "width": 8 },
+    { "data_key": "period", "col_header": "P", "expl_de": "Drittel", "width": 5 },
+    { "data_key": "time", "col_header": "Min", "expl_de": null, "width": 7 },
+    { "data_key": "plr_situation", "col_header": "Sit", "expl_de": "Spielsituation", "width": 7 },
+    { "data_key": "opp_team", "col_header": "Geg", "expl_de": "Gegner", "width": 7 },
+    { "data_key": "ne_shot_zone", "col_header": "NHL-Zone", "expl_de": null, "width": 14 },
+    { "data_key": "shot_zone", "col_header": "DEL-Zone", "expl_de": null, "width": 14 },
+    { "data_key": "distance", "col_header": "Dist", "expl_de": "Distanz", "width": 7 },
+    { "data_key": "target_type", "col_header": "Typ", "expl_de": "Schussergebnis", "width": 14 },
+    { "data_key": "goalie_last_name", "col_header": "Torhüter", "expl_de": null, "width": 13 }
+]

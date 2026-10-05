@@ -119,6 +119,10 @@ caption {
 .shot-legend-square {
     border-radius: 0;
 }
+.shot-legend-outline {
+    background: transparent !important;
+    border: 2px solid #e74c3c;
+}
 #edge_shot_zones path,
 #es_shot_zones path {
     fill: #ddeeff !important;

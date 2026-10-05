@@ -114,7 +114,7 @@
             <div class="input-group col-2">
                 <select class="form-control" data-ng-model="timespanSelect" data-ng-change="changeTimespan()">
                     <option data-ng-option value selected="selected">alle Zeiträume</option>
-                    <option data-ng-option data-ng-repeat="month in monthsPlayed" value="{{month}}">{{svc.germanMonths()[month]}}</option>
+                    <option data-ng-option data-ng-repeat="month in monthsPlayed" value="{{month}}">{{monthNames[month]}}</option>
                 </select>
             </div>
             <div class="input-group col-2 pl-0">
@@ -201,7 +201,7 @@
                                 <td>
                                     <span class="shot-legend-dot"
                                         ng-class="{'shot-legend-square': shot.target_type === 'blocked', 'shot-legend-outline': shot.target_type === 'missed'}"
-                                        ng-style="shot.target_type === 'missed' ? {'border': '2px solid #e74c3c', 'background': 'transparent'} : {'background': shotColor(shot)}"></span>
+                                        ng-style="{'background': shot.dotColor}"></span>
                                     {{shot.scored ? 'Tor' : targetTypeLabels[shot.target_type]}}
                                 </td>
                                 <td>{{shot.goalie_name}}</td>
@@ -235,9 +235,9 @@
             <!-- Legend -->
             <div class="mb-2 d-flex flex-wrap">
                 <span class="mr-3"><span class="shot-legend-dot" style="background:#1a1a1a;"></span> Tor</span>
-                <span class="mr-3"><span class="shot-legend-dot" style="background:#2980b9;"></span> auf das Tor</span>
+                <span class="mr-3"><span class="shot-legend-dot" style="background:#2980b9;"></span> Torschuss</span>
                 <span class="mr-3"><span class="shot-legend-dot shot-legend-square" style="background:#f39c12;"></span> geblockt</span>
-                <span class="mr-3"><span class="shot-legend-dot shot-legend-outline" style="border:2px solid #e74c3c; background:transparent;"></span> daneben</span>
+                <span class="mr-3"><span class="shot-legend-dot shot-legend-outline"></span> daneben</span>
             </div>
 
 <!-- Rink visualization wrapper (portrait: height = 121/61 * width) -->
@@ -350,7 +350,7 @@
                                 cx="{{shot.svg_x}}" cy="{{shot.svg_y}}" r="0.75"
                                 fill="#1a1a1a" fill-opacity="0.85"
                                 stroke="#000" stroke-width="0.12">
-                                <title>Tor | {{delZoneLabels[shot.shot_zone]}} | {{shot.distance | number:1}} m | P{{shot.period}} | {{shot.situation}} | {{shot.home_road}}</title>
+                                <title>{{shot.tooltip}}</title>
                             </circle>
                             <!-- Blocked: square -->
                             <rect ng-if="!shot.scored && shot.target_type === 'blocked'"
@@ -358,21 +358,21 @@
                                 width="1.2" height="1.2"
                                 fill="#f39c12" fill-opacity="0.7"
                                 stroke="#555" stroke-width="0.12">
-                                <title>geblockt | {{delZoneLabels[shot.shot_zone]}} | {{shot.distance | number:1}} m | P{{shot.period}} | {{shot.situation}} | {{shot.home_road}}</title>
+                                <title>{{shot.tooltip}}</title>
                             </rect>
                             <!-- Missed: red outline circle, no fill -->
                             <circle ng-if="!shot.scored && shot.target_type === 'missed'"
                                 cx="{{shot.svg_x}}" cy="{{shot.svg_y}}" r="0.7"
                                 fill="transparent"
                                 stroke="#e74c3c" stroke-width="0.28">
-                                <title>daneben | {{delZoneLabels[shot.shot_zone]}} | {{shot.distance | number:1}} m | P{{shot.period}} | {{shot.situation}} | {{shot.home_road}}</title>
+                                <title>{{shot.tooltip}}</title>
                             </circle>
                             <!-- On goal: blue filled circle -->
                             <circle ng-if="!shot.scored && shot.target_type === 'on_goal'"
                                 cx="{{shot.svg_x}}" cy="{{shot.svg_y}}" r="0.7"
                                 fill="#2980b9" fill-opacity="0.65"
                                 stroke="#555" stroke-width="0.12">
-                                <title>Torschuss | {{delZoneLabels[shot.shot_zone]}} | {{shot.distance | number:1}} m | P{{shot.period}} | {{shot.situation}} | {{shot.home_road}}</title>
+                                <title>{{shot.tooltip}}</title>
                             </circle>
                         </g>
                     </g>

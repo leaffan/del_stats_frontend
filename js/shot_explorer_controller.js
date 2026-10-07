@@ -3,6 +3,22 @@ app.controller(
     function ($scope, $http, $routeParams, $location, $timeout, config, svc) {
         $scope.svc = svc;
 
+        // Collects a German message for each failed request below, shown as a
+        // dismissable list instead of leaving the page silently incomplete
+        $scope.loadErrors = [];
+        function reportLoadError(message) {
+            $scope.loadErrors.push(message);
+        }
+
+        $http
+            .get('./cfg/columns_shot_explorer.json')
+            .then(function (res) {
+                $scope.shotColumns = res.data;
+            })
+            .catch(function () {
+                reportLoadError('Tabellenspalten konnten nicht geladen werden.');
+            });
+
         // ── Season / Player from URL ─────────────────────────────────────────────
         $scope.season = Number.parseInt($routeParams.season) || config.defaultSeason;
         $scope.player_id = $routeParams.player_id;
@@ -132,7 +148,9 @@ app.controller(
         $scope.fromRoundSelect = '1';
         $scope.toRoundSelect = '';
         $scope.monthsPlayed = [];
-        $scope.maxRoundPlayed = 52;
+        // svc.germanMonths() builds a fresh array via 12 moment() calls - too
+        // expensive to call from the timespan dropdown's ng-repeat every digest
+        $scope.monthNames = svc.germanMonths();
         $scope.filteredShots = [];
         $scope.shotStats = null;
         $scope.hoveredShot = null;
@@ -143,33 +161,36 @@ app.controller(
             $scope.hoveredShot = shot;
         };
 
-        // Cache for per-player shot files, keyed as "season_playerId"
-        let shotCache = {};
         // All shots for the currently selected player (before UI filters)
         let playerShots = [];
-        // Opposing goalie player_id -> full_name / abbreviated name, rebuilt
-        // whenever the loaded shots change
-        let goalieNameById = {};
+        // Opposing goalie player_id -> abbreviated / last name, rebuilt whenever
+        // the loaded shots change
         let goalieShortNameById = {};
         let goalieLastNameById = {};
 
         // ── Static data loads ────────────────────────────────────────────────────
-        $http.get('./data/del_players.json').then(function (res) {
-            $scope.players = res.data;
-        });
-
         // loading player ids with portraits
-        $http.get('./po/' + $scope.season + '/_portraits.json').then(function (res) {
-            $scope.portraits = res.data;
-            $scope.hasPortrait = $scope.portraits.includes($scope.player_id);
-        });
-
-        $http.get('./cfg/teams.json').then(function (res) {
-            $scope.all_teams = res.data.filter(function (t) {
-                return svc.isTeamValidForSeason(t, $scope.season);
+        $http
+            .get('./po/' + $scope.season + '/_portraits.json')
+            .then(function (res) {
+                $scope.portraits = res.data;
+                $scope.hasPortrait = $scope.portraits.includes($scope.player_id);
+            })
+            .catch(function () {
+                reportLoadError('Porträt-Liste konnte nicht geladen werden.');
             });
-            maybeSetColors();
-        });
+
+        $http
+            .get('./cfg/teams.json')
+            .then(function (res) {
+                $scope.all_teams = res.data.filter(function (t) {
+                    return svc.isTeamValidForSeason(t, $scope.season);
+                });
+                maybeSetColors();
+            })
+            .catch(function () {
+                reportLoadError('Teamliste konnte nicht geladen werden.');
+            });
 
         $http
             .get('./data/' + $scope.season + '/del_player_personal_data.json')
@@ -181,6 +202,9 @@ app.controller(
                     $scope.currentPlayerData = pd;
                     $scope.mainNumber = pd.no;
                 }
+            })
+            .catch(function () {
+                reportLoadError('Spielerdaten konnten nicht geladen werden.');
             });
 
         $http
@@ -203,7 +227,18 @@ app.controller(
                     $scope.model.team = currentPlayer.team;
                     maybeSetColors();
                 }
-                $scope.loadShots();
+                // The shot list loads independently and may already be in by
+                // now, with every goalie resolved to a "Torhüter <id>"
+                // fallback for lack of a roster - redo that resolution now
+                // that all_players is available, and refresh the shot list
+                // that reads it
+                if ($scope.shotsLoaded) {
+                    resolveGoalies();
+                    $scope.applyFilters();
+                }
+            })
+            .catch(function () {
+                reportLoadError('Spielerliste konnte nicht geladen werden.');
             });
 
         function maybeSetColors() {
@@ -217,12 +252,12 @@ app.controller(
             }
         }
 
-        // ── Navigation helpers ───────────────────────────────────────────────────
-        $scope.changeSeason = function () {
-            $location.path('/shot_explorer/' + $scope.season + '/' + $scope.player_id);
-        };
-
         // ── Shot loading ─────────────────────────────────────────────────────────
+        // Only true once loading has actually finished (success or failure) -
+        // guards the "no data" message against flashing while still loading
+        $scope.shotsLoaded = false;
+        $scope.shotsLoadFailed = false;
+
         $scope.loadShots = function () {
             if (!$scope.model.player_id) {
                 return;
@@ -235,27 +270,32 @@ app.controller(
             // shift-level data) - skip the fetch rather than let it 404
             if (season == 2017) {
                 playerShots = [];
+                $scope.shotsLoaded = true;
                 updateShotMetadata();
                 $scope.applyFilters();
                 return;
             }
 
-            let cacheKey = season + '_' + playerId;
-            if (shotCache[cacheKey]) {
-                playerShots = shotCache[cacheKey];
-                updateShotMetadata();
-                $scope.applyFilters();
-            } else {
-                $http
-                    .get('./data/' + season + '/shots/per_player/' + playerId + '.json')
-                    .then(function (res) {
-                        shotCache[cacheKey] = res.data;
-                        playerShots = res.data;
-                        updateShotMetadata();
-                        $scope.applyFilters();
-                    });
-            }
+            $http
+                .get('./data/' + season + '/shots/per_player/' + playerId + '.json')
+                .then(function (res) {
+                    playerShots = res.data;
+                    updateShotMetadata();
+                    $scope.applyFilters();
+                })
+                .catch(function () {
+                    $scope.shotsLoadFailed = true;
+                    reportLoadError('Schussdaten konnten nicht geladen werden.');
+                })
+                .finally(function () {
+                    $scope.shotsLoaded = true;
+                });
         };
+
+        // Independent of the fetches above - it only needs model.player_id,
+        // which is already known from the route, so a slow/failing portrait
+        // or roster request can no longer delay or block the shot data itself
+        $scope.loadShots();
 
         // ── Shot metadata (months / rounds) derived from loaded shots ────────────
         function updateShotMetadata() {
@@ -278,15 +318,6 @@ app.controller(
                 }
             });
             $scope.roundsPlayed = roundsPlayed;
-            $scope.maxRoundPlayed =
-                roundsPlayed.length > 0
-                    ? Math.max.apply(
-                          Math,
-                          roundsPlayed.map(function (r) {
-                              return r.round;
-                          }),
-                      )
-                    : 52;
             $scope.fromRoundSelect = roundsPlayed.length > 0 ? roundsPlayed[0].key : '1|';
             $scope.toRoundSelect =
                 roundsPlayed.length > 0 ? roundsPlayed[roundsPlayed.length - 1].key : '52|';
@@ -301,9 +332,18 @@ app.controller(
             $scope.maxShotDate =
                 dates.length > 0 ? moment(dates[dates.length - 1]).format('DD.MM.YYYY') : null;
 
-            // Goalies actually faced by this player this season, resolved to
-            // full names via the same season roster used for the player select
-            goalieNameById = {};
+            resolveGoalies();
+        }
+
+        // Goalies actually faced by this player this season, resolved to full
+        // names via the same season roster used for the player select
+        // ($scope.all_players). Split out of updateShotMetadata() so it can be
+        // re-run on its own: the roster and the shot list load independently
+        // (see loadShots() below), so if the shots arrive first, this first
+        // pass falls back to "Torhüter <id>" for every goalie - the roster's
+        // own $http.then() calls this again once it lands, without resetting
+        // the round/date range state that the rest of updateShotMetadata() owns
+        function resolveGoalies() {
             goalieShortNameById = {};
             goalieLastNameById = {};
             let seenGoalies = {};
@@ -323,7 +363,6 @@ app.controller(
                         });
                     let full_name = p ? p.full_name : 'Torhüter ' + s.goalie;
                     let last_name = p ? p.last_name : full_name;
-                    goalieNameById[s.goalie] = full_name;
                     goalieLastNameById[s.goalie] = last_name;
                     goalieShortNameById[s.goalie] =
                         p && p.first_name ? p.first_name.charAt(0) + '. ' + p.last_name : full_name;
@@ -376,224 +415,46 @@ app.controller(
             $scope.applyFilters();
         };
 
+        // target_type is 'on_goal' for goals too, so scored is checked first
+        $scope.targetTypeLabels = { on_goal: 'Torschuss', blocked: 'geblockt', missed: 'daneben' };
+
         // ── Filtering + coordinate transform ─────────────────────────────────────
+        // Idea for later: a display mode showing aggregate shot counts per zone
+        // (grouped by whichever scheme - DEL or Edge - is active) instead of
+        // individual dots on the rink. A per-shot_zone count aggregation used to
+        // live in ShotFilters.computeStats() (removed October 2026 as dead code,
+        // since it was computed but never displayed); re-add a similar grouping,
+        // keyed by the active zoneOverlay scheme, when building that feature.
         $scope.applyFilters = function () {
-            let shots = playerShots.slice();
-
-            if ($scope.seasonTypeFilter !== 'all') {
-                shots = shots.filter(function (s) {
-                    return s.season_type === $scope.seasonTypeFilter;
-                });
-            }
-            if ($scope.situationFilter !== 'all') {
-                shots = shots.filter(function (s) {
-                    return s.situation === $scope.situationFilter;
-                });
-            }
-            if ($scope.targetTypeFilter !== 'all') {
-                if ($scope.targetTypeFilter === 'goals') {
-                    shots = shots.filter(function (s) {
-                        return s.scored;
-                    });
-                } else {
-                    shots = shots.filter(function (s) {
-                        return s.target_type === $scope.targetTypeFilter;
-                    });
-                }
-            }
-            if ($scope.periodFilter !== 'all') {
-                shots = shots.filter(function (s) {
-                    return s.period == $scope.periodFilter;
-                });
-            }
-            if ($scope.homeRoadFilter !== 'all') {
-                shots = shots.filter(function (s) {
-                    return s.home_road === $scope.homeRoadFilter;
-                });
-            }
-            if ($scope.oppFilter !== 'all') {
-                shots = shots.filter(function (s) {
-                    return s.opp_team === $scope.oppFilter;
-                });
-            }
-            if ($scope.goalieFilter !== 'all') {
-                if ($scope.goalieFilter === 'empty_net') {
-                    shots = shots.filter(function (s) {
-                        return s.goalie === null || s.goalie === undefined;
-                    });
-                } else {
-                    shots = shots.filter(function (s) {
-                        return s.goalie == $scope.goalieFilter;
-                    });
-                }
-            }
-
-            if ($scope.zoneFilter !== 'all') {
-                let [scheme, key] = $scope.zoneFilter.split(':');
-                if (scheme === 'es') {
-                    shots = shots.filter(function (s) {
-                        return s.shot_zone === key;
-                    });
-                } else if (scheme === 'edge') {
-                    let groupCodes = new Set($scope.edgeZoneGroups[key]);
-                    shots = shots.filter(function (s) {
-                        return groupCodes.has(s.ne_shot_zone);
-                    });
-                } else {
-                    shots = shots.filter(function (s) {
-                        return s.ne_shot_zone === key;
-                    });
-                }
-            }
-
-            // Date range (set either by month selector or directly)
-            if ($scope.ctrl.fromDate) {
-                let from = $scope.ctrl.fromDate.format('YYYY-MM-DD');
-                shots = shots.filter(function (s) {
-                    return s.game_date >= from;
-                });
-            }
-            if ($scope.ctrl.toDate) {
-                let to = $scope.ctrl.toDate.format('YYYY-MM-DD');
-                shots = shots.filter(function (s) {
-                    return s.game_date <= to;
-                });
-            }
-
-            // Round range
-            let fromIdx = $scope.roundsPlayed.findIndex(function (r) {
-                return r.key === $scope.fromRoundSelect;
-            });
-            let toIdx = $scope.roundsPlayed.findIndex(function (r) {
-                return r.key === $scope.toRoundSelect;
-            });
-            if (fromIdx === -1) {
-                fromIdx = 0;
-            }
-            if (toIdx === -1) {
-                toIdx = $scope.roundsPlayed.length - 1;
-            }
-            if (fromIdx > 0 || toIdx < $scope.roundsPlayed.length - 1) {
-                let validKeys = new Set(
-                    $scope.roundsPlayed.slice(fromIdx, toIdx + 1).map(function (r) {
-                        return r.key;
-                    }),
-                );
-                shots = shots.filter(function (s) {
-                    return validKeys.has(s.round + '|' + (s.po_round || ''));
-                });
-            }
-
-            // Transform to SVG coords (full rink, goal on left, viewBox "-0.5 -0.5 121 61")
-            // Road teams attack left (x<0 = attacking zone); home teams attack right (x>0 = attacking zone) → mirror to left
-            $scope.filteredShots = shots.map(function (s) {
-                let sx, sy;
-                if (s.home_road === 'home') {
-                    // home attacks right → mirror to show attacking left
-                    sx = 60 - s.x * 2;
-                    sy = 30 + s.y * 2;
-                } else {
-                    // road attacks left → already correct
-                    sx = 60 + s.x * 2;
-                    sy = 30 - s.y * 2;
-                }
-                let mins = Math.floor(s.time / 60);
-                let secs = s.time % 60;
-                return {
-                    svg_x: sx,
-                    svg_y: sy,
-                    scored: s.scored,
-                    target_type: s.target_type,
-                    shot_zone: s.shot_zone,
-                    ne_shot_zone: s.ne_shot_zone,
-                    opp_team: s.opp_team,
-                    game_date: s.game_date,
-                    goalie_name:
-                        s.goalie === null || s.goalie === undefined
-                            ? 'Leeres Tor'
-                            : goalieShortNameById[s.goalie] || 'Torhüter ' + s.goalie,
-                    goalie_last_name:
-                        s.goalie === null || s.goalie === undefined
-                            ? 'Leeres Tor'
-                            : goalieLastNameById[s.goalie] || 'Torhüter ' + s.goalie,
-                    distance: s.distance,
-                    period: s.period,
-                    situation: s.situation,
-                    plr_situation: s.plr_situation,
-                    home_road: s.home_road,
-                    time: s.time,
-                    time_str: mins + ':' + (secs < 10 ? '0' : '') + secs,
-                };
+            let shots = ShotFilters.filterShots(playerShots, {
+                seasonType: $scope.seasonTypeFilter,
+                situation: $scope.situationFilter,
+                targetType: $scope.targetTypeFilter,
+                period: $scope.periodFilter,
+                homeRoad: $scope.homeRoadFilter,
+                opp: $scope.oppFilter,
+                goalie: $scope.goalieFilter,
+                zoneFilter: $scope.zoneFilter,
+                edgeZoneGroups: $scope.edgeZoneGroups,
+                fromDate: $scope.ctrl.fromDate ? $scope.ctrl.fromDate.format('YYYY-MM-DD') : null,
+                toDate: $scope.ctrl.toDate ? $scope.ctrl.toDate.format('YYYY-MM-DD') : null,
+                roundsPlayed: $scope.roundsPlayed,
+                fromRoundKey: $scope.fromRoundSelect,
+                toRoundKey: $scope.toRoundSelect,
             });
 
-            $scope.shotStats = computeStats(shots);
-        };
-
-        $scope.shotColor = function (shot) {
-            if (shot.scored) {
-                return '#1a1a1a';
-            }
-            if (shot.target_type === 'on_goal') {
-                return '#2980b9';
-            }
-            if (shot.target_type === 'blocked') {
-                return '#f39c12';
-            }
-            return '#e74c3c'; // missed
-        };
-
-        $scope.shotOpacity = function (shot) {
-            return shot.scored ? 0.9 : 0.55;
-        };
-
-        // ── Statistics ───────────────────────────────────────────────────────────
-        function computeStats(shots) {
-            if (!shots || shots.length === 0) {
-                return null;
-            }
-
-            let goals = shots.filter(function (s) {
-                return s.scored;
-            }).length;
-            let onGoal = shots.filter(function (s) {
-                return s.target_type === 'on_goal';
-            }).length;
-            let blocked = shots.filter(function (s) {
-                return s.target_type === 'blocked';
-            }).length;
-            let missed = shots.filter(function (s) {
-                return s.target_type === 'missed';
-            }).length;
-
-            let zoneCounts = {};
-            shots.forEach(function (s) {
-                let z = s.shot_zone || 'UNKNOWN';
-                zoneCounts[z] = (zoneCounts[z] || 0) + 1;
-            });
-            let zoneList = Object.keys(zoneCounts)
-                .map(function (k) {
-                    return { zone: k, count: zoneCounts[k] };
-                })
-                .sort(function (a, b) {
-                    return b.count - a.count;
-                });
-
-            let totalDistance = shots.reduce(function (sum, s) {
-                return sum + s.distance;
-            }, 0);
-
-            return {
-                total: shots.length,
-                goals: goals,
-                on_goal: onGoal,
-                blocked: blocked,
-                missed: missed,
-                shooting_pct: ((goals / shots.length) * 100).toFixed(1),
-                on_goal_pct: ((onGoal / shots.length) * 100).toFixed(1),
-                avg_distance: (totalDistance / shots.length).toFixed(1),
-                zones: zoneList,
+            let transformContext = {
+                goalieShortNameById: goalieShortNameById,
+                goalieLastNameById: goalieLastNameById,
+                delZoneLabels: $scope.delZoneLabels,
+                targetTypeLabels: $scope.targetTypeLabels,
             };
-        }
+            $scope.filteredShots = shots.map(function (s) {
+                return ShotFilters.transformShot(s, transformContext);
+            });
+
+            $scope.shotStats = ShotFilters.computeStats(shots);
+        };
 
         // Download the current rink view as PNG, kept in the same portrait
         // orientation as it's shown on screen (viewBox 61 x 121), with a title

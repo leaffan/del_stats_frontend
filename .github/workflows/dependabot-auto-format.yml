@@ -10,11 +10,17 @@ on:
             - reopened
 
 permissions:
-    contents: write
+    contents: read
+
+concurrency:
+    group: dependabot-auto-format-${{ github.event.pull_request.number }}
+    cancel-in-progress: true
 
 jobs:
     format:
-        if: github.actor == 'dependabot[bot]' && github.event.pull_request.head.repo.full_name == github.repository
+        if: github.actor == 'dependabot[bot]' && startsWith(github.head_ref, 'dependabot/') && github.event.pull_request.head.repo.full_name == github.repository
+        permissions:
+            contents: write
         runs-on: ubuntu-latest
 
         steps:

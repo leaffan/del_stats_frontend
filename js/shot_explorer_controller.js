@@ -227,6 +227,15 @@ app.controller(
                     $scope.model.team = currentPlayer.team;
                     maybeSetColors();
                 }
+                // The shot list loads independently and may already be in by
+                // now, with every goalie resolved to a "Torhüter <id>"
+                // fallback for lack of a roster - redo that resolution now
+                // that all_players is available, and refresh the shot list
+                // that reads it
+                if ($scope.shotsLoaded) {
+                    resolveGoalies();
+                    $scope.applyFilters();
+                }
             })
             .catch(function () {
                 reportLoadError('Spielerliste konnte nicht geladen werden.');
@@ -323,8 +332,18 @@ app.controller(
             $scope.maxShotDate =
                 dates.length > 0 ? moment(dates[dates.length - 1]).format('DD.MM.YYYY') : null;
 
-            // Goalies actually faced by this player this season, resolved to
-            // full names via the same season roster used for the player select
+            resolveGoalies();
+        }
+
+        // Goalies actually faced by this player this season, resolved to full
+        // names via the same season roster used for the player select
+        // ($scope.all_players). Split out of updateShotMetadata() so it can be
+        // re-run on its own: the roster and the shot list load independently
+        // (see loadShots() below), so if the shots arrive first, this first
+        // pass falls back to "Torhüter <id>" for every goalie - the roster's
+        // own $http.then() calls this again once it lands, without resetting
+        // the round/date range state that the rest of updateShotMetadata() owns
+        function resolveGoalies() {
             goalieShortNameById = {};
             goalieLastNameById = {};
             let seenGoalies = {};

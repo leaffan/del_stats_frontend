@@ -6,7 +6,7 @@
     </div>
 
     <div class="alert alert-warning" ng-if="loadErrors.length > 0">
-        <div ng-repeat="err in loadErrors">{{err}}</div>
+        <div ng-repeat="err in loadErrors track by $index">{{err}}</div>
     </div>
 
     <player-information

@@ -112,6 +112,12 @@ app.config([
                 controller: 'shotExplorerController',
                 reloadOnSearch: false,
             })
+            .when('/datenschutz', {
+                title: 'Datenschutzerklärung',
+                templateUrl: 'datenschutz.html',
+                controller: 'datenschutzController as ctrl',
+                reloadOnSearch: false,
+            })
             .otherwise({
                 redirectTo: '/home',
             });
@@ -139,6 +145,9 @@ app.run([
         $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
             // TODO: set page title dynamically to include current teams
             $rootScope.title = current.$$route.title;
+            window._paq.push(['setCustomUrl', window.location.href]);
+            window._paq.push(['setDocumentTitle', current.$$route.title]);
+            window._paq.push(['trackPageView']);
         });
     },
 ]);

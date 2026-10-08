@@ -1,0 +1,44 @@
+<div class="container" data-ng-app="delStatsApp">
+    <div class="alert alert-info main-bg shadow mb-2">
+        <a href="#!"><b>Startseite</b></a>
+    </div>
+
+    <div class="alert alert-info main-bg shadow">
+        <h1 class="mb-0">Datenschutzerklärung</h1>
+    </div>
+
+    <div class="alert alert-info main-bg shadow">
+        <h3>Webanalyse mit Matomo</h3>
+        <p>
+            Diese Website nutzt die Open-Source-Software Matomo zur anonymisierten, cookielosen
+            Reichweitenmessung. IP-Adressen werden dabei anonymisiert verarbeitet. Entscheidest du
+            dich über die Checkbox unten gegen die Teilnahme, wird ausschließlich zu diesem Zweck
+            ein technisch notwendiges Cookie gesetzt, das deine Wahl speichert — kein
+            Tracking-Cookie.
+        </p>
+        <p>
+            <!-- TODO: durch eine vollständige, rechtlich geprüfte Datenschutzerklärung ersetzen
+            (Verantwortlicher, Rechtsgrundlage, Speicherdauer, Kontaktmöglichkeiten etc.) -->
+        </p>
+
+        <h4>Widerspruchsmöglichkeit (Opt-out)</h4>
+        <p>
+            Falls du auch der anonymisierten, cookielosen Reichweitenmessung widersprechen möchtest,
+            kannst du das hier tun:
+        </p>
+        <div class="form-check">
+            <input
+                type="checkbox"
+                class="form-check-input"
+                id="optOutCheckbox"
+                data-ng-checked="optedOut"
+                data-ng-click="optedOut ? optIn() : optOut()"
+            />
+            <label class="form-check-label" for="optOutCheckbox">
+                <span data-ng-if="optedOut === null">Status wird geladen …</span>
+                <span data-ng-if="optedOut === true">Du bist aktuell abgemeldet (kein Tracking).</span>
+                <span data-ng-if="optedOut === false">Du bist aktuell angemeldet (Tracking aktiv).</span>
+            </label>
+        </div>
+    </div>
+</div>

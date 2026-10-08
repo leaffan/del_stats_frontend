@@ -3,8 +3,9 @@ app.controller('datenschutzController', function ($scope) {
 
     window._paq.push([
         function () {
+            var optedOut = this.isUserOptedOut();
             $scope.$applyAsync(function () {
-                $scope.optedOut = this.isUserOptedOut();
+                $scope.optedOut = optedOut;
             });
         },
     ]);

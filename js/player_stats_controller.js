@@ -457,47 +457,24 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
     }
 
     $scope.elementPassedFilters = function (element) {
-        let is_equal_past_from_date = false;
-        let is_prior_equal_to_date = false;
-        let is_selected_home_away_type = false;
-        let is_selected_game_situation = false;
-        let is_selected_season_type = false;
-        let is_selected_weekday = false;
-        let is_equal_past_from_round = false;
-        let is_prior_equal_to_round = false;
-        let is_selected_games_back = false;
-
-        // retrieving game date as moment structure
-        date_to_test = moment(element.game_date);
-
-        is_equal_past_from_date = !ctrl.fromDate || date_to_test >= ctrl.fromDate.startOf('day');
-        is_prior_equal_to_date = !ctrl.toDate || date_to_test <= ctrl.toDate.startOf('day');
-        is_selected_home_away_type =
-            !$scope.homeAwaySelect || $scope.homeAwaySelect === element.home_road;
-        is_selected_game_situation = !$scope.situationSelect || element[$scope.situationSelect];
-        is_selected_weekday = !$scope.weekdaySelect || $scope.weekdaySelect == element.weekday;
-        is_equal_past_from_round =
-            !$scope.fromRoundSelect || element.round >= parseFloat($scope.fromRoundSelect);
-        is_prior_equal_to_round =
-            !$scope.toRoundSelect || element.round <= parseFloat($scope.toRoundSelect);
-        is_selected_games_back =
-            !$scope.gamesBackSelect || element.games_back <= $scope.gamesBackSelect;
+        let is_selected_game_situation = !$scope.situationSelect || element[$scope.situationSelect];
         // if seasonTypeSelect is set to "Hauptrunde und Playoffs" we just want games of these types but no pre-season games
-        is_selected_season_type = ['RS', 'PO', 'MSC'].includes(ctrl.seasonTypeSelect)
+        let is_selected_season_type = ['RS', 'PO', 'MSC'].includes(ctrl.seasonTypeSelect)
             ? ctrl.seasonTypeSelect === element.season_type
             : ['RS', 'PO'].includes(element.season_type);
 
-        // finally combining booleans of all previous tests
         return (
-            is_equal_past_from_date &&
-            is_prior_equal_to_date &&
-            is_selected_home_away_type &&
             is_selected_game_situation &&
             is_selected_season_type &&
-            is_selected_weekday &&
-            is_equal_past_from_round &&
-            is_prior_equal_to_round &&
-            is_selected_games_back
+            GameFilters.gamePassesCommonFilters(element, {
+                fromDate: ctrl.fromDate ? ctrl.fromDate.format('YYYY-MM-DD') : null,
+                toDate: ctrl.toDate ? ctrl.toDate.format('YYYY-MM-DD') : null,
+                homeAwaySelect: $scope.homeAwaySelect,
+                weekdaySelect: $scope.weekdaySelect,
+                fromRoundSelect: $scope.fromRoundSelect,
+                toRoundSelect: $scope.toRoundSelect,
+                gamesBackSelect: $scope.gamesBackSelect,
+            })
         );
     };
 

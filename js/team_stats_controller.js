@@ -158,41 +158,9 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
 
         $scope.team_stats.forEach((element) => {
             const team = element['team'];
-            let is_equal_past_from_date = false;
-            let is_prior_equal_to_date = false;
-            let is_selected_home_away_type = false;
             let is_selected_game_situation = false;
             let is_selected_season_type = false;
-            let is_selected_weekday = false;
-            let is_equal_past_from_round = false;
-            let is_prior_equal_to_round = false;
-            let is_selected_games_back = false;
 
-            // retrieving game date as moment structure
-            const date_to_test = moment(element.game_date);
-
-            if ($scope.gamesBackSelect) {
-                if (element.games_back <= $scope.gamesBackSelect) {
-                    is_selected_games_back = true;
-                }
-            } else {
-                is_selected_games_back = true;
-            }
-            if (ctrl.fromDate) {
-                if (date_to_test >= ctrl.fromDate.startOf('day')) is_equal_past_from_date = true;
-            } else {
-                is_equal_past_from_date = true;
-            }
-            if (ctrl.toDate) {
-                if (date_to_test <= ctrl.toDate.startOf('day')) is_prior_equal_to_date = true;
-            } else {
-                is_prior_equal_to_date = true;
-            }
-            if ($scope.homeAwaySelect) {
-                if ($scope.homeAwaySelect === element.home_road) is_selected_home_away_type = true;
-            } else {
-                is_selected_home_away_type = true;
-            }
             if ($scope.situationSelect) {
                 if ($scope.situationSelect == 'max_lead_1' && element['max_lead'] == 1)
                     is_selected_game_situation = true;
@@ -217,35 +185,19 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
                 // if seasonTypeSelect is set to "Hauptrunde und Playoffs" we just want that but no pre-season games
                 if (element['season_type'] != 'MSC') is_selected_season_type = true;
             }
-            if ($scope.weekdaySelect) {
-                if ($scope.weekdaySelect == element.weekday) is_selected_weekday = true;
-            } else {
-                is_selected_weekday = true;
-            }
-            if ($scope.fromRoundSelect) {
-                if (element.round >= parseFloat($scope.fromRoundSelect))
-                    is_equal_past_from_round = true;
-            } else {
-                is_equal_past_from_round = true;
-            }
-            if ($scope.toRoundSelect) {
-                if (element.round <= parseFloat($scope.toRoundSelect))
-                    is_prior_equal_to_round = true;
-            } else {
-                is_prior_equal_to_round = true;
-            }
-
             // finally aggregating values of all season stat lines that have been filtered
             if (
-                is_equal_past_from_date &&
-                is_prior_equal_to_date &&
-                is_selected_home_away_type &&
                 is_selected_game_situation &&
                 is_selected_season_type &&
-                is_selected_weekday &&
-                is_equal_past_from_round &&
-                is_prior_equal_to_round &&
-                is_selected_games_back
+                GameFilters.gamePassesCommonFilters(element, {
+                    fromDate: ctrl.fromDate ? ctrl.fromDate.format('YYYY-MM-DD') : null,
+                    toDate: ctrl.toDate ? ctrl.toDate.format('YYYY-MM-DD') : null,
+                    homeAwaySelect: $scope.homeAwaySelect,
+                    weekdaySelect: $scope.weekdaySelect,
+                    fromRoundSelect: $scope.fromRoundSelect,
+                    toRoundSelect: $scope.toRoundSelect,
+                    gamesBackSelect: $scope.gamesBackSelect,
+                })
             ) {
                 $scope.svc.stats_to_aggregate().forEach((category) => {
                     // skipping categories that possibly don't exist, e.g. for shootout-related data

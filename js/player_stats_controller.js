@@ -890,14 +890,12 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
             ctrl.toDate = null;
             $scope.gamesBackSelect = parseInt($scope.timespanSelect.split('_')[1]);
         } else {
-            timespanSelect = parseInt($scope.timespanSelect) + 1;
-            if (timespanSelect < 9) {
-                season = parseInt($scope.season) + 1;
-            } else {
-                season = parseInt($scope.season);
-            }
-            ctrl.fromDate = moment(season + '-' + timespanSelect + '-1', 'YYYY-M-D');
-            ctrl.toDate = moment(season + '-' + timespanSelect + '-1', 'YYYY-M-D').endOf('month');
+            let monthTimespan = TimespanUtils.deriveMonthTimespan(
+                $scope.season,
+                $scope.timespanSelect,
+            );
+            ctrl.fromDate = monthTimespan.fromDate;
+            ctrl.toDate = monthTimespan.toDate;
         }
     };
 

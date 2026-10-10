@@ -836,15 +836,12 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
             $scope.gamesBackSelect = $scope.timespanSelect.split('_')[1];
             // games played in selected month
         } else {
-            const timespanSelect = parseInt($scope.timespanSelect) + 1;
-            let season;
-            if (timespanSelect < 9) {
-                season = parseInt($scope.season) + 1;
-            } else {
-                season = parseInt($scope.season);
-            }
-            ctrl.fromDate = moment(season + '-' + timespanSelect + '-1', 'YYYY-M-D');
-            ctrl.toDate = moment(season + '-' + timespanSelect + '-1', 'YYYY-M-D').endOf('month');
+            let monthTimespan = TimespanUtils.deriveMonthTimespan(
+                $scope.season,
+                $scope.timespanSelect,
+            );
+            ctrl.fromDate = monthTimespan.fromDate;
+            ctrl.toDate = monthTimespan.toDate;
         }
     };
 

@@ -50,6 +50,7 @@ module.exports = [
                 // defined in clinched_status.js, loaded via <script> before del_stats.js
                 ClinchedStatus: 'readonly',
                 FormatUtils: 'readonly',
+                GameLogMetadata: 'readonly',
             },
         },
     },

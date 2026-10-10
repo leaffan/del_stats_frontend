@@ -1,3 +1,4 @@
+/* global module */
 // Pure per-game filtering logic shared between player_stats_controller.js and
 // team_stats_controller.js - only the criteria that are identical between the
 // two. situationSelect and seasonTypeSelect are handled differently by each

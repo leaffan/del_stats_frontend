@@ -112,9 +112,23 @@ This file captures the remaining repository improvement plan after the documenta
       created an undeclared (implicit global) `combined` variable as a side
       effect, harmless here (nothing ever read it) but the same bug pattern
       as `changeTimespan` above — replaced with a plain `true`.
-    - Shot-metadata derivation in `shot_explorer_controller.js`, companion to
-      the weekdays/rounds candidate above — likely folds into the
-      existing `js/shot_filters.js`.
+    - ✅ Shot-metadata derivation in `shot_explorer_controller.js`
+      (`updateShotMetadata`'s months/rounds/date-range computation, not its
+      `resolveGoalies()` call) moved to `js/shot_filters.js#deriveShotMetadata`
+      (unit-tested in `tests/shot-filters.spec.js`), the companion to the
+      weekdays/rounds candidate above. A different scheme from
+      `js/game_log_metadata.js`: it works off raw shot records rather than
+      per-game stat-line records, and its `roundsPlayed` already dedupes by a
+      composite `round + '|' + po_round` key instead of raw round number alone
+      — see the deferred TODO below about adopting that scheme for
+      `deriveRoundsPlayed` too. `monthsPlayed` here uses `new Date(s.game_date).getMonth()`,
+      not `moment(...).month()` like the other controllers' duplicated
+      `monthsPlayed` — a pre-existing inconsistency, left as-is (not unified,
+      per the no-behavior-change rule; same spirit as the `monthsPlayed`
+      follow-up TODO below). Incidentally fixed in passing: `ShotFilters` was
+      used by this controller already (`filterShots`/`transformShot`/
+      `computeStats`) but was missing from `eslint.config.js`'s globals list —
+      added alongside the other module globals.
 
 ## 5. Data and runtime expectations
 

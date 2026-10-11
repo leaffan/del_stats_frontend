@@ -98,12 +98,23 @@ This file captures the remaining repository improvement plan after the documenta
       operator/guard paths never touch `$scope` at all and are now directly
       unit-tested for the first time. See the deferred TODO below for
       replacing the `eval` hack itself with something safer.
+    - ✅ `sumIntoTarget`/`prepareSingleSeasonStatline` in
+      `career_stats_controller.js` moved to `js/career_stat_utils.js`
+      (unit-tested in `tests/career-stat-utils.spec.js`) — the lowest-risk
+      "quick win" of the batch, establishing the module pattern in a
+      controller that had none yet. `sumIntoTarget` was already a free
+      function, lifted verbatim. `prepareSingleSeasonStatline` called
+      `$scope.preparePlayer(player)` internally (itself already pure); call
+      sites now call `$scope.preparePlayer(player)` themselves and pass the
+      fresh result in, so the "one new object per call" behavior is
+      unchanged. Incidentally fixed in passing: one call site used
+      `(combined = true)` — an assignment expression as an argument, which
+      created an undeclared (implicit global) `combined` variable as a side
+      effect, harmless here (nothing ever read it) but the same bug pattern
+      as `changeTimespan` above — replaced with a plain `true`.
     - Shot-metadata derivation in `shot_explorer_controller.js`, companion to
       the weekdays/rounds candidate above — likely folds into the
       existing `js/shot_filters.js`.
-    - `sumIntoTarget`/`prepareSingleSeasonStatline` in
-      `career_stats_controller.js` — not duplicated, but already a free
-      function; lowest-risk "quick win" to establish the pattern in that file.
 
 ## 5. Data and runtime expectations
 

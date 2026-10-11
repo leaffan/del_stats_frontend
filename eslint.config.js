@@ -51,6 +51,7 @@ module.exports = [
                 ClinchedStatus: 'readonly',
                 FormatUtils: 'readonly',
                 GameFilters: 'readonly',
+                GameLogMetadata: 'readonly',
             },
         },
     },

@@ -45,9 +45,23 @@ This file captures the remaining repository improvement plan after the documenta
       situations and reads `seasonTypeSelect` from a different scope — so
       they were deliberately left controller-specific rather than forced
       into a shared shape, to avoid changing either controller's behavior.
-    - Weekdays/months/rounds-played derivation from a per-game array, duplicated
-      across `player_stats_controller.js`, `team_stats_controller.js`,
-      `player_profile_controller.js`, `team_profile_controller.js`.
+    - ✅ Weekdays/rounds-played derivation, moved to `js/game_log_metadata.js`
+      (unit-tested in `tests/game-log-metadata.spec.js`). Turned out to be two
+      genuinely different "rounds" computations rather than one: a full
+      deduped/sorted `roundsPlayed` list for round-range filter dropdowns
+      (`deriveRoundsPlayed`, used by `player_stats_controller.js`/
+      `team_stats_controller.js`) and a single `maxRoundPlayed` upper bound
+      (`deriveMaxRoundPlayed`, used by `player_profile_controller.js`/
+      `team_profile_controller.js`) — kept as two separate functions for the
+      same reason as the `elementPassedFilters` split above.
+      `monthsPlayed` was deliberately NOT extracted even though it's
+      duplicated the same way: it needs `moment.js` to parse `game_date`, and
+      `moment` isn't an npm dependency of this project (only loaded via CDN
+      in the browser) — extracting it would need either a `moment` dev
+      dependency just for this, or an injected month-extraction function
+      parameter. Revisit if/when a `moment` dev dependency gets added for
+      other reasons (e.g. the `changeTimespan` candidate below, which needs
+      the same thing more).
     - `changeTimespan` date-range builder, near-identical in
       `player_stats_controller.js`/`team_stats_controller.js`, reduced form in
       `player_profile_controller.js`.
@@ -55,7 +69,7 @@ This file captures the remaining repository improvement plan after the documenta
       `player_stats_controller.js` — config-driven, uses `eval()`, high value
       for isolated unit tests regardless of duplication.
     - Shot-metadata derivation in `shot_explorer_controller.js`, companion to
-      the weekdays/months/rounds candidate above — likely folds into the
+      the weekdays/rounds candidate above — likely folds into the
       existing `js/shot_filters.js`.
     - `sumIntoTarget`/`prepareSingleSeasonStatline` in
       `career_stats_controller.js` — not duplicated, but already a free
@@ -85,6 +99,14 @@ This file captures the remaining repository improvement plan after the documenta
 - App-wide: no `$http` request outside the shot explorer has error handling —
   a failed request fails silently. `js/shot_explorer_controller.js`'s
   `loadErrors` pattern is the reference to follow once this is picked up.
+- `player_stats_controller.js`/`team_stats_controller.js`'s `roundsPlayed`
+  (`js/game_log_metadata.js#deriveRoundsPlayed`) dedupes by raw round number
+  only, so a regular-season round and a playoff round sharing the same
+  number (e.g. both "round 1") collapse into one entry in the round-range
+  filter dropdown. `shot_explorer_controller.js`'s `updateShotMetadata`
+  already solves this correctly with a composite `round + '|' + po_round`
+  key — adopt that scheme here too when this gets revisited. A real behavior
+  change, not a pure refactor, so kept out of the extraction pass above.
 
 `del_stats_frontend_ext`'s `docs/ROADMAP.md` tracks additional deferred items
 specific to that private superset (trivia/preview pages, test-flakiness

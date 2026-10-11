@@ -240,21 +240,15 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
             }, {});
         });
         // retrieving all weekdays a game was played
-        $scope.weekdaysPlayed = [
-            ...new Set($scope.player_games.map((item) => item.weekday)),
-        ].sort();
+        $scope.weekdaysPlayed = GameLogMetadata.deriveWeekdaysPlayed($scope.player_games);
         // retrieving all months a game was played
         $scope.monthsPlayed = [
             ...new Set($scope.player_games.map((item) => moment(item.game_date).month())),
         ];
-        // retrieving rounds played
-        $scope.roundsPlayed = [
-            ...new Set($scope.player_games.map((item) => svc.parseInt(item.round))),
-        ].sort(function (a, b) {
-            return a - b;
-        });
-        // retrieving maximum round played and setting round to selection to it
-        $scope.toRoundSelect = Math.max.apply(Math, $scope.roundsPlayed).toString();
+        // retrieving rounds played, and maximum round played and setting round to selection to it
+        let roundsPlayedResult = GameLogMetadata.deriveRoundsPlayed($scope.player_games);
+        $scope.roundsPlayed = roundsPlayedResult.roundsPlayed;
+        $scope.toRoundSelect = roundsPlayedResult.toRoundSelect;
 
         // preparing player games for later filtering, i.e. retrieving personal data etc.
         $scope.prep_player_games = $scope.preparePlayerStats($scope.player_games);

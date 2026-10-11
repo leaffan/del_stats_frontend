@@ -252,7 +252,14 @@
     function deriveShotMetadata(shots) {
         let months = shots
             .map(function (s) {
-                return s.game_date ? new Date(s.game_date).getMonth() : null;
+                // moment(), not new Date(): a 'YYYY-MM-DD' string is a
+                // date-only ISO form, which native Date parses as UTC
+                // midnight while .getMonth() reads back in local time - for
+                // negative-UTC-offset timezones that rolls a day-1-of-month
+                // game back into the previous month. moment deliberately
+                // parses date-only strings as local time instead, sidestepping
+                // the bug entirely.
+                return s.game_date ? moment(s.game_date).month() : null;
             })
             .filter(function (m) {
                 return m !== null;

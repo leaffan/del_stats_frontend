@@ -121,14 +121,21 @@ This file captures the remaining repository improvement plan after the documenta
       per-game stat-line records, and its `roundsPlayed` already dedupes by a
       composite `round + '|' + po_round` key instead of raw round number alone
       — see the deferred TODO below about adopting that scheme for
-      `deriveRoundsPlayed` too. `monthsPlayed` here uses `new Date(s.game_date).getMonth()`,
-      not `moment(...).month()` like the other controllers' duplicated
-      `monthsPlayed` — a pre-existing inconsistency, left as-is (not unified,
-      per the no-behavior-change rule; same spirit as the `monthsPlayed`
-      follow-up TODO below). Incidentally fixed in passing: `ShotFilters` was
-      used by this controller already (`filterShots`/`transformShot`/
+      `deriveRoundsPlayed` too. Incidentally fixed in passing: `ShotFilters`
+      was used by this controller already (`filterShots`/`transformShot`/
       `computeStats`) but was missing from `eslint.config.js`'s globals list —
-      added alongside the other module globals.
+      added alongside the other module globals. A Copilot PR review caught a
+      real, pre-existing timezone bug in `monthsPlayed`'s original
+      `new Date(s.game_date).getMonth()`: a `'YYYY-MM-DD'` string is a
+      date-only ISO form, which native `Date` parses as UTC midnight while
+      `.getMonth()` reads it back in local time — in a negative-UTC-offset
+      timezone a day-1-of-month game rolls back into the previous month.
+      Fixed by switching to `moment(s.game_date).month()`, which deliberately
+      parses date-only strings as local time instead of round-tripping
+      through UTC. This also incidentally resolves what had been a
+      pre-existing inconsistency with `monthsPlayed`'s duplicated computation
+      elsewhere (`moment(item.game_date).month()` in `player_stats_controller.js`
+      etc., see the `monthsPlayed` follow-up TODO below) — both now agree.
 
 ## 5. Data and runtime expectations
 

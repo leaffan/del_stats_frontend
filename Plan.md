@@ -35,9 +35,16 @@ This file captures the remaining repository improvement plan after the documenta
       `svc.setSortOrder2` instead of calling it (already used directly by
       `shot_explorer_controller.js`) — switched to delegate, ~20 duplicate lines
       removed, no behavior change (covered by `tests/sorting.spec.js`).
-    - `elementPassedFilters` game-filter predicate, duplicated between
-      `player_stats_controller.js` and `team_stats_controller.js` — extract to
-      `js/game_filters.js`.
+    - ✅ `elementPassedFilters` game-filter predicate: of its 9 criteria, 7
+      were identical between `player_stats_controller.js` and
+      `team_stats_controller.js` and moved to
+      `js/game_filters.js#gamePassesCommonFilters` (unit-tested in
+      `tests/game-filters.spec.js`). The other 2 (`situationSelect`,
+      `seasonTypeSelect`) genuinely differ between the controllers —
+      `team_stats_controller.js` supports extra max_lead/max_deficit
+      situations and reads `seasonTypeSelect` from a different scope — so
+      they were deliberately left controller-specific rather than forced
+      into a shared shape, to avoid changing either controller's behavior.
     - Weekdays/months/rounds-played derivation from a per-game array, duplicated
       across `player_stats_controller.js`, `team_stats_controller.js`,
       `player_profile_controller.js`, `team_profile_controller.js`.

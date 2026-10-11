@@ -1378,4 +1378,62 @@ test.describe('DEL Stats Core Flows', () => {
             expect(backgroundColor).not.toBe('');
         }
     });
+
+    // 32 locks down svc.germanMonths()/germanDays() output, which no test
+    // previously pinned down - added alongside the moment.js 2.22.2 -> 2.31.0
+    // CDN upgrade (index.html), since this is the one place a German-locale
+    // formatting regression would actually be visible.
+    test('32. Team stats page renders German month and weekday names', async ({ page }) => {
+        await requireFixture(page, hasTeamGameStats('2025'));
+
+        const germanMonths = [
+            'Januar',
+            'Februar',
+            'März',
+            'April',
+            'Mai',
+            'Juni',
+            'Juli',
+            'August',
+            'September',
+            'Oktober',
+            'November',
+            'Dezember',
+        ];
+        const germanWeekdays = [
+            'Montag',
+            'Dienstag',
+            'Mittwoch',
+            'Donnerstag',
+            'Freitag',
+            'Samstag',
+            'Sonntag',
+        ];
+
+        await page.goto('http://localhost:8000/index.html#!/team_stats/2025');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        // the season has games in several months, so at least one dropdown
+        // option must be a real German month name, and none may render as
+        // "undefined"/"NaN" (what a broken locale call would produce)
+        const monthOptionTexts = await page.locator('#time_span_select option').allTextContents();
+        const renderedMonths = monthOptionTexts.filter((text) => germanMonths.includes(text));
+        expect(renderedMonths.length).toBeGreaterThan(0);
+        for (const text of monthOptionTexts) {
+            expect(text).not.toContain('undefined');
+            expect(text).not.toContain('NaN');
+        }
+
+        // the weekday dropdown only renders on the "Zuschauerdaten" table view
+        await page.locator('#table_select').selectOption('attendance_stats');
+        await page.waitForTimeout(300);
+
+        const weekdayOptionTexts = await page.locator('#week_day_select option').allTextContents();
+        const renderedWeekdays = weekdayOptionTexts.filter((text) => germanWeekdays.includes(text));
+        expect(renderedWeekdays.length).toBeGreaterThan(0);
+        for (const text of weekdayOptionTexts) {
+            expect(text).not.toContain('undefined');
+            expect(text).not.toContain('NaN');
+        }
+    });
 });

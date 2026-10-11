@@ -397,58 +397,13 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         singleGameStats,
         filteredStats,
     ) {
-        statsToCategorize.forEach((categoryCfg) => {
-            if (categoryCfg.categories) {
-                // checking category with multiple conditions combined by logical AND
-                let allConditionsMet = categoryCfg.categories.every((cond) => {
-                    return checkCondition(cond, singleGameStats);
-                });
-
-                if (allConditionsMet) {
-                    filteredStats[categoryCfg.name] = (filteredStats[categoryCfg.name] || 0) + 1;
-                }
-            } else {
-                // checking category with one criterion
-                if (checkCondition(categoryCfg, singleGameStats)) {
-                    filteredStats[categoryCfg.name] = (filteredStats[categoryCfg.name] || 0) + 1;
-                }
-            }
-        });
+        StatCategorization.categorizeStatsForStatline(
+            statsToCategorize,
+            singleGameStats,
+            filteredStats,
+            $scope,
+        );
     };
-
-    // helper function to check single condition
-    function checkCondition(condition, stats) {
-        let { operator, criterion, value } = condition;
-
-        if (stats[criterion] === undefined) {
-            return false; // Falls das Kriterium nicht existiert
-        }
-        // hacky: evaluating value if found to be of string type
-        if (typeof value === 'string') {
-            value = eval(value);
-        }
-
-        if (stats[criterion] === null) {
-            return false;
-        }
-
-        switch (operator) {
-            case 'greater_equal':
-                return stats[criterion] >= value;
-            case 'less_equal':
-                return stats[criterion] <= value;
-            case 'greater':
-                return stats[criterion] > value;
-            case 'less':
-                return stats[criterion] < value;
-            case 'equal':
-                return stats[criterion] == value;
-            case 'not_equal':
-                return stats[criterion] != value;
-            default:
-                return false;
-        }
-    }
 
     $scope.elementPassedFilters = function (element) {
         let is_selected_game_situation = !$scope.situationSelect || element[$scope.situationSelect];

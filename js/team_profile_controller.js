@@ -23,7 +23,7 @@ app.controller('teamProfileController', function ($scope, $http, $routeParams, $
         // retrieving special game log with shootout games only
         $scope.so_game_log = $scope.game_log.filter((game) => game.sw == 1 || game.sl == 1);
         // retrieving maximum round played
-        $scope.maxRoundPlayed = GameLogMetadata.deriveMaxRoundPlayed($scope.game_log);
+        $scope.maxRoundPlayed = GameLogMetadata.deriveRoundsPlayed($scope.game_log).maxRoundPlayed;
         // retrieving all weekdays a game was played by the current team
         $scope.weekdaysPlayed = GameLogMetadata.deriveWeekdaysPlayed($scope.game_log);
         // retrieving all months a game was played by the current team

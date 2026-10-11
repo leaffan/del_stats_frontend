@@ -285,8 +285,8 @@ app.controller('careerStatsController', [
                             (single_season) => single_season.season_type == seasonType,
                         );
                         if (player_season_type_stats.length < 1) return;
-                        let filtered_stat_line = prepareSingleSeasonStatline(
-                            player,
+                        let filtered_stat_line = CareerStatUtils.prepareSingleSeasonStatline(
+                            $scope.preparePlayer(player),
                             player_season_type_stats,
                             championships,
                         );
@@ -306,20 +306,24 @@ app.controller('careerStatsController', [
                         filtered_player_season_stats.push(filtered_stat_line);
                     });
                     if ($scope.season_type == 'ALL') {
-                        let all_season_stat_line = prepareSingleSeasonStatline(
-                            player,
+                        let all_season_stat_line = CareerStatUtils.prepareSingleSeasonStatline(
+                            $scope.preparePlayer(player),
                             player_season_stats,
                             championships,
-                            (combined = true),
+                            true,
                         );
-                        sumIntoTarget(filtered_player_season_stats, all_season_stat_line, [
-                            'season',
-                            'age',
-                            'teams_cnt',
-                            'last_season',
-                            'first_season',
-                            'player_id',
-                        ]);
+                        CareerStatUtils.sumIntoTarget(
+                            filtered_player_season_stats,
+                            all_season_stat_line,
+                            [
+                                'season',
+                                'age',
+                                'teams_cnt',
+                                'last_season',
+                                'first_season',
+                                'player_id',
+                            ],
+                        );
                         svc.calculateDerivedStats(all_season_stat_line, stats_to_calculate);
                         filtered_season_stats.push(all_season_stat_line);
                     } else {
@@ -333,35 +337,6 @@ app.controller('careerStatsController', [
             });
             return filtered_season_stats;
         };
-
-        function prepareSingleSeasonStatline(player, playerSeasonStats, championships, combined) {
-            let singleSeasonStatline = $scope.preparePlayer(player);
-            // let championships = playerSeasonStats.filter(single_season => single_season.c == 1).length;
-            singleSeasonStatline['season'] = playerSeasonStats[0]['season'];
-            if (combined) {
-                singleSeasonStatline['season_type'] = 'ALL';
-            } else {
-                singleSeasonStatline['season_type'] = playerSeasonStats[0]['season_type'];
-            }
-            singleSeasonStatline['age'] = playerSeasonStats[0]['age'];
-            singleSeasonStatline['championships'] = championships > 0 ? 1 : 0;
-            singleSeasonStatline['teams'] = Array.from(
-                new Set(playerSeasonStats.map((season) => season['team'])),
-            );
-            singleSeasonStatline['teams_cnt'] = singleSeasonStatline['teams'].length;
-
-            return singleSeasonStatline;
-        }
-
-        function sumIntoTarget(array, target, attrsToIgnore) {
-            array.forEach((obj) => {
-                for (let key in obj) {
-                    if (!attrsToIgnore.includes(key) && typeof obj[key] === 'number') {
-                        target[key] = (target[key] || 0) + obj[key];
-                    }
-                }
-            });
-        }
 
         $scope.filterCareerStats = function () {
             if ($scope.players === undefined) return;

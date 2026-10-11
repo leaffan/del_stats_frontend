@@ -53,6 +53,7 @@ module.exports = [
                 GameFilters: 'readonly',
                 GameLogMetadata: 'readonly',
                 TimespanUtils: 'readonly',
+                CareerStatUtils: 'readonly',
             },
         },
     },

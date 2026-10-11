@@ -774,33 +774,12 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
 
     // adjusting sort order after click on column header
     $scope.setSortOrder = function (sortKey, oldSortConfig) {
-        // if previous sort key equals the new one
-        if (oldSortConfig['sortKey'] == sortKey) {
-            // just change sort direction
-            return {
-                sortKey: oldSortConfig['sortKey'],
-                sortCriteria: oldSortConfig['sortCriteria'],
-                sortDescending: !oldSortConfig['sortDescending'],
-            };
-        } else {
-            // ascending sort order for a few columns
-            let sort_descending;
-            if ($scope.ascendingAttrs.indexOf(sortKey) !== -1) {
-                sort_descending = false;
-                // otherwise descending sort order
-            } else {
-                sort_descending = true;
-            }
-            // retrieving actual (and minor) sort criteria from scope-wide
-            // definition of sort criteria
-            // use plain sort key if nothing has been defined otherwise
-            const sort_criteria = $scope.sortCriteria[sortKey] || sortKey;
-            return {
-                sortKey: sortKey,
-                sortCriteria: sort_criteria,
-                sortDescending: sort_descending,
-            };
-        }
+        return svc.setSortOrder2(
+            sortKey,
+            oldSortConfig,
+            $scope.sortCriteria,
+            $scope.ascendingAttrs,
+        );
     };
 
     // adjusting displayed data according to selected timespan

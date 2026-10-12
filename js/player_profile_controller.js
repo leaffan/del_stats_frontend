@@ -72,7 +72,9 @@ app.controller('plrProfileController', function ($scope, $http, $routeParams, $l
                 $scope.tableSelect = 'basic_game_by_game';
             }
             // retrieving maximum round played
-            $scope.maxRoundPlayed = GameLogMetadata.deriveMaxRoundPlayed($scope.player_stats);
+            $scope.maxRoundPlayed = GameLogMetadata.deriveRoundsPlayed(
+                $scope.player_stats,
+            ).maxRoundPlayed;
             // retrieving all weekdays a game was played by the current team
             $scope.weekdaysPlayed = GameLogMetadata.deriveWeekdaysPlayed($scope.player_stats);
             // retrieving all months a game was played by the current team

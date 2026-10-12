@@ -49,11 +49,24 @@ This file captures the remaining repository improvement plan after the documenta
       (unit-tested in `tests/game-log-metadata.spec.js`). Turned out to be two
       genuinely different "rounds" computations rather than one: a full
       deduped/sorted `roundsPlayed` list for round-range filter dropdowns
-      (`deriveRoundsPlayed`, used by `player_stats_controller.js`/
-      `team_stats_controller.js`) and a single `maxRoundPlayed` upper bound
-      (`deriveMaxRoundPlayed`, used by `player_profile_controller.js`/
-      `team_profile_controller.js`) — kept as two separate functions for the
-      same reason as the `elementPassedFilters` split above.
+      (used by `player_stats_controller.js`/`team_stats_controller.js`) and a
+      single `maxRoundPlayed` upper bound (used by
+      `player_profile_controller.js`/`team_profile_controller.js` via
+      `svc.range(1, maxRoundPlayed)`) — initially kept as two separate
+      functions (`deriveRoundsPlayed`/`deriveMaxRoundPlayed`) for the same
+      reason as the `elementPassedFilters` split above, since
+      `deriveRoundsPlayed` used `parseInt(item.round)` while
+      `deriveMaxRoundPlayed` took the raw `round` value straight into
+      `Math.max` (which itself coerces to number) — a real difference _if_
+      `round` were ever a non-numeric string. Later merged into one
+      `deriveRoundsPlayed` returning `{roundsPlayed, toRoundSelect,
+maxRoundPlayed}` after a dedicated fact-finding pass confirmed `round`
+      is purely numeric everywhere this project actually has data (all
+      seasons/season_types, across `del_team_game_stats.json`,
+      `per_player/*.json`, `del_player_game_stats.csv`), so the parseInt-vs-raw
+      distinction never materializes in practice; `player_profile_controller.js`/
+      `team_profile_controller.js` now read `.maxRoundPlayed` off the merged
+      result instead of calling a separate function.
       `monthsPlayed` was deliberately NOT extracted even though it's
       duplicated the same way: it needs `moment.js` to parse `game_date`, and
       `moment` wasn't an npm dependency of this project at the time (only

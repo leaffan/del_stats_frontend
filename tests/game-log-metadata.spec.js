@@ -1,9 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const {
-    deriveWeekdaysPlayed,
-    deriveRoundsPlayed,
-    deriveMaxRoundPlayed,
-} = require('../js/game_log_metadata.js');
+const { deriveWeekdaysPlayed, deriveRoundsPlayed } = require('../js/game_log_metadata.js');
 
 function game(overrides) {
     return Object.assign({ weekday: 'Mi', round: 5 }, overrides);
@@ -32,15 +28,17 @@ test.describe('deriveRoundsPlayed', () => {
         const games = [game({ round: '2' }), game({ round: '10' })];
         expect(deriveRoundsPlayed(games).roundsPlayed).toEqual([2, 10]);
     });
-});
 
-test.describe('deriveMaxRoundPlayed', () => {
-    test('returns the maximum raw round value as a string', () => {
+    test('maxRoundPlayed is the same value as toRoundSelect (the merged deriveMaxRoundPlayed)', () => {
         const games = [game({ round: 5 }), game({ round: 12 }), game({ round: 3 })];
-        expect(deriveMaxRoundPlayed(games)).toBe('12');
+        const result = deriveRoundsPlayed(games);
+        expect(result.maxRoundPlayed).toBe('12');
+        expect(result.maxRoundPlayed).toBe(result.toRoundSelect);
     });
 
     test('works with a single game', () => {
-        expect(deriveMaxRoundPlayed([game({ round: 7 })])).toBe('7');
+        const result = deriveRoundsPlayed([game({ round: 7 })]);
+        expect(result.maxRoundPlayed).toBe('7');
+        expect(result.roundsPlayed).toEqual([7]);
     });
 });

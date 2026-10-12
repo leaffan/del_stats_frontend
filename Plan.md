@@ -125,9 +125,30 @@ maxRoundPlayed}` after a dedicated fact-finding pass confirmed `round`
       created an undeclared (implicit global) `combined` variable as a side
       effect, harmless here (nothing ever read it) but the same bug pattern
       as `changeTimespan` above — replaced with a plain `true`.
-    - Shot-metadata derivation in `shot_explorer_controller.js`, companion to
-      the weekdays/rounds candidate above — likely folds into the
-      existing `js/shot_filters.js`.
+    - ✅ Shot-metadata derivation in `shot_explorer_controller.js`
+      (`updateShotMetadata`'s months/rounds/date-range computation, not its
+      `resolveGoalies()` call) moved to `js/shot_filters.js#deriveShotMetadata`
+      (unit-tested in `tests/shot-filters.spec.js`), the companion to the
+      weekdays/rounds candidate above. A different scheme from
+      `js/game_log_metadata.js`: it works off raw shot records rather than
+      per-game stat-line records, and its `roundsPlayed` already dedupes by a
+      composite `round + '|' + po_round` key instead of raw round number alone
+      — see the deferred TODO below about adopting that scheme for
+      `deriveRoundsPlayed` too. Incidentally fixed in passing: `ShotFilters`
+      was used by this controller already (`filterShots`/`transformShot`/
+      `computeStats`) but was missing from `eslint.config.js`'s globals list —
+      added alongside the other module globals. A Copilot PR review caught a
+      real, pre-existing timezone bug in `monthsPlayed`'s original
+      `new Date(s.game_date).getMonth()`: a `'YYYY-MM-DD'` string is a
+      date-only ISO form, which native `Date` parses as UTC midnight while
+      `.getMonth()` reads it back in local time — in a negative-UTC-offset
+      timezone a day-1-of-month game rolls back into the previous month.
+      Fixed by switching to `moment(s.game_date).month()`, which deliberately
+      parses date-only strings as local time instead of round-tripping
+      through UTC. This also incidentally resolves what had been a
+      pre-existing inconsistency with `monthsPlayed`'s duplicated computation
+      elsewhere (`moment(item.game_date).month()` in `player_stats_controller.js`
+      etc., see the `monthsPlayed` follow-up TODO below) — both now agree.
 
 ## 5. Data and runtime expectations
 

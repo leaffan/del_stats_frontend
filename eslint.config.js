@@ -55,6 +55,7 @@ module.exports = [
                 TimespanUtils: 'readonly',
                 StatCategorization: 'readonly',
                 CareerStatUtils: 'readonly',
+                ShotFilters: 'readonly',
             },
         },
     },

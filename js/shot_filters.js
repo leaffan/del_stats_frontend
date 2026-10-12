@@ -1,9 +1,11 @@
-/* global module */
+/* global module, require */
 // Pure shot-filtering/aggregation logic extracted from shot_explorer_controller.js
 // so it's reachable from unit tests, not just E2E. Plain script so the same
 // code runs in the browser (global ShotFilters) and in tests (see
 // js/format_utils.js for the same dual-export pattern).
 (function (root) {
+    var moment = typeof module !== 'undefined' && module.exports ? require('moment') : root.moment;
+
     // shots: raw per-player shot records (data/<season>/shots/per_player/<id>.json)
     // filters: {
     //   seasonType, situation, targetType, period, homeRoad, opp, goalie: 'all' | a specific value,
@@ -239,10 +241,64 @@
         };
     }
 
+    // Derives the months/rounds/date-range metadata shot_explorer_controller.js
+    // shows for a player's full shot list (its updateShotMetadata()). A
+    // different scheme than js/game_log_metadata.js's weekdays/rounds
+    // derivation: it works off raw shot records rather than per-game
+    // stat-line records, and its roundsPlayed already uses a composite
+    // round + po_round key instead of deduping by raw round number alone
+    // (see Plan.md's deferred TODO about adopting this scheme for
+    // game_log_metadata.js's deriveRoundsPlayed too).
+    function deriveShotMetadata(shots) {
+        let months = shots
+            .map(function (s) {
+                // moment(), not new Date(): a 'YYYY-MM-DD' string is a
+                // date-only ISO form, which native Date parses as UTC
+                // midnight while .getMonth() reads back in local time - for
+                // negative-UTC-offset timezones that rolls a day-1-of-month
+                // game back into the previous month. moment deliberately
+                // parses date-only strings as local time instead, sidestepping
+                // the bug entirely.
+                return s.game_date ? moment(s.game_date).month() : null;
+            })
+            .filter(function (m) {
+                return m !== null;
+            });
+
+        let seenRounds = {};
+        let roundsPlayed = [];
+        shots.forEach(function (s) {
+            let key = s.round + '|' + (s.po_round || '');
+            if (s.round && !seenRounds[key]) {
+                seenRounds[key] = true;
+                roundsPlayed.push({ round: s.round, po_round: s.po_round || null, key: key });
+            }
+        });
+
+        let dates = shots
+            .map(function (s) {
+                return s.game_date;
+            })
+            .filter(Boolean)
+            .sort();
+
+        return {
+            monthsPlayed: [...new Set(months)],
+            roundsPlayed: roundsPlayed,
+            fromRoundSelect: roundsPlayed.length > 0 ? roundsPlayed[0].key : '1|',
+            toRoundSelect:
+                roundsPlayed.length > 0 ? roundsPlayed[roundsPlayed.length - 1].key : '52|',
+            minShotDate: dates.length > 0 ? moment(dates[0]).format('DD.MM.YYYY') : null,
+            maxShotDate:
+                dates.length > 0 ? moment(dates[dates.length - 1]).format('DD.MM.YYYY') : null,
+        };
+    }
+
     const api = {
         filterShots: filterShots,
         transformShot: transformShot,
         computeStats: computeStats,
+        deriveShotMetadata: deriveShotMetadata,
     };
     if (typeof module !== 'undefined' && module.exports) module.exports = api;
     else root.ShotFilters = api;

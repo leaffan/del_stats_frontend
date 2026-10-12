@@ -1,5 +1,10 @@
 const { test, expect } = require('@playwright/test');
-const { filterShots, transformShot, computeStats } = require('../js/shot_filters.js');
+const {
+    filterShots,
+    transformShot,
+    computeStats,
+    deriveShotMetadata,
+} = require('../js/shot_filters.js');
 
 // Builds one raw shot record (the shape of data/<season>/shots/per_player/<id>.json)
 // with sensible defaults, so each test only has to spell out what it cares about.
@@ -387,5 +392,72 @@ test.describe('computeStats', () => {
     test('avg_distance averages the distance field to one decimal', () => {
         const shots = [shot({ distance: 10 }), shot({ distance: 20 }), shot({ distance: 15 })];
         expect(computeStats(shots).avg_distance).toBe('15.0');
+    });
+});
+
+test.describe('deriveShotMetadata', () => {
+    test('monthsPlayed is a deduplicated list of 0-indexed calendar months from game_date', () => {
+        const shots = [
+            shot({ game_date: '2025-10-05' }),
+            shot({ game_date: '2025-10-20' }),
+            shot({ game_date: '2025-11-01' }),
+        ];
+        expect(deriveShotMetadata(shots).monthsPlayed).toEqual([9, 10]);
+    });
+
+    test('shots without a game_date are skipped when deriving monthsPlayed', () => {
+        const shots = [shot({ game_date: null }), shot({ game_date: '2025-10-05' })];
+        expect(deriveShotMetadata(shots).monthsPlayed).toEqual([9]);
+    });
+
+    test('roundsPlayed dedupes by composite round + po_round key, in first-seen order', () => {
+        const shots = [
+            shot({ round: 1, po_round: null }),
+            shot({ round: 1, po_round: null }),
+            shot({ round: 2, po_round: null }),
+            shot({ round: 1, po_round: 'QF' }),
+        ];
+        expect(deriveShotMetadata(shots).roundsPlayed).toEqual([
+            { round: 1, po_round: null, key: '1|' },
+            { round: 2, po_round: null, key: '2|' },
+            { round: 1, po_round: 'QF', key: '1|QF' },
+        ]);
+    });
+
+    test('shots with a falsy round are excluded from roundsPlayed', () => {
+        const shots = [shot({ round: 0 }), shot({ round: null }), shot({ round: 1 })];
+        expect(deriveShotMetadata(shots).roundsPlayed).toEqual([
+            { round: 1, po_round: null, key: '1|' },
+        ]);
+    });
+
+    test('fromRoundSelect/toRoundSelect fall back to "1|"/"52|" when no rounds were played', () => {
+        const metadata = deriveShotMetadata([]);
+        expect(metadata.fromRoundSelect).toBe('1|');
+        expect(metadata.toRoundSelect).toBe('52|');
+    });
+
+    test('fromRoundSelect/toRoundSelect are the keys of the first/last entries actually played', () => {
+        const shots = [shot({ round: 3 }), shot({ round: 1 }), shot({ round: 2 })];
+        const metadata = deriveShotMetadata(shots);
+        expect(metadata.fromRoundSelect).toBe('3|');
+        expect(metadata.toRoundSelect).toBe('2|');
+    });
+
+    test('minShotDate/maxShotDate are the earliest/latest game_date, formatted DD.MM.YYYY', () => {
+        const shots = [
+            shot({ game_date: '2025-10-20' }),
+            shot({ game_date: '2025-10-05' }),
+            shot({ game_date: '2025-11-01' }),
+        ];
+        const metadata = deriveShotMetadata(shots);
+        expect(metadata.minShotDate).toBe('05.10.2025');
+        expect(metadata.maxShotDate).toBe('01.11.2025');
+    });
+
+    test('minShotDate/maxShotDate are null when there are no shots', () => {
+        const metadata = deriveShotMetadata([]);
+        expect(metadata.minShotDate).toBeNull();
+        expect(metadata.maxShotDate).toBeNull();
     });
 });

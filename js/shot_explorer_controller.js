@@ -299,38 +299,13 @@ app.controller(
 
         // ── Shot metadata (months / rounds) derived from loaded shots ────────────
         function updateShotMetadata() {
-            let months = playerShots
-                .map(function (s) {
-                    return s.game_date ? new Date(s.game_date).getMonth() : null;
-                })
-                .filter(function (m) {
-                    return m !== null;
-                });
-            $scope.monthsPlayed = [...new Set(months)];
-
-            let seenRounds = {};
-            let roundsPlayed = [];
-            playerShots.forEach(function (s) {
-                let key = s.round + '|' + (s.po_round || '');
-                if (s.round && !seenRounds[key]) {
-                    seenRounds[key] = true;
-                    roundsPlayed.push({ round: s.round, po_round: s.po_round || null, key: key });
-                }
-            });
-            $scope.roundsPlayed = roundsPlayed;
-            $scope.fromRoundSelect = roundsPlayed.length > 0 ? roundsPlayed[0].key : '1|';
-            $scope.toRoundSelect =
-                roundsPlayed.length > 0 ? roundsPlayed[roundsPlayed.length - 1].key : '52|';
-
-            let dates = playerShots
-                .map(function (s) {
-                    return s.game_date;
-                })
-                .filter(Boolean)
-                .sort();
-            $scope.minShotDate = dates.length > 0 ? moment(dates[0]).format('DD.MM.YYYY') : null;
-            $scope.maxShotDate =
-                dates.length > 0 ? moment(dates[dates.length - 1]).format('DD.MM.YYYY') : null;
+            let metadata = ShotFilters.deriveShotMetadata(playerShots);
+            $scope.monthsPlayed = metadata.monthsPlayed;
+            $scope.roundsPlayed = metadata.roundsPlayed;
+            $scope.fromRoundSelect = metadata.fromRoundSelect;
+            $scope.toRoundSelect = metadata.toRoundSelect;
+            $scope.minShotDate = metadata.minShotDate;
+            $scope.maxShotDate = metadata.maxShotDate;
 
             resolveGoalies();
         }

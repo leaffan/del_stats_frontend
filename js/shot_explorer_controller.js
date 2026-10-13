@@ -34,14 +34,6 @@ app.controller(
         $scope.oppFilter = 'all';
         $scope.goalieFilter = 'all';
 
-        // ── PO round display mapping (manually configurable) ───────────────────
-        $scope.poRoundLabels = {
-            first_round: 'PO1',
-            quarter_finals: 'VF',
-            semi_finals: 'HF',
-            finals: 'F',
-        };
-
         // ── Zone overlay visibility (mutually exclusive: 'none', 'edge', or 'es') ──
         $scope.zoneOverlay = 'edge';
 

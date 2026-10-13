@@ -435,9 +435,15 @@ test.describe('deriveShotMetadata', () => {
             shot({ round: 1, season_type: 'PO', po_round: 'quarter_finals' }),
         ];
         expect(deriveShotMetadata(shots).roundsPlayed).toEqual([
-            { round: 1, season_type: 'RS', po_round: null, key: '1|RS|' },
-            { round: 2, season_type: 'RS', po_round: null, key: '2|RS|' },
-            { round: 1, season_type: 'PO', po_round: 'quarter_finals', key: '1|PO|quarter_finals' },
+            { round: 1, season_type: 'RS', po_round: null, key: '1|RS|', label: 'Spieltag 1' },
+            { round: 2, season_type: 'RS', po_round: null, key: '2|RS|', label: 'Spieltag 2' },
+            {
+                round: 1,
+                season_type: 'PO',
+                po_round: 'quarter_finals',
+                key: '1|PO|quarter_finals',
+                label: 'VF / Spieltag 1',
+            },
         ]);
     });
 
@@ -445,14 +451,16 @@ test.describe('deriveShotMetadata', () => {
         // the exact collision this scheme fixes: a 'PO' round sharing a
         // number with an 'RS' round, with no po_round data available at all
         // (as is still the case for del_team_game_stats.json/
-        // del_player_game_stats.csv - see Plan.md)
+        // del_player_game_stats.csv - see Plan.md). The label falls back to
+        // the season_type as a prefix in that case, so "PO" is at least
+        // visually distinguishable from plain "Spieltag 1".
         const shots = [
             shot({ round: 1, season_type: 'RS' }),
             shot({ round: 1, season_type: 'PO' }),
         ];
         expect(deriveShotMetadata(shots).roundsPlayed).toEqual([
-            { round: 1, season_type: 'RS', po_round: null, key: '1|RS|' },
-            { round: 1, season_type: 'PO', po_round: null, key: '1|PO|' },
+            { round: 1, season_type: 'RS', po_round: null, key: '1|RS|', label: 'Spieltag 1' },
+            { round: 1, season_type: 'PO', po_round: null, key: '1|PO|', label: 'PO / Spieltag 1' },
         ]);
     });
 
@@ -477,14 +485,20 @@ test.describe('deriveShotMetadata', () => {
     test('a po_round of the literal string "rnd_type" (a known pipeline bug) is treated as absent', () => {
         const shots = [shot({ round: 1, season_type: 'MSC', po_round: 'rnd_type' })];
         expect(deriveShotMetadata(shots).roundsPlayed).toEqual([
-            { round: 1, season_type: 'MSC', po_round: null, key: '1|MSC|' },
+            {
+                round: 1,
+                season_type: 'MSC',
+                po_round: null,
+                key: '1|MSC|',
+                label: 'MSC / Spieltag 1',
+            },
         ]);
     });
 
     test('shots with a falsy round are excluded from roundsPlayed', () => {
         const shots = [shot({ round: 0 }), shot({ round: null }), shot({ round: 1 })];
         expect(deriveShotMetadata(shots).roundsPlayed).toEqual([
-            { round: 1, season_type: 'RS', po_round: null, key: '1|RS|' },
+            { round: 1, season_type: 'RS', po_round: null, key: '1|RS|', label: 'Spieltag 1' },
         ]);
     });
 

@@ -100,27 +100,15 @@
             });
         }
 
-        let roundsPlayed = filters.roundsPlayed || [];
-        if (roundsPlayed.length > 0) {
-            let fromIdx = roundsPlayed.findIndex(function (r) {
-                return r.key === filters.fromRoundKey;
+        let validRoundKeys = GameLogMetadata.deriveValidRoundKeys(
+            filters.roundsPlayed,
+            filters.fromRoundKey,
+            filters.toRoundKey,
+        );
+        if (validRoundKeys) {
+            result = result.filter(function (s) {
+                return validRoundKeys.has(GameLogMetadata.roundKeyOf(s));
             });
-            let toIdx = roundsPlayed.findIndex(function (r) {
-                return r.key === filters.toRoundKey;
-            });
-            if (fromIdx === -1) fromIdx = 0;
-            if (toIdx === -1) toIdx = roundsPlayed.length - 1;
-            if (fromIdx > 0 || toIdx < roundsPlayed.length - 1) {
-                let validKeys = new Set(
-                    roundsPlayed.slice(fromIdx, toIdx + 1).map(function (r) {
-                        return r.key;
-                    }),
-                );
-                result = result.filter(function (s) {
-                    let po_round = GameLogMetadata.normalizedPoRound(s.po_round);
-                    return validKeys.has(s.round + '|' + s.season_type + '|' + (po_round || ''));
-                });
-            }
         }
 
         return result;

@@ -46,8 +46,18 @@
     // season_type already appears in in every season_type <select> in this
     // project (MagentaSport Cup, then Hauptrunde, then Playoffs).
     var SEASON_TYPE_ORDER = ['MSC', 'RS', 'PO'];
-    // Matches shot_explorer_controller.js's $scope.poRoundLabels key order.
     var PO_STAGE_ORDER = ['first_round', 'quarter_finals', 'semi_finals', 'finals'];
+    // Originally defined inline as shot_explorer_controller.js's own
+    // $scope.poRoundLabels - used by roundOptionLabel below so every
+    // controller using the round-selection dropdown shows the same
+    // abbreviations (the dropdown's label now lives on each entry, not in
+    // the template - see roundOptionLabel/deriveRoundSelection).
+    var PO_STAGE_LABELS = {
+        first_round: 'PO1',
+        quarter_finals: 'VF',
+        semi_finals: 'HF',
+        finals: 'F',
+    };
 
     // po_round is sometimes the literal string 'rnd_type' - an unresolved
     // template placeholder, a known pipeline bug, not a real stage name -
@@ -76,6 +86,35 @@
         return 0;
     }
 
+    // item: anything with .round/.season_type/.po_round (a per-game stat-line
+    //   record or a per-shot record) - the single place this key format is
+    //   built, shared by deriveRoundSelection below and by the round-range
+    //   membership checks in js/game_filters.js and js/shot_filters.js.
+    function roundKeyOf(item) {
+        return item.round + '|' + item.season_type + '|' + (normalizedPoRound(item.po_round) || '');
+    }
+
+    // entry: one already-normalized {round, season_type, po_round} triple
+    //   (as built by deriveRoundSelection below).
+    //
+    // Display label for a round-selection dropdown option. po_round gives
+    // the most specific prefix when known (e.g. "VF / Spieltag 3"). When
+    // it's not (still the case for player_stats_controller.js/
+    // team_stats_controller.js's data sources, which don't have a po_round
+    // field yet - see Plan.md), season_type is the next best thing: it's
+    // always available, and at least tells a PO/MSC entry apart from an RS
+    // entry sharing the same round number, even though it can't be more
+    // specific than "PO"/"MSC". No prefix at all for RS, the common case.
+    function roundOptionLabel(entry) {
+        let prefix = '';
+        if (entry.po_round) {
+            prefix = (PO_STAGE_LABELS[entry.po_round] || entry.po_round) + ' / ';
+        } else if (entry.season_type && entry.season_type !== 'RS') {
+            prefix = entry.season_type + ' / ';
+        }
+        return prefix + 'Spieltag ' + entry.round;
+    }
+
     // games: array of per-game-ish records (round, season_type, po_round?,
     //   ...) - works for per-game stat-line records AND per-shot records,
     //   since it only reads .round/.season_type/.po_round.
@@ -96,16 +135,17 @@
         let seen = {};
         let roundsPlayed = [];
         games.forEach((item) => {
-            let po_round = normalizedPoRound(item.po_round);
-            let key = item.round + '|' + item.season_type + '|' + (po_round || '');
+            let key = roundKeyOf(item);
             if (item.round && !seen[key]) {
                 seen[key] = true;
-                roundsPlayed.push({
+                let entry = {
                     round: item.round,
                     season_type: item.season_type,
-                    po_round: po_round,
+                    po_round: normalizedPoRound(item.po_round),
                     key: key,
-                });
+                };
+                entry.label = roundOptionLabel(entry);
+                roundsPlayed.push(entry);
             }
         });
         roundsPlayed.sort(compareRoundEntries);
@@ -118,11 +158,36 @@
         };
     }
 
+    // roundsPlayed: the sorted {round, season_type, po_round, key}[] from
+    //   deriveRoundSelection above.
+    // fromRoundKey, toRoundKey: the currently selected range's keys.
+    //
+    // Returns the Set of keys that fall within the selected range, or null
+    // when the full range is selected - callers should skip the round
+    // filter entirely in that case rather than build/check a Set that would
+    // just match everything. Shared by js/shot_filters.js#filterShots and
+    // js/game_filters.js#gamePassesCommonFilters's callers so this
+    // index-slice logic exists in exactly one place.
+    function deriveValidRoundKeys(roundsPlayed, fromRoundKey, toRoundKey) {
+        if (!roundsPlayed || roundsPlayed.length === 0) return null;
+        let fromIdx = roundsPlayed.findIndex((r) => r.key === fromRoundKey);
+        let toIdx = roundsPlayed.findIndex((r) => r.key === toRoundKey);
+        if (fromIdx === -1) fromIdx = 0;
+        if (toIdx === -1) toIdx = roundsPlayed.length - 1;
+        if (fromIdx > 0 || toIdx < roundsPlayed.length - 1) {
+            return new Set(roundsPlayed.slice(fromIdx, toIdx + 1).map((r) => r.key));
+        }
+        return null;
+    }
+
     const api = {
         deriveWeekdaysPlayed: deriveWeekdaysPlayed,
         deriveRoundsPlayed: deriveRoundsPlayed,
         deriveRoundSelection: deriveRoundSelection,
+        deriveValidRoundKeys: deriveValidRoundKeys,
         normalizedPoRound: normalizedPoRound,
+        roundKeyOf: roundKeyOf,
+        roundOptionLabel: roundOptionLabel,
     };
     if (typeof module !== 'undefined' && module.exports) module.exports = api;
     else root.GameLogMetadata = api;

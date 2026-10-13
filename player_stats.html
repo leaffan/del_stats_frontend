@@ -151,7 +151,7 @@
                     <label class="input-group-text w-100 justify-content-center">von</label>
                 </div>
                 <select class="form-control" data-ng-model="$parent.fromRoundSelect">
-                    <option data-ng-option data-ng-repeat="round in roundsPlayed" value="{{round}}">Spieltag {{round}}</option>
+                    <option data-ng-option data-ng-repeat="r in roundsPlayed" value="{{r.key}}">{{r.label}}</option>
                 </select>
             </div>
             <div class="input-group col-3 pl-0">
@@ -160,7 +160,7 @@
                     <!-- <span class="input-group-text">bis</i></span> -->
                 </div>
                 <select class="form-control" data-ng-model="$parent.toRoundSelect">
-                    <option data-ng-option data-ng-repeat="round in roundsPlayed" value="{{round}}">Spieltag {{round}}</option>
+                    <option data-ng-option data-ng-repeat="r in roundsPlayed" value="{{r.key}}">{{r.label}}</option>
                 </select>
             </div>
         </div>

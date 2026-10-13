@@ -174,14 +174,80 @@ maxRoundPlayed}` after a dedicated fact-finding pass confirmed `round`
 - App-wide: no `$http` request outside the shot explorer has error handling —
   a failed request fails silently. `js/shot_explorer_controller.js`'s
   `loadErrors` pattern is the reference to follow once this is picked up.
-- `player_stats_controller.js`/`team_stats_controller.js`'s `roundsPlayed`
-  (`js/game_log_metadata.js#deriveRoundsPlayed`) dedupes by raw round number
-  only, so a regular-season round and a playoff round sharing the same
-  number (e.g. both "round 1") collapse into one entry in the round-range
-  filter dropdown. `shot_explorer_controller.js`'s `updateShotMetadata`
-  already solves this correctly with a composite `round + '|' + po_round`
-  key — adopt that scheme here too when this gets revisited. A real behavior
-  change, not a pure refactor, so kept out of the extraction pass above.
+- **In progress, 3-PR plan** (`round_selection_scheme` work): unify the
+  round-range selection scheme across all three controller pairs. Root
+  problem: `player_stats_controller.js`/`team_stats_controller.js`'s
+  `roundsPlayed` (`js/game_log_metadata.js#deriveRoundsPlayed`) and
+  `player_profile_controller.js`/`team_profile_controller.js`'s
+  `maxRoundPlayed` both dedupe/bound by raw round number only, so a
+  regular-season round and a playoff round sharing the same number collapse
+  together in the round-range filter - and, confirmed against real data,
+  it's worse than that: `round` resets to 1 at the start of each playoff
+  _stage_ (`po_round`: `first_round`/`quarter_finals`/`semi_finals`/
+  `finals`), so e.g. "round 1" alone can mean four different real games in
+  the same PO season. `del_team_game_stats.json`/`del_player_game_stats.csv`
+  don't have a `po_round` field at all yet (only `shots/per_player/*.json`
+  does) - the maintainer is adding it to that pipeline, but the new scheme
+  doesn't require it: it's keyed on `round + season_type + (po_round || '')`,
+  so `season_type` alone already fixes the RS-vs-PO collision today, and
+  `po_round` additionally resolves the playoff-stage collision once/wherever
+  it's populated (also defensively treats the literal string `'rnd_type'` -
+  a known pipeline bug in some `MSC` records - as absent, same as missing).
+    - ✅ **PR 1**: new shared `js/game_log_metadata.js#deriveRoundSelection`
+      (unit-tested in `tests/game-log-metadata.spec.js`), sorted `MSC` → `RS` →
+      `PO` (matching existing season_type `<select>` option order), playoff
+      entries sub-sorted by tournament stage then round.
+      `shot_explorer_controller.js`/`js/shot_filters.js#deriveShotMetadata`
+      migrated onto it (it already had the right idea with its own
+      `round + '|' + po_round` key, just not shared or season_type-aware;
+      `js/shot_filters.js#filterShots`'s round-range membership check updated
+      to match). `deriveRoundsPlayed` (the old, round-number-only function)
+      stays for now - `player_stats_controller.js`/`team_stats_controller.js`/
+      `player_profile_controller.js`/`team_profile_controller.js` haven't
+      migrated yet, delete it once they have.
+    - ✅ **PR 2**: `player_stats_controller.js`/`team_stats_controller.js`
+      migrated onto `deriveRoundSelection`. Along the way, extracted the
+      index-slice/key-membership logic itself out of
+      `js/shot_filters.js#filterShots` into
+      `js/game_log_metadata.js#deriveValidRoundKeys` (so it's not duplicated a
+      third time) and the composite-key string building into
+      `js/game_log_metadata.js#roundKeyOf` (same reason -
+      `deriveRoundSelection` and `filterShots` were each building that string
+      themselves). `js/game_filters.js#gamePassesCommonFilters` takes a
+      pre-built `validRoundKeys` Set (or null for "no restriction") instead of
+      raw `fromRoundSelect`/`toRoundSelect` strings - both controllers compute
+      it once per filtering pass (in the existing `$watchGroup` callback that
+      already re-runs filtering on any filter change), not once per element,
+      since it's the same Set for every element in that pass. Templates move
+      from a plain-number dropdown to the `{round, season_type, po_round,
+key}` shape, matching `shot_explorer.html`'s pattern exactly. This also
+      fixes the "Hauptrunde und Playoffs" combined-season-type-mode bug
+      identified earlier (a round-range narrowed within one season_type's
+      contiguous sorted block - e.g. "RS round 1 to 10" - can no longer pull
+      in a different season_type's games, since the sort groups `MSC`/`RS`/`PO`
+      into separate contiguous ranges).
+      **Follow-up found after this PR's templates went live**: with
+      `player_stats_controller.js`/`team_stats_controller.js`'s data sources
+      still lacking `po_round` (see above), every PO/MSC entry's dropdown
+      label looked identical to an RS entry sharing the same round number
+      (e.g. two indistinguishable "Spieltag 1" options) - the key already
+      disambiguated them correctly, but nothing signaled that visually.
+      Fixed by moving the label out of the template (previously duplicated,
+      slightly differently, in `player_stats.html`/`team_stats.html`/
+      `shot_explorer.html`) into `js/game_log_metadata.js#roundOptionLabel`,
+      computed once per entry inside `deriveRoundSelection` itself (a `.label`
+      field, alongside `.key`) - it now falls back to `season_type` as the
+      prefix (e.g. "PO / Spieltag 1") when `po_round` isn't available, instead
+      of showing no prefix at all. shot_explorer_controller.js's inline
+      `$scope.poRoundLabels` (the PO stage abbreviations) moved into that
+      same function (as `PO_STAGE_LABELS`, no longer exposed on any
+      `$scope` - the three controllers' own `$scope.poRoundLabels`
+      assignments were deleted along with the template logic that read them).
+    - ⬜ **PR 3**: `player_profile_controller.js`/`team_profile_controller.js` -
+      replace the `maxRoundPlayed`/`svc.range(1, maxRoundPlayed)` 1..N-range
+      approach (and the numeric `$scope.fromRoundFilter`/`$scope.toRoundFilter`
+      Angular filter functions) with the same shared scheme; delete
+      `deriveRoundsPlayed` once this lands, since nothing will call it anymore.
 - Full `changeTimespan` consolidation across all five controllers that
   define it (`player_stats_controller.js`, `team_stats_controller.js`,
   `team_profile_controller.js`, `player_profile_controller.js`,

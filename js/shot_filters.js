@@ -5,6 +5,10 @@
 // js/format_utils.js for the same dual-export pattern).
 (function (root) {
     var moment = typeof module !== 'undefined' && module.exports ? require('moment') : root.moment;
+    var GameLogMetadata =
+        typeof module !== 'undefined' && module.exports
+            ? require('./game_log_metadata.js')
+            : root.GameLogMetadata;
 
     // shots: raw per-player shot records (data/<season>/shots/per_player/<id>.json)
     // filters: {
@@ -96,26 +100,15 @@
             });
         }
 
-        let roundsPlayed = filters.roundsPlayed || [];
-        if (roundsPlayed.length > 0) {
-            let fromIdx = roundsPlayed.findIndex(function (r) {
-                return r.key === filters.fromRoundKey;
+        let validRoundKeys = GameLogMetadata.deriveValidRoundKeys(
+            filters.roundsPlayed,
+            filters.fromRoundKey,
+            filters.toRoundKey,
+        );
+        if (validRoundKeys) {
+            result = result.filter(function (s) {
+                return validRoundKeys.has(GameLogMetadata.roundKeyOf(s));
             });
-            let toIdx = roundsPlayed.findIndex(function (r) {
-                return r.key === filters.toRoundKey;
-            });
-            if (fromIdx === -1) fromIdx = 0;
-            if (toIdx === -1) toIdx = roundsPlayed.length - 1;
-            if (fromIdx > 0 || toIdx < roundsPlayed.length - 1) {
-                let validKeys = new Set(
-                    roundsPlayed.slice(fromIdx, toIdx + 1).map(function (r) {
-                        return r.key;
-                    }),
-                );
-                result = result.filter(function (s) {
-                    return validKeys.has(s.round + '|' + (s.po_round || ''));
-                });
-            }
         }
 
         return result;
@@ -242,13 +235,13 @@
     }
 
     // Derives the months/rounds/date-range metadata shot_explorer_controller.js
-    // shows for a player's full shot list (its updateShotMetadata()). A
-    // different scheme than js/game_log_metadata.js's weekdays/rounds
-    // derivation: it works off raw shot records rather than per-game
-    // stat-line records, and its roundsPlayed already uses a composite
-    // round + po_round key instead of deduping by raw round number alone
-    // (see Plan.md's deferred TODO about adopting this scheme for
-    // game_log_metadata.js's deriveRoundsPlayed too).
+    // shows for a player's full shot list (its updateShotMetadata()). Its
+    // roundsPlayed used to compute its own composite round+po_round key
+    // in-line - now shares js/game_log_metadata.js#deriveRoundSelection
+    // instead (see Plan.md), which additionally folds in season_type (round
+    // numbers reset per playoff stage, so round+po_round alone can still
+    // collide across season_type boundaries in principle, even though in
+    // practice po_round is only ever populated for PO/MSC games).
     function deriveShotMetadata(shots) {
         let months = shots
             .map(function (s) {
@@ -265,15 +258,7 @@
                 return m !== null;
             });
 
-        let seenRounds = {};
-        let roundsPlayed = [];
-        shots.forEach(function (s) {
-            let key = s.round + '|' + (s.po_round || '');
-            if (s.round && !seenRounds[key]) {
-                seenRounds[key] = true;
-                roundsPlayed.push({ round: s.round, po_round: s.po_round || null, key: key });
-            }
-        });
+        let roundSelection = GameLogMetadata.deriveRoundSelection(shots);
 
         let dates = shots
             .map(function (s) {
@@ -284,10 +269,9 @@
 
         return {
             monthsPlayed: [...new Set(months)],
-            roundsPlayed: roundsPlayed,
-            fromRoundSelect: roundsPlayed.length > 0 ? roundsPlayed[0].key : '1|',
-            toRoundSelect:
-                roundsPlayed.length > 0 ? roundsPlayed[roundsPlayed.length - 1].key : '52|',
+            roundsPlayed: roundSelection.roundsPlayed,
+            fromRoundSelect: roundSelection.fromRoundSelect,
+            toRoundSelect: roundSelection.toRoundSelect,
             minShotDate: dates.length > 0 ? moment(dates[0]).format('DD.MM.YYYY') : null,
             maxShotDate:
                 dates.length > 0 ? moment(dates[dates.length - 1]).format('DD.MM.YYYY') : null,

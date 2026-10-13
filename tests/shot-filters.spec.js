@@ -183,33 +183,50 @@ test.describe('filterShots', () => {
 
     test('round range narrows to the selected slice of roundsPlayed', () => {
         const roundsPlayed = [
-            { round: 1, po_round: null, key: '1|' },
-            { round: 2, po_round: null, key: '2|' },
-            { round: 3, po_round: null, key: '3|' },
+            { round: 1, season_type: 'RS', po_round: null, key: '1|RS|' },
+            { round: 2, season_type: 'RS', po_round: null, key: '2|RS|' },
+            { round: 3, season_type: 'RS', po_round: null, key: '3|RS|' },
         ];
-        const shots = [
-            shot({ round: 1, po_round: null }),
-            shot({ round: 2, po_round: null }),
-            shot({ round: 3, po_round: null }),
-        ];
+        const shots = [shot({ round: 1 }), shot({ round: 2 }), shot({ round: 3 })];
         const result = filterShots(
             shots,
             Object.assign({}, noFilters, {
                 roundsPlayed: roundsPlayed,
-                fromRoundKey: '2|',
-                toRoundKey: '2|',
+                fromRoundKey: '2|RS|',
+                toRoundKey: '2|RS|',
             }),
         );
         expect(result.length).toBe(1);
         expect(result[0].round).toBe(2);
     });
 
+    test('round range distinguishes same-numbered rounds across season_type/po_round', () => {
+        const roundsPlayed = [
+            { round: 1, season_type: 'RS', po_round: null, key: '1|RS|' },
+            { round: 1, season_type: 'PO', po_round: 'first_round', key: '1|PO|first_round' },
+        ];
+        const shots = [
+            shot({ round: 1, season_type: 'RS' }),
+            shot({ round: 1, season_type: 'PO', po_round: 'first_round' }),
+        ];
+        const result = filterShots(
+            shots,
+            Object.assign({}, noFilters, {
+                roundsPlayed: roundsPlayed,
+                fromRoundKey: '1|RS|',
+                toRoundKey: '1|RS|',
+            }),
+        );
+        expect(result.length).toBe(1);
+        expect(result[0].season_type).toBe('RS');
+    });
+
     test('an unresolvable round key falls back to that end of the full range', () => {
         const roundsPlayed = [
-            { round: 1, po_round: null, key: '1|' },
-            { round: 2, po_round: null, key: '2|' },
+            { round: 1, season_type: 'RS', po_round: null, key: '1|RS|' },
+            { round: 2, season_type: 'RS', po_round: null, key: '2|RS|' },
         ];
-        const shots = [shot({ round: 1, po_round: null }), shot({ round: 2, po_round: null })];
+        const shots = [shot({ round: 1 }), shot({ round: 2 })];
         const result = filterShots(
             shots,
             Object.assign({}, noFilters, {
@@ -227,8 +244,8 @@ test.describe('filterShots', () => {
             shots,
             Object.assign({}, noFilters, {
                 roundsPlayed: [],
-                fromRoundKey: '1|',
-                toRoundKey: '1|',
+                fromRoundKey: '1|RS|',
+                toRoundKey: '1|RS|',
             }),
         );
         expect(result.length).toBe(2);
@@ -410,38 +427,96 @@ test.describe('deriveShotMetadata', () => {
         expect(deriveShotMetadata(shots).monthsPlayed).toEqual([9]);
     });
 
-    test('roundsPlayed dedupes by composite round + po_round key, in first-seen order', () => {
+    test('roundsPlayed dedupes by composite round + season_type + po_round key, sorted', () => {
         const shots = [
-            shot({ round: 1, po_round: null }),
-            shot({ round: 1, po_round: null }),
-            shot({ round: 2, po_round: null }),
-            shot({ round: 1, po_round: 'QF' }),
+            shot({ round: 2, season_type: 'RS' }),
+            shot({ round: 1, season_type: 'RS' }),
+            shot({ round: 1, season_type: 'RS' }),
+            shot({ round: 1, season_type: 'PO', po_round: 'quarter_finals' }),
         ];
         expect(deriveShotMetadata(shots).roundsPlayed).toEqual([
-            { round: 1, po_round: null, key: '1|' },
-            { round: 2, po_round: null, key: '2|' },
-            { round: 1, po_round: 'QF', key: '1|QF' },
+            { round: 1, season_type: 'RS', po_round: null, key: '1|RS|', label: 'Spieltag 1' },
+            { round: 2, season_type: 'RS', po_round: null, key: '2|RS|', label: 'Spieltag 2' },
+            {
+                round: 1,
+                season_type: 'PO',
+                po_round: 'quarter_finals',
+                key: '1|PO|quarter_finals',
+                label: 'VF / Spieltag 1',
+            },
+        ]);
+    });
+
+    test('same round number in different season_types stays distinct even without po_round', () => {
+        // the exact collision this scheme fixes: a 'PO' round sharing a
+        // number with an 'RS' round, with no po_round data available at all
+        // (as is still the case for del_team_game_stats.json/
+        // del_player_game_stats.csv - see Plan.md). The label falls back to
+        // the season_type as a prefix in that case, so "PO" is at least
+        // visually distinguishable from plain "Spieltag 1".
+        const shots = [
+            shot({ round: 1, season_type: 'RS' }),
+            shot({ round: 1, season_type: 'PO' }),
+        ];
+        expect(deriveShotMetadata(shots).roundsPlayed).toEqual([
+            { round: 1, season_type: 'RS', po_round: null, key: '1|RS|', label: 'Spieltag 1' },
+            { round: 1, season_type: 'PO', po_round: null, key: '1|PO|', label: 'PO / Spieltag 1' },
+        ]);
+    });
+
+    test('the same round number recurring across playoff stages stays distinct', () => {
+        // round resets to 1 at the start of each best-of series/stage, so
+        // round 1 of first_round, quarter_finals, semi_finals and finals are
+        // four different real games, not duplicates
+        const shots = [
+            shot({ round: 1, season_type: 'PO', po_round: 'finals' }),
+            shot({ round: 1, season_type: 'PO', po_round: 'first_round' }),
+            shot({ round: 1, season_type: 'PO', po_round: 'semi_finals' }),
+            shot({ round: 1, season_type: 'PO', po_round: 'quarter_finals' }),
+        ];
+        expect(deriveShotMetadata(shots).roundsPlayed.map((r) => r.po_round)).toEqual([
+            'first_round',
+            'quarter_finals',
+            'semi_finals',
+            'finals',
+        ]);
+    });
+
+    test('a po_round of the literal string "rnd_type" (a known pipeline bug) is treated as absent', () => {
+        const shots = [shot({ round: 1, season_type: 'MSC', po_round: 'rnd_type' })];
+        expect(deriveShotMetadata(shots).roundsPlayed).toEqual([
+            {
+                round: 1,
+                season_type: 'MSC',
+                po_round: null,
+                key: '1|MSC|',
+                label: 'MSC / Spieltag 1',
+            },
         ]);
     });
 
     test('shots with a falsy round are excluded from roundsPlayed', () => {
         const shots = [shot({ round: 0 }), shot({ round: null }), shot({ round: 1 })];
         expect(deriveShotMetadata(shots).roundsPlayed).toEqual([
-            { round: 1, po_round: null, key: '1|' },
+            { round: 1, season_type: 'RS', po_round: null, key: '1|RS|', label: 'Spieltag 1' },
         ]);
     });
 
-    test('fromRoundSelect/toRoundSelect fall back to "1|"/"52|" when no rounds were played', () => {
+    test('fromRoundSelect/toRoundSelect fall back to "1|RS|"/"52|RS|" when no rounds were played', () => {
         const metadata = deriveShotMetadata([]);
-        expect(metadata.fromRoundSelect).toBe('1|');
-        expect(metadata.toRoundSelect).toBe('52|');
+        expect(metadata.fromRoundSelect).toBe('1|RS|');
+        expect(metadata.toRoundSelect).toBe('52|RS|');
     });
 
-    test('fromRoundSelect/toRoundSelect are the keys of the first/last entries actually played', () => {
-        const shots = [shot({ round: 3 }), shot({ round: 1 }), shot({ round: 2 })];
+    test('fromRoundSelect/toRoundSelect are the keys of the first/last entries in sorted order (MSC, then RS, then PO)', () => {
+        const shots = [
+            shot({ round: 3, season_type: 'RS' }),
+            shot({ round: 1, season_type: 'PO', po_round: 'finals' }),
+            shot({ round: 2, season_type: 'MSC' }),
+        ];
         const metadata = deriveShotMetadata(shots);
-        expect(metadata.fromRoundSelect).toBe('3|');
-        expect(metadata.toRoundSelect).toBe('2|');
+        expect(metadata.fromRoundSelect).toBe('2|MSC|');
+        expect(metadata.toRoundSelect).toBe('1|PO|finals');
     });
 
     test('minShotDate/maxShotDate are the earliest/latest game_date, formatted DD.MM.YYYY', () => {

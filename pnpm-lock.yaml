@@ -11,8 +11,8 @@ importers:
                 specifier: ^10.0.1
                 version: 10.0.1(eslint@10.12.0)
             '@playwright/test':
-                specifier: ^1.63.0
-                version: 1.63.0
+                specifier: ^1.64.0
+                version: 1.64.0
             eslint:
                 specifier: ^10.12.0
                 version: 10.12.0
@@ -29,8 +29,8 @@ importers:
                 specifier: 2.31.0
                 version: 2.31.0
             prettier:
-                specifier: ^3.9.9
-                version: 3.9.9
+                specifier: ^3.9.10
+                version: 3.9.10
 
 packages:
     '@cacheable/memory@2.2.0':
@@ -158,10 +158,10 @@ packages:
                 integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==,
             }
 
-    '@playwright/test@1.63.0':
+    '@playwright/test@1.64.0':
         resolution:
             {
-                integrity: sha512-oxMK4vllB9RK5NQ2l1pq1IfOf2AvnEuj/vYGDj0H2nMtmtZpKtCwt/l00GEO6xjGfpBNAvjovvYdCm50dRQkpQ==,
+                integrity: sha512-oTN9FNYuN6bqQMwiho6jJKLCG2/QOYCixGXuCjRmzOq23eODeukuY2XiAVoVpAECbuezMt1MHQjAiQxK8F+Y+g==,
             }
         engines: { node: '>=20' }
         hasBin: true
@@ -552,18 +552,18 @@ packages:
             }
         engines: { node: '>=12' }
 
-    playwright-core@1.63.0:
+    playwright-core@1.64.0:
         resolution:
             {
-                integrity: sha512-rYCsBF/M5HjUch52bbtVONEFjv6Xu8sm8h72dNlR5bzIE1fvC/bxgspzkjSfU+MweEMmPM8KJebG6nnyxo5mCg==,
+                integrity: sha512-T9r+MZkTECl2+oUcZ26YgZzTrYidTsIhYYkJix+6iDOymOb1FB2RLLSOxRGnZGv5DStt+aduIVbt+E8WygXYpg==,
             }
         engines: { node: '>=20' }
         hasBin: true
 
-    playwright@1.63.0:
+    playwright@1.64.0:
         resolution:
             {
-                integrity: sha512-+7ziBLidS4NaNCdt57SUDT+wYmmd5fmiQejUic/kb+YsYSCPyOOE9sebzMjNmQrsnNpDJqd4WHvV/8lfKfUDUg==,
+                integrity: sha512-kVzTnYFYEyQ9RGzBjNCd2+yEqWmVbxl3AHPynv3qQ6JTjv4a+kwRcnqQwIpuP3NnrnIrE/Q6wWAIAvMfIE2/Yg==,
             }
         engines: { node: '>=20' }
         hasBin: true
@@ -575,10 +575,10 @@ packages:
             }
         engines: { node: '>= 0.8.0' }
 
-    prettier@3.9.9:
+    prettier@3.9.10:
         resolution:
             {
-                integrity: sha512-Z/CJHIkdujO/OtN7nXUii0Rf3VT5SRuhjBA82Xvu2XhBUgX3nhP67T0LHceBdQLex7OOFGTox+Q5Yg8Jk2Qivg==,
+                integrity: sha512-skGHTH1Yb9QvaTC4hWnRTzEYtCpApF0UMBPz+t/0ZPzP8ihefo/btKd+QA7pUE0fEwA1SbS/NmhyEcstdXOIdA==,
             }
         engines: { node: '>=14' }
         hasBin: true
@@ -739,9 +739,9 @@ snapshots:
 
     '@keyv/serialize@1.1.1': {}
 
-    '@playwright/test@1.63.0':
+    '@playwright/test@1.64.0':
         dependencies:
-            playwright: 1.63.0
+            playwright: 1.64.0
 
     '@types/esrecurse@4.3.1': {}
 
@@ -963,15 +963,15 @@ snapshots:
 
     picomatch@4.0.7: {}
 
-    playwright-core@1.63.0: {}
+    playwright-core@1.64.0: {}
 
-    playwright@1.63.0:
+    playwright@1.64.0:
         dependencies:
-            playwright-core: 1.63.0
+            playwright-core: 1.64.0
 
     prelude-ls@1.2.1: {}
 
-    prettier@3.9.9: {}
+    prettier@3.9.10: {}
 
     punycode@2.3.1: {}
 

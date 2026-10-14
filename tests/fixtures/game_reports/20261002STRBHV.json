@@ -1,0 +1,1393 @@
+{
+    "schema_version": 1,
+    "game": {
+        "game_id": "20261002STRBHV",
+        "ids": {
+            "del": 4424
+        },
+        "season": 2026,
+        "season_type": "RS",
+        "matchday": 5,
+        "date": "2026-10-02",
+        "time": "19:30",
+        "venue": "Eisstadion Straubing",
+        "attendance": 4543,
+        "referees": {
+            "head": [
+                {
+                    "name": "Andr\u00e9 Schrader",
+                    "ids": {
+                        "del": 106
+                    }
+                },
+                {
+                    "name": "Lukas Voit",
+                    "ids": {
+                        "del": 305
+                    }
+                }
+            ],
+            "linesmen": [
+                {
+                    "name": "David Tschirner",
+                    "ids": {
+                        "del": 140
+                    }
+                },
+                {
+                    "name": "Tobias Schwenk",
+                    "ids": {
+                        "del": 203
+                    }
+                }
+            ]
+        },
+        "overtime": false,
+        "shootout": false,
+        "source": "pipeline"
+    },
+    "teams": {
+        "home": {
+            "abbr": "STR",
+            "name": "Straubing Tigers",
+            "coach": {
+                "name": "Woodcroft Craig",
+                "ids": {
+                    "del": 1114
+                }
+            },
+            "score": 4,
+            "goals_per_period": [2, 0, 2],
+            "shots_on_goal": 50,
+            "shots_on_goal_per_period": [22, 16, 12],
+            "power_play": {
+                "opportunities": 3,
+                "goals": 1
+            },
+            "penalty_minutes": 9,
+            "outcome": "W",
+            "points": 3
+        },
+        "road": {
+            "abbr": "BHV",
+            "name": "Pinguins Bremerhaven",
+            "coach": {
+                "name": "Alexander Sulzer",
+                "ids": {
+                    "del": 874
+                }
+            },
+            "score": 3,
+            "goals_per_period": [2, 0, 1],
+            "shots_on_goal": 23,
+            "shots_on_goal_per_period": [6, 10, 7],
+            "power_play": {
+                "opportunities": 2,
+                "goals": 0
+            },
+            "penalty_minutes": 11,
+            "outcome": "L",
+            "points": 0
+        }
+    },
+    "scoring": [
+        {
+            "number": 1,
+            "period": 1,
+            "time": 603,
+            "team": "BHV",
+            "score": {
+                "home": 0,
+                "road": 1
+            },
+            "scorer": {
+                "player_id": 1430,
+                "ids": {
+                    "current": 1430,
+                    "archive": 3526,
+                    "ep": "277620/nino-kinder",
+                    "wh": 312
+                },
+                "first_name": "Nino",
+                "last_name": "Kinder"
+            },
+            "assists": [
+                {
+                    "player_id": 1795,
+                    "ids": {
+                        "current": 1795,
+                        "archive": 4012,
+                        "ep": "210744/christian-wejse",
+                        "wh": 320
+                    },
+                    "first_name": "Christian",
+                    "last_name": "Wejse"
+                }
+            ],
+            "goalie": {
+                "player_id": 1618,
+                "ids": {
+                    "current": 1618,
+                    "archive": 4100,
+                    "ep": "382239/florian-bugl",
+                    "wh": [40, 1590]
+                },
+                "first_name": "Florian",
+                "last_name": "Bugl"
+            },
+            "go_ahead": true
+        },
+        {
+            "number": 2,
+            "period": 1,
+            "time": 685,
+            "team": "STR",
+            "score": {
+                "home": 1,
+                "road": 1
+            },
+            "scorer": {
+                "player_id": 104,
+                "ids": {
+                    "current": 104,
+                    "archive": 2737,
+                    "ep": "43412/marcel-brandt",
+                    "wh": 29
+                },
+                "first_name": "Marcel",
+                "last_name": "Brandt"
+            },
+            "assists": [
+                {
+                    "player_id": 2028,
+                    "ids": {
+                        "current": 2028,
+                        "archive": 4124,
+                        "ep": "166653/skyler-mckenzie",
+                        "wh": 324
+                    },
+                    "first_name": "Skyler",
+                    "last_name": "McKenzie"
+                },
+                {
+                    "player_id": 59,
+                    "ids": {
+                        "current": 59,
+                        "archive": 2989,
+                        "ep": "117469/stefan-loibl",
+                        "wh": 467
+                    },
+                    "first_name": "Stefan",
+                    "last_name": "Loibl"
+                }
+            ],
+            "goalie": {
+                "player_id": 1547,
+                "ids": {
+                    "current": 1547,
+                    "archive": 3795,
+                    "ep": "49585/kristers-gudlevskis",
+                    "wh": 1080
+                },
+                "first_name": "Kristers",
+                "last_name": "Gudlevskis"
+            },
+            "tying": true
+        },
+        {
+            "number": 3,
+            "period": 1,
+            "time": 1033,
+            "team": "STR",
+            "score": {
+                "home": 2,
+                "road": 1
+            },
+            "scorer": {
+                "player_id": 1663,
+                "ids": {
+                    "current": 1663,
+                    "archive": 3863,
+                    "ep": "381680/adrian-klein",
+                    "wh": 41
+                },
+                "first_name": "Adrian",
+                "last_name": "Klein"
+            },
+            "assists": [
+                {
+                    "player_id": 4315,
+                    "ids": {
+                        "current": 4315,
+                        "ep": "262071/joseph-duszak",
+                        "wh": 3209
+                    },
+                    "first_name": "Joseph",
+                    "last_name": "Duszak"
+                }
+            ],
+            "goalie": {
+                "player_id": 1547,
+                "ids": {
+                    "current": 1547,
+                    "archive": 3795,
+                    "ep": "49585/kristers-gudlevskis",
+                    "wh": 1080
+                },
+                "first_name": "Kristers",
+                "last_name": "Gudlevskis"
+            },
+            "go_ahead": true
+        },
+        {
+            "number": 4,
+            "period": 1,
+            "time": 1138,
+            "team": "BHV",
+            "score": {
+                "home": 2,
+                "road": 2
+            },
+            "scorer": {
+                "player_id": 1615,
+                "ids": {
+                    "current": 1615,
+                    "archive": 3822,
+                    "ep": "72683/parker-tuomie",
+                    "wh": 39
+                },
+                "first_name": "Parker",
+                "last_name": "Tuomie"
+            },
+            "assists": [
+                {
+                    "player_id": 990,
+                    "ids": {
+                        "current": 990,
+                        "archive": 3369,
+                        "ep": "6635/nicholas-b.-jensen",
+                        "wh": 304
+                    },
+                    "first_name": "Nicholas B.",
+                    "last_name": "Jensen"
+                }
+            ],
+            "goalie": {
+                "player_id": 1618,
+                "ids": {
+                    "current": 1618,
+                    "archive": 4100,
+                    "ep": "382239/florian-bugl",
+                    "wh": [40, 1590]
+                },
+                "first_name": "Florian",
+                "last_name": "Bugl"
+            },
+            "tying": true
+        },
+        {
+            "number": 5,
+            "period": 3,
+            "time": 3072,
+            "team": "STR",
+            "score": {
+                "home": 3,
+                "road": 2
+            },
+            "scorer": {
+                "player_id": 4316,
+                "ids": {
+                    "current": 4316,
+                    "ep": "370370/spencer-kersten",
+                    "wh": 3210
+                },
+                "first_name": "Spencer",
+                "last_name": "Kersten"
+            },
+            "assists": [
+                {
+                    "player_id": 2121,
+                    "ids": {
+                        "current": 2121,
+                        "archive": 4078,
+                        "ep": "204169/jean-christophe-beaudin",
+                        "wh": 510
+                    },
+                    "first_name": "Jean-Christophe",
+                    "last_name": "Beaudin"
+                }
+            ],
+            "goalie": {
+                "player_id": 1547,
+                "ids": {
+                    "current": 1547,
+                    "archive": 3795,
+                    "ep": "49585/kristers-gudlevskis",
+                    "wh": 1080
+                },
+                "first_name": "Kristers",
+                "last_name": "Gudlevskis"
+            },
+            "strength": "PP1",
+            "go_ahead": true
+        },
+        {
+            "number": 6,
+            "period": 3,
+            "time": 3324,
+            "team": "BHV",
+            "score": {
+                "home": 3,
+                "road": 3
+            },
+            "scorer": {
+                "player_id": 1615,
+                "ids": {
+                    "current": 1615,
+                    "archive": 3822,
+                    "ep": "72683/parker-tuomie",
+                    "wh": 39
+                },
+                "first_name": "Parker",
+                "last_name": "Tuomie"
+            },
+            "assists": [
+                {
+                    "player_id": 1346,
+                    "ids": {
+                        "current": 1346,
+                        "archive": 3490,
+                        "ep": "31568/alex-friesen",
+                        "wh": 308
+                    },
+                    "first_name": "Alexander",
+                    "last_name": "Friesen"
+                },
+                {
+                    "player_id": 2191,
+                    "ids": {
+                        "current": 2191,
+                        "archive": 4158,
+                        "ep": "547264/rayan-bettahar",
+                        "wh": 843
+                    },
+                    "first_name": "Rayan",
+                    "last_name": "Bettahar"
+                }
+            ],
+            "goalie": {
+                "player_id": 1618,
+                "ids": {
+                    "current": 1618,
+                    "archive": 4100,
+                    "ep": "382239/florian-bugl",
+                    "wh": [40, 1590]
+                },
+                "first_name": "Florian",
+                "last_name": "Bugl"
+            },
+            "tying": true
+        },
+        {
+            "number": 7,
+            "period": 3,
+            "time": 3359,
+            "team": "STR",
+            "score": {
+                "home": 4,
+                "road": 3
+            },
+            "scorer": {
+                "player_id": 4316,
+                "ids": {
+                    "current": 4316,
+                    "ep": "370370/spencer-kersten",
+                    "wh": 3210
+                },
+                "first_name": "Spencer",
+                "last_name": "Kersten"
+            },
+            "assists": [
+                {
+                    "player_id": 1476,
+                    "ids": {
+                        "current": 1476,
+                        "archive": 3757,
+                        "ep": "258069/tim-brunnhuber",
+                        "wh": 37
+                    },
+                    "first_name": "Tim",
+                    "last_name": "Brunnhuber"
+                },
+                {
+                    "player_id": 104,
+                    "ids": {
+                        "current": 104,
+                        "archive": 2737,
+                        "ep": "43412/marcel-brandt",
+                        "wh": 29
+                    },
+                    "first_name": "Marcel",
+                    "last_name": "Brandt"
+                }
+            ],
+            "goalie": {
+                "player_id": 1547,
+                "ids": {
+                    "current": 1547,
+                    "archive": 3795,
+                    "ep": "49585/kristers-gudlevskis",
+                    "wh": 1080
+                },
+                "first_name": "Kristers",
+                "last_name": "Gudlevskis"
+            },
+            "go_ahead": true,
+            "game_winning": true
+        }
+    ],
+    "penalties": [
+        {
+            "period": 1,
+            "time": 72,
+            "team": "BHV",
+            "minutes": 2,
+            "infraction": "slashing",
+            "player": {
+                "player_id": 1615,
+                "ids": {
+                    "current": 1615,
+                    "archive": 3822,
+                    "ep": "72683/parker-tuomie",
+                    "wh": 39
+                },
+                "first_name": "Parker",
+                "last_name": "Tuomie"
+            }
+        },
+        {
+            "period": 2,
+            "time": 1717,
+            "team": "STR",
+            "minutes": 2,
+            "infraction": "holding_the_stick",
+            "player": {
+                "player_id": 1476,
+                "ids": {
+                    "current": 1476,
+                    "archive": 3757,
+                    "ep": "258069/tim-brunnhuber",
+                    "wh": 37
+                },
+                "first_name": "Tim",
+                "last_name": "Brunnhuber"
+            }
+        },
+        {
+            "period": 2,
+            "time": 2053,
+            "team": "STR",
+            "minutes": 2,
+            "infraction": "interference",
+            "player": {
+                "player_id": 1476,
+                "ids": {
+                    "current": 1476,
+                    "archive": 3757,
+                    "ep": "258069/tim-brunnhuber",
+                    "wh": 37
+                },
+                "first_name": "Tim",
+                "last_name": "Brunnhuber"
+            }
+        },
+        {
+            "period": 2,
+            "time": 2263,
+            "team": "STR",
+            "minutes": 5,
+            "infraction": "fighting",
+            "player": {
+                "player_id": 107,
+                "ids": {
+                    "current": 107,
+                    "archive": 2105,
+                    "ep": "15220/stephan-daschner",
+                    "wh": 30
+                },
+                "first_name": "Stephan",
+                "last_name": "Daschner"
+            }
+        },
+        {
+            "period": 2,
+            "time": 2263,
+            "team": "BHV",
+            "minutes": 5,
+            "infraction": "fighting",
+            "player": {
+                "player_id": 2191,
+                "ids": {
+                    "current": 2191,
+                    "archive": 4158,
+                    "ep": "547264/rayan-bettahar",
+                    "wh": 843
+                },
+                "first_name": "Rayan",
+                "last_name": "Bettahar"
+            }
+        },
+        {
+            "period": 3,
+            "time": 2422,
+            "team": "BHV",
+            "minutes": 2,
+            "infraction": "tripping",
+            "player": {
+                "player_id": 1615,
+                "ids": {
+                    "current": 1615,
+                    "archive": 3822,
+                    "ep": "72683/parker-tuomie",
+                    "wh": 39
+                },
+                "first_name": "Parker",
+                "last_name": "Tuomie"
+            }
+        },
+        {
+            "period": 3,
+            "time": 2970,
+            "team": "BHV",
+            "minutes": 2,
+            "infraction": "holding",
+            "player": {
+                "player_id": 2384,
+                "ids": {
+                    "current": 2384,
+                    "archive": 4211,
+                    "ep": "27493/ludwig-bystrom",
+                    "wh": 1062
+                },
+                "first_name": "Ludwig",
+                "last_name": "Bystr\u00f6m"
+            }
+        }
+    ],
+    "skaters": {
+        "home": [
+            {
+                "player_id": 3418,
+                "ids": {
+                    "current": 3418,
+                    "archive": 4309,
+                    "ep": "233565/alex-green",
+                    "wh": 1593
+                },
+                "first_name": "Alex",
+                "last_name": "Green",
+                "no": 6,
+                "position": "D",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": -1,
+                "shots_on_goal": 5,
+                "penalty_minutes": 0,
+                "toi": 1130
+            },
+            {
+                "player_id": 3549,
+                "ids": {
+                    "current": 3549,
+                    "archive": 4431,
+                    "ep": "284924/nicolas-beaudin",
+                    "wh": 2322
+                },
+                "first_name": "Nicolas",
+                "last_name": "Beaudin",
+                "no": 7,
+                "position": "D",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": -1,
+                "shots_on_goal": 3,
+                "penalty_minutes": 0,
+                "toi": 1256
+            },
+            {
+                "player_id": 107,
+                "ids": {
+                    "current": 107,
+                    "archive": 2105,
+                    "ep": "15220/stephan-daschner",
+                    "wh": 30
+                },
+                "first_name": "Stephan",
+                "last_name": "Daschner",
+                "no": 9,
+                "position": "D",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": 0,
+                "shots_on_goal": 1,
+                "penalty_minutes": 5,
+                "toi": 539
+            },
+            {
+                "player_id": 4315,
+                "ids": {
+                    "current": 4315,
+                    "ep": "262071/joseph-duszak",
+                    "wh": 3209
+                },
+                "first_name": "Joseph",
+                "last_name": "Duszak",
+                "no": 12,
+                "position": "D",
+                "goals": 0,
+                "assists": 1,
+                "plus_minus": -1,
+                "shots_on_goal": 2,
+                "penalty_minutes": 0,
+                "toi": 1044
+            },
+            {
+                "player_id": 1811,
+                "ids": {
+                    "current": 1811,
+                    "archive": 3990,
+                    "ep": "344166/mario-zimmermann",
+                    "wh": 48
+                },
+                "first_name": "Mario",
+                "last_name": "Zimmermann",
+                "no": 13,
+                "position": "D",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": 2,
+                "shots_on_goal": 2,
+                "penalty_minutes": 0,
+                "toi": 859
+            },
+            {
+                "player_id": 1663,
+                "ids": {
+                    "current": 1663,
+                    "archive": 3863,
+                    "ep": "381680/adrian-klein",
+                    "wh": 41
+                },
+                "first_name": "Adrian",
+                "last_name": "Klein",
+                "no": 17,
+                "position": "D",
+                "goals": 1,
+                "assists": 0,
+                "plus_minus": -1,
+                "shots_on_goal": 5,
+                "penalty_minutes": 0,
+                "toi": 917
+            },
+            {
+                "player_id": 3551,
+                "ids": {
+                    "current": 3551,
+                    "archive": 4433,
+                    "ep": "201489/tyler-madden",
+                    "wh": 2324
+                },
+                "first_name": "Tyler",
+                "last_name": "Madden",
+                "no": 18,
+                "position": "F",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": 2,
+                "shots_on_goal": 3,
+                "penalty_minutes": 0,
+                "toi": 1116
+            },
+            {
+                "player_id": 1476,
+                "ids": {
+                    "current": 1476,
+                    "archive": 3757,
+                    "ep": "258069/tim-brunnhuber",
+                    "wh": 37
+                },
+                "first_name": "Tim",
+                "last_name": "Brunnhuber",
+                "no": 19,
+                "position": "F",
+                "goals": 0,
+                "assists": 1,
+                "plus_minus": 0,
+                "shots_on_goal": 0,
+                "penalty_minutes": 4,
+                "toi": 998
+            },
+            {
+                "player_id": 2121,
+                "ids": {
+                    "current": 2121,
+                    "archive": 4078,
+                    "ep": "204169/jean-christophe-beaudin",
+                    "wh": 510
+                },
+                "first_name": "Jean-Christophe",
+                "last_name": "Beaudin",
+                "no": 23,
+                "position": "F",
+                "goals": 0,
+                "assists": 1,
+                "plus_minus": -2,
+                "shots_on_goal": 3,
+                "penalty_minutes": 0,
+                "toi": 1034
+            },
+            {
+                "player_id": 59,
+                "ids": {
+                    "current": 59,
+                    "archive": 2989,
+                    "ep": "117469/stefan-loibl",
+                    "wh": 467
+                },
+                "first_name": "Stefan",
+                "last_name": "Loibl",
+                "no": 38,
+                "position": "F",
+                "goals": 0,
+                "assists": 1,
+                "plus_minus": 2,
+                "shots_on_goal": 5,
+                "penalty_minutes": 0,
+                "toi": 1047
+            },
+            {
+                "player_id": 3072,
+                "ids": {
+                    "current": 3072,
+                    "archive": 4307,
+                    "ep": "795209/simon-seidl",
+                    "wh": 1591
+                },
+                "first_name": "Simon",
+                "last_name": "Seidl",
+                "no": 39,
+                "position": "F",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": 0,
+                "shots_on_goal": 1,
+                "penalty_minutes": 0,
+                "toi": 414
+            },
+            {
+                "player_id": 3550,
+                "ids": {
+                    "current": 3550,
+                    "archive": 4432,
+                    "ep": "234030/nick-halloran",
+                    "wh": 2323
+                },
+                "first_name": "Nicholas",
+                "last_name": "Halloran",
+                "no": 71,
+                "position": "F",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": -1,
+                "shots_on_goal": 2,
+                "penalty_minutes": 0,
+                "toi": 931
+            },
+            {
+                "player_id": 2420,
+                "ids": {
+                    "current": 2420,
+                    "archive": 4223,
+                    "ep": "751866/linus-brandl",
+                    "wh": 1052
+                },
+                "first_name": "Linus",
+                "last_name": "Brandl",
+                "no": 73,
+                "position": "F",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": 0,
+                "shots_on_goal": 2,
+                "penalty_minutes": 0,
+                "toi": 422
+            },
+            {
+                "player_id": 2028,
+                "ids": {
+                    "current": 2028,
+                    "archive": 4124,
+                    "ep": "166653/skyler-mckenzie",
+                    "wh": 324
+                },
+                "first_name": "Skyler",
+                "last_name": "McKenzie",
+                "no": 86,
+                "position": "F",
+                "goals": 0,
+                "assists": 1,
+                "plus_minus": 1,
+                "shots_on_goal": 2,
+                "penalty_minutes": 0,
+                "toi": 769
+            },
+            {
+                "player_id": 1540,
+                "ids": {
+                    "current": 1540,
+                    "archive": 3784,
+                    "ep": "317380/filip-varejcka",
+                    "wh": 531
+                },
+                "first_name": "Filip",
+                "last_name": "Varejcka",
+                "no": 90,
+                "position": "F",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": 0,
+                "shots_on_goal": 0,
+                "penalty_minutes": 0,
+                "toi": 1086
+            },
+            {
+                "player_id": 4317,
+                "ids": {
+                    "current": 4317,
+                    "ep": "107909/hudson-elynuik",
+                    "wh": 3211
+                },
+                "first_name": "Hudson",
+                "last_name": "Elynuik",
+                "no": 91,
+                "position": "F",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": -1,
+                "shots_on_goal": 2,
+                "penalty_minutes": 0,
+                "toi": 662
+            },
+            {
+                "player_id": 104,
+                "ids": {
+                    "current": 104,
+                    "archive": 2737,
+                    "ep": "43412/marcel-brandt",
+                    "wh": 29
+                },
+                "first_name": "Marcel",
+                "last_name": "Brandt",
+                "no": 92,
+                "position": "D",
+                "goals": 1,
+                "assists": 1,
+                "plus_minus": 2,
+                "shots_on_goal": 5,
+                "penalty_minutes": 0,
+                "toi": 1150
+            },
+            {
+                "player_id": 4316,
+                "ids": {
+                    "current": 4316,
+                    "ep": "370370/spencer-kersten",
+                    "wh": 3210
+                },
+                "first_name": "Spencer",
+                "last_name": "Kersten",
+                "no": 93,
+                "position": "F",
+                "goals": 2,
+                "assists": 0,
+                "plus_minus": 0,
+                "shots_on_goal": 7,
+                "penalty_minutes": 0,
+                "toi": 1082
+            },
+            {
+                "player_id": 4318,
+                "ids": {
+                    "current": 4318,
+                    "ep": "418060/jamieson-rees",
+                    "wh": 3212
+                },
+                "first_name": "Jamieson",
+                "last_name": "Rees",
+                "no": 94,
+                "position": "F",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": -1,
+                "shots_on_goal": 0,
+                "penalty_minutes": 0,
+                "toi": 793
+            }
+        ],
+        "road": [
+            {
+                "player_id": 4149,
+                "ids": {
+                    "current": 4149,
+                    "archive": 4473,
+                    "ep": "287310/akito-hirose",
+                    "wh": 2372
+                },
+                "first_name": "Akito",
+                "last_name": "Hirose",
+                "no": 2,
+                "position": "D",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": 1,
+                "shots_on_goal": 0,
+                "penalty_minutes": 0,
+                "toi": 1533
+            },
+            {
+                "player_id": 1615,
+                "ids": {
+                    "current": 1615,
+                    "archive": 3822,
+                    "ep": "72683/parker-tuomie",
+                    "wh": 39
+                },
+                "first_name": "Parker",
+                "last_name": "Tuomie",
+                "no": 6,
+                "position": "F",
+                "goals": 2,
+                "assists": 0,
+                "plus_minus": 1,
+                "shots_on_goal": 4,
+                "penalty_minutes": 4,
+                "toi": 993
+            },
+            {
+                "player_id": 1430,
+                "ids": {
+                    "current": 1430,
+                    "archive": 3526,
+                    "ep": "277620/nino-kinder",
+                    "wh": 312
+                },
+                "first_name": "Nino",
+                "last_name": "Kinder",
+                "no": 8,
+                "position": "F",
+                "goals": 1,
+                "assists": 0,
+                "plus_minus": 0,
+                "shots_on_goal": 3,
+                "penalty_minutes": 0,
+                "toi": 1005
+            },
+            {
+                "player_id": 2191,
+                "ids": {
+                    "current": 2191,
+                    "archive": 4158,
+                    "ep": "547264/rayan-bettahar",
+                    "wh": 843
+                },
+                "first_name": "Rayan",
+                "last_name": "Bettahar",
+                "no": 15,
+                "position": "D",
+                "goals": 0,
+                "assists": 1,
+                "plus_minus": 0,
+                "shots_on_goal": 0,
+                "penalty_minutes": 5,
+                "toi": 839
+            },
+            {
+                "player_id": 2384,
+                "ids": {
+                    "current": 2384,
+                    "archive": 4211,
+                    "ep": "27493/ludwig-bystrom",
+                    "wh": 1062
+                },
+                "first_name": "Ludwig",
+                "last_name": "Bystr\u00f6m",
+                "no": 17,
+                "position": "D",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": -1,
+                "shots_on_goal": 3,
+                "penalty_minutes": 2,
+                "toi": 1180
+            },
+            {
+                "player_id": 4171,
+                "ids": {
+                    "current": 4171,
+                    "archive": 4497,
+                    "ep": "151013/c-j-smith",
+                    "wh": 2438
+                },
+                "first_name": "C.J.",
+                "last_name": "Smith",
+                "no": 19,
+                "position": "F",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": -1,
+                "shots_on_goal": 2,
+                "penalty_minutes": 0,
+                "toi": 992
+            },
+            {
+                "player_id": 143,
+                "ids": {
+                    "current": 143,
+                    "archive": 2544,
+                    "ep": "43434/nico-krammer",
+                    "wh": 468
+                },
+                "first_name": "Nicolas",
+                "last_name": "Kr\u00e4mmer",
+                "no": 21,
+                "position": "F",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": -1,
+                "shots_on_goal": 1,
+                "penalty_minutes": 0,
+                "toi": 970
+            },
+            {
+                "player_id": 1564,
+                "ids": {
+                    "current": 1564,
+                    "archive": 3881,
+                    "ep": "70378/vladimir-eminger",
+                    "wh": 315
+                },
+                "first_name": "Vladimir",
+                "last_name": "Eminger",
+                "no": 22,
+                "position": "D",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": -1,
+                "shots_on_goal": 0,
+                "penalty_minutes": 0,
+                "toi": 1190
+            },
+            {
+                "player_id": 1585,
+                "ids": {
+                    "current": 1585,
+                    "archive": 3816,
+                    "ep": "27258/max-gortz",
+                    "wh": 1057
+                },
+                "first_name": "Max",
+                "last_name": "G\u00f6rtz",
+                "no": 23,
+                "position": "F",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": 0,
+                "shots_on_goal": 0,
+                "penalty_minutes": 0,
+                "toi": 949
+            },
+            {
+                "player_id": 990,
+                "ids": {
+                    "current": 990,
+                    "archive": 3369,
+                    "ep": "6635/nicholas-b.-jensen",
+                    "wh": 304
+                },
+                "first_name": "Nicholas B.",
+                "last_name": "Jensen",
+                "no": 48,
+                "position": "D",
+                "goals": 0,
+                "assists": 1,
+                "plus_minus": 0,
+                "shots_on_goal": 0,
+                "penalty_minutes": 0,
+                "toi": 797
+            },
+            {
+                "player_id": 2689,
+                "ids": {
+                    "current": 2689,
+                    "archive": 4192,
+                    "ep": "15665/andy-miele",
+                    "wh": 1060
+                },
+                "first_name": "Andy",
+                "last_name": "Miele",
+                "no": 51,
+                "position": "F",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": -1,
+                "shots_on_goal": 2,
+                "penalty_minutes": 0,
+                "toi": 1275
+            },
+            {
+                "player_id": 1346,
+                "ids": {
+                    "current": 1346,
+                    "archive": 3490,
+                    "ep": "31568/alex-friesen",
+                    "wh": 308
+                },
+                "first_name": "Alexander",
+                "last_name": "Friesen",
+                "no": 57,
+                "position": "F",
+                "goals": 0,
+                "assists": 1,
+                "plus_minus": 1,
+                "shots_on_goal": 1,
+                "penalty_minutes": 0,
+                "toi": 962
+            },
+            {
+                "player_id": 1795,
+                "ids": {
+                    "current": 1795,
+                    "archive": 4012,
+                    "ep": "210744/christian-wejse",
+                    "wh": 320
+                },
+                "first_name": "Christian",
+                "last_name": "Wejse",
+                "no": 65,
+                "position": "F",
+                "goals": 0,
+                "assists": 1,
+                "plus_minus": 0,
+                "shots_on_goal": 2,
+                "penalty_minutes": 0,
+                "toi": 992
+            },
+            {
+                "player_id": 1339,
+                "ids": {
+                    "current": 1339,
+                    "archive": 3439,
+                    "ep": "22561/phillip-bruggisser",
+                    "wh": 306
+                },
+                "first_name": "Phillip",
+                "last_name": "Bruggisser",
+                "no": 72,
+                "position": "D",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": 1,
+                "shots_on_goal": 4,
+                "penalty_minutes": 0,
+                "toi": 1265
+            },
+            {
+                "player_id": 2817,
+                "ids": {
+                    "current": 2817,
+                    "archive": 4260,
+                    "ep": "199895/colt-conrad",
+                    "wh": 1345
+                },
+                "first_name": "Colt Adam",
+                "last_name": "Conrad",
+                "no": 79,
+                "position": "F",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": 0,
+                "shots_on_goal": 1,
+                "penalty_minutes": 0,
+                "toi": 736
+            },
+            {
+                "player_id": 4307,
+                "ids": {
+                    "current": 4307,
+                    "ep": "874307/florian-reinwald",
+                    "wh": 3206
+                },
+                "first_name": "Florian",
+                "last_name": "Reinwald",
+                "no": 83,
+                "position": "F",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": 0,
+                "shots_on_goal": 0,
+                "penalty_minutes": 0,
+                "toi": 424
+            },
+            {
+                "player_id": 1347,
+                "ids": {
+                    "current": 1347,
+                    "archive": 3491,
+                    "ep": "34328/miha-verlic",
+                    "wh": 309
+                },
+                "first_name": "Miha",
+                "last_name": "Verlic",
+                "no": 91,
+                "position": "F",
+                "goals": 0,
+                "assists": 0,
+                "plus_minus": 1,
+                "shots_on_goal": 0,
+                "penalty_minutes": 0,
+                "toi": 1146
+            }
+        ]
+    },
+    "goalies": {
+        "home": [
+            {
+                "player_id": 1618,
+                "ids": {
+                    "current": 1618,
+                    "archive": 4100,
+                    "ep": "382239/florian-bugl",
+                    "wh": [40, 1590]
+                },
+                "first_name": "Florian",
+                "last_name": "Bugl",
+                "no": 1,
+                "toi": 3600,
+                "goals_against": 3,
+                "shots_against": 23,
+                "started": true,
+                "outcome": "W"
+            },
+            {
+                "player_id": 3548,
+                "ids": {
+                    "current": 3548,
+                    "archive": 4430,
+                    "ep": "559322/sebastian-wieber",
+                    "wh": 2301
+                },
+                "first_name": "Sebastian",
+                "last_name": "Wieber",
+                "no": 21,
+                "toi": 0,
+                "goals_against": 0,
+                "shots_against": 0
+            }
+        ],
+        "road": [
+            {
+                "player_id": 1451,
+                "ids": {
+                    "current": 1451,
+                    "archive": 3701,
+                    "ep": "118495/leon-hungerecker",
+                    "wh": 67
+                },
+                "first_name": "Leon",
+                "last_name": "Hungerecker",
+                "no": 27,
+                "toi": 0,
+                "goals_against": 0,
+                "shots_against": 0
+            },
+            {
+                "player_id": 1547,
+                "ids": {
+                    "current": 1547,
+                    "archive": 3795,
+                    "ep": "49585/kristers-gudlevskis",
+                    "wh": 1080
+                },
+                "first_name": "Kristers",
+                "last_name": "Gudlevskis",
+                "no": 30,
+                "toi": 3466,
+                "goals_against": 4,
+                "shots_against": 50,
+                "started": true,
+                "outcome": "L"
+            },
+            {
+                "player_id": 3546,
+                "ids": {
+                    "current": 3546,
+                    "archive": 4453,
+                    "ep": "488094/christopher-strasen",
+                    "wh": 2296
+                },
+                "first_name": "Christopher",
+                "last_name": "Strasen",
+                "no": 34,
+                "toi": 0,
+                "goals_against": 0,
+                "shots_against": 0
+            }
+        ]
+    },
+    "data_quality": {
+        "findings": [
+            {
+                "check": "goal_situation_implausible",
+                "severity": "inconsistent",
+                "path": "scoring[0].situation",
+                "description": "0v0 skaters on the ice at the goal in second 603 are not plausible"
+            },
+            {
+                "check": "goal_situation_implausible",
+                "severity": "inconsistent",
+                "path": "scoring[1].situation",
+                "description": "0v0 skaters on the ice at the goal in second 685 are not plausible"
+            },
+            {
+                "check": "goal_situation_implausible",
+                "severity": "inconsistent",
+                "path": "scoring[2].situation",
+                "description": "0v0 skaters on the ice at the goal in second 1033 are not plausible"
+            },
+            {
+                "check": "goal_situation_implausible",
+                "severity": "inconsistent",
+                "path": "scoring[3].situation",
+                "description": "0v0 skaters on the ice at the goal in second 1138 are not plausible"
+            },
+            {
+                "check": "goal_situation_implausible",
+                "severity": "inconsistent",
+                "path": "scoring[4].situation",
+                "description": "0v0 skaters on the ice at the goal in second 3072 are not plausible"
+            },
+            {
+                "check": "goal_situation_implausible",
+                "severity": "inconsistent",
+                "path": "scoring[5].situation",
+                "description": "0v0 skaters on the ice at the goal in second 3324 are not plausible"
+            },
+            {
+                "check": "goal_situation_implausible",
+                "severity": "inconsistent",
+                "path": "scoring[6].situation",
+                "description": "0v0 skaters on the ice at the goal in second 3359 are not plausible"
+            }
+        ]
+    }
+}

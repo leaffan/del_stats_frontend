@@ -182,6 +182,19 @@
         );
     }
 
+    // player profiles only exist for seasons from 2016 on, independent of
+    // config.gameReports.firstSeason (which gates the report page itself)
+    const PLAYER_PROFILE_FIRST_SEASON = 2016;
+
+    // the link target for a player's name on the game report page, or null
+    // when it has no profile to link to: an archive-only player (no
+    // ids.current) or a season before player profiles exist
+    function playerProfileUrl(player, teamAbbr, season) {
+        if (!player || !player.ids || player.ids.current === undefined) return null;
+        if (season < PLAYER_PROFILE_FIRST_SEASON) return null;
+        return '#!/player_profile/' + season + '/' + teamAbbr + '/' + player.ids.current;
+    }
+
     // goals + assists for a skater line
     function calculatePoints(skater) {
         return (skater.goals || 0) + (skater.assists || 0);
@@ -206,6 +219,7 @@
         formatScore: formatScore,
         buildGenericId: buildGenericId,
         gameReportUrl: gameReportUrl,
+        playerProfileUrl: playerProfileUrl,
         fallbackLabel: fallbackLabel,
         getLabel: getLabel,
         parseFindingPath: parseFindingPath,

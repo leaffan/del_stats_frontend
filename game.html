@@ -1,0 +1,271 @@
+<div class="container" data-ng-app="delStatsApp">
+    <div class="alert alert-info main-bg shadow">
+        <a href="#!"><b>Startseite</b></a> | <a href="#!/team_stats/{{season}}"><b>Teamstatistiken</b></a> | <a href="#!/del_stats/{{season}}"><b>Spielerstatistiken</b></a>
+    </div>
+
+    <div class="text-center p-4" ng-if="loading">
+        <i class="fas fa-spinner fa-spin fa-2x"></i>
+    </div>
+
+    <div class="alert alert-warning shadow" ng-if="loadFailed">
+        Der Spielbericht konnte nicht geladen werden.
+    </div>
+
+    <div ng-if="report">
+        <!-- Kopf -->
+        <div class="alert alert-info main-bg shadow">
+            <div class="row align-items-center text-center">
+                <div class="col-5">
+                    <h3>{{ report.teams.home.name }}</h3>
+                </div>
+                <div class="col-2">
+                    <h2><b>{{ gru.formatScore(report.teams.home.score, report.teams.road.score) }}</b></h2>
+                    <a href="#findings" ng-if="warningCount > 0" title="Datenhinweise zu diesem Spiel anzeigen">
+                        <i class="fas fa-triangle-exclamation text-warning"></i> {{ warningCount }}
+                    </a>
+                </div>
+                <div class="col-5">
+                    <h3>{{ report.teams.road.name }}</h3>
+                </div>
+            </div>
+            <div class="text-center" ng-if="report.game.armchair">
+                nachträglich gewertet<span ng-if="playedStatus === 'played'">; tatsächlich {{ gru.formatScore(report.teams.home.goals, report.teams.road.goals) }}</span>
+            </div>
+            <div class="text-center small">
+                {{ gru.formatGameDate(report.game.date, report.game.time) }}
+                <span ng-if="report.game.venue"> · {{ report.game.venue }}</span>
+                <span ng-if="report.game.attendance"> · {{ report.game.attendance }} Zuschauer</span>
+            </div>
+            <div class="text-center small" ng-if="gameMeta.length > 0">{{ gameMeta.join(' · ') }}</div>
+        </div>
+
+        <!-- Spielstand je Drittel -->
+        <div ng-if="report.teams.home.goals_per_period || report.teams.road.goals_per_period">
+            <table class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Team</th>
+                        <th scope="col" ng-repeat="period in [1, 2, 3]">{{ gru.periodLabel(period) }}</th>
+                        <th scope="col">Endstand</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-info" ng-if="report.teams.home.goals_per_period">
+                        <td>{{ report.teams.home.abbr }}</td>
+                        <td ng-repeat="g in report.teams.home.goals_per_period">{{ g }}</td>
+                        <td>
+                            <b>{{ report.teams.home.score }}</b>
+                            <i ng-if="teamFindings.home.goals_per_period" class="fas fa-triangle-exclamation text-warning" title="{{ findingTooltip(teamFindings.home.goals_per_period) }}"></i>
+                        </td>
+                    </tr>
+                    <tr class="table-warning" ng-if="report.teams.road.goals_per_period">
+                        <td>{{ report.teams.road.abbr }}</td>
+                        <td ng-repeat="g in report.teams.road.goals_per_period">{{ g }}</td>
+                        <td>
+                            <b>{{ report.teams.road.score }}</b>
+                            <i ng-if="teamFindings.road.goals_per_period" class="fas fa-triangle-exclamation text-warning" title="{{ findingTooltip(teamFindings.road.goals_per_period) }}"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Tore -->
+        <div ng-if="report.scoring.length > 0">
+            <h4>Tore</h4>
+            <table class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Zeit</th>
+                        <th scope="col">Drittel</th>
+                        <th scope="col">Team</th>
+                        <th scope="col">Spielstand</th>
+                        <th scope="col">Torschütze</th>
+                        <th scope="col">Art</th>
+                        <th scope="col">Siegtor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="goal in report.scoring" class="{{ goal.team === report.teams.home.abbr ? 'table-info' : 'table-warning' }}">
+                        <td>{{ gru.formatGameClock(goal.period, goal.time) }}</td>
+                        <td>{{ gru.periodLabel(goal.period) }}</td>
+                        <td>{{ goal.team }}</td>
+                        <td>{{ gru.formatScore(goal.score.home, goal.score.road) }}</td>
+                        <td>
+                            <span ng-if="goal.scorer">
+                                <a ng-if="playerProfileUrl(goal.scorer, goal.team)" ng-href="{{ playerProfileUrl(goal.scorer, goal.team) }}">{{ playerDisplayName(goal.scorer) }}</a>
+                                <span ng-if="!playerProfileUrl(goal.scorer, goal.team)">{{ playerDisplayName(goal.scorer) }}</span>
+                            </span>
+                            <span ng-if="goal.assists.length > 0" class="small text-muted">
+                                (<span ng-repeat="assist in goal.assists">{{ !$first ? ', ' : '' }}<a ng-if="playerProfileUrl(assist, goal.team)" ng-href="{{ playerProfileUrl(assist, goal.team) }}">{{ playerDisplayName(assist) }}</a><span ng-if="!playerProfileUrl(assist, goal.team)">{{ playerDisplayName(assist) }}</span></span>)
+                            </span>
+                            <i ng-if="goal._hasWarning" class="fas fa-triangle-exclamation text-warning" title="{{ findingTooltip(goal._findings) }}"></i>
+                        </td>
+                        <td>{{ goal.strength ? gru.getLabel(labels, 'strengths', goal.strength) : '' }}</td>
+                        <td class="text-center"><i ng-if="goal.game_winning" class="fas fa-star" title="Siegtor"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Strafen -->
+        <div ng-if="report.penalties.length > 0">
+            <h4>Strafen</h4>
+            <table class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Zeit</th>
+                        <th scope="col">Drittel</th>
+                        <th scope="col">Team</th>
+                        <th scope="col">Spieler</th>
+                        <th scope="col">Vergehen</th>
+                        <th scope="col">Minuten</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="penalty in report.penalties" class="{{ penalty.team === report.teams.home.abbr ? 'table-info' : 'table-warning' }}">
+                        <td>{{ gru.formatGameClock(penalty.period, penalty.time) }}</td>
+                        <td>{{ gru.periodLabel(penalty.period) }}</td>
+                        <td>{{ penalty.team }}</td>
+                        <td>
+                            <span ng-if="penalty.player">
+                                <a ng-if="playerProfileUrl(penalty.player, penalty.team)" ng-href="{{ playerProfileUrl(penalty.player, penalty.team) }}">{{ playerDisplayName(penalty.player) }}</a>
+                                <span ng-if="!playerProfileUrl(penalty.player, penalty.team)">{{ playerDisplayName(penalty.player) }}</span>
+                            </span>
+                            <span ng-if="!penalty.player && penalty.served_by">{{ playerDisplayName(penalty.served_by) }} (Verbüßung)</span>
+                            <span ng-if="penalty.bench" class="text-muted">Bankstrafe</span>
+                            <span ng-if="penalty.official" class="text-muted">Funktionärsstrafe</span>
+                            <i ng-if="penalty._hasWarning" class="fas fa-triangle-exclamation text-warning" title="{{ findingTooltip(penalty._findings) }}"></i>
+                        </td>
+                        <td>{{ gru.getLabel(labels, 'infractions', penalty.infraction) }}</td>
+                        <td>{{ gru.formatPenaltyMinutes(penalty.minutes) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Penaltyschießen -->
+        <div ng-if="report.shootout.length > 0">
+            <h4>Penaltyschießen</h4>
+            <table class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Nr.</th>
+                        <th scope="col">Team</th>
+                        <th scope="col">Schütze</th>
+                        <th scope="col">Torhüter</th>
+                        <th scope="col">Ergebnis</th>
+                        <th scope="col">Siegtreffer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="attempt in report.shootout" class="{{ attempt.team === report.teams.home.abbr ? 'table-info' : 'table-warning' }}">
+                        <td>{{ attempt.number || '–' }}</td>
+                        <td>{{ attempt.team }}</td>
+                        <td>
+                            <a ng-if="playerProfileUrl(attempt.shooter, attempt.team)" ng-href="{{ playerProfileUrl(attempt.shooter, attempt.team) }}">{{ playerDisplayName(attempt.shooter) }}</a>
+                            <span ng-if="!playerProfileUrl(attempt.shooter, attempt.team)">{{ playerDisplayName(attempt.shooter) }}</span>
+                        </td>
+                        <td>
+                            <a ng-if="playerProfileUrl(attempt.goalie, oppositeTeam(attempt.team))" ng-href="{{ playerProfileUrl(attempt.goalie, oppositeTeam(attempt.team)) }}">{{ playerDisplayName(attempt.goalie) }}</a>
+                            <span ng-if="!playerProfileUrl(attempt.goalie, oppositeTeam(attempt.team))">{{ playerDisplayName(attempt.goalie) }}</span>
+                        </td>
+                        <td>{{ attempt.scored ? 'Tor' : 'kein Tor' }}</td>
+                        <td class="text-center"><i ng-if="attempt.game_winning" class="fas fa-star" title="Siegtreffer"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Torhüter und Feldspieler -->
+        <div class="row" ng-if="report.skaters.home.length > 0 || report.skaters.road.length > 0 || report.goalies.home.length > 0 || report.goalies.road.length > 0">
+            <div class="col-lg-6" ng-repeat="side in gru.SIDES">
+                <h4>{{ side === 'home' ? report.teams.home.name : report.teams.road.name }}</h4>
+
+                <table class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" ng-if="report.goalies[side].length > 0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Nr.</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Eiszeit</th>
+                            <th scope="col">Schüsse</th>
+                            <th scope="col">Gegentore</th>
+                            <th scope="col">Fangquote</th>
+                            <th scope="col">Ergebnis</th>
+                            <th scope="col">Zu Null</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="goalie in report.goalies[side]" class="{{ goalie.toi === 0 ? 'text-muted' : (side === 'home' ? 'table-info' : 'table-warning') }}">
+                            <td>{{ goalie.no }}</td>
+                            <td>
+                                <a ng-if="playerProfileUrl(goalie, report.teams[side].abbr)" ng-href="{{ playerProfileUrl(goalie, report.teams[side].abbr) }}">{{ playerDisplayName(goalie) }}</a>
+                                <span ng-if="!playerProfileUrl(goalie, report.teams[side].abbr)">{{ playerDisplayName(goalie) }}</span>
+                                <i ng-if="goalie._hasWarning" class="fas fa-triangle-exclamation text-warning" title="{{ findingTooltip(goalie._findings) }}"></i>
+                            </td>
+                            <td>{{ gru.formatToi(goalie.toi) }}</td>
+                            <td>{{ goalie.shots_against !== undefined ? goalie.shots_against : '–' }}</td>
+                            <td>{{ goalie.goals_against }}</td>
+                            <td>{{ gru.calculateSavePercentage(goalie) !== undefined ? gru.calculateSavePercentage(goalie).toFixed(1) + ' %' : '–' }}</td>
+                            <td>{{ goalie.outcome ? gru.getLabel(labels, 'outcomes', goalie.outcome) : '' }}</td>
+                            <td class="text-center"><i ng-if="goalie.shutout" class="fas fa-check" title="Zu Null"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="small text-muted" ng-repeat="goalie in report.goalies[side]" ng-if="goalie.remark">
+                    Anmerkung zu {{ playerDisplayName(goalie) }}: {{ goalie.remark }}
+                </p>
+
+                <table class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" ng-if="report.skaters[side].length > 0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Nr.</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Pos.</th>
+                            <th scope="col">Tore</th>
+                            <th scope="col">Vorlagen</th>
+                            <th scope="col">Punkte</th>
+                            <th scope="col" ng-if="hasPlusMinus">+/-</th>
+                            <th scope="col" ng-if="hasShotsOnGoal">Schüsse</th>
+                            <th scope="col">Strafminuten</th>
+                            <th scope="col" ng-if="hasToi">Eiszeit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="skater in report.skaters[side]" class="{{ side === 'home' ? 'table-info' : 'table-warning' }}">
+                            <td>{{ skater.no }}</td>
+                            <td>
+                                <a ng-if="playerProfileUrl(skater, report.teams[side].abbr)" ng-href="{{ playerProfileUrl(skater, report.teams[side].abbr) }}">{{ playerDisplayName(skater) }}</a>
+                                <span ng-if="!playerProfileUrl(skater, report.teams[side].abbr)">{{ playerDisplayName(skater) }}</span>
+                                <i ng-if="skater._hasWarning" class="fas fa-triangle-exclamation text-warning" title="{{ findingTooltip(skater._findings) }}"></i>
+                            </td>
+                            <td>{{ gru.getLabel(labels, 'positions', skater.position) }}</td>
+                            <td>{{ skater.goals }}</td>
+                            <td>{{ skater.assists }}</td>
+                            <td>{{ gru.calculatePoints(skater) }}</td>
+                            <td ng-if="hasPlusMinus">{{ skater.plus_minus !== undefined ? skater.plus_minus : '' }}</td>
+                            <td ng-if="hasShotsOnGoal">{{ skater.shots_on_goal !== undefined ? skater.shots_on_goal : '' }}</td>
+                            <td>{{ gru.formatPenaltyMinutes(skater.penalty_minutes) }}</td>
+                            <td ng-if="hasToi">{{ gru.formatToi(skater.toi) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Datenhinweise -->
+        <div id="findings" class="shadow mb-3" ng-if="findingEntries.length > 0">
+            <div class="alert alert-info main-bg mb-0" style="cursor: pointer" ng-click="toggleFindings()">
+                <i class="fas" ng-class="findingsShown ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+                Datenhinweise zu diesem Spiel ({{ findingEntries.length }})
+            </div>
+            <div class="p-3 border" ng-if="findingsShown">
+                <div ng-repeat="entry in findingEntries" class="mb-2">
+                    <i ng-if="entry.isWarning" class="fas fa-triangle-exclamation text-warning"></i>
+                    <b>{{ entry.severityLabel }}:</b> {{ entry.checkLabel }} ({{ entry.target }})
+                    <div class="small text-muted">{{ entry.finding.description }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

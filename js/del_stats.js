@@ -9,6 +9,11 @@ let app = angular.module('delStatsApp', [
 app.constant('config', {
     defaultSeason: 2026,
     cloudfrontBaseUrl: 'https://d1fqr5y2lyjylu.cloudfront.net/data/',
+    gameReports: {
+        // games before this season have no report yet; raise once the
+        // archive seasons 1994-2016 are converted in the backend
+        firstSeason: 2017,
+    },
 });
 
 app.factory('cfgLoader', [
@@ -110,6 +115,12 @@ app.config([
                 title: 'Schussanalyse',
                 templateUrl: 'shot_explorer.html',
                 controller: 'shotExplorerController',
+                reloadOnSearch: false,
+            })
+            .when('/game/:season/:game_id', {
+                title: 'Spiel',
+                templateUrl: 'game.html',
+                controller: 'gameController',
                 reloadOnSearch: false,
             })
             .when('/datenschutz', {

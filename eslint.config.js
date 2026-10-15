@@ -52,6 +52,7 @@ module.exports = [
                 FormatUtils: 'readonly',
                 GameFilters: 'readonly',
                 GameLogMetadata: 'readonly',
+                GameReportUtils: 'readonly',
                 TimespanUtils: 'readonly',
                 StatCategorization: 'readonly',
                 CareerStatUtils: 'readonly',

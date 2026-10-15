@@ -10,6 +10,7 @@ const {
     formatScore,
     buildGenericId,
     gameReportUrl,
+    playerProfileUrl,
     fallbackLabel,
     getLabel,
     parseFindingPath,
@@ -152,6 +153,26 @@ test.describe('gameReportUrl', () => {
         expect(
             gameReportUrl({ season: 2025, game_date: '2025-09-26', team: 'EBB' }, 2017),
         ).toBeNull();
+    });
+});
+
+test.describe('playerProfileUrl', () => {
+    const player = { ids: { current: 1491 }, first_name: 'Tim', last_name: 'Fleischer' };
+
+    test('a player with ids.current from a season with profiles', () => {
+        expect(playerProfileUrl(player, 'STR', 2025)).toBe('#!/player_profile/2025/STR/1491');
+    });
+
+    test('an archive-only player (no ids.current) has no profile', () => {
+        expect(playerProfileUrl({ ids: { archive: 3719 } }, 'STR', 2025)).toBeNull();
+    });
+
+    test('a season before player profiles exist', () => {
+        expect(playerProfileUrl(player, 'STR', 2015)).toBeNull();
+    });
+
+    test('a missing player (e.g. a goal without a scorer) has no profile', () => {
+        expect(playerProfileUrl(undefined, 'STR', 2025)).toBeNull();
     });
 });
 

@@ -268,7 +268,7 @@
             <tr class="{{stat.home_road === 'home'? 'table-info' : 'table-warning'}}" data-ng-repeat="stat in filtered_stats = (player_stats | orderBy:sortCriterion:statsSortDescending | filter:dayFilter | filter:fromRoundFilter | filter:toRoundFilter | filter:weekdayFilter | filter: {home_road: homeRoadFilter} | filter: {opp_team: oppFilter} | filter: {season_type: seasonTypeFilter})">
                 <td class="w-08 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
-                <td class="w-11 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a></td>
+                <td class="w-11 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-10 text-right">{{ season != 2017 ? svc.formatTime(stat.time_on_ice) : '' }}</td>
                 <td class="w-10 text-right">{{ season != 2017 ? svc.formatTime(stat.time_on_ice_pp) : '' }}</td>
                 <td class="w-10 text-right">{{ season != 2017 ? svc.formatTime(stat.time_on_ice_sh) : '' }}</td>
@@ -313,7 +313,7 @@
             <tr class="{{stat.home_road === 'home'? 'table-info' : 'table-warning'}}" data-ng-repeat="stat in filtered_stats = (player_stats | orderBy:sortCriterion:statsSortDescending | filter:dayFilter | filter:fromRoundFilter | filter:toRoundFilter | filter:weekdayFilter | filter: {home_road: homeRoadFilter} | filter: {opp_team: oppFilter} | filter: {season_type: seasonTypeFilter})">
                 <td class="w-08 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
-                <td class="w-13 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a></td>
+                <td class="w-13 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-08 text-right">{{ stat.shots_missed }}</td>
                 <td class="w-08 text-right">{{ stat.shots_blocked }}</td>
                 <td class="w-08 text-right">{{ stat.plus_minus }}</td>
@@ -358,7 +358,7 @@
             <tr class="{{stat.home_road === 'home'? 'table-info' : 'table-warning'}}" data-ng-repeat="stat in filtered_stats = (shootoutParticipationGames | orderBy:sortCriterion:statsSortDescending | filter:dayFilter | filter:fromRoundFilter | filter:toRoundFilter | filter:weekdayFilter | filter: {home_road: homeRoadFilter} | filter: {opp_team: oppFilter} | filter: {season_type: seasonTypeFilter})">
                 <td class="w-08 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
-                <td class="w-13 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a></td>
+                <td class="w-13 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-18 text-right">{{ stat.so_attempts }}</td>
                 <td class="w-18 text-right">{{ stat.so_goals }}</td>
                 <td class="w-18 text-right">{{ stat.so_pctg.toFixed(1) }} %</td>
@@ -393,7 +393,7 @@
             <tr class="{{stat.home_road === 'home'? 'table-info' : 'table-warning'}}" data-ng-repeat="stat in filtered_stats = (goalie_so_stats | orderBy:sortCriterion:statsSortDescending | filter:goalieFilter | filter:dayFilter | filter: {home_road: homeRoadFilter} | filter: {opp_team: oppFilter} | filter:fromRoundFilter | filter:toRoundFilter | filter:weekdayFilter | filter: {season_type: seasonTypeFilter})">
                 <td class="w-08 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
-                <td class="w-13 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a></td>
+                <td class="w-13 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-24 text-right">{{ stat.so_attempts_a }}</td>
                 <td class="w-24 text-right">{{ stat.so_goals_a }}</td>
                 <td class="w-24 text-right">{{ stat.so_sv_pctg.toFixed(1) }} %</td>
@@ -427,7 +427,7 @@
             <tr class="{{stat.home_road === 'home'? 'table-info' : 'table-warning'}}" data-ng-repeat="stat in filtered_stats = (player_stats | orderBy:sortCriterion:statsSortDescending | filter:dayFilter | filter:fromRoundFilter | filter:toRoundFilter | filter:weekdayFilter | filter: {home_road: homeRoadFilter} | filter: {opp_team: oppFilter} | filter: {season_type: seasonTypeFilter})">
                 <td class="w-08 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
-                <td class="w-19 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a></td>
+                <td class="w-19 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-11 text-right">{{ stat.on_ice_sh_f }}</td>
                 <td class="w-11 text-right">{{ stat.on_ice_sh_a }}</td>
                 <td class="w-11 text-right">{{ stat.on_ice_sh_pctg.toFixed(1) }} %</td>
@@ -466,7 +466,7 @@
             <tr class="{{stat.home_road === 'home'? 'table-info' : 'table-warning'}}" data-ng-repeat="stat in filtered_stats = (player_stats | orderBy:sortCriterion:statsSortDescending | filter:dayFilter | filter:fromRoundFilter | filter:toRoundFilter | filter:weekdayFilter | filter: {home_road: homeRoadFilter} | filter: {opp_team: oppFilter} | filter: {season_type: seasonTypeFilter})">
                 <td class="w-07 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
-                <td class="w-10 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a></td>
+                <td class="w-10 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-09 text-right">{{ stat.on_ice_sog_f }}</td>
                 <td class="w-09 text-right">{{ stat.on_ice_sog_a }}</td>
                 <td class="w-09 text-right">{{ stat.on_ice_sog_pctg.toFixed(1) }} %</td>
@@ -511,7 +511,7 @@
             <tr class="{{stat.home_road === 'home'? 'table-info' : 'table-warning'}}" data-ng-repeat="stat in filtered_stats = (player_stats | orderBy:sortCriterion:statsSortDescending | filter:dayFilter | filter:fromRoundFilter | filter:toRoundFilter | filter:weekdayFilter | filter: {home_road: homeRoadFilter} | filter: {opp_team: oppFilter} | filter: {season_type: seasonTypeFilter})">
                 <td class="w-08 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
-                <td class="w-19 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a></td>
+                <td class="w-19 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-11 text-right">{{ stat.on_ice_sh_f_5v5 }}</td>
                 <td class="w-11 text-right">{{ stat.on_ice_sh_a_5v5 }}</td>
                 <td class="w-11 text-right">{{ stat.on_ice_sh_pctg_5v5.toFixed(1) }} %</td>
@@ -550,7 +550,7 @@
             <tr class="{{stat.home_road === 'home'? 'table-info' : 'table-warning'}}" data-ng-repeat="stat in filtered_stats = (player_stats | orderBy:sortCriterion:statsSortDescending | filter:dayFilter | filter:fromRoundFilter | filter:toRoundFilter | filter:weekdayFilter | filter: {home_road: homeRoadFilter} | filter: {opp_team: oppFilter} | filter: {season_type: seasonTypeFilter})">
                 <td class="w-07 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
-                <td class="w-10 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a></td>
+                <td class="w-10 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-09 text-right">{{ stat.on_ice_sog_f_5v5 }}</td>
                 <td class="w-09 text-right">{{ stat.on_ice_sog_a_5v5 }}</td>
                 <td class="w-09 text-right">{{ stat.on_ice_sog_pctg_5v5.toFixed(1) }} %</td>
@@ -595,7 +595,7 @@
             <tr class="{{stat.home_road === 'home'? 'table-info' : 'table-warning'}}" data-ng-repeat="stat in filtered_stats = (player_stats | orderBy:sortCriterion:statsSortDescending | filter:dayFilter | filter:fromRoundFilter | filter:toRoundFilter | filter:weekdayFilter | filter: {home_road: homeRoadFilter} | filter: {opp_team: oppFilter} | filter: {season_type: seasonTypeFilter})">
                 <td class="w-08 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
-                <td class="w-16 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a></td>
+                <td class="w-16 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-06 text-right">{{ stat.nzone_faceoffs }}</td>
                 <td class="w-05 text-right">{{ stat.nzone_faceoffs_won }}</td>
                 <td class="w-04 text-right">{{ stat.nzone_faceoffs_lost }}</td>
@@ -646,7 +646,7 @@
             <tr class="{{stat.home_road === 'home'? 'table-info' : 'table-warning'}}" data-ng-repeat="stat in filtered_stats = (player_stats | orderBy:sortCriterion:statsSortDescending | filter:dayFilter | filter:fromRoundFilter | filter:toRoundFilter | filter:weekdayFilter | filter: {home_road: homeRoadFilter} | filter: {opp_team: oppFilter} | filter: {season_type: seasonTypeFilter})">
                 <td class="w-08 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
-                <td class="w-13 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a></td>
+                <td class="w-13 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-08 text-center">{{ stat.shoots == 'left' ? 'L' : 'R' }}</td>
                 <td class="w-08 text-right">{{ stat.weak_side_faceoffs }}</td>
                 <td class="w-08 text-right">{{ stat.weak_side_faceoffs_won }}</td>
@@ -691,7 +691,7 @@
             <tr class="{{stat.home_road === 'home'? 'table-info' : 'table-warning'}}" data-ng-repeat="stat in filtered_stats = (player_stats | orderBy:sortCriterion:statsSortDescending | filter:dayFilter | filter:fromRoundFilter | filter:toRoundFilter | filter:weekdayFilter | filter: {home_road: homeRoadFilter} | filter: {opp_team: oppFilter} | filter: {season_type: seasonTypeFilter})">
                 <td class="w-08 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
-                <td class="w-16 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a></td>
+                <td class="w-16 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-09 text-right">{{ row_total = stat.ozone_starts + stat.dzone_starts + stat.nzone_starts }}</td>
                 <td class="w-09 text-right">{{ stat.nzone_starts }}</td>
                 <td class="w-11 text-right">{{ row_total > 0 ? (stat.nzone_starts / row_total * 100).toFixed(1) : (0).toFixed(1) }} %</td>
@@ -732,7 +732,7 @@
             <tr class="{{stat.home_road === 'home'? 'table-info' : 'table-warning'}}" data-ng-repeat="stat in filtered_stats = (player_stats | orderBy:sortCriterion:statsSortDescending | filter:dayFilter | filter:fromRoundFilter | filter:toRoundFilter | filter:weekdayFilter | filter: {home_road: homeRoadFilter} | filter: {opp_team: oppFilter} | filter: {season_type: seasonTypeFilter})">
                 <td class="w-08 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
-                <td class="w-19 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a></td>
+                <td class="w-19 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-06 text-right">{{ stat.goals }}</td>
                 <td class="w-05 text-right">{{ stat.gw_goals }}</td>
                 <td class="w-05 text-right">{{ stat.first_goals }}</td>
@@ -785,9 +785,7 @@
                         stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
                 <td class="w-14 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score
-                        }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road
-                        === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type
-                        === 'OT' ? '(VL)' : ''}}</a></td>
+                        }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-08 text-right">{{ stat.goals }}</td>
                 <td class="w-08 text-right">{{ stat.assists }}</td>
                 <td class="w-08 text-right">{{ stat.primary_assists }}</td>
@@ -833,9 +831,7 @@
                 <td class="w-08 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
                 <td class="w-15 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score
-                        }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road
-                        === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type
-                        === 'OT' ? '(VL)' : ''}}</a></td>
+                        }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-05 text-right">{{ stat.line }}</td>
                 <td class="w-13"><a href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.defense[0]}}">{{ players[stat.defense[0]]['first_name'].length > 10 ? players[stat.defense[0]]['first_name'].charAt(0) + '.' : players[stat.defense[0]]['first_name'] }} {{ players[stat.defense[0]]['last_name'] }}</a></td>
                 <td class="w-13"><a href="#!/player_profile/{{season}}/{{stat.team}}/{{stat.defense[1]}}">{{ players[stat.defense[1]]['first_name'].length > 10 ? players[stat.defense[1]]['first_name'].charAt(0) + '.' : players[stat.defense[1]]['first_name'] }} {{ players[stat.defense[1]]['last_name'] }}</a></td>
@@ -930,9 +926,7 @@
                 <td class="w-08 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
                 <td class="w-13 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score
-                        }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road
-                        === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type
-                        === 'OT' ? '(VL)' : ''}}</a></td>
+                        }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-08 text-right">{{ stat.games_started }}</td>
                 <td class="w-08 text-right">{{ stat.w }}</td>
                 <td class="w-08 text-right">{{ stat.l }}</td>
@@ -978,9 +972,7 @@
                 <td class="w-08 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
                 <td class="w-13 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score
-                        }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road
-                        === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type
-                        === 'OT' ? '(VL)' : ''}}</a></td>
+                        }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-08 text-right">{{ stat.games_started }}</td>
                 <td class="w-08 text-right">{{ stat.shots_against }}</td>
                 <td class="w-08 text-right">{{ stat.goals_against }}</td>
@@ -1026,9 +1018,7 @@
                 <td class="w-08 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
                 <td class="w-13 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score
-                        }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road
-                        === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type
-                        === 'OT' ? '(VL)' : ''}}</a></td>
+                        }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-08 text-right">{{ stat.sa_slot }}</td>
                 <td class="w-08 text-right">{{ stat.ga_slot }}</td>
                 <td class="w-08 text-right">{{ stat.save_pctg_slot != null ? stat.save_pctg_slot.toFixed(2) + ' %' : 'n/a' }}</td>
@@ -1074,9 +1064,7 @@
                 <td class="w-08 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
                 <td class="w-15 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score
-                        }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road
-                        === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type
-                        === 'OT' ? '(VL)' : ''}}</a></td>
+                        }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-10 text-right">{{ stat.sa_blue_line }}</td>
                 <td class="w-10 text-right">{{ stat.ga_blue_line }}</td>
                 <td class="w-13 text-right">{{ stat.save_pctg_blue_line != null ? stat.save_pctg_blue_line.toFixed(2) + ' %' : 'n/a' }}</td>
@@ -1116,9 +1104,7 @@
                 <td class="w-08 text-center"><a href="https://www.del.org/spielplan/{{stat.game_date}}#schedule">{{ stat.game_date }}</a></td>
                 <td class="w-07 text-right">{{ stat.round }}</td>
                 <td class="w-13 {{ svc.setTextColor(stat.score, stat.opp_score) }}"><b>{{ stat.score
-                        }}:{{stat.opp_score}} </b><a href="https://www.del.org/event/{{stat.home_road === 'home'? team_lookup[stat.team] : team_lookup[stat.opp_team]}}-{{stat.home_road === 'home'? team_lookup[stat.opp_team] : team_lookup[stat.team]}}/{{stat.schedule_game_id}}">{{stat.home_road
-                        === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type
-                        === 'OT' ? '(VL)' : ''}}</a></td>
+                        }}:{{stat.opp_score}} </b><a ng-if="svc.gameReportUrl(stat)" ng-href="{{ svc.gameReportUrl(stat) }}">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(stat)">{{stat.home_road === 'home'? 'vs.' : '@'}} {{ stat.opp_team }} {{stat.game_type === 'SO' ? '(SO)' : stat.game_type === 'OT' ? '(VL)' : ''}}</span></td>
                 <td class="w-08 text-right">{{ stat.sa_5v5 }}</td>
                 <td class="w-08 text-right">{{ stat.ga_5v5 }}</td>
                 <td class="w-08 text-right">{{ stat.save_pctg_5v5 != null ? stat.save_pctg_5v5.toFixed(2) + ' %' : 'n/a' }}</td>

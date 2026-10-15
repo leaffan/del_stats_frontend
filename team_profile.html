@@ -291,9 +291,7 @@
                 <td class="w-07 text-right">{{ game.round }}</td>
                 <td class="w-10 {{ svc.setTextColor(game.score, game.opp_score) }}">
                     <b>{{game.score}}:{{game.opp_score}}</b>
-                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
-                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
-                    </a>
+                    <a ng-if="svc.gameReportUrl(game)" ng-href="{{ svc.gameReportUrl(game) }}">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(game)">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</span>
                 </td>
                 <td class="w-10 text-right">{{ game.faceoffs }}</td>
                 <td class="w-10 text-right">{{ game.faceoffs_won }}</td>
@@ -338,9 +336,7 @@
                 <td class="w-07 text-right">{{ game.round }}</td>
                 <td class="w-10 {{ svc.setTextColor(game.score, game.opp_score) }}">
                     <b>{{game.score}}:{{game.opp_score}}</b>
-                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
-                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
-                    </a>
+                    <a ng-if="svc.gameReportUrl(game)" ng-href="{{ svc.gameReportUrl(game) }}">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(game)">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</span>
                 </td>
                 <td class="w-10 text-right">{{ game.shots_on_goal }}</td>
                 <td class="w-09 text-right">{{ game.shots_missed }}</td>
@@ -387,9 +383,7 @@
                 <td class="w-07 text-right">{{ game.round }}</td>
                 <td class="w-10 {{ svc.setTextColor(game.score, game.opp_score) }}">
                     <b>{{game.score}}:{{game.opp_score}}</b>
-                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
-                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
-                    </a>
+                    <a ng-if="svc.gameReportUrl(game)" ng-href="{{ svc.gameReportUrl(game) }}">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(game)">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</span>
                 </td>
                 <td class="w-09 text-right">{{ game.goals_1 }}</td>
                 <td class="w-10 text-right">{{ game.opp_goals_1 }}</td>
@@ -436,9 +430,7 @@
                 <td class="w-07 text-right">{{ game.round }}</td>
                 <td class="w-10 {{ svc.setTextColor(game.score, game.opp_score) }}">
                     <b>{{game.score}}:{{game.opp_score}}</b>
-                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
-                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
-                    </a>
+                    <a ng-if="svc.gameReportUrl(game)" ng-href="{{ svc.gameReportUrl(game) }}">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(game)">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</span>
                 </td>
                 <td class="w-07 text-right">{{ game.goals }}</td>
                 <td class="w-07 text-right">{{ game.opp_goals }}</td>
@@ -489,9 +481,7 @@
                 <td class="w-07 text-right">{{ game.round }}</td>
                 <td class="w-10 {{ svc.setTextColor(game.score, game.opp_score) }}">
                     <b>{{game.score}}:{{game.opp_score}}</b>
-                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
-                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
-                    </a>
+                    <a ng-if="svc.gameReportUrl(game)" ng-href="{{ svc.gameReportUrl(game) }}">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(game)">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</span>
                 </td>
                 <td class="w-15">{{ game.ref_1 }}</td>
                 <td class="w-15">{{ game.ref_2 }}</td>
@@ -539,9 +529,7 @@
                 <td class="w-07 text-right">{{ game.round }}</td>
                 <td class="w-10 {{ svc.setTextColor(game.score, game.opp_score) }}">
                     <b>{{game.score}}:{{game.opp_score}}</b>
-                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
-                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
-                    </a>
+                    <a ng-if="svc.gameReportUrl(game)" ng-href="{{ svc.gameReportUrl(game) }}">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(game)">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</span>
                 </td>
                 <td class="w-18">{{ game.arena }}</td>
                 <td class="w-08 text-right">{{ game.attendance }}</td>
@@ -583,9 +571,7 @@
                 <td class="w-07 text-center"><a href="https://www.del.org/spielplan/{{game.game_date}}#schedule">{{ game.game_date }}</a></td>
                 <td class="w-10 {{ svc.setTextColor(game.score, game.opp_score) }}">
                     <b>{{game.score}}:{{game.opp_score}}</b>
-                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
-                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
-                    </a>
+                    <a ng-if="svc.gameReportUrl(game)" ng-href="{{ svc.gameReportUrl(game) }}">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(game)">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</span>
                 </td>
                 <td class="w-11 text-right">{{ svc.formatTime(game.pp_time) }}</td>
                 <td class="w-08 text-right">{{ game.pp_opps }}</td>
@@ -635,9 +621,7 @@
                 <td class="w-07 text-right">{{ game.round }}</td>
                 <td class="w-16 {{ svc.setTextColor(game.score, game.opp_score) }}">
                     <b>{{game.score}}:{{game.opp_score}}</b>
-                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
-                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
-                    </a>
+                    <a ng-if="svc.gameReportUrl(game)" ng-href="{{ svc.gameReportUrl(game) }}">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(game)">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</span>
                 </td>
                 <td class="w-10 text-right">{{ game.pim }}</td>
                 <td class="w-10 text-right">{{ game.penalty_2 }}</td>
@@ -682,9 +666,7 @@
                 <td class="w-07 text-right">{{ game.round }}</td>
                 <td class="w-26 {{ svc.setTextColor(game.score, game.opp_score) }}">
                     <b>{{game.score}}:{{game.opp_score}}</b>
-                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
-                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
-                    </a>
+                    <a ng-if="svc.gameReportUrl(game)" ng-href="{{ svc.gameReportUrl(game) }}">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(game)">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</span>
                 </td>
                 <td class="w-15 text-right">{{ game.en_goals }}</td>
                 <td class="w-15 text-right">{{ game.opp_en_goals }}</td>
@@ -719,9 +701,7 @@
                 <td class="w-07 text-right">{{ game.round }}</td>
                 <td class="w-10 {{ svc.setTextColor(game.score, game.opp_score) }}">
                     <b>{{game.score}}:{{game.opp_score}}</b>
-                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
-                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
-                    </a>
+                    <a ng-if="svc.gameReportUrl(game)" ng-href="{{ svc.gameReportUrl(game) }}">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(game)">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</span>
                 </td>
                 <td class="w-04 text-right">
                     {{ homeRoadFilter || oppFilter ? '--' : getStandingsPositionThroughDate(game.game_date) }}
@@ -776,9 +756,7 @@
                 <td class="w-07 text-right">{{ game.round }}</td>
                 <td class="w-10 {{ svc.setTextColor(game.score, game.opp_score) }}">
                     <b>{{game.score}}:{{game.opp_score}}</b>
-                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
-                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
-                    </a>
+                    <a ng-if="svc.gameReportUrl(game)" ng-href="{{ svc.gameReportUrl(game) }}">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(game)">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</span>
                 </td>
                 <td class="w-08 text-right">{{ game.shots }}</td>
                 <td class="w-08 text-right">{{ game.sl_sh }}</td>
@@ -827,9 +805,7 @@
                 <td class="w-07 text-right">{{ game.round }}</td>
                 <td class="w-10 {{ svc.setTextColor(game.score, game.opp_score) }}">
                     <b>{{game.score}}:{{game.opp_score}}</b>
-                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
-                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
-                    </a>
+                    <a ng-if="svc.gameReportUrl(game)" ng-href="{{ svc.gameReportUrl(game) }}">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(game)">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</span>
                 </td>
                 <td class="w-08 text-right">{{ game.shots_on_goal }}</td>
                 <td class="w-08 text-right">{{ game.sl_og }}</td>
@@ -878,9 +854,7 @@
                 <td class="w-07 text-right">{{ game.round }}</td>
                 <td class="w-10 {{ svc.setTextColor(game.score, game.opp_score) }}">
                     <b>{{game.score}}:{{game.opp_score}}</b>
-                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
-                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
-                    </a>
+                    <a ng-if="svc.gameReportUrl(game)" ng-href="{{ svc.gameReportUrl(game) }}">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(game)">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</span>
                 </td>
                 <td class="w-08 text-right">{{ game.opp_shots }}</td>
                 <td class="w-08 text-right">{{ game.sl_sh_a }}</td>
@@ -929,9 +903,7 @@
                 <td class="w-07 text-right">{{ game.round }}</td>
                 <td class="w-10 {{ svc.setTextColor(game.score, game.opp_score) }}">
                     <b>{{game.score}}:{{game.opp_score}}</b>
-                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
-                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
-                    </a>
+                    <a ng-if="svc.gameReportUrl(game)" ng-href="{{ svc.gameReportUrl(game) }}">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(game)">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</span>
                 </td>
                 <td class="w-08 text-right">{{ game.opp_shots_on_goal }}</td>
                 <td class="w-08 text-right">{{ game.sl_og_a }}</td>
@@ -979,9 +951,7 @@
                 <td class="w-07 text-right">{{ game.round }}</td>
                 <td class="w-10 {{ svc.setTextColor(game.score, game.opp_score) }}">
                     <b>{{game.score}}:{{game.opp_score}}</b>
-                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
-                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
-                    </a>
+                    <a ng-if="svc.gameReportUrl(game)" ng-href="{{ svc.gameReportUrl(game) }}">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(game)">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</span>
                 </td>
                 <td class="w-10 text-right">{{ svc.formatTime(game.time_played) }}</td>
                 <td class="w-10 text-right">{{ svc.formatTime(game.leading) }}</td>
@@ -1025,9 +995,7 @@
                 <td class="w-07 text-right">{{ game.round }}</td>
                 <td class="w-10 {{ svc.setTextColor(game.score, game.opp_score) }}">
                     <b>{{game.score}}:{{game.opp_score}}</b>
-                    <a href="https://www.del.org/event/{{game.home_road === 'home'? team_lookup[game.team] : team_lookup[game.opp_team]}}-{{game.home_road === 'home'? team_lookup[game.opp_team] : team_lookup[game.team]}}/{{game.schedule_game_id}}">
-                        {{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}
-                    </a>
+                    <a ng-if="svc.gameReportUrl(game)" ng-href="{{ svc.gameReportUrl(game) }}">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</a><span ng-if="!svc.gameReportUrl(game)">{{game.home_road === 'home'? 'vs.' : '@'}} {{ game.opp_team }} {{game.game_type === 'SO' ? '(SO)' : game.game_type === 'OT' ? '(VL)' : ''}}</span>
                 </td>
                 <td class="w-08 text-right">{{ game.so_rounds }}</td>
                 <td class="w-08 text-right">{{ game.so_a }}</td>

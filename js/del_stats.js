@@ -168,13 +168,19 @@ app.run(function (amMoment) {
 });
 
 // providing functions to several controllers as services
-app.factory('svc', function ($rootScope) {
+app.factory('svc', function ($rootScope, config) {
     return {
         setTitle: function (title) {
             $rootScope.title = title;
         },
         // marker and tooltip for a team's playoff qualification state (or null)
         getClinchedStatus: ClinchedStatus.getClinchedStatus,
+        // the game report link for a player/team game-log row (null for a
+        // season before config.gameReports.firstSeason, or a row missing
+        // what it takes to resolve a generic_id)
+        gameReportUrl: function (stat) {
+            return GameReportUtils.gameReportUrl(stat, config.gameReports.firstSeason);
+        },
         // sets sorting order according to selected sort criterion
         setSortOrder: function (
             sortCriterion,

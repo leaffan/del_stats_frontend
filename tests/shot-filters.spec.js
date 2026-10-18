@@ -5,6 +5,7 @@ const {
     computeStats,
     deriveShotMetadata,
 } = require('../js/shot_filters.js');
+const { deriveMonthsPlayed } = require('../js/game_log_metadata.js');
 
 // Builds one raw shot record (the shape of data/<season>/shots/per_player/<id>.json)
 // with sensible defaults, so each test only has to spell out what it cares about.
@@ -422,9 +423,26 @@ test.describe('deriveShotMetadata', () => {
         expect(deriveShotMetadata(shots).monthsPlayed).toEqual([9, 10]);
     });
 
-    test('shots without a game_date are skipped when deriving monthsPlayed', () => {
+    test('monthsPlayed delegates to GameLogMetadata.deriveMonthsPlayed, no independent computation', () => {
+        const shots = [
+            shot({ game_date: '2025-10-05' }),
+            shot({ game_date: '2025-10-20' }),
+            shot({ game_date: '2025-11-01' }),
+            shot({ game_date: '2025-10-05' }),
+        ];
+        expect(deriveShotMetadata(shots).monthsPlayed).toEqual(deriveMonthsPlayed(shots));
+    });
+
+    // deriveShotMetadata used to guard against a null/missing game_date here
+    // (filtering it out before deduping), but a full scan of every shot
+    // record in every season (2018-2026, 337k+ records) found none with a
+    // null/missing/empty game_date, so that guard was dead code - it was
+    // dropped when this delegated to the shared, guard-less
+    // deriveMonthsPlayed (see Plan.md). A null game_date would now surface as
+    // a NaN entry instead of being silently filtered.
+    test('a null game_date produces a NaN month entry (the dropped guard never triggered on real data)', () => {
         const shots = [shot({ game_date: null }), shot({ game_date: '2025-10-05' })];
-        expect(deriveShotMetadata(shots).monthsPlayed).toEqual([9]);
+        expect(deriveShotMetadata(shots).monthsPlayed).toEqual([NaN, 9]);
     });
 
     test('roundsPlayed dedupes by composite round + season_type + po_round key, sorted', () => {

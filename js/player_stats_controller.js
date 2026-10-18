@@ -249,9 +249,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         // retrieving all weekdays a game was played
         $scope.weekdaysPlayed = GameLogMetadata.deriveWeekdaysPlayed($scope.player_games);
         // retrieving all months a game was played
-        $scope.monthsPlayed = [
-            ...new Set($scope.player_games.map((item) => moment(item.game_date).month())),
-        ];
+        $scope.monthsPlayed = GameLogMetadata.deriveMonthsPlayed($scope.player_games);
         // retrieving rounds played, and from/to round selection bounds
         let roundSelection = GameLogMetadata.deriveRoundSelection($scope.player_games);
         $scope.roundsPlayed = roundSelection.roundsPlayed;

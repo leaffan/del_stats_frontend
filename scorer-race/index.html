@@ -217,6 +217,9 @@ a.plr-link:hover { text-decoration-color: currentColor; }
 
   async function main() {
     const res = await fetch(DATA_URL);
+    if (!res.ok) {
+      throw new Error(`Fetch von ${DATA_URL} fehlgeschlagen: ${res.status} ${res.statusText}`);
+    }
     const data = await res.json();
     const frames = data.frames;
     const players = data.players;
@@ -433,14 +436,18 @@ a.plr-link:hover { text-decoration-color: currentColor; }
               .attr("width", 0)
               .attr("rx", 4)
               .attr("fill", (d) => colorFor(d[0]));
-            g.append("text")
+            const nameText = g
+              .append("text")
               .attr("class", (d) => "row-name" + (d[0] === reimerId || d[0] === piettaId ? " highlight" : ""))
               .attr("x", labelW - 10)
               .attr("y", rowHeight / 2 + 1)
               .attr("text-anchor", "end")
-              .attr("dominant-baseline", "middle")
-              .append("title")
-              .text((d) => nameFor(d[0]));
+              .attr("dominant-baseline", "middle");
+            // the full-name tooltip lives in its own <title> child, never touched by the
+            // <tspan>'s .text() calls below -- setting .text() on the parent <text> element
+            // would wipe every child node, title included
+            nameText.append("title").text((d) => nameFor(d[0]));
+            nameText.append("tspan").attr("class", "row-name-label");
             g.append("text")
               .attr("class", "row-rank")
               .attr("x", 4)
@@ -485,6 +492,7 @@ a.plr-link:hover { text-decoration-color: currentColor; }
         .select("text.row-name")
         .attr("x", labelW - 10)
         .attr("y", rowHeight / 2 + 1)
+        .select("tspan.row-name-label")
         .text((d) => truncateName(nameFor(d[0])));
 
       if (showCallouts) {
@@ -565,7 +573,14 @@ a.plr-link:hover { text-decoration-color: currentColor; }
     });
   }
 
-  main();
+  main().catch((err) => {
+    console.error(err);
+    const banner = document.createElement("div");
+    banner.className = "alert alert-danger shadow-sm mb-3";
+    banner.textContent =
+      "Die aktuellen Daten konnten nicht geladen werden. Die angezeigten Zahlen sind nicht aktuell.";
+    document.querySelector(".container").prepend(banner);
+  });
 })();
 </script>
 </body>

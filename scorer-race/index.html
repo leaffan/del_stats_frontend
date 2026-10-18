@@ -290,7 +290,7 @@ body { background: #fff; color: #212529; padding-left: 0; padding-right: 0; }
       const gap = reimerTotal[1] - piettaTotal[1];
       document.getElementById("hero-gap").innerHTML =
         gap > 0
-          ? `Rückstand von Daniel Pietta: <b>${gap} ${gap === 1 ? "Punkt" : "Punkte"}</b>`
+          ? `Noch <b>${gap} ${gap === 1 ? "Punkt" : "Punkte"}</b> bis zum Rekord`
           : gap < 0
           ? `Daniel Pietta führt bereits mit <b>${-gap} ${-gap === 1 ? "Punkt" : "Punkte"}</b> Vorsprung`
           : `Gleichstand`;
@@ -384,7 +384,27 @@ body { background: #fff; color: #212529; padding-left: 0; padding-right: 0; }
       renderFrame(currentIndex, 0, false);
     }
 
-    let currentIndex = frames.length - 1;
+    function frameIndexFromHash() {
+      const match = location.hash.match(/^#date=(\d{4}-\d{2}-\d{2})$/);
+      if (!match) return null;
+      const targetDate = match[1];
+      // the last frame on or before the requested date, since not every date has its own
+      // frame (only the ones where the top 10 actually changed)
+      let idx = null;
+      for (const [i, frame] of frames.entries()) {
+        if (frame.date > targetDate) break;
+        idx = i;
+      }
+      return idx;
+    }
+
+    function updateHash(index) {
+      // replaceState, not a hash assignment: keeps the address bar shareable for the moment
+      // currently shown without spamming the browser's back/forward history every frame
+      history.replaceState(null, "", `#date=${frames[index].date}`);
+    }
+
+    let currentIndex = frameIndexFromHash() ?? frames.length - 1;
     let playing = false;
     let playToken = 0;
     let calloutTimer = null;
@@ -409,6 +429,7 @@ body { background: #fff; color: #212529; padding-left: 0; padding-right: 0; }
 
     function renderFrame(index, duration, showCallouts) {
       const frame = frames[index];
+      updateHash(index);
       clockDate.textContent = fmtDate(frame.date);
       clockSeason.textContent = frame.season;
       scrub.value = String(index);
@@ -562,6 +583,34 @@ body { background: #fff; color: #212529; padding-left: 0; padding-right: 0; }
       stopPlayback('<i class="fa-solid fa-play"></i> Verlauf abspielen');
       currentIndex = Number(scrub.value);
       renderFrame(currentIndex, 0, false);
+    });
+
+    // editing just the #date=... fragment of an already-open page and pressing Enter is a
+    // same-document navigation: no reload, just a "hashchange" event, never read otherwise
+    window.addEventListener("hashchange", () => {
+      const idx = frameIndexFromHash();
+      if (idx == null) return;
+      stopPlayback('<i class="fa-solid fa-play"></i> Verlauf abspielen');
+      currentIndex = idx;
+      renderFrame(currentIndex, 0, false);
+    });
+
+    // only elements with their own native arrow-key/space behaviour (the range slider, text
+    // inputs, selects) need to be left alone -- a focused button or link (e.g. right after
+    // clicking it) has none, so it must not swallow the shortcuts
+    const ARROW_SENSITIVE_TAGS = new Set(["INPUT", "TEXTAREA", "SELECT"]);
+    window.addEventListener("keydown", (event) => {
+      if (ARROW_SENSITIVE_TAGS.has(event.target.tagName)) return;
+      if (event.key === " ") {
+        event.preventDefault();
+        playBtn.click();
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        stepFwdBtn.click();
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        stepBackBtn.click();
+      }
     });
 
     layout();

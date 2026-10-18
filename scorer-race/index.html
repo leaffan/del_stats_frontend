@@ -70,8 +70,6 @@ body { background: #fff; color: #212529; padding-left: 0; padding-right: 0; }
 
 .hero-num { font-variant-numeric: tabular-nums; }
 .scrub-date { width: 70px; text-align: right; font-variant-numeric: tabular-nums; }
-a.plr-link { color: inherit; text-decoration: underline; text-decoration-color: rgba(0, 0, 0, .25); }
-a.plr-link:hover { text-decoration-color: currentColor; }
 </style>
 </head>
 <body>
@@ -241,7 +239,7 @@ a.plr-link:hover { text-decoration-color: currentColor; }
     function nameCell(id) {
       const name = nameFor(id);
       const highlight = id === reimerId || id === piettaId ? " font-weight-bold" : "";
-      return `<td class="${highlight}"><a class="plr-link" href="${playerLink(id)}">${name}</a></td>`;
+      return `<td class="${highlight}"><a href="${playerLink(id)}">${name}</a></td>`;
     }
 
     // climb events for Reimer/Pietta: computed once per frame transition, reused for both

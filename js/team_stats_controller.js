@@ -86,6 +86,13 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
             'referenceSeasonSelect',
         ],
         function () {
+            // computed once per filtering pass here, not once per element,
+            // since it's the same Set for every element
+            $scope.validRoundKeys = GameLogMetadata.deriveValidRoundKeys(
+                $scope.roundsPlayed,
+                $scope.fromRoundSelect,
+                $scope.toRoundSelect,
+            );
             if ($scope.team_stats) {
                 $scope.filtered_team_stats = $scope.filterStats($scope.team_stats);
             }
@@ -101,10 +108,11 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
         $scope.weekdaysPlayed = GameLogMetadata.deriveWeekdaysPlayed($scope.team_stats);
         // retrieving all months a game was played by all the teams
         $scope.monthsPlayed = GameLogMetadata.deriveMonthsPlayed($scope.team_stats);
-        // retrieving rounds played, and maximum round played and setting round to selection to it
-        let roundsPlayedResult = GameLogMetadata.deriveRoundsPlayed($scope.team_stats);
-        $scope.roundsPlayed = roundsPlayedResult.roundsPlayed;
-        $scope.toRoundSelect = roundsPlayedResult.toRoundSelect;
+        // retrieving rounds played, and from/to round selection bounds
+        let roundSelection = GameLogMetadata.deriveRoundSelection($scope.team_stats);
+        $scope.roundsPlayed = roundSelection.roundsPlayed;
+        $scope.fromRoundSelect = roundSelection.fromRoundSelect;
+        $scope.toRoundSelect = roundSelection.toRoundSelect;
         // $scope.filtered_team_stats = $scope.filterStats($scope.team_stats);
     });
 
@@ -188,8 +196,7 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
                     toDate: ctrl.toDate ? ctrl.toDate.format('YYYY-MM-DD') : null,
                     homeAwaySelect: $scope.homeAwaySelect,
                     weekdaySelect: $scope.weekdaySelect,
-                    fromRoundSelect: $scope.fromRoundSelect,
-                    toRoundSelect: $scope.toRoundSelect,
+                    validRoundKeys: $scope.validRoundKeys,
                     gamesBackSelect: $scope.gamesBackSelect,
                 })
             ) {

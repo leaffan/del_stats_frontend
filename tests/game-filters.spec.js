@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { gamePassesCommonFilters } = require('../js/game_filters.js');
+const { roundKeyOf } = require('../js/game_log_metadata.js');
 
 // Builds one raw per-game stat-line record (the shape of a row from
 // data/<season>/del_player_game_stats.csv or del_team_game_stats.csv) with
@@ -11,6 +12,7 @@ function game(overrides) {
             home_road: 'home',
             weekday: 'Mi',
             round: 5,
+            season_type: 'RS',
             games_back: 3,
         },
         overrides,
@@ -24,8 +26,7 @@ function noFilters(overrides) {
             toDate: null,
             homeAwaySelect: null,
             weekdaySelect: null,
-            fromRoundSelect: null,
-            toRoundSelect: null,
+            validRoundKeys: null,
             gamesBackSelect: null,
         },
         overrides,
@@ -97,24 +98,37 @@ test.describe('gamePassesCommonFilters', () => {
     });
 
     test.describe('round range', () => {
-        test('fromRoundSelect/toRoundSelect are inclusive on both ends', () => {
-            expect(
-                gamePassesCommonFilters(
-                    game({ round: 5 }),
-                    noFilters({ fromRoundSelect: '5', toRoundSelect: '5' }),
-                ),
-            ).toBe(true);
+        test('a validRoundKeys Set containing the element round key passes', () => {
+            const g = game({ round: 5 });
+            const validRoundKeys = new Set([roundKeyOf(g)]);
+            expect(gamePassesCommonFilters(g, noFilters({ validRoundKeys: validRoundKeys }))).toBe(
+                true,
+            );
         });
 
-        test('rejects a round before fromRoundSelect', () => {
+        test('rejects a round whose key is not in validRoundKeys', () => {
+            const validRoundKeys = new Set([roundKeyOf(game({ round: 5 }))]);
             expect(
-                gamePassesCommonFilters(game({ round: 4 }), noFilters({ fromRoundSelect: '5' })),
+                gamePassesCommonFilters(
+                    game({ round: 4 }),
+                    noFilters({ validRoundKeys: validRoundKeys }),
+                ),
             ).toBe(false);
         });
 
-        test('rejects a round after toRoundSelect', () => {
+        test('a null validRoundKeys skips the round filter entirely (full range selected)', () => {
             expect(
-                gamePassesCommonFilters(game({ round: 6 }), noFilters({ toRoundSelect: '5' })),
+                gamePassesCommonFilters(game({ round: 999 }), noFilters({ validRoundKeys: null })),
+            ).toBe(true);
+        });
+
+        test('a round sharing a number with a different season_type is rejected unless its own key is included', () => {
+            const validRoundKeys = new Set([roundKeyOf(game({ round: 1, season_type: 'RS' }))]);
+            expect(
+                gamePassesCommonFilters(
+                    game({ round: 1, season_type: 'PO' }),
+                    noFilters({ validRoundKeys: validRoundKeys }),
+                ),
             ).toBe(false);
         });
     });
@@ -135,7 +149,8 @@ test.describe('gamePassesCommonFilters', () => {
 
     test('all criteria are ANDed - one mismatch fails the whole predicate', () => {
         const g = game({ home_road: 'home', round: 5 });
-        const filters = noFilters({ homeAwaySelect: 'home', fromRoundSelect: '10' });
+        const validRoundKeys = new Set([roundKeyOf(game({ round: 10 }))]);
+        const filters = noFilters({ homeAwaySelect: 'home', validRoundKeys: validRoundKeys });
         expect(gamePassesCommonFilters(g, filters)).toBe(false);
     });
 });

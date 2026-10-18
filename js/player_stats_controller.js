@@ -119,6 +119,13 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
             'gamesBackSelect',
         ],
         function (newValue, oldValue) {
+            // computed once per filtering pass here, not once per element in
+            // elementPassedFilters, since it's the same Set for every element
+            $scope.validRoundKeys = GameLogMetadata.deriveValidRoundKeys(
+                $scope.roundsPlayed,
+                $scope.fromRoundSelect,
+                $scope.toRoundSelect,
+            );
             if ($scope.player_games && !ctrl.tableSelect.includes('goalie')) {
                 $scope.filtered_player_stats = $scope.filterStats();
             }
@@ -243,10 +250,11 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
         $scope.weekdaysPlayed = GameLogMetadata.deriveWeekdaysPlayed($scope.player_games);
         // retrieving all months a game was played
         $scope.monthsPlayed = GameLogMetadata.deriveMonthsPlayed($scope.player_games);
-        // retrieving rounds played, and maximum round played and setting round to selection to it
-        let roundsPlayedResult = GameLogMetadata.deriveRoundsPlayed($scope.player_games);
-        $scope.roundsPlayed = roundsPlayedResult.roundsPlayed;
-        $scope.toRoundSelect = roundsPlayedResult.toRoundSelect;
+        // retrieving rounds played, and from/to round selection bounds
+        let roundSelection = GameLogMetadata.deriveRoundSelection($scope.player_games);
+        $scope.roundsPlayed = roundSelection.roundsPlayed;
+        $scope.fromRoundSelect = roundSelection.fromRoundSelect;
+        $scope.toRoundSelect = roundSelection.toRoundSelect;
 
         // preparing player games for later filtering, i.e. retrieving personal data etc.
         $scope.prep_player_games = $scope.preparePlayerStats($scope.player_games);
@@ -418,8 +426,7 @@ app.controller('plrStatsController', function ($scope, $http, $window, $routePar
                 toDate: ctrl.toDate ? ctrl.toDate.format('YYYY-MM-DD') : null,
                 homeAwaySelect: $scope.homeAwaySelect,
                 weekdaySelect: $scope.weekdaySelect,
-                fromRoundSelect: $scope.fromRoundSelect,
-                toRoundSelect: $scope.toRoundSelect,
+                validRoundKeys: $scope.validRoundKeys,
                 gamesBackSelect: $scope.gamesBackSelect,
             })
         );

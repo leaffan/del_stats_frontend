@@ -1,4 +1,4 @@
-/* global module */
+/* global module, require */
 // Pure per-game filtering logic shared between player_stats_controller.js and
 // team_stats_controller.js - only the criteria that are identical between the
 // two. situationSelect and seasonTypeSelect are handled differently by each
@@ -6,8 +6,13 @@
 // situations, and reads seasonTypeSelect from a different scope) and stay in
 // each controller, ANDed together with this function's result.
 (function (root) {
+    var GameLogMetadata =
+        typeof module !== 'undefined' && module.exports
+            ? require('./game_log_metadata.js')
+            : root.GameLogMetadata;
+
     // element: one per-game stat-line record (game_date 'YYYY-MM-DD',
-    //   home_road, weekday, round, games_back, ...)
+    //   home_road, weekday, round, season_type, po_round?, games_back, ...)
     // filters: {
     //   fromDate, toDate: 'YYYY-MM-DD' or falsy (format a moment with
     //     'YYYY-MM-DD' at the call site - element.game_date is always a
@@ -16,7 +21,11 @@
     //     the moment library in this pure module),
     //   homeAwaySelect: 'home' | 'road' | falsy,
     //   weekdaySelect: weekday value or falsy,
-    //   fromRoundSelect, toRoundSelect: string/number or falsy,
+    //   validRoundKeys: a Set of round keys (see
+    //     js/game_log_metadata.js#deriveValidRoundKeys), or falsy/null to
+    //     skip the round filter entirely - callers compute this once per
+    //     filtering pass, not once per element, since it's the same for
+    //     every element in that pass,
     //   gamesBackSelect: number or falsy,
     // }
     function gamePassesCommonFilters(element, filters) {
@@ -25,10 +34,9 @@
         let isSelectedHomeAwayType =
             !filters.homeAwaySelect || filters.homeAwaySelect === element.home_road;
         let isSelectedWeekday = !filters.weekdaySelect || filters.weekdaySelect == element.weekday;
-        let isEqualPastFromRound =
-            !filters.fromRoundSelect || element.round >= parseFloat(filters.fromRoundSelect);
-        let isPriorEqualToRound =
-            !filters.toRoundSelect || element.round <= parseFloat(filters.toRoundSelect);
+        let isSelectedRound =
+            !filters.validRoundKeys ||
+            filters.validRoundKeys.has(GameLogMetadata.roundKeyOf(element));
         let isSelectedGamesBack =
             !filters.gamesBackSelect || element.games_back <= filters.gamesBackSelect;
 
@@ -37,8 +45,7 @@
             isPriorEqualToDate &&
             isSelectedHomeAwayType &&
             isSelectedWeekday &&
-            isEqualPastFromRound &&
-            isPriorEqualToRound &&
+            isSelectedRound &&
             isSelectedGamesBack
         );
     }

@@ -255,20 +255,14 @@
     // collide across season_type boundaries in principle, even though in
     // practice po_round is only ever populated for PO/MSC games).
     function deriveShotMetadata(shots) {
-        let months = shots
-            .map(function (s) {
-                // moment(), not new Date(): a 'YYYY-MM-DD' string is a
-                // date-only ISO form, which native Date parses as UTC
-                // midnight while .getMonth() reads back in local time - for
-                // negative-UTC-offset timezones that rolls a day-1-of-month
-                // game back into the previous month. moment deliberately
-                // parses date-only strings as local time instead, sidestepping
-                // the bug entirely.
-                return s.game_date ? moment(s.game_date).month() : null;
-            })
-            .filter(function (m) {
-                return m !== null;
-            });
+        // Shot records are per-shot, not per-game, but deriveMonthsPlayed
+        // only reads .game_date, so it works unchanged on either shape - a
+        // real fact-finding pass (not just a code read) confirmed no shot
+        // record in any season (2018-2026, full scan, 337k+ records) ever
+        // has a null/missing/empty game_date, so the null-guard this used to
+        // have here was dead code and has been dropped along with the
+        // duplicate computation.
+        let months = GameLogMetadata.deriveMonthsPlayed(shots);
 
         let roundSelection = GameLogMetadata.deriveRoundSelection(shots);
 

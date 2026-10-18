@@ -100,9 +100,7 @@ app.controller('teamStatsController', function ($scope, $http, $routeParams, $q,
         // retrieving all weekdays a game was played by all the teams
         $scope.weekdaysPlayed = GameLogMetadata.deriveWeekdaysPlayed($scope.team_stats);
         // retrieving all months a game was played by all the teams
-        $scope.monthsPlayed = [
-            ...new Set($scope.team_stats.map((item) => moment(item.game_date).month())),
-        ];
+        $scope.monthsPlayed = GameLogMetadata.deriveMonthsPlayed($scope.team_stats);
         // retrieving rounds played, and maximum round played and setting round to selection to it
         let roundsPlayedResult = GameLogMetadata.deriveRoundsPlayed($scope.team_stats);
         $scope.roundsPlayed = roundsPlayedResult.roundsPlayed;

@@ -1,13 +1,17 @@
 const { test, expect } = require('@playwright/test');
 const {
     deriveWeekdaysPlayed,
+    deriveMonthsPlayed,
     deriveRoundsPlayed,
     deriveRoundSelection,
     normalizedPoRound,
 } = require('../js/game_log_metadata.js');
 
 function game(overrides) {
-    return Object.assign({ weekday: 'Mi', round: 5, season_type: 'RS' }, overrides);
+    return Object.assign(
+        { weekday: 'Mi', round: 5, season_type: 'RS', game_date: '2025-10-01' },
+        overrides,
+    );
 }
 
 test.describe('deriveWeekdaysPlayed', () => {
@@ -18,6 +22,21 @@ test.describe('deriveWeekdaysPlayed', () => {
 
     test('returns an empty array for no games', () => {
         expect(deriveWeekdaysPlayed([])).toEqual([]);
+    });
+});
+
+test.describe('deriveMonthsPlayed', () => {
+    test('dedupes 0-indexed calendar months, in first-seen order (not sorted)', () => {
+        const games = [
+            game({ game_date: '2025-11-05' }),
+            game({ game_date: '2025-10-20' }),
+            game({ game_date: '2025-11-01' }),
+        ];
+        expect(deriveMonthsPlayed(games)).toEqual([10, 9]);
+    });
+
+    test('returns an empty array for no games', () => {
+        expect(deriveMonthsPlayed([])).toEqual([]);
     });
 });
 

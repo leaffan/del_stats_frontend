@@ -1,14 +1,22 @@
-/* global module */
+/* global module, require */
 // Pure per-game-array metadata derivation shared across controllers that load
-// a season's per-game stat lines. monthsPlayed is deliberately NOT included
-// here even though it's duplicated the same way - it needs moment.js to
-// parse game_date, and moment isn't an npm dependency of this project (only
-// loaded via CDN in the browser), so it stays duplicated in each controller
-// for now (see Plan.md item 4).
+// a season's per-game stat lines.
 (function (root) {
+    var moment = typeof module !== 'undefined' && module.exports ? require('moment') : root.moment;
+
     // games: array of per-game stat-line records (weekday, round, ...)
     function deriveWeekdaysPlayed(games) {
         return [...new Set(games.map((item) => item.weekday))].sort();
+    }
+
+    // Deduplicated, 0-indexed calendar months a team/player had a game in -
+    // NOT sorted, matching all four controllers' original inline version
+    // (player_stats_controller.js, team_stats_controller.js,
+    // player_profile_controller.js, team_profile_controller.js). Not
+    // extracted when this module was created since moment wasn't an npm
+    // dependency yet - it is now (see deriveRoundsPlayed/js/timespan_utils.js).
+    function deriveMonthsPlayed(games) {
+        return [...new Set(games.map((item) => moment(item.game_date).month()))];
     }
 
     // roundsPlayed/toRoundSelect: a full, deduplicated, numerically-sorted
@@ -120,6 +128,7 @@
 
     const api = {
         deriveWeekdaysPlayed: deriveWeekdaysPlayed,
+        deriveMonthsPlayed: deriveMonthsPlayed,
         deriveRoundsPlayed: deriveRoundsPlayed,
         deriveRoundSelection: deriveRoundSelection,
         normalizedPoRound: normalizedPoRound,

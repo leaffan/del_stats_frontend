@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DEL Scorer-Race</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
+<style>
+
+/* ---- del_stats_frontend-matched overrides + chart-specific styles ---- */
+:root {
+  color-scheme: light;
+  --reimer: #007bff;
+  --pietta: #dc3545;
+  --other: #6c757d;
+  --main-bg: rgb(216, 250, 250);
+  --po-bg: rgb(255, 201, 202);
+}
+body { background: #fff; color: #212529; padding-left: 0; padding-right: 0; }
+.container {
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+#chart { display: block; width: 100%; }
+.row-name { font-size: 12px; fill: #495057; }
+.row-name.highlight { font-weight: 700; fill: #212529; }
+.row-rank { font-size: 10px; fill: #6c757d; font-variant-numeric: tabular-nums; }
+.row-value { font-size: 12px; font-weight: 600; fill: #212529; font-variant-numeric: tabular-nums; }
+
+.callout-slot { display: flex; flex-direction: column; align-items: center; gap: 6px; min-height: 76px; justify-content: center; }
+
+.marker.callout {
+  display: inline-block;
+  background: orange;
+  color: #212529;
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: .5rem 1.15rem;
+  border-radius: .4rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .25);
+  opacity: 0;
+  transform: scale(.8);
+  transition: opacity .25s ease, transform .25s ease;
+}
+.marker.callout.show {
+  opacity: 1;
+  transform: scale(1);
+  animation: calloutPop .45s cubic-bezier(.34, 1.56, .64, 1);
+}
+@keyframes calloutPop {
+  0% { transform: scale(.6); }
+  60% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+.marker.climb {
+  display: inline-block;
+  background: #fff3cd;
+  color: #664d03;
+  font-weight: 600;
+  font-size: .85rem;
+  padding: .3rem .85rem;
+  border-radius: .3rem;
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+.marker.climb.show { opacity: 1; }
+
+.hero-num { font-variant-numeric: tabular-nums; }
+.scrub-date { width: 70px; text-align: right; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+
+<div class="container py-4" style="max-width:820px;">
+
+  <div class="alert alert-info shadow-sm mb-3" style="background-color: var(--main-bg); border-color: transparent;">
+    <h1 class="h3 mb-2">Der ewige Punkte-Rekord</h1>
+    <p class="mb-0">
+      Patrick Reimer führt die ewige DEL-Punkteliste (Hauptrunde und Playoffs zusammen)
+      seit November 2021 an. Daniel Pietta holt auf. Diese Grafik zeigt, wie sich die
+      Führung an der Spitze seit der ersten DEL-Saison 1994/95 immer wieder verschoben hat.
+    </p>
+  </div>
+
+  <div class="row text-center mb-2">
+    <div class="col-6 mb-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <div class="small text-muted">Aktueller Rekordhalter</div>
+          <div class="display-4 font-weight-bold hero-num" style="color:var(--reimer)" id="hero-reimer-pts">859</div>
+          <div class="small" id="hero-reimer-name">Patrick Reimer</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 mb-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <div class="small text-muted">Herausforderer</div>
+          <div class="display-4 font-weight-bold hero-num" style="color:var(--pietta)" id="hero-pietta-pts">845</div>
+          <div class="small" id="hero-pietta-name">Daniel Pietta</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="alert alert-light border text-center small" id="hero-gap">Rückstand: <b>14 Punkte</b></div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-baseline flex-wrap mb-2">
+        <span class="small text-muted">Punkte gesamt (Hauptrunde + Playoffs) &middot; Top 10</span>
+        <span class="font-weight-bold hero-num">
+          <span id="clock-date">17.10.2026</span>
+          <span class="text-muted small" id="clock-season">2026/27</span>
+        </span>
+      </div>
+
+      <div class="callout-slot mb-2">
+        <span class="marker callout" id="callout"></span>
+        <span class="marker climb" id="climb-callout"></span>
+      </div>
+
+      <div class="chart-stage">
+        <svg id="chart"></svg>
+      </div>
+
+      <div class="d-flex flex-wrap small text-muted mt-2" style="gap:1rem">
+        <span><span class="d-inline-block rounded-circle" style="width:10px;height:10px;background:var(--reimer)"></span> Patrick Reimer</span>
+        <span><span class="d-inline-block rounded-circle" style="width:10px;height:10px;background:var(--pietta)"></span> Daniel Pietta</span>
+        <span><span class="d-inline-block rounded-circle" style="width:10px;height:10px;background:var(--other)"></span> übrige Top 10</span>
+      </div>
+
+      <div class="d-flex align-items-center mt-3" style="gap:8px">
+        <button id="step-back-btn" type="button" class="btn btn-outline-secondary btn-sm" aria-label="Einen Schritt zurück" title="Einen Schritt zurück">
+          <i class="fa-solid fa-backward-step"></i>
+        </button>
+        <button id="play-btn" type="button" class="btn btn-primary btn-sm text-nowrap">
+          <i class="fa-solid fa-play"></i> Verlauf abspielen
+        </button>
+        <button id="step-fwd-btn" type="button" class="btn btn-outline-secondary btn-sm" aria-label="Einen Schritt vor" title="Einen Schritt vor">
+          <i class="fa-solid fa-forward-step"></i>
+        </button>
+        <input id="scrub" type="range" class="form-control-range flex-grow-1" min="0" max="1" step="1" value="0" aria-label="Zeitpunkt in der DEL-Geschichte">
+        <span class="small text-muted scrub-date" id="scrub-date">1994/95</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h2 class="h5">Alle Führungswechsel an der Spitze</h2>
+      <p class="small text-muted">Jedes Mal, wenn sich die ewige Nummer 1 änderte, seit dem ersten DEL-Punkt 1994.</p>
+      <div class="table-responsive-md">
+        <table class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" id="history-table">
+          <thead><tr><th>Datum</th><th>Saison</th><th>Spieler</th><th class="text-right">Punkte</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h2 class="h5">Top 10 heute</h2>
+      <div class="table-responsive-md">
+        <table class="table table-responsive-md table-striped table-bordered table-hover table-sm small shadow" id="today-table">
+          <thead><tr><th>Platz</th><th>Spieler</th><th class="text-right">Punkte</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-muted small pb-3" id="footer">
+    Datenbasis: DEL-Archiv und del_stats_backend, alle Spiele 1994/95 bis heute, Hauptrunde
+    und Playoffs kombiniert. Bei Punktgleichstand bleibt die zuerst erreichte Platzierung
+    erhalten.
+  </footer>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  const DATA_URL = "../data/historic_trivia/scorer_race.json";
+  const REIMER_NAME = "Patrick Reimer";
+  const PIETTA_NAME = "Daniel Pietta";
+  const TARGET_TOTAL_MS = 75000;
+  const LEAD_HOLD_MS = 2000;
+  const MIN_STEP_MS = 10;
+  const MAX_STEP_MS = 70;
+  const STEP_NAV_MS = 280;
+  const CALLOUT_VISIBLE_MS = 2500;
+  const CLIMB_VISIBLE_MS = 1900;
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const fmtDate = (iso) => {
+    const [y, m, d] = iso.split("-");
+    return `${d}.${m}.${y}`;
+  };
+
+  // an id that looks purely numeric is del_stats_backend's own current-era player id (and
+  // the frontend's own c_id); anything else is a generic id, shown as "g<id>" in player links
+  const restoreId = (key) => (/^\d+$/.test(key) ? Number(key) : key);
+
+  function playerLink(id) {
+    const linkId = typeof id === "number" ? id : "g" + id;
+    return `../#!/player_career/${linkId}`;
+  }
+
+  async function main() {
+    const res = await fetch(DATA_URL);
+    if (!res.ok) {
+      throw new Error(`Fetch von ${DATA_URL} fehlgeschlagen: ${res.status} ${res.statusText}`);
+    }
+    const data = await res.json();
+    const frames = data.frames;
+    const players = data.players;
+    const nameFor = (id) => players[String(id)];
+
+    const reimerId = restoreId(
+      Object.keys(players).find((k) => players[k] === REIMER_NAME)
+    );
+    const piettaId = restoreId(
+      Object.keys(players).find((k) => players[k] === PIETTA_NAME)
+    );
+
+    function colorFor(id) {
+      if (id === reimerId) return "var(--reimer)";
+      if (id === piettaId) return "var(--pietta)";
+      return "var(--other)";
+    }
+
+    function nameCell(id) {
+      const name = nameFor(id);
+      const highlight = id === reimerId || id === piettaId ? " font-weight-bold" : "";
+      return `<td class="${highlight}"><a href="${playerLink(id)}">${name}</a></td>`;
+    }
+
+    // climb events for Reimer/Pietta: computed once per frame transition, reused for both
+    // the playback pacing budget and the actual callout text during playback
+    function climbMessages(frame, prevFrame) {
+      if (!prevFrame || frame.leadChange) return [];
+      const messages = [];
+      for (const pid of [reimerId, piettaId]) {
+        if (pid == null) continue;
+        const newRank = frame.top10.findIndex(([id]) => id === pid);
+        if (newRank === -1) continue;
+        const oldRank = prevFrame.top10.findIndex(([id]) => id === pid);
+        if (oldRank !== -1 && newRank >= oldRank) continue;
+        messages.push(
+          oldRank === -1
+            ? `${nameFor(pid)} steigt in die Top 10 ein (Platz ${newRank + 1})`
+            : `${nameFor(pid)} steigt auf Platz ${newRank + 1}`
+        );
+      }
+      return messages;
+    }
+
+    const climbMessagesByIndex = frames.map((f, i) =>
+      i === 0 ? [] : climbMessages(f, frames[i - 1])
+    );
+    const isSpecialFrame = frames.map(
+      (f, i) => Boolean(f.leadChange) || climbMessagesByIndex[i].length > 0
+    );
+    const specialCount = isSpecialFrame.filter(Boolean).length;
+    const lastFrame = frames[frames.length - 1];
+    const maxPoints = lastFrame.top10[0][1];
+
+    const normalSteps = frames.length - 1 - specialCount;
+    const stepMs = Math.min(
+      MAX_STEP_MS,
+      Math.max(
+        MIN_STEP_MS,
+        normalSteps > 0 ? (TARGET_TOTAL_MS - specialCount * LEAD_HOLD_MS) / normalSteps : MIN_STEP_MS
+      )
+    );
+
+    // ---- hero ----
+    const reimerTotal = lastFrame.top10.find(([id]) => id === reimerId);
+    const piettaTotal = lastFrame.top10.find(([id]) => id === piettaId);
+    if (reimerTotal) document.getElementById("hero-reimer-pts").textContent = reimerTotal[1];
+    if (piettaTotal) document.getElementById("hero-pietta-pts").textContent = piettaTotal[1];
+    if (reimerTotal && piettaTotal) {
+      const gap = reimerTotal[1] - piettaTotal[1];
+      document.getElementById("hero-gap").innerHTML =
+        gap > 0
+          ? `Noch <b>${gap} ${gap === 1 ? "Punkt" : "Punkte"}</b> bis zum Rekord`
+          : gap < 0
+          ? `Daniel Pietta führt bereits mit <b>${-gap} ${-gap === 1 ? "Punkt" : "Punkte"}</b> Vorsprung`
+          : `Gleichstand`;
+    }
+    document.getElementById("footer").textContent =
+      `Datenbasis: DEL-Daten-Archiv und DEL-Statistiken, alle Spiele 1994/95 bis ${fmtDate(lastFrame.date)}, ` +
+      `Hauptrunde und Playoffs kombiniert. Bei Punktgleichstand bleibt die zuerst erreichte Platzierung erhalten.`;
+
+    // ---- history table ----
+    const leadChangeFrames = frames.filter((f) => f.leadChange);
+    const historyRows = [
+      { date: frames[0].date, season: frames[0].season, id: frames[0].top10[0][0], points: frames[0].top10[0][1] },
+      ...leadChangeFrames.map((f) => ({
+        date: f.date,
+        season: f.season,
+        id: f.leadChange.to,
+        points: f.leadChange.points,
+      })),
+    ];
+    const historyBody = document.querySelector("#history-table tbody");
+    historyBody.innerHTML = historyRows
+      .map(
+        (r) => `<tr>
+          <td>${fmtDate(r.date)}</td>
+          <td>${r.season}</td>
+          ${nameCell(r.id)}
+          <td class="text-right">${r.points}</td>
+        </tr>`
+      )
+      .join("");
+
+    // ---- today table ----
+    const todayBody = document.querySelector("#today-table tbody");
+    todayBody.innerHTML = lastFrame.top10
+      .map(
+        ([id, points], i) => `<tr>
+          <td>${i + 1}</td>
+          ${nameCell(id)}
+          <td class="text-right">${points}</td>
+        </tr>`
+      )
+      .join("");
+
+    // ---- chart ----
+    const svg = d3.select("#chart");
+    const stage = document.querySelector(".chart-stage");
+    const callout = document.getElementById("callout");
+    const climbCallout = document.getElementById("climb-callout");
+    const clockDate = document.getElementById("clock-date");
+    const clockSeason = document.getElementById("clock-season");
+    const scrub = document.getElementById("scrub");
+    const scrubDate = document.getElementById("scrub-date");
+    const playBtn = document.getElementById("play-btn");
+    const stepBackBtn = document.getElementById("step-back-btn");
+    const stepFwdBtn = document.getElementById("step-fwd-btn");
+
+    scrub.max = String(frames.length - 1);
+
+    let rowHeight = 36;
+    let labelW = 150;
+    let valueW = 56;
+    let narrow = false;
+    const xScale = d3.scaleLinear().domain([0, maxPoints * 1.08]).range([0, 100]);
+
+    const measureCanvas = document.createElement("canvas");
+    const measureCtx = measureCanvas.getContext("2d");
+    measureCtx.font = `700 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`;
+    function truncateName(name) {
+      const maxWidth = labelW - 10 - 20;
+      if (measureCtx.measureText(name).width <= maxWidth) return name;
+      let lo = 0,
+        hi = name.length;
+      while (lo < hi) {
+        const mid = Math.ceil((lo + hi) / 2);
+        if (measureCtx.measureText(name.slice(0, mid) + "…").width <= maxWidth) lo = mid;
+        else hi = mid - 1;
+      }
+      return name.slice(0, lo) + "…";
+    }
+
+    function layout() {
+      const width = Math.max(260, stage.clientWidth);
+      narrow = width < 480;
+      rowHeight = narrow ? 30 : 36;
+      labelW = narrow ? 86 : 160;
+      valueW = narrow ? 42 : 56;
+      const barAreaWidth = Math.max(40, width - labelW - valueW);
+      const height = rowHeight * 10 + 8;
+      svg.attr("width", width).attr("height", height).attr("viewBox", `0 0 ${width} ${height}`);
+      xScale.range([0, barAreaWidth]);
+      renderFrame(currentIndex, 0, false);
+    }
+
+    function frameIndexFromHash() {
+      const match = location.hash.match(/^#date=(\d{4}-\d{2}-\d{2})$/);
+      if (!match) return null;
+      const targetDate = match[1];
+      // the last frame on or before the requested date, since not every date has its own
+      // frame (only the ones where the top 10 actually changed)
+      let idx = null;
+      for (const [i, frame] of frames.entries()) {
+        if (frame.date > targetDate) break;
+        idx = i;
+      }
+      return idx;
+    }
+
+    function updateHash(index) {
+      // replaceState, not a hash assignment: keeps the address bar shareable for the moment
+      // currently shown without spamming the browser's back/forward history every frame
+      history.replaceState(null, "", `#date=${frames[index].date}`);
+    }
+
+    let currentIndex = frameIndexFromHash() ?? frames.length - 1;
+    let playing = false;
+    let playToken = 0;
+    let calloutTimer = null;
+    let climbTimer = null;
+
+    function showCallout(lc) {
+      callout.textContent = `${nameFor(lc.to)} überholt ${nameFor(lc.from)} – ${lc.points} Punkte`;
+      callout.classList.remove("show");
+      // restarting the pop animation even if a callout is already showing
+      void callout.offsetWidth;
+      callout.classList.add("show");
+      clearTimeout(calloutTimer);
+      calloutTimer = setTimeout(() => callout.classList.remove("show"), CALLOUT_VISIBLE_MS);
+    }
+
+    function showClimb(messages) {
+      climbCallout.textContent = messages.join(" · ");
+      climbCallout.classList.add("show");
+      clearTimeout(climbTimer);
+      climbTimer = setTimeout(() => climbCallout.classList.remove("show"), CLIMB_VISIBLE_MS);
+    }
+
+    function renderFrame(index, duration, showCallouts) {
+      const frame = frames[index];
+      updateHash(index);
+      clockDate.textContent = fmtDate(frame.date);
+      clockSeason.textContent = frame.season;
+      scrub.value = String(index);
+      scrubDate.textContent = frame.season;
+
+      const t = duration > 0 && !reduceMotion ? d3.transition().duration(duration).ease(d3.easeCubicInOut) : null;
+
+      const rows = svg
+        .selectAll("g.row")
+        .data(frame.top10, (d) => d[0])
+        .join(
+          (enter) => {
+            const g = enter
+              .append("g")
+              .attr("class", "row")
+              .attr("transform", `translate(0, ${rowHeight * 10})`)
+              .style("opacity", 0);
+            g.append("rect")
+              .attr("class", "bar")
+              .attr("x", labelW)
+              .attr("y", (rowHeight - 24) / 2)
+              .attr("height", 24)
+              .attr("width", 0)
+              .attr("rx", 4)
+              .attr("fill", (d) => colorFor(d[0]));
+            const nameText = g
+              .append("text")
+              .attr("class", (d) => "row-name" + (d[0] === reimerId || d[0] === piettaId ? " highlight" : ""))
+              .attr("x", labelW - 10)
+              .attr("y", rowHeight / 2 + 1)
+              .attr("text-anchor", "end")
+              .attr("dominant-baseline", "middle");
+            // the full-name tooltip lives in its own <title> child, never touched by the
+            // <tspan>'s .text() calls below -- setting .text() on the parent <text> element
+            // would wipe every child node, title included
+            nameText.append("title").text((d) => nameFor(d[0]));
+            nameText.append("tspan").attr("class", "row-name-label");
+            g.append("text")
+              .attr("class", "row-rank")
+              .attr("x", 4)
+              .attr("y", rowHeight / 2 + 1)
+              .attr("dominant-baseline", "middle");
+            g.append("text")
+              .attr("class", "row-value")
+              .attr("y", rowHeight / 2 + 1)
+              .attr("dominant-baseline", "middle");
+            return g;
+          },
+          (update) => update,
+          (exit) => {
+            if (t) {
+              exit
+                .transition(t)
+                .attr("transform", `translate(0, ${rowHeight * 10})`)
+                .style("opacity", 0)
+                .remove();
+            } else {
+              exit.remove();
+            }
+            return exit;
+          }
+        );
+
+      const merged = t ? rows.transition(t) : rows;
+      merged.attr("transform", (d, i) => `translate(0, ${i * rowHeight})`).style("opacity", 1);
+      merged
+        .select("rect.bar")
+        .attr("x", labelW)
+        .attr("y", (rowHeight - 24) / 2)
+        .attr("width", (d) => Math.max(1, xScale(d[1])))
+        .attr("fill", (d) => colorFor(d[0]));
+      merged
+        .select("text.row-value")
+        .attr("x", (d) => labelW + Math.max(1, xScale(d[1])) + 8)
+        .attr("y", rowHeight / 2 + 1)
+        .text((d) => d[1]);
+      rows.select("text.row-rank").attr("y", rowHeight / 2 + 1).text((d, i) => i + 1);
+      rows
+        .select("text.row-name")
+        .attr("x", labelW - 10)
+        .attr("y", rowHeight / 2 + 1)
+        .select("tspan.row-name-label")
+        .text((d) => truncateName(nameFor(d[0])));
+
+      if (showCallouts) {
+        if (frame.leadChange) showCallout(frame.leadChange);
+        if (climbMessagesByIndex[index].length) showClimb(climbMessagesByIndex[index]);
+      }
+    }
+
+    function stopPlayback(nextLabel) {
+      playing = false;
+      playToken++;
+      svg.selectAll("g.row").interrupt();
+      playBtn.innerHTML = nextLabel;
+    }
+
+    async function playFrom(startIndex) {
+      const myToken = ++playToken;
+      playing = true;
+      playBtn.innerHTML = '<i class="fa-solid fa-pause"></i> Pause';
+      let i = startIndex;
+      while (playing && myToken === playToken && i < frames.length - 1) {
+        i++;
+        currentIndex = i;
+        const dur = isSpecialFrame[i] ? LEAD_HOLD_MS : stepMs;
+        renderFrame(i, dur, true);
+        await wait(dur);
+      }
+      if (myToken === playToken) {
+        playing = false;
+        playBtn.innerHTML =
+          i >= frames.length - 1
+            ? '<i class="fa-solid fa-rotate-right"></i> Nochmal abspielen'
+            : '<i class="fa-solid fa-play"></i> Weiter';
+      }
+    }
+
+    playBtn.addEventListener("click", () => {
+      if (playing) {
+        stopPlayback('<i class="fa-solid fa-play"></i> Weiter');
+        return;
+      }
+      if (currentIndex >= frames.length - 1) {
+        currentIndex = 0;
+        renderFrame(0, 0, false);
+      }
+      playFrom(currentIndex);
+    });
+
+    stepFwdBtn.addEventListener("click", () => {
+      if (currentIndex >= frames.length - 1) return;
+      stopPlayback('<i class="fa-solid fa-play"></i> Weiter');
+      currentIndex += 1;
+      renderFrame(currentIndex, STEP_NAV_MS, true);
+    });
+
+    stepBackBtn.addEventListener("click", () => {
+      if (currentIndex <= 0) return;
+      stopPlayback(
+        currentIndex - 1 >= frames.length - 1
+          ? '<i class="fa-solid fa-rotate-right"></i> Nochmal abspielen'
+          : '<i class="fa-solid fa-play"></i> Weiter'
+      );
+      currentIndex -= 1;
+      // stepping back narrates nothing: it is undoing a moment, not advancing through history
+      renderFrame(currentIndex, STEP_NAV_MS, false);
+    });
+
+    scrub.addEventListener("input", () => {
+      stopPlayback('<i class="fa-solid fa-play"></i> Verlauf abspielen');
+      currentIndex = Number(scrub.value);
+      renderFrame(currentIndex, 0, false);
+    });
+
+    // editing just the #date=... fragment of an already-open page and pressing Enter is a
+    // same-document navigation: no reload, just a "hashchange" event, never read otherwise
+    window.addEventListener("hashchange", () => {
+      const idx = frameIndexFromHash();
+      if (idx == null) return;
+      stopPlayback('<i class="fa-solid fa-play"></i> Verlauf abspielen');
+      currentIndex = idx;
+      renderFrame(currentIndex, 0, false);
+    });
+
+    // only elements with their own native arrow-key/space behaviour (the range slider, text
+    // inputs, selects) need to be left alone -- a focused button or link (e.g. right after
+    // clicking it) has none, so it must not swallow the shortcuts
+    const ARROW_SENSITIVE_TAGS = new Set(["INPUT", "TEXTAREA", "SELECT"]);
+    window.addEventListener("keydown", (event) => {
+      if (ARROW_SENSITIVE_TAGS.has(event.target.tagName)) return;
+      if (event.key === " ") {
+        event.preventDefault();
+        playBtn.click();
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        stepFwdBtn.click();
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        stepBackBtn.click();
+      }
+    });
+
+    layout();
+    window.addEventListener("resize", () => {
+      clearTimeout(window.__scorerRaceResize);
+      window.__scorerRaceResize = setTimeout(layout, 150);
+    });
+  }
+
+  main().catch((err) => {
+    console.error(err);
+    const banner = document.createElement("div");
+    banner.className = "alert alert-danger shadow-sm mb-3";
+    banner.textContent =
+      "Die aktuellen Daten konnten nicht geladen werden. Die angezeigten Zahlen sind nicht aktuell.";
+    document.querySelector(".container").prepend(banner);
+  });
+})();
+</script>
+</body>
+</html>

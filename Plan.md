@@ -67,12 +67,17 @@ maxRoundPlayed}` after a dedicated fact-finding pass confirmed `round`
       distinction never materializes in practice; `player_profile_controller.js`/
       `team_profile_controller.js` now read `.maxRoundPlayed` off the merged
       result instead of calling a separate function.
-      `monthsPlayed` was deliberately NOT extracted even though it's
-      duplicated the same way: it needs `moment.js` to parse `game_date`, and
-      `moment` wasn't an npm dependency of this project at the time (only
-      loaded via CDN in the browser). That blocker is gone now that
-      `changeTimespan` below added `moment` as a dev dependency — extracting
-      `monthsPlayed` is a small, still-open follow-up.
+      `monthsPlayed` was initially NOT extracted even though it's duplicated
+      the same way: it needed `moment.js` to parse `game_date`, and `moment`
+      wasn't an npm dependency of this project at the time (only loaded via
+      CDN in the browser). That blocker went away once `changeTimespan` below
+      added `moment` as a dev dependency, and it has since been extracted too
+      — `GameLogMetadata.deriveMonthsPlayed(games)`, identical across all four
+      controllers (`[...new Set(games.map(item => moment(item.game_date).month()))]`,
+      deliberately left unsorted, matching the original inline version in
+      each controller). `shot_explorer_controller.js`'s own months
+      computation (see the shot-metadata entry below) was later unified into
+      this too, once a fact-finding pass confirmed it was safe.
     - ✅ `changeTimespan` date-range builder: only the "selected month" branch
       turned out to be truly identical, and only across four of the five
       controllers that define `changeTimespan` — moved to
@@ -145,10 +150,24 @@ maxRoundPlayed}` after a dedicated fact-finding pass confirmed `round`
       timezone a day-1-of-month game rolls back into the previous month.
       Fixed by switching to `moment(s.game_date).month()`, which deliberately
       parses date-only strings as local time instead of round-tripping
-      through UTC. This also incidentally resolves what had been a
+      through UTC. This also incidentally resolved what had been a
       pre-existing inconsistency with `monthsPlayed`'s duplicated computation
       elsewhere (`moment(item.game_date).month()` in `player_stats_controller.js`
-      etc., see the `monthsPlayed` follow-up TODO below) — both now agree.
+      etc.) — which then made full unification possible: `deriveShotMetadata`'s
+      `months` now calls `GameLogMetadata.deriveMonthsPlayed(shots)` directly
+      instead of computing its own copy (it only reads `.game_date`, so it
+      works the same whether given per-game or per-shot records). This also
+      dropped `deriveShotMetadata`'s null-`game_date` guard
+      (`s.game_date ? ... : null`, then filtered out) — a dedicated
+      fact-finding pass, not just a code read, confirmed via a full scan (not
+      a sample) of all 337k+ shot records across every season with this data
+      (2018-2026) that `game_date` is never null/missing/empty in practice,
+      and no code comment or doc explained the guard's origin, so it was
+      judged dead defensive code. A null `game_date` would now surface as a
+      `NaN` entry in `monthsPlayed` instead of being silently filtered (see
+      `tests/shot-filters.spec.js`) — acceptable since this never occurs with
+      real data; worth revisiting only if the backend data generator's
+      guarantees ever change.
 
 ## 5. Data and runtime expectations
 
@@ -193,12 +212,6 @@ maxRoundPlayed}` after a dedicated fact-finding pass confirmed `round`
   to decide on one canonical representation (probably `shot_explorer`'s
   object-constructor form, or a `{year, month}` input shape) rather than
   string-format parsing everywhere.
-- `monthsPlayed` derivation (`moment(item.game_date).month()`, duplicated in
-  `player_stats_controller.js`, `team_stats_controller.js`,
-  `player_profile_controller.js`, `team_profile_controller.js`) — not
-  extracted into `js/game_log_metadata.js` when that module was created,
-  since `moment` wasn't a dev dependency yet. It is now (see above); this is
-  a small, low-risk follow-up.
 - `checkCondition`'s `eval(value)` hack (`js/stat_categorization.js`) — only
   the goalie `quality_starts` category needs it, to resolve
   `"$scope.league_data.save_pctg * 100"` dynamically against the league's

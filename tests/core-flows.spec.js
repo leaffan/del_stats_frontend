@@ -250,11 +250,9 @@ test.describe('DEL Stats Core Flows', () => {
         ];
 
         for (const file of expectedFiles) {
-            const response = await page.request
-                .head(`http://localhost:8000/${file}`)
-                .catch(() => null);
-            // File should exist (404 would indicate missing config)
-            // We're lenient here because not all configs are always needed
+            // File should exist (404 would indicate missing config); we're
+            // lenient here because not all configs are always needed
+            await page.request.head(`http://localhost:8000/${file}`).catch(() => null);
         }
 
         expect(failedRequests.length).toBeLessThan(3); // Allow some failures but not many

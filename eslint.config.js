@@ -60,11 +60,26 @@ module.exports = [
         },
     },
     {
+        // del_stats.js is the one file that actually declares `app` (see
+        // above), so it must not also see it as a pre-existing global, or
+        // no-redeclare flags its own declaration
+        files: ['js/del_stats.js'],
+        languageOptions: {
+            globals: {
+                app: 'off',
+            },
+        },
+    },
+    {
         files: ['tests/**/*.js', 'scripts/**/*.js', '*.config.js', 'eslint.config.js'],
         languageOptions: {
             sourceType: 'commonjs',
             globals: {
                 ...globals.node,
+                // tests reference these inside page.evaluate()/waitForFunction()
+                // callbacks, which run in the browser, not in the Node test process
+                document: 'readonly',
+                window: 'readonly',
             },
         },
     },

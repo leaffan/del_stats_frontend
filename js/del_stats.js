@@ -1044,7 +1044,6 @@ app.directive('playerInformation', [
                 model: '=',
                 season: '=',
                 playerId: '=',
-                hasPortrait: '=',
                 colors: '=',
                 mainNumber: '=',
             },
@@ -1055,3 +1054,17 @@ app.directive('playerInformation', [
         };
     },
 ]);
+
+// hides an image's parent element if the image fails to load (e.g. a player
+// portrait that doesn't exist for the given season), instead of showing a
+// broken-image icon
+app.directive('hideParentOnError', function () {
+    return {
+        restrict: 'A',
+        link: function (scope, element) {
+            element.on('error', function () {
+                element.parent().css('display', 'none');
+            });
+        },
+    };
+});

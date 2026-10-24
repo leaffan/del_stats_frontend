@@ -27,12 +27,6 @@ app.controller('plrProfileController', function ($scope, $http, $routeParams, $l
         $scope.refreshToiStats();
     });
 
-    // loading player ids with portraits
-    $http.get('./po/' + $scope.season + '/_portraits.json').then(function (res) {
-        $scope.portraits = res.data;
-        $scope.hasPortrait = $scope.portraits.includes($scope.player_id);
-    });
-
     // retrieving current season's teams as well currently selected team and its colors
     $http.get('./cfg/teams.json').then(function (res) {
         $scope.all_teams = res.data.filter((team) => svc.isTeamValidForSeason(team, $scope.season));

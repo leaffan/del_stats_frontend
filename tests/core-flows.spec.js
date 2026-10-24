@@ -1440,16 +1440,18 @@ test.describe('DEL Stats Core Flows', () => {
     test('33. Player profile hides a missing portrait image instead of a broken icon', async ({
         page,
     }) => {
-        await requireFixture(page, hasPlayerFile('2025', 'DRE', '4158'));
+        await requireFixture(page, hasPlayerFile('2025', 'NIT', '4'));
 
-        // Rourke Chartier (DRE, 2025) has per-player stats but no file under
-        // po/2025/, which is what the hideParentOnError directive is for; if a
-        // portrait gets added for this player later, pick another id missing
-        // from po/<season>/ instead of adjusting the assertion below.
-        await page.goto('http://localhost:8000/index.html#!/player_profile/2025/DRE/4158');
+        // Force the portrait request to 404 regardless of whether po/2025/4.png
+        // actually exists on this machine, so the hideParentOnError fallback is
+        // tested deterministically rather than depending on local-only, gitignored
+        // po/ contents (which aren't shipped to CI at all).
+        await page.route('**/po/2025/4.png', (route) => route.fulfill({ status: 404 }));
+
+        await page.goto('http://localhost:8000/index.html#!/player_profile/2025/NIT/4');
         await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
 
-        const portraitImg = page.locator('#player_information img[src*="4158.png"]');
+        const portraitImg = page.locator('#player_information img[src*="po/2025/4.png"]');
         await expect(portraitImg).toHaveCount(1);
         await expect(portraitImg).toBeHidden();
     });

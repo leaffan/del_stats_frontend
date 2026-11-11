@@ -33,9 +33,9 @@
     "homepage": "https://github.com/leaffan/del_stats_frontend#readme",
     "devDependencies": {
         "@eslint/js": "^10.0.1",
-        "@playwright/test": "^1.64.1",
+        "@playwright/test": "^1.65.0",
         "eslint": "^10.14.0",
-        "globals": "^17.13.0",
+        "globals": "^17.14.0",
         "husky": "^9.1.7",
         "lint-staged": "^17.6.0",
         "moment": "2.31.0",

@@ -9,16 +9,16 @@ importers:
         devDependencies:
             '@eslint/js':
                 specifier: ^10.0.1
-                version: 10.0.1(eslint@10.14.0)
+                version: 10.0.1(eslint@10.15.0)
             '@playwright/test':
-                specifier: ^1.64.1
-                version: 1.64.1
+                specifier: ^1.65.1
+                version: 1.65.1
             eslint:
-                specifier: ^10.14.0
-                version: 10.14.0
+                specifier: ^10.15.0
+                version: 10.15.0
             globals:
-                specifier: ^17.13.0
-                version: 17.13.0
+                specifier: ^17.14.0
+                version: 17.14.0
             husky:
                 specifier: ^9.1.7
                 version: 9.1.7
@@ -29,8 +29,8 @@ importers:
                 specifier: 2.31.0
                 version: 2.31.0
             prettier:
-                specifier: ^3.9.10
-                version: 3.9.10
+                specifier: ^3.10.1
+                version: 3.10.1
 
 packages:
     '@cacheable/memory@2.2.0':
@@ -61,10 +61,10 @@ packages:
             }
         engines: { node: ^12.0.0 || ^14.0.0 || >=16.0.0 }
 
-    '@eslint/config-array@0.23.5':
+    '@eslint/config-array@0.23.6':
         resolution:
             {
-                integrity: sha512-Y3kKLvC1dvTOT+oGlqNQ1XLqK6D1HU2YXPc52NmAlJZbMMWDzGYXMiPRJ8TYD39muD/OTjlZmNJ4ib7dvSrMBA==,
+                integrity: sha512-WrTH7nioI9QPY4NZGnsywmecswJdgeq4BCM76qok9VgjTO29ZgUzUvcuJLVPYVQM4uDbaPBU0M33R9DIxI8X3w==,
             }
         engines: { node: ^20.19.0 || ^22.13.0 || >=24 }
 
@@ -143,6 +143,12 @@ packages:
             }
         engines: { node: '>=18.18' }
 
+    '@isaacs/nonrecursive-glob-match@1.1.0':
+        resolution:
+            {
+                integrity: sha512-GPm/Dbvk5RLmhRnxXIa7nTpK0xtl4E0wj0MslsuNiJ1FIROU+2+9lgUC/dgF7Ey4QCWhfEsgxilMRMCdHPfDfw==,
+            }
+
     '@keyv/bigmap@1.3.1':
         resolution:
             {
@@ -158,10 +164,10 @@ packages:
                 integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==,
             }
 
-    '@playwright/test@1.64.1':
+    '@playwright/test@1.65.1':
         resolution:
             {
-                integrity: sha512-IaYGml/nSOiZWROfPtuIL7neuu9qDOZ3TNvNljUIrhDMxiGTgPjzj/g9p9RxpS2tSepPDRY+UwAaEeiKtUvIAg==,
+                integrity: sha512-y+NCIRm2LvY4slUVWvGh1nujJ8RF/hEisIsq2mtUPgdQC4L701bq5hZGMhrpeXjACvwvO9tj5dJqhvM6TP9lbw==,
             }
         engines: { node: '>=20' }
         hasBin: true
@@ -279,10 +285,10 @@ packages:
             }
         engines: { node: ^20.19.0 || ^22.13.0 || >=24 }
 
-    eslint@10.14.0:
+    eslint@10.15.0:
         resolution:
             {
-                integrity: sha512-T0pNsxkb9IKmtQjhpK3d7nWOpFv+YHuMbTJnSVMoQblF0onvXfErrtp4V1jHtsQPan7dKaGVD0q1WCXnzMF31A==,
+                integrity: sha512-+5Wg4p+ze3sG1WErYgUO/3H1IQIfFBymVUA0Fo/XTeBOLS6UQIUekpSJ8sdRkn7O7wjh84b55w/roqavH2aScg==,
             }
         engines: { node: ^20.19.0 || ^22.13.0 || >=24 }
         hasBin: true
@@ -377,10 +383,10 @@ packages:
             }
         engines: { node: '>=10.13.0' }
 
-    globals@17.13.0:
+    globals@17.14.0:
         resolution:
             {
-                integrity: sha512-RwMTC61u7hrG3ZJMkZQOK4JLJrKS8QtoTii63EmWvFXHqycY9FObBJQCbsLxSO8kjKhWE5kV1GC+Vb1g3RI0Zg==,
+                integrity: sha512-UtdkTVyAJePQv0J2M9Xe4L0ruNSDV314XiIJsADI2Zf40bcdAonE/D/OhAU8AT99oij9mhLByb+NvA3QWZYgCg==,
             }
         engines: { node: '>=18' }
 
@@ -485,12 +491,12 @@ packages:
             }
         engines: { node: '>=10' }
 
-    minimatch@10.2.6:
+    minimatch@11.0.8:
         resolution:
             {
-                integrity: sha512-vpLQEs+VLCr1nU0BXS07maYoFwlDAH0gngQuuttxIwutDFEMHq2blX+8vpgxDdK3J1PwjCJiep77OitTZ4Ll1A==,
+                integrity: sha512-nFQuYSTVrGvysVBps5Ih+0BdnYFN/Cj3C816r6+p7yK+FHrVLGE4O4N9AFwykrlNlvM2HYt+Rad1Uiro6h88Ig==,
             }
-        engines: { node: 18 || 20 || >=22 }
+        engines: { node: 20 || >=22 }
 
     moment@2.31.0:
         resolution:
@@ -552,18 +558,18 @@ packages:
             }
         engines: { node: '>=12' }
 
-    playwright-core@1.64.1:
+    playwright-core@1.65.1:
         resolution:
             {
-                integrity: sha512-BC4s8y6SEVA6Q1rSxZTto8hI1KUI3xXlHGZgvGqP4IqPdI/a6FX9H29IDNz7vKo9l21b6LfYosScPL6M3xxyDQ==,
+                integrity: sha512-hqPpz7blSMPxWVdoeE1yiBSzXsKiVOd2k+kjCvmUywD2GPO2Dd9HfcWnq9NN0GHbNZDFgZ9JfBFr+X5/BLo0qw==,
             }
         engines: { node: '>=20' }
         hasBin: true
 
-    playwright@1.64.1:
+    playwright@1.65.1:
         resolution:
             {
-                integrity: sha512-HCrVhHr5QQuwYoswEUGTb7gGp522yflbv/ST8nF4sFWGuLjQCt17Q/EubpGGSNKYn1tsTCPZxqHhHCfVURu7UA==,
+                integrity: sha512-vJ1FuoOrNwOKHUIVEvSt3jT1L+wjjDpwhwIstKtfvTh8XIG4FG4bIFuvNdMxi81LGfAhUgUZleVFaOLY4RIUUw==,
             }
         engines: { node: '>=20' }
         hasBin: true
@@ -575,10 +581,10 @@ packages:
             }
         engines: { node: '>= 0.8.0' }
 
-    prettier@3.9.10:
+    prettier@3.10.1:
         resolution:
             {
-                integrity: sha512-skGHTH1Yb9QvaTC4hWnRTzEYtCpApF0UMBPz+t/0ZPzP8ihefo/btKd+QA7pUE0fEwA1SbS/NmhyEcstdXOIdA==,
+                integrity: sha512-70vp3ZUYoPlFbF9uiTdXHUUCGEIp7d4+6p+8DYbkm2jP7x/3i/paXVF6dopSI3zd/CEitrZN1rc4i85xWmmXlg==,
             }
         engines: { node: '>=14' }
         hasBin: true
@@ -681,18 +687,18 @@ snapshots:
             hashery: 1.5.1
             keyv: 5.6.0
 
-    '@eslint-community/eslint-utils@4.10.1(eslint@10.14.0)':
+    '@eslint-community/eslint-utils@4.10.1(eslint@10.15.0)':
         dependencies:
-            eslint: 10.14.0
+            eslint: 10.15.0
             eslint-visitor-keys: 3.4.3
 
     '@eslint-community/regexpp@4.12.2': {}
 
-    '@eslint/config-array@0.23.5':
+    '@eslint/config-array@0.23.6':
         dependencies:
             '@eslint/object-schema': 3.0.5
             debug: 4.4.3
-            minimatch: 10.2.6
+            minimatch: 11.0.8
         transitivePeerDependencies:
             - supports-color
 
@@ -704,9 +710,9 @@ snapshots:
         dependencies:
             '@types/json-schema': 7.0.15
 
-    '@eslint/js@10.0.1(eslint@10.14.0)':
+    '@eslint/js@10.0.1(eslint@10.15.0)':
         optionalDependencies:
-            eslint: 10.14.0
+            eslint: 10.15.0
 
     '@eslint/object-schema@3.0.5': {}
 
@@ -731,6 +737,8 @@ snapshots:
 
     '@humanwhocodes/retry@0.4.3': {}
 
+    '@isaacs/nonrecursive-glob-match@1.1.0': {}
+
     '@keyv/bigmap@1.3.1(keyv@5.6.0)':
         dependencies:
             hashery: 1.5.1
@@ -739,9 +747,9 @@ snapshots:
 
     '@keyv/serialize@1.1.1': {}
 
-    '@playwright/test@1.64.1':
+    '@playwright/test@1.65.1':
         dependencies:
-            playwright: 1.64.1
+            playwright: 1.65.1
 
     '@types/esrecurse@4.3.1': {}
 
@@ -801,11 +809,11 @@ snapshots:
 
     eslint-visitor-keys@5.0.1: {}
 
-    eslint@10.14.0:
+    eslint@10.15.0:
         dependencies:
-            '@eslint-community/eslint-utils': 4.10.1(eslint@10.14.0)
+            '@eslint-community/eslint-utils': 4.10.1(eslint@10.15.0)
             '@eslint-community/regexpp': 4.12.2
-            '@eslint/config-array': 0.23.5
+            '@eslint/config-array': 0.23.6
             '@eslint/config-helpers': 0.7.0
             '@eslint/core': 1.2.1
             '@eslint/plugin-kit': 0.7.3
@@ -830,7 +838,7 @@ snapshots:
             imurmurhash: 0.1.4
             is-glob: 4.0.3
             json-stable-stringify-without-jsonify: 1.0.1
-            minimatch: 10.2.6
+            minimatch: 11.0.8
             natural-compare: 1.4.0
             optionator: 0.9.4
         transitivePeerDependencies:
@@ -881,7 +889,7 @@ snapshots:
         dependencies:
             is-glob: 4.0.3
 
-    globals@17.13.0: {}
+    globals@17.14.0: {}
 
     hashery@1.5.1:
         dependencies:
@@ -930,8 +938,9 @@ snapshots:
         dependencies:
             p-locate: 5.0.0
 
-    minimatch@10.2.6:
+    minimatch@11.0.8:
         dependencies:
+            '@isaacs/nonrecursive-glob-match': 1.1.0
             brace-expansion: 5.0.12
 
     moment@2.31.0: {}
@@ -963,15 +972,15 @@ snapshots:
 
     picomatch@4.0.7: {}
 
-    playwright-core@1.64.1: {}
+    playwright-core@1.65.1: {}
 
-    playwright@1.64.1:
+    playwright@1.65.1:
         dependencies:
-            playwright-core: 1.64.1
+            playwright-core: 1.65.1
 
     prelude-ls@1.2.1: {}
 
-    prettier@3.9.10: {}
+    prettier@3.10.1: {}
 
     punycode@2.3.1: {}
 

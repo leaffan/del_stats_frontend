@@ -27,8 +27,7 @@ module.exports = [
             'test-results/**',
             'po/**',
             // vendored third-party scripts, not project code
-            'js/angular*.min.js',
-            'js/moment-with-locales.min.js',
+            'js/angular-moment-picker.min.js',
             'js/twix.js',
         ],
     },

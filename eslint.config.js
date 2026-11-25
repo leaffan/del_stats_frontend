@@ -28,8 +28,6 @@ module.exports = [
             'po/**',
             // vendored third-party scripts, not project code
             'vendor/**',
-            'js/angular-moment-picker.min.js',
-            'js/twix.js',
         ],
     },
     {

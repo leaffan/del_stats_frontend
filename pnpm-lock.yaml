@@ -11,8 +11,8 @@ importers:
                 specifier: 6.7.2
                 version: 6.7.2
             angular:
-                specifier: 1.7.2
-                version: 1.7.2
+                specifier: 1.8.3
+                version: 1.8.3
             angular-moment:
                 specifier: 1.3.0
                 version: 1.3.0
@@ -20,11 +20,11 @@ importers:
                 specifier: 0.10.2
                 version: 0.10.2
             angular-route:
-                specifier: 1.7.2
-                version: 1.7.2
+                specifier: 1.8.3
+                version: 1.8.3
             bootstrap:
-                specifier: 4.5.2
-                version: 4.5.2(jquery@3.8.0)(popper.js@1.16.1)
+                specifier: 4.6.2
+                version: 4.6.2(jquery@3.8.0)(popper.js@1.16.1)
             d3:
                 specifier: 7.9.0
                 version: 7.9.0
@@ -32,11 +32,11 @@ importers:
                 specifier: 2.31.0
                 version: 2.31.0
             ngstorage:
-                specifier: 0.3.10
-                version: 0.3.10
+                specifier: 0.3.11
+                version: 0.3.11
             twix:
-                specifier: 1.2.0
-                version: 1.2.0(moment@2.31.0)
+                specifier: 1.3.0
+                version: 1.3.0(moment@2.31.0)
         devDependencies:
             '@eslint/js':
                 specifier: ^10.0.1
@@ -260,17 +260,17 @@ packages:
             }
         engines: { node: '>=0.10.0' }
 
-    angular-route@1.7.2:
+    angular-route@1.8.3:
         resolution:
             {
-                integrity: sha512-YshcsuhYThFbuQqWDhDvxaZtwlwV6M7dPzB2Eit215t0zx/78A7SSKGtw8SsqYyPCealrgD2QWdv4iY7kl6l1w==,
+                integrity: sha512-kpIcRmDR2+o1FxDVVYy8Rvfab86/7LDbOgTRb9T+X9ewPQiBRuDEnZtM3oJYBiQLvAXDYTJXHV48n/bGE9Mv2g==,
             }
         deprecated: For the actively supported Angular, see https://www.npmjs.com/package/@angular/core. AngularJS support has officially ended. For extended AngularJS support options, see https://goo.gle/angularjs-path-forward.
 
-    angular@1.7.2:
+    angular@1.8.3:
         resolution:
             {
-                integrity: sha512-JcKKJbBdybUsmQ6x1M3xWyTYQ/ioVKJhSByEAjqrhmlOfvMFdhfMqAx5KIo8rLGk4DFolYPcCSgssjgTVjCtRQ==,
+                integrity: sha512-5qjkWIQQVsHj4Sb5TcEs4WZWpFeVFHXwxEBHUhrny41D8UrBAd6T/6nPPAsLngJCReIOqi95W3mxdveveutpZw==,
             }
         deprecated: For the actively supported Angular, see https://www.npmjs.com/package/@angular/core. AngularJS support has officially ended. For extended AngularJS support options, see https://goo.gle/angularjs-path-forward.
 
@@ -281,10 +281,10 @@ packages:
             }
         engines: { node: 18 || 20 || >=22 }
 
-    bootstrap@4.5.2:
+    bootstrap@4.6.2:
         resolution:
             {
-                integrity: sha512-vlGn0bcySYl/iV+BGA544JkkZP5LB3jsmkeKLFQakCOwCM3AOk7VkldBz4jrzSe+Z0Ezn99NVXa1o45cQY4R6A==,
+                integrity: sha512-51Bbp/Uxr9aTuy6ca/8FbFloBUJZLHwnhTcnjIeRn2suQWsWzcuJhGjKDB5eppVte/8oCdOL3VuwxvZDUggwGQ==,
             }
         deprecated: This version of Bootstrap is no longer supported. Please upgrade to the latest version.
         peerDependencies:
@@ -841,10 +841,10 @@ packages:
                 integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==,
             }
 
-    ngstorage@0.3.10:
+    ngstorage@0.3.11:
         resolution:
             {
-                integrity: sha512-Iv/riUxmmAFdkLy5tw31wpPKjg/hh2Luc62rdZYq8w6yMkGr/Zn1rEgYiu4F67bsFyyQCBHr53TgF2P+P4Nc8w==,
+                integrity: sha512-IXOcCZ/4f0bU24e0dIzzEJKz/8l00S0k8XXpnROC912iJDL3WQtdens50ayWtTI9EbXOeYhc7FCea4LzFG+WlQ==,
             }
 
     optionator@0.9.4:
@@ -987,10 +987,10 @@ packages:
             }
         engines: { node: '>=18' }
 
-    twix@1.2.0:
+    twix@1.3.0:
         resolution:
             {
-                integrity: sha512-jjeQgkqR5MaiiRB7STrh8Imnl1+PhKOftebdi4XjPuL7BVG4CKzpeTbFdmLEtm2SU4e8bSf+fxDqTCOuW4ty2Q==,
+                integrity: sha512-D1kCQgEuRZLZHIoYa6HUMgEBwHTzN8n8gYVX1y8uBooM+ZpowNyPcAuYk8YCkZxoIKIMOR7qgrae9yUUBP3yDQ==,
             }
         peerDependencies:
             moment: '>= 2.10.0'
@@ -1138,20 +1138,20 @@ snapshots:
 
     angular-moment-picker@0.10.2:
         dependencies:
-            angular: 1.7.2
+            angular: 1.8.3
             moment: 2.31.0
 
     angular-moment@1.3.0:
         dependencies:
             moment: 2.31.0
 
-    angular-route@1.7.2: {}
+    angular-route@1.8.3: {}
 
-    angular@1.7.2: {}
+    angular@1.8.3: {}
 
     balanced-match@4.0.4: {}
 
-    bootstrap@4.5.2(jquery@3.8.0)(popper.js@1.16.1):
+    bootstrap@4.6.2(jquery@3.8.0)(popper.js@1.16.1):
         dependencies:
             jquery: 3.8.0
             popper.js: 1.16.1
@@ -1500,7 +1500,7 @@ snapshots:
 
     natural-compare@1.4.0: {}
 
-    ngstorage@0.3.10: {}
+    ngstorage@0.3.11: {}
 
     optionator@0.9.4:
         dependencies:
@@ -1559,7 +1559,7 @@ snapshots:
 
     tinyexec@1.3.1: {}
 
-    twix@1.2.0(moment@2.31.0):
+    twix@1.3.0(moment@2.31.0):
         dependencies:
             moment: 2.31.0
 

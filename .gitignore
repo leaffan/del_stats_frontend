@@ -107,18 +107,8 @@ venv.bak/
 */.ht*
 .vscode
 
-angular-animate.min.js
-angular-aria.min.js
-angular-material.min.js
-angular-messages.min.js
-angular-route.min.js
-angular.min.js
-moment-with-locales.min.js
 new_stuff.js
 
-angular-material.min.css
-bootstrap.min.css
-fonttawesome.all.css
 data/*
 *.ics
 

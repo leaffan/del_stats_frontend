@@ -36,6 +36,28 @@ This runs:
 
 - `format:check` — Prettier formatting validation
 - `validate:routes` — Verifies that all defined routes have corresponding template files
+- `verify:vendor` — Verifies that `vendor/` matches the installed runtime libraries (see below)
+
+### Third-party runtime libraries
+
+The libraries the browser loads (AngularJS, Bootstrap, Font Awesome, moment, d3, ...) are not loaded from CDNs. They are served from `vendor/`, which is committed because the site is deployed with a plain `git pull` and has no build step.
+
+- Each library is an exactly pinned entry (no `^` or `~`) under `dependencies` in `package.json`.
+- `scripts/vendor.js` lists which files of each package are copied, and to which path below `vendor/<package>/`. Each folder also gets the package's licence file.
+- Paths under `vendor/` contain no version numbers, so an update does not touch `index.html`.
+- Never edit files under `vendor/` by hand. Prettier, ESLint, and git line-ending conversion are disabled for that folder (`.prettierignore`, `eslint.config.js`, `.gitattributes`) so the files stay byte-identical to their npm package.
+
+To update or add a library:
+
+```bash
+# 1. change the version in package.json (or add the package and its files to scripts/vendor.js)
+pnpm install
+pnpm run vendor
+pnpm check
+# 2. commit package.json, pnpm-lock.yaml, and vendor/ together
+```
+
+Dependabot proposes runtime updates as a separate `runtime` group. Its pull requests only change `package.json` and `pnpm-lock.yaml`, so `verify:vendor` fails on them until `pnpm run vendor` has been run and committed on the branch.
 
 ### End-to-End Tests
 

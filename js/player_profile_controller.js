@@ -27,12 +27,6 @@ app.controller('plrProfileController', function ($scope, $http, $routeParams, $l
         $scope.refreshToiStats();
     });
 
-    // loading player ids with portraits
-    $http.get('./po/' + $scope.season + '/_portraits.json').then(function (res) {
-        $scope.portraits = res.data;
-        $scope.hasPortrait = $scope.portraits.includes($scope.player_id);
-    });
-
     // retrieving current season's teams as well currently selected team and its colors
     $http.get('./cfg/teams.json').then(function (res) {
         $scope.all_teams = res.data.filter((team) => svc.isTeamValidForSeason(team, $scope.season));
@@ -78,9 +72,7 @@ app.controller('plrProfileController', function ($scope, $http, $routeParams, $l
             // retrieving all weekdays a game was played by the current team
             $scope.weekdaysPlayed = GameLogMetadata.deriveWeekdaysPlayed($scope.player_stats);
             // retrieving all months a game was played by the current team
-            $scope.monthsPlayed = [
-                ...new Set($scope.player_stats.map((item) => moment(item.game_date).month())),
-            ];
+            $scope.monthsPlayed = GameLogMetadata.deriveMonthsPlayed($scope.player_stats);
             // setting to round selection to maximum round played
             $scope.toRoundSelect = $scope.maxRoundPlayed;
             // retrieving all numbers a player used

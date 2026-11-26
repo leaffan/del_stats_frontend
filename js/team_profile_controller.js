@@ -27,9 +27,7 @@ app.controller('teamProfileController', function ($scope, $http, $routeParams, $
         // retrieving all weekdays a game was played by the current team
         $scope.weekdaysPlayed = GameLogMetadata.deriveWeekdaysPlayed($scope.game_log);
         // retrieving all months a game was played by the current team
-        $scope.monthsPlayed = [
-            ...new Set($scope.game_log.map((item) => moment(item.game_date).month())),
-        ];
+        $scope.monthsPlayed = GameLogMetadata.deriveMonthsPlayed($scope.game_log);
         // setting to round selection to maximum round played
         $scope.toRoundSelect = $scope.maxRoundPlayed;
 

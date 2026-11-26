@@ -34,14 +34,6 @@ app.controller(
         $scope.oppFilter = 'all';
         $scope.goalieFilter = 'all';
 
-        // ── PO round display mapping (manually configurable) ───────────────────
-        $scope.poRoundLabels = {
-            first_round: 'PO1',
-            quarter_finals: 'VF',
-            semi_finals: 'HF',
-            finals: 'F',
-        };
-
         // ── Zone overlay visibility (mutually exclusive: 'none', 'edge', or 'es') ──
         $scope.zoneOverlay = 'edge';
 
@@ -169,17 +161,6 @@ app.controller(
         let goalieLastNameById = {};
 
         // ── Static data loads ────────────────────────────────────────────────────
-        // loading player ids with portraits
-        $http
-            .get('./po/' + $scope.season + '/_portraits.json')
-            .then(function (res) {
-                $scope.portraits = res.data;
-                $scope.hasPortrait = $scope.portraits.includes($scope.player_id);
-            })
-            .catch(function () {
-                reportLoadError('Porträt-Liste konnte nicht geladen werden.');
-            });
-
         $http
             .get('./cfg/teams.json')
             .then(function (res) {

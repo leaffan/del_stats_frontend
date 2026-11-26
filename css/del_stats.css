@@ -1,5 +1,9 @@
 body { padding-top: 40px; }
 
+/* Bootstrap 4.6 enlarged small/.small from 80% to .875em; the table column
+   widths are balanced for 80%, so keep the 4.5 size. */
+small, .small { font-size: 80%; }
+
 .inline { display: inline-block; }
 
 .inline-headers h2, .inline-headers span, .inline-headers img {

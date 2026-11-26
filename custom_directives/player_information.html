@@ -11,8 +11,8 @@
         <span class="ml-2" data-ng-if="currentPlayerData.rookie"><img class="test" height="20px" src="img/rookie.png" title="Rookie" alt="Rookie" /></span>
     </div>
     <div class="inline-headers row ml-1 align-items-start mt-2">
-        <div data-ng-if="hasPortrait" class="col-auto p-0 ml-0 mr-3 order-1">
-            <img height="90" width="90" ng-src="po/{{season}}/{{currentPlayerData.player_id}}.png" alt="{{ currentPlayerData.full_name }} - Mit freundlicher Genehmigung der City-Press GmbH Bildagentur" title="{{ currentPlayerData.full_name }} - Mit freundlicher Genehmigung der City-Press GmbH Bildagentur"/>
+        <div data-ng-if="currentPlayerData.player_id != null" class="col-auto p-0 ml-0 mr-3 order-1">
+            <img height="90" width="90" ng-src="po/{{season}}/{{currentPlayerData.player_id}}.png" alt="{{ currentPlayerData.full_name }} - Mit freundlicher Genehmigung der City-Press GmbH Bildagentur" title="{{ currentPlayerData.full_name }} - Mit freundlicher Genehmigung der City-Press GmbH Bildagentur" data-hide-parent-on-error/>
         </div>
         <div class="col-12 col-md ml-0 p-0 order-3 order-md-2">
             <ul class="list-group list-group-horizontal-sm my-1">

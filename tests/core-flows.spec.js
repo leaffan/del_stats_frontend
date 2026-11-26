@@ -250,11 +250,9 @@ test.describe('DEL Stats Core Flows', () => {
         ];
 
         for (const file of expectedFiles) {
-            const response = await page.request
-                .head(`http://localhost:8000/${file}`)
-                .catch(() => null);
-            // File should exist (404 would indicate missing config)
-            // We're lenient here because not all configs are always needed
+            // File should exist (404 would indicate missing config); we're
+            // lenient here because not all configs are always needed
+            await page.request.head(`http://localhost:8000/${file}`).catch(() => null);
         }
 
         expect(failedRequests.length).toBeLessThan(3); // Allow some failures but not many
@@ -1381,8 +1379,8 @@ test.describe('DEL Stats Core Flows', () => {
 
     // 32 locks down svc.germanMonths()/germanDays() output, which no test
     // previously pinned down - added alongside the moment.js 2.22.2 -> 2.31.0
-    // CDN upgrade (index.html), since this is the one place a German-locale
-    // formatting regression would actually be visible.
+    // upgrade (now vendored under vendor/moment/), since this is the one place
+    // a German-locale formatting regression would actually be visible.
     test('32. Team stats page renders German month and weekday names', async ({ page }) => {
         await requireFixture(page, hasTeamGameStats('2025'));
 
@@ -1435,5 +1433,24 @@ test.describe('DEL Stats Core Flows', () => {
             expect(text).not.toContain('undefined');
             expect(text).not.toContain('NaN');
         }
+    });
+
+    test('33. Player profile hides a missing portrait image instead of a broken icon', async ({
+        page,
+    }) => {
+        await requireFixture(page, hasPlayerFile('2025', 'NIT', '4'));
+
+        // Force the portrait request to 404 regardless of whether po/2025/4.png
+        // actually exists on this machine, so the hideParentOnError fallback is
+        // tested deterministically rather than depending on local-only, gitignored
+        // po/ contents (which aren't shipped to CI at all).
+        await page.route('**/po/2025/4.png', (route) => route.fulfill({ status: 404 }));
+
+        await page.goto('http://localhost:8000/index.html#!/player_profile/2025/NIT/4');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        const portraitImg = page.locator('#player_information img[src*="po/2025/4.png"]');
+        await expect(portraitImg).toHaveCount(1);
+        await expect(portraitImg).toBeHidden();
     });
 });

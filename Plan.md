@@ -67,12 +67,17 @@ maxRoundPlayed}` after a dedicated fact-finding pass confirmed `round`
       distinction never materializes in practice; `player_profile_controller.js`/
       `team_profile_controller.js` now read `.maxRoundPlayed` off the merged
       result instead of calling a separate function.
-      `monthsPlayed` was deliberately NOT extracted even though it's
-      duplicated the same way: it needs `moment.js` to parse `game_date`, and
-      `moment` wasn't an npm dependency of this project at the time (only
-      loaded via CDN in the browser). That blocker is gone now that
-      `changeTimespan` below added `moment` as a dev dependency — extracting
-      `monthsPlayed` is a small, still-open follow-up.
+      `monthsPlayed` was initially NOT extracted even though it's duplicated
+      the same way: it needed `moment.js` to parse `game_date`, and `moment`
+      wasn't an npm dependency of this project at the time (only loaded via
+      CDN in the browser). That blocker went away once `changeTimespan` below
+      added `moment` as a dev dependency, and it has since been extracted too
+      — `GameLogMetadata.deriveMonthsPlayed(games)`, identical across all four
+      controllers (`[...new Set(games.map(item => moment(item.game_date).month()))]`,
+      deliberately left unsorted, matching the original inline version in
+      each controller). `shot_explorer_controller.js`'s own months
+      computation (see the shot-metadata entry below) was later unified into
+      this too, once a fact-finding pass confirmed it was safe.
     - ✅ `changeTimespan` date-range builder: only the "selected month" branch
       turned out to be truly identical, and only across four of the five
       controllers that define `changeTimespan` — moved to
@@ -145,10 +150,24 @@ maxRoundPlayed}` after a dedicated fact-finding pass confirmed `round`
       timezone a day-1-of-month game rolls back into the previous month.
       Fixed by switching to `moment(s.game_date).month()`, which deliberately
       parses date-only strings as local time instead of round-tripping
-      through UTC. This also incidentally resolves what had been a
+      through UTC. This also incidentally resolved what had been a
       pre-existing inconsistency with `monthsPlayed`'s duplicated computation
       elsewhere (`moment(item.game_date).month()` in `player_stats_controller.js`
-      etc., see the `monthsPlayed` follow-up TODO below) — both now agree.
+      etc.) — which then made full unification possible: `deriveShotMetadata`'s
+      `months` now calls `GameLogMetadata.deriveMonthsPlayed(shots)` directly
+      instead of computing its own copy (it only reads `.game_date`, so it
+      works the same whether given per-game or per-shot records). This also
+      dropped `deriveShotMetadata`'s null-`game_date` guard
+      (`s.game_date ? ... : null`, then filtered out) — a dedicated
+      fact-finding pass, not just a code read, confirmed via a full scan (not
+      a sample) of all 337k+ shot records across every season with this data
+      (2018-2026) that `game_date` is never null/missing/empty in practice,
+      and no code comment or doc explained the guard's origin, so it was
+      judged dead defensive code. A null `game_date` would now surface as a
+      `NaN` entry in `monthsPlayed` instead of being silently filtered (see
+      `tests/shot-filters.spec.js`) — acceptable since this never occurs with
+      real data; worth revisiting only if the backend data generator's
+      guarantees ever change.
 
 ## 5. Data and runtime expectations
 
@@ -174,14 +193,80 @@ maxRoundPlayed}` after a dedicated fact-finding pass confirmed `round`
 - App-wide: no `$http` request outside the shot explorer has error handling —
   a failed request fails silently. `js/shot_explorer_controller.js`'s
   `loadErrors` pattern is the reference to follow once this is picked up.
-- `player_stats_controller.js`/`team_stats_controller.js`'s `roundsPlayed`
-  (`js/game_log_metadata.js#deriveRoundsPlayed`) dedupes by raw round number
-  only, so a regular-season round and a playoff round sharing the same
-  number (e.g. both "round 1") collapse into one entry in the round-range
-  filter dropdown. `shot_explorer_controller.js`'s `updateShotMetadata`
-  already solves this correctly with a composite `round + '|' + po_round`
-  key — adopt that scheme here too when this gets revisited. A real behavior
-  change, not a pure refactor, so kept out of the extraction pass above.
+- **In progress, 3-PR plan** (`round_selection_scheme` work): unify the
+  round-range selection scheme across all three controller pairs. Root
+  problem: `player_stats_controller.js`/`team_stats_controller.js`'s
+  `roundsPlayed` (`js/game_log_metadata.js#deriveRoundsPlayed`) and
+  `player_profile_controller.js`/`team_profile_controller.js`'s
+  `maxRoundPlayed` both dedupe/bound by raw round number only, so a
+  regular-season round and a playoff round sharing the same number collapse
+  together in the round-range filter - and, confirmed against real data,
+  it's worse than that: `round` resets to 1 at the start of each playoff
+  _stage_ (`po_round`: `first_round`/`quarter_finals`/`semi_finals`/
+  `finals`), so e.g. "round 1" alone can mean four different real games in
+  the same PO season. `del_team_game_stats.json`/`del_player_game_stats.csv`
+  don't have a `po_round` field at all yet (only `shots/per_player/*.json`
+  does) - the maintainer is adding it to that pipeline, but the new scheme
+  doesn't require it: it's keyed on `round + season_type + (po_round || '')`,
+  so `season_type` alone already fixes the RS-vs-PO collision today, and
+  `po_round` additionally resolves the playoff-stage collision once/wherever
+  it's populated (also defensively treats the literal string `'rnd_type'` -
+  a known pipeline bug in some `MSC` records - as absent, same as missing).
+    - ✅ **PR 1**: new shared `js/game_log_metadata.js#deriveRoundSelection`
+      (unit-tested in `tests/game-log-metadata.spec.js`), sorted `MSC` → `RS` →
+      `PO` (matching existing season_type `<select>` option order), playoff
+      entries sub-sorted by tournament stage then round.
+      `shot_explorer_controller.js`/`js/shot_filters.js#deriveShotMetadata`
+      migrated onto it (it already had the right idea with its own
+      `round + '|' + po_round` key, just not shared or season_type-aware;
+      `js/shot_filters.js#filterShots`'s round-range membership check updated
+      to match). `deriveRoundsPlayed` (the old, round-number-only function)
+      stays for now - `player_stats_controller.js`/`team_stats_controller.js`/
+      `player_profile_controller.js`/`team_profile_controller.js` haven't
+      migrated yet, delete it once they have.
+    - ✅ **PR 2**: `player_stats_controller.js`/`team_stats_controller.js`
+      migrated onto `deriveRoundSelection`. Along the way, extracted the
+      index-slice/key-membership logic itself out of
+      `js/shot_filters.js#filterShots` into
+      `js/game_log_metadata.js#deriveValidRoundKeys` (so it's not duplicated a
+      third time) and the composite-key string building into
+      `js/game_log_metadata.js#roundKeyOf` (same reason -
+      `deriveRoundSelection` and `filterShots` were each building that string
+      themselves). `js/game_filters.js#gamePassesCommonFilters` takes a
+      pre-built `validRoundKeys` Set (or null for "no restriction") instead of
+      raw `fromRoundSelect`/`toRoundSelect` strings - both controllers compute
+      it once per filtering pass (in the existing `$watchGroup` callback that
+      already re-runs filtering on any filter change), not once per element,
+      since it's the same Set for every element in that pass. Templates move
+      from a plain-number dropdown to the `{round, season_type, po_round,
+key}` shape, matching `shot_explorer.html`'s pattern exactly. This also
+      fixes the "Hauptrunde und Playoffs" combined-season-type-mode bug
+      identified earlier (a round-range narrowed within one season_type's
+      contiguous sorted block - e.g. "RS round 1 to 10" - can no longer pull
+      in a different season_type's games, since the sort groups `MSC`/`RS`/`PO`
+      into separate contiguous ranges).
+      **Follow-up found after this PR's templates went live**: with
+      `player_stats_controller.js`/`team_stats_controller.js`'s data sources
+      still lacking `po_round` (see above), every PO/MSC entry's dropdown
+      label looked identical to an RS entry sharing the same round number
+      (e.g. two indistinguishable "Spieltag 1" options) - the key already
+      disambiguated them correctly, but nothing signaled that visually.
+      Fixed by moving the label out of the template (previously duplicated,
+      slightly differently, in `player_stats.html`/`team_stats.html`/
+      `shot_explorer.html`) into `js/game_log_metadata.js#roundOptionLabel`,
+      computed once per entry inside `deriveRoundSelection` itself (a `.label`
+      field, alongside `.key`) - it now falls back to `season_type` as the
+      prefix (e.g. "PO / Spieltag 1") when `po_round` isn't available, instead
+      of showing no prefix at all. shot_explorer_controller.js's inline
+      `$scope.poRoundLabels` (the PO stage abbreviations) moved into that
+      same function (as `PO_STAGE_LABELS`, no longer exposed on any
+      `$scope` - the three controllers' own `$scope.poRoundLabels`
+      assignments were deleted along with the template logic that read them).
+    - ⬜ **PR 3**: `player_profile_controller.js`/`team_profile_controller.js` -
+      replace the `maxRoundPlayed`/`svc.range(1, maxRoundPlayed)` 1..N-range
+      approach (and the numeric `$scope.fromRoundFilter`/`$scope.toRoundFilter`
+      Angular filter functions) with the same shared scheme; delete
+      `deriveRoundsPlayed` once this lands, since nothing will call it anymore.
 - Full `changeTimespan` consolidation across all five controllers that
   define it (`player_stats_controller.js`, `team_stats_controller.js`,
   `team_profile_controller.js`, `player_profile_controller.js`,
@@ -193,12 +278,6 @@ maxRoundPlayed}` after a dedicated fact-finding pass confirmed `round`
   to decide on one canonical representation (probably `shot_explorer`'s
   object-constructor form, or a `{year, month}` input shape) rather than
   string-format parsing everywhere.
-- `monthsPlayed` derivation (`moment(item.game_date).month()`, duplicated in
-  `player_stats_controller.js`, `team_stats_controller.js`,
-  `player_profile_controller.js`, `team_profile_controller.js`) — not
-  extracted into `js/game_log_metadata.js` when that module was created,
-  since `moment` wasn't a dev dependency yet. It is now (see above); this is
-  a small, low-risk follow-up.
 - `checkCondition`'s `eval(value)` hack (`js/stat_categorization.js`) — only
   the goalie `quality_starts` category needs it, to resolve
   `"$scope.league_data.save_pctg * 100"` dynamically against the league's

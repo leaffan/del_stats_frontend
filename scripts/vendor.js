@@ -217,7 +217,7 @@ if (check) {
     }
     for (const extra of present) errors.push(`not listed in scripts/vendor.js: vendor/${extra}`);
     if (errors.length) {
-        console.error('vendor/ is out of date, run pnpm run vendor:');
+        console.error('vendor/ is out of date, run pnpm run vendor');
         fail(errors);
     }
     console.log(`vendor/ is up to date (${planned.size} files).`);

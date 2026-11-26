@@ -1,0 +1,3 @@
+# Vendored third-party files (scripts/vendor.js) must stay byte-identical to
+# their npm package, so git must never convert their line endings.
+vendor/** -text

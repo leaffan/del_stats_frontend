@@ -1379,8 +1379,8 @@ test.describe('DEL Stats Core Flows', () => {
 
     // 32 locks down svc.germanMonths()/germanDays() output, which no test
     // previously pinned down - added alongside the moment.js 2.22.2 -> 2.31.0
-    // CDN upgrade (index.html), since this is the one place a German-locale
-    // formatting regression would actually be visible.
+    // upgrade (now vendored under vendor/moment/), since this is the one place
+    // a German-locale formatting regression would actually be visible.
     test('32. Team stats page renders German month and weekday names', async ({ page }) => {
         await requireFixture(page, hasTeamGameStats('2025'));
 

@@ -1,17 +1,28 @@
 version: 2
 updates:
-    # Dev tooling only (Playwright, Prettier, Husky, ESLint, ...). Runtime
-    # libraries (AngularJS, Bootstrap, Angular Material, ...) are vendored
-    # static files under js/ and are not managed here.
+    # npm covers two groups: the dev tooling (Playwright, Prettier, Husky,
+    # ESLint, ...) and the runtime libraries the browser loads (AngularJS,
+    # Bootstrap, Font Awesome, moment, d3, ...). Runtime libraries are copied
+    # into the committed vendor/ folder by scripts/vendor.js, so a runtime
+    # update also needs `pnpm run vendor`; until then the verify:vendor step
+    # in `pnpm check` fails on the pull request.
     - package-ecosystem: 'npm'
       directory: '/'
       schedule:
           interval: 'weekly'
-      open-pull-requests-limit: 1
+      open-pull-requests-limit: 2
       groups:
           dev-tooling:
-              patterns:
-                  - '*'
+              dependency-type: 'development'
+          runtime:
+              dependency-type: 'production'
+      ignore:
+          # Major upgrades that need template or styling work and are planned
+          # separately.
+          - dependency-name: 'bootstrap'
+            versions: ['>=5']
+          - dependency-name: '@fortawesome/fontawesome-free'
+            versions: ['>=7']
 
     - package-ecosystem: 'github-actions'
       directory: '/'

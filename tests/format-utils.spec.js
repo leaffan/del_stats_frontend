@@ -133,6 +133,11 @@ test.describe('isTeamValidForSeason', () => {
         ).toBe(false);
     });
 
+    test('missing team data (not loaded yet) is not valid instead of throwing', () => {
+        expect(isTeamValidForSeason(undefined, 2020)).toBe(false);
+        expect(isTeamValidForSeason(null, 2020)).toBe(false);
+    });
+
     test('a season from the route (string) compares numerically', () => {
         expect(isTeamValidForSeason(KEV, '2020')).toBe(true);
         expect(isTeamValidForSeason(KEV, '2023')).toBe(false);

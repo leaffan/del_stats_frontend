@@ -80,6 +80,9 @@
 
     // checks if team is valid for a given season (supports multiple periods via valid_periods)
     function isTeamValidForSeason(team, season) {
+        // The team profile template calls this from ng-if before teams.json
+        // has loaded, so the team data can still be missing (#37)
+        if (!team) return false;
         // If valid_periods is defined, use that for teams with non-continuous presence
         if (team.valid_periods && Array.isArray(team.valid_periods)) {
             return team.valid_periods.some(

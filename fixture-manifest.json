@@ -1,5 +1,5 @@
 {
-    "archive": "fixture-f43f2597b4dd72e4.tar.gz",
+    "archive": "fixture-98846e5bba4f1912.tar.gz",
     "files": [
         {
             "path": "data/2017/del_player_game_stats_aggregated.json",
@@ -53,23 +53,23 @@
         },
         {
             "path": "data/2025/del_player_game_stats_aggregated.json",
-            "sha256": "e53ff39f13959a78712fb96f34406eec514d13563062309526db4e76b9166622",
-            "bytes": 2960382
+            "sha256": "5fee314f62e46986874f622f9b64fb719cee8c099bf1a5dce4fa340767e3453c",
+            "bytes": 2960383
         },
         {
             "path": "data/2025/del_player_personal_data.json",
-            "sha256": "85a73b7323597281c9504645fe8121cbb3f4844c1243708aba3a8905947549a5",
-            "bytes": 201490
+            "sha256": "7f8065cce4baaa097262edf30ee38ca3fa20c14341eb9dbbef6444af21343962",
+            "bytes": 201491
         },
         {
             "path": "data/2025/del_slumps_loose.json",
-            "sha256": "8715eba9806ffeba16bebb975ac52d2cb2cdf9d9d457f0fc2080dc26297e952b",
-            "bytes": 790297
+            "sha256": "b174d9106a1d3a5bc29bc2f2b897c23ec11ef9a2930fd7998b73d9f4b13ad151",
+            "bytes": 790255
         },
         {
             "path": "data/2025/del_slumps_strict.json",
-            "sha256": "cf17ff0d96959af34e16a3d0efb7a607ad78aa1192cc8a18d930d038fa7138e5",
-            "bytes": 754535
+            "sha256": "0fd1cb850ee207b1ba32fcdf73fddd0bc4ca25c34bdd1bc1e885da2fe43e213e",
+            "bytes": 754400
         },
         {
             "path": "data/2025/del_streaks_goalies.json",
@@ -83,13 +83,23 @@
         },
         {
             "path": "data/2025/del_streaks_strict.json",
-            "sha256": "fdc00ed107a761d07c12114743911b4e246c49f95ca5c0d204174af4aa0eb6b2",
-            "bytes": 419881
+            "sha256": "73db3cfe15c30acb8468ba8d9af12fd324d9abc7a8cbf625962381cd3fd75653",
+            "bytes": 419832
         },
         {
             "path": "data/2025/del_team_game_stats.json",
-            "sha256": "844d4a48f820647d9da75213f51fdc5f8559e36bff7f24e9dd08ae983e0c3cd2",
-            "bytes": 5228293
+            "sha256": "083e9bfdfdf07fa1287075a102cc38adf1a51061c74dbfbc4b69fd9eb0c2ed05",
+            "bytes": 5231225
+        },
+        {
+            "path": "data/2025/game_reports/20250914DREING.json",
+            "sha256": "fb7bb9e920b76b6907f7e54f0e5f8072182868a96d494c06826c950e9865c757",
+            "bytes": 30719
+        },
+        {
+            "path": "data/2025/game_reports/20250919IECNIT.json",
+            "sha256": "c0f47809700b867025318b26084b1aa5c58a718713f0be4d26c56ecc6faaf96a",
+            "bytes": 41108
         },
         {
             "path": "data/2025/per_player/NIT_4.json",
@@ -112,9 +122,9 @@
             "bytes": 96372
         },
         {
-            "path": "data/2025/shots/per_player/3870.json",
-            "sha256": "6c12ee7e525382de971eff21e7d4d2dd50616175d83021fdb7abb7f7bc6208d9",
-            "bytes": 113931
+            "path": "data/2025/shots/per_player/4.json",
+            "sha256": "4ebb4bb407c247b77116bca71fe67d014340098542fb330373e84ddd58baf88f",
+            "bytes": 38926
         },
         {
             "path": "data/2026/dates_attendance.json",
@@ -123,73 +133,73 @@
         },
         {
             "path": "data/2026/del_game_scores_per_game_bottom.json",
-            "sha256": "1528f2fe2d7911ee1a3d5c882743386d273f3e9ef6166cec7db880a82125854e",
-            "bytes": 23135
+            "sha256": "0e026b877dcf674f87e6e02217087870b6af92f72fa5e87406379dcc5c90508c",
+            "bytes": 83437
         },
         {
             "path": "data/2026/del_game_scores_per_game_top.json",
-            "sha256": "228c370324f95f134da3cbd29bca2900928a414c5249b7d536247bf7e0d5afd1",
-            "bytes": 66647
+            "sha256": "5ac2971446f32a1e0e8f24cb49e37526a1644c2d59fa18ebf5abde09709a4ca7",
+            "bytes": 257841
         },
         {
             "path": "data/2026/del_goalie_game_stats.json",
-            "sha256": "b0e10f8fc124f8bf34ef9c13548826a77df30ae8de5d38a8382eb1c8bab8118f",
-            "bytes": 333828
+            "sha256": "2d689cc16bb5a3976344ae7df47b0ab713010147bcbf34b90f476b9c3e35678f",
+            "bytes": 1216094
         },
         {
             "path": "data/2026/del_league_stats.json",
-            "sha256": "be31b2959f4fce88dfa27aba4fe07e254f85d3081754f15e0c45fd4dfcc22583",
-            "bytes": 167
+            "sha256": "a918bf97c5d47742d52d1e18f193679464d4c04a0a2ba6d6270f86b62d5c1b53",
+            "bytes": 169
         },
         {
             "path": "data/2026/del_player_game_stats_aggregated.json",
-            "sha256": "1b84d39c466881f1a36381c1042fca50433b5f8fdd167c2a254f162885ce763d",
-            "bytes": 1502196
+            "sha256": "2509e0824ed2d3cd141c90b24ba0e5ed8679dedf108689e128bcb6bb2ba1d307",
+            "bytes": 1648731
         },
         {
             "path": "data/2026/del_player_personal_data.json",
-            "sha256": "7b2fd7ff71375211ac3d98633157579de2b41c4e74953ea00cbb33d52de3a6f5",
-            "bytes": 165855
+            "sha256": "927eeec3e2584509210ffc71c35fd81d0e442ca38451f319e3d06c595e0744d8",
+            "bytes": 178800
         },
         {
             "path": "data/2026/del_slumps_loose.json",
-            "sha256": "8613ae0c25f95dff248d9b56665ff4c9412f2e27239ccc4eb4463465a5d36dd4",
-            "bytes": 175735
+            "sha256": "3da3db39f9dc05c8aa162ad335e671b71aa67a1f6f3a76a5a60753d723ca5fa3",
+            "bytes": 332055
         },
         {
             "path": "data/2026/del_slumps_strict.json",
-            "sha256": "308137f4049de53557a5cd5ee5128b6d5fc19840cdfe85d046ff922853c7572b",
-            "bytes": 117339
+            "sha256": "4409e0c16481e43403c8edb7459743d4b84053464c3b8b39decf4cc3d7b54d19",
+            "bytes": 269493
         },
         {
             "path": "data/2026/del_streaks_goalies.json",
-            "sha256": "359536db39115388d5a45f6134645d22857d4bcf06a28352bfff8c29865d8169",
-            "bytes": 4951
+            "sha256": "8e0d6bcf3ee22c6fab8c64b8858f8ac7883ab6eaaa4eecafcb2b1e641c048d64",
+            "bytes": 13732
         },
         {
             "path": "data/2026/del_streaks_loose.json",
-            "sha256": "8f016dd80099a641ed39cdb03a8b97ad5a3e533a037571a74372322d287d2ca8",
-            "bytes": 41694
+            "sha256": "624c611bcafd61b8a6e809bc9ff984ea4b1a2466fb0341f690d05b7e1dcedd88",
+            "bytes": 133055
         },
         {
             "path": "data/2026/del_streaks_strict.json",
-            "sha256": "37b2e5df53a7ef66e4260473e02155f7b8fb73e0c5b7f8815593904b81d58be6",
-            "bytes": 34826
+            "sha256": "5b138e4ebfcdd497961a4899dc54bee428b53706926ed7b834d5b10cd72b893f",
+            "bytes": 125161
         },
         {
             "path": "data/2026/per_player/NIT_100.json",
-            "sha256": "a29a05932b1bb83eeade17508125c6390c68834178f0dcf5377e615cd021ffa1",
-            "bytes": 31368
+            "sha256": "866f8809924a8e7e3f518265fe51d02c9161b4b458654e5e54400618eb3acbf3",
+            "bytes": 99644
         },
         {
             "path": "data/2026/per_player_toi/100.json",
-            "sha256": "02e81c16930454651652eadab55c8439dfab2f6fc017035745d5a2b2986a69d5",
-            "bytes": 4399
+            "sha256": "33604ed3d137f09768784ea3cab69748874da36bd2af322cbde6af2d5569d9ea",
+            "bytes": 12672
         },
         {
             "path": "data/2026/per_player_toi_opp/100.json",
-            "sha256": "86f3acee3a9e1bed2b2702ebebe96ab22a7faf0dfb94b100362384e07a8fc31f",
-            "bytes": 5609
+            "sha256": "465daa02e25b56cce996cf5a9ad6f80eeb284c172cb829857ed95109d7e5860c",
+            "bytes": 16412
         },
         {
             "path": "data/attendance.json",
@@ -197,9 +207,14 @@
             "bytes": 3267
         },
         {
-            "path": "data/career_stats/per_player/119.json",
-            "sha256": "e9956d5f3bc818dd2bb9ce0d85cbd767d8a5287978a8810b927aeacd1cefddab",
-            "bytes": 5404
+            "path": "data/career_stats/per_player/101.json",
+            "sha256": "c5d53ec6097fa4f13fe12d7656356e693899e88dfe15ff79874e3b803c2d9134",
+            "bytes": 13007
+        },
+        {
+            "path": "data/career_stats/per_player/250.json",
+            "sha256": "a045190b07ce5a479689fbd71acfc3d0c9b510e3e5a2c3e39738542b38067813",
+            "bytes": 9959
         },
         {
             "path": "data/career_stats/per_player/26.json",
@@ -207,14 +222,19 @@
             "bytes": 6655
         },
         {
-            "path": "data/career_stats/per_player/477.json",
-            "sha256": "599af4f6114d7eedc6b31fdcede99cab77fc4d8b218d138c581d28e2b002c314",
-            "bytes": 9057
+            "path": "data/career_stats/per_player/442.json",
+            "sha256": "de28f700501571acf0ec43df3ab608a14f225c3a03325be4a0c60e5fa3a0f004",
+            "bytes": 11487
         },
         {
             "path": "data/career_stats/per_player/487.json",
-            "sha256": "37d74c93ac985d94c5aaaa315eec922a3bc820d9531c36ac24ec206de11c9d71",
-            "bytes": 15133
+            "sha256": "0b257492bfbc3d461b73aa9a49526c71e98147a11bb7e6541ec16f829ae8e754",
+            "bytes": 15142
+        },
+        {
+            "path": "data/career_stats/per_player/493.json",
+            "sha256": "d4409571950f639d08b5b1e55dc0c1be82c81654dab0fe83c0fa995192f2524a",
+            "bytes": 12077
         },
         {
             "path": "data/career_stats/per_player/508.json",
@@ -222,9 +242,9 @@
             "bytes": 8487
         },
         {
-            "path": "data/career_stats/per_player/80.json",
-            "sha256": "6ba987e755b267cb5b06916879e959206a8be1f669e92c4ba78f9bd52a1f64cf",
-            "bytes": 14830
+            "path": "data/career_stats/per_player/556.json",
+            "sha256": "c4c10c49ebb3ebb9315ac7c0a0d5f717f9f7e4b5067631ec640a3c3359a39602",
+            "bytes": 12389
         },
         {
             "path": "data/career_stats/per_player/94.json",
@@ -232,24 +252,14 @@
             "bytes": 14185
         },
         {
-            "path": "data/career_stats/per_player/g13988mf.json",
-            "sha256": "7803500b83a1fa1b84b748ca944f179f37b9b3278d73027e8997e6955afac4ac",
-            "bytes": 4596
+            "path": "data/career_stats/per_player/g16275cs.json",
+            "sha256": "d871b8e253ef257df0d97964af980d7853cf1199072db1e4155fe5e7a535261f",
+            "bytes": 5712
         },
         {
             "path": "data/career_stats/per_player/g17327fm.json",
             "sha256": "1cb2064ef802202408a7947003cfcad8f73c43972a3d824c5a0bbe597236a9de",
             "bytes": 6916
-        },
-        {
-            "path": "data/career_stats/per_player/g20796dh.json",
-            "sha256": "dfa065044d7a9b05dbf285310be0abc430b8e5897897dd2e7ba4a35cac9f37cf",
-            "bytes": 4801
-        },
-        {
-            "path": "data/career_stats/per_player/g36564ta.json",
-            "sha256": "a029d62ca401b4f57cd059032b9bb33e3989c54f7aa8a45dd3ba8c5d0e8e166a",
-            "bytes": 7589
         },
         {
             "path": "data/career_stats/per_player/g49145mb.json",
@@ -268,23 +278,23 @@
         },
         {
             "path": "data/career_stats/upd_all_players.json",
-            "sha256": "27d9ec02ed778e722989f6e8040e673eccd4c46c9f3a70d686fdfafd8ae44f64",
-            "bytes": 894232
+            "sha256": "5ec14bb50668dfea802ed44a21ae8d500aff3e355afd6a0d38d119465f7b8d81",
+            "bytes": 896685
         },
         {
             "path": "data/career_stats/upd_full_career_stats_stripped.json",
-            "sha256": "b29b44a2515873145010374756df1df220165b84e97a22e57409e31027f1fcf8",
-            "bytes": 3600486
+            "sha256": "88ca8267b3e62a69ff790e3f7c53a4a2ec574864b8cf4f1b9a9f75094ebd6469",
+            "bytes": 3621439
         },
         {
             "path": "data/clinched_data.json",
-            "sha256": "5d384051929f3be14aecd7b765d00db60866db51e9f40c1473d1db6fe592ca0b",
+            "sha256": "991336e60099451ece7a1d7312d0076db253fa7ace9b4da6b6f6d9492ece19bf",
             "bytes": 2355
         },
         {
             "path": "data/del_players.json",
-            "sha256": "7c8d991a308c9616d7dbbfcf880bc2c3007120b095cd97b70ccad71045af0234",
-            "bytes": 394655
+            "sha256": "aff31a179c0323f75212347cec02f97a474e430dfc69f351ec8c2c0c83623578",
+            "bytes": 396456
         },
         {
             "path": "data/historic_trivia/blown_leads.json",
@@ -298,8 +308,8 @@
         },
         {
             "path": "data/historic_trivia/fastest_first_goal_period_1.json",
-            "sha256": "f530805718f52c00a4128fed3115b1c591c842d12da5aebea7f897e5f65233a0",
-            "bytes": 94749
+            "sha256": "6d227037cbd0d9d5bfb31c7558346f9db6853eef29047c8f064f20e362445e84",
+            "bytes": 95718
         },
         {
             "path": "data/historic_trivia/fastest_first_goal_period_OT.json",
@@ -313,8 +323,8 @@
         },
         {
             "path": "data/historic_trivia/goals_in_games_period_1.json",
-            "sha256": "776a68219d0d492dc17d2c89b03b39d0d24d720bf816710e52a455495d0b3ee8",
-            "bytes": 53473
+            "sha256": "f538a342583fbba2be8687ec9bcf9b7fff6307e4cb9422c726429c934f636776",
+            "bytes": 53902
         },
         {
             "path": "data/historic_trivia/goals_in_games_period_3.json",
@@ -323,8 +333,8 @@
         },
         {
             "path": "data/historic_trivia/last_game_player_ages_older_40.json",
-            "sha256": "a7cba989da4ae1181d7dd0d10f825f648121b3fe184bcfb335b8b3a1fac78801",
-            "bytes": 9334
+            "sha256": "cbf21b7afe121d405e5ef2c8c316475577a77cb8db5bdf8aa1093c0e8b6a30bd",
+            "bytes": 9638
         },
         {
             "path": "data/historic_trivia/losing_streaks.json",

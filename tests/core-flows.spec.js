@@ -10,6 +10,7 @@ const {
     hasPlayerTriviaData,
     hasShotExplorerData,
     hasToiData,
+    hasGameReport,
 } = require('./support/probes');
 
 test.describe('DEL Stats Core Flows', () => {
@@ -1452,5 +1453,86 @@ test.describe('DEL Stats Core Flows', () => {
         const portraitImg = page.locator('#player_information img[src*="po/2025/4.png"]');
         await expect(portraitImg).toHaveCount(1);
         await expect(portraitImg).toBeHidden();
+    });
+
+    // Game page tests start at 37, not 34: ext already uses 34-36 for its own
+    // tests, and numbering them apart keeps the main -> ext merge collision-free.
+    test('37. Game page renders header, goals, shootout and title for a shootout game', async ({
+        page,
+    }) => {
+        await requireFixture(page, hasGameReport('2025', '20250919IECNIT'));
+
+        await page.goto('http://localhost:8000/index.html#!/game/2025/20250919IECNIT');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        await expect(page.locator('h3', { hasText: 'Iserlohn Roosters' })).toBeVisible();
+        await expect(page.locator('h3', { hasText: 'Nürnberg Ice Tigers' })).toBeVisible();
+        await expect(page.locator('h2', { hasText: '6:5' })).toBeVisible();
+        await expect(page.getByText('Fr., 19.09.2025, 19:30 Uhr')).toBeVisible();
+        await expect(page).toHaveTitle(/^IEC - NIT, Fr\., 19\.09\.2025$/);
+        await expect(page.getByText('Der Spielbericht konnte nicht geladen werden.')).toHaveCount(
+            0,
+        );
+
+        // one row per entry of the report's scoring/shootout lists
+        await expect(page.locator('h4:text-is("Tore") + table tbody tr')).toHaveCount(10);
+        await expect(page.locator('h4:text-is("Penaltyschießen") + table tbody tr')).toHaveCount(8);
+        // a report without findings shows no data-quality block at all
+        await expect(page.locator('#findings')).toHaveCount(0);
+    });
+
+    test('38. Player profile game log links to the game page, also for rows without generic_id', async ({
+        page,
+    }) => {
+        await requireFixture(page, hasPlayerFile('2025', 'NIT', '4'));
+        await requireFixture(page, hasGameReport('2025', '20250919IECNIT'));
+
+        await page.goto('http://localhost:8000/index.html#!/player_profile/2025/NIT/4');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        // the 19.09.2025 row has generic_id null in the player file, so this
+        // link is built from game_date/team/opp_team/home_road (fallback path)
+        const gameLink = page
+            .locator('#basic_game_by_game a[href="#!/game/2025/20250919IECNIT"]')
+            .first();
+        await expect(gameLink).toBeVisible();
+        // dead del.org match-report links must be gone from every game log
+        await expect(page.locator('a[href*="del.org/event"]')).toHaveCount(0);
+
+        await gameLink.click();
+        await expect(page).toHaveURL(/#!\/game\/2025\/20250919IECNIT$/);
+        await expect(page.locator('h2', { hasText: '6:5' })).toBeVisible();
+    });
+
+    test('39. Game page data-quality block is collapsed, counts warnings in the header, and expands on click', async ({
+        page,
+    }) => {
+        await requireFixture(page, hasGameReport('2025', '20250914DREING'));
+
+        await page.goto('http://localhost:8000/index.html#!/game/2025/20250914DREING');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+        // two skater_stats_assists findings, both warnings
+        const headerWarning = page.locator('a[title="Datenhinweise zu diesem Spiel anzeigen"]');
+        await expect(headerWarning).toHaveText(/2/);
+        const findings = page.locator('#findings');
+        await expect(findings).toContainText('Datenhinweise zu diesem Spiel (2)');
+        await expect(findings.locator('.p-3')).toHaveCount(0);
+
+        await findings.locator('.alert').click();
+        await expect(findings.locator('.p-3 > div')).toHaveCount(2);
+        await findings.locator('.alert').click();
+        await expect(findings.locator('.p-3')).toHaveCount(0);
+
+        // the affected skater rows carry the warning symbol too
+        await expect(page.locator('table tbody tr i.fa-triangle-exclamation[title]')).toHaveCount(
+            2,
+        );
+
+        // the header count expands the block in place; it must not be a plain
+        // #anchor, which the #!/ router would treat as a route and send home
+        await headerWarning.click();
+        await expect(page).toHaveURL(/#!\/game\/2025\/20250914DREING$/);
+        await expect(findings.locator('.p-3 > div')).toHaveCount(2);
     });
 });

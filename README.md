@@ -63,18 +63,19 @@ No compilation, bundling, or restart is required. The web server serves the file
 
 The following structure is expected at runtime:
 
-| Path                      | Description                                                   |
-| ------------------------- | ------------------------------------------------------------- |
-| `data/attendance.json`    | Season-wide attendance figures                                |
-| `data/clinched_data.json` | Playoff clinching state per team (current season)             |
-| `data/del_players.json`   | Master player list                                            |
-| `data/po_series.json`     | Playoff series results                                        |
-| `data/{season}/`          | Per-season player, goalie, and team game stats (JSON and CSV) |
-| `data/career_stats/`      | Aggregated career stats per player and team                   |
-| `data/h2h_data/`          | Head-to-head records for each team pair                       |
-| `data/team_records/`      | All-time and playoff records per team                         |
-| `data/calendars/`         | ICS calendar files per team (also excluded via `*.ics`)       |
-| `po/`                     | Player portrait images (excluded via `po/*`)                  |
+| Path                          | Description                                                            |
+| ----------------------------- | ---------------------------------------------------------------------- |
+| `data/attendance.json`        | Season-wide attendance figures                                         |
+| `data/clinched_data.json`     | Playoff clinching state per team (current season)                      |
+| `data/del_players.json`       | Master player list                                                     |
+| `data/po_series.json`         | Playoff series results                                                 |
+| `data/{season}/`              | Per-season player, goalie, and team game stats (JSON and CSV)          |
+| `data/{season}/game_reports/` | One game report per game (`{generic_id}.json`), shown on the game page |
+| `data/career_stats/`          | Aggregated career stats per player and team                            |
+| `data/h2h_data/`              | Head-to-head records for each team pair                                |
+| `data/team_records/`          | All-time and playoff records per team                                  |
+| `data/calendars/`             | ICS calendar files per team (also excluded via `*.ics`)                |
+| `po/`                         | Player portrait images (excluded via `po/*`)                           |
 
 ### Relationship with the private repository
 

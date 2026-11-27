@@ -1,4 +1,4 @@
-app.controller('gameController', function ($scope, $http, $q, $routeParams, config, svc) {
+app.controller('gameController', function ($scope, $http, $q, $routeParams, $timeout, config, svc) {
     $scope.svc = svc;
     $scope.gru = GameReportUtils;
 
@@ -11,6 +11,15 @@ app.controller('gameController', function ($scope, $http, $q, $routeParams, conf
     $scope.findingsShown = false;
     $scope.toggleFindings = function () {
         $scope.findingsShown = !$scope.findingsShown;
+    };
+    // the header's warning count jumps to the (expanded) findings block; a
+    // plain href="#findings" would be read as a route in this #!/ app and
+    // redirect home via .otherwise(), so scroll in code instead
+    $scope.showFindings = function () {
+        $scope.findingsShown = true;
+        $timeout(function () {
+            document.getElementById('findings').scrollIntoView();
+        });
     };
 
     $q.all([

@@ -244,7 +244,7 @@
 
             <!-- skater filters for minimum games played/time on ice -->
             <div class="input-group col-6" data-ng-if="ctrl.tableSelect != 'goalie_stats' && ctrl.tableSelect != 'goalie_against_avg_stats' && ctrl.tableSelect != 'goalie_stats_ev' && ctrl.tableSelect != 'goalie_stats_pp' && ctrl.tableSelect != 'goalie_stats_sh' && ctrl.tableSelect != 'goalie_zone_stats_far' && ctrl.tableSelect != 'goalie_zone_stats_near' && ctrl.tableSelect != 'goalie_shootout_stats'">
-                <div class="input-group-prepend w-65">
+                <div class="input-group-prepend">
                     <label class="input-group-text w-100 justify-content-center">Mindestens absolvierte Spiele:</label>
                 </div>
                 <input class="form-control" type="text" data-ng-model="$parent.$parent.minGamesPlayed" readonly />
@@ -253,7 +253,7 @@
 
             <!-- <div class="input-group col-6 pl-0" data-ng-if="ctrl.tableSelect != 'goalie_stats' && ctrl.tableSelect != 'goalie_against_avg_stats' && ctrl.tableSelect != 'goalie_stats_ev' && ctrl.tableSelect != 'goalie_stats_pp' && ctrl.tableSelect != 'goalie_stats_sh' && ctrl.tableSelect != 'goalie_zone_stats_far' && ctrl.tableSelect != 'goalie_zone_stats_near' && ctrl.tableSelect != 'goalie_shootout_stats' && ctrl.tableSelect != 'basic_stats_5v5' && ctrl.tableSelect != 'on_ice_shot_stats_5v5' && ctrl.tableSelect != 'on_ice_shot_on_goal_stats_5v5'"> -->
             <div class="input-group col-6 pl-0" data-ng-if="season != 2017 && ctrl.tableSelect != 'goalie_stats' && ctrl.tableSelect != 'goalie_against_avg_stats' && ctrl.tableSelect != 'goalie_stats_ev' && ctrl.tableSelect != 'goalie_stats_pp' && ctrl.tableSelect != 'goalie_stats_sh' && ctrl.tableSelect != 'goalie_zone_stats_far' && ctrl.tableSelect != 'goalie_zone_stats_near' && ctrl.tableSelect != 'goalie_shootout_stats'">
-                    <div class="input-group-prepend w-65">
+                    <div class="input-group-prepend">
                     <label class="input-group-text w-100 justify-content-center">Mindestens gespielte Eiszeit:</label>
                 </div>
                 <input class="form-control" type="text" data-ng-model="$parent.$parent.minTimeOnIceInMinutesFormatted" readonly />
@@ -262,7 +262,7 @@
 
             <!-- 5v5 time on ice is used for corresponding table displays -->
             <!-- <div class="input-group col-6 pl-0" data-ng-if="ctrl.tableSelect == 'basic_stats_5v5' && ctrl.tableSelect == 'on_ice_shot_stats_5v5' && ctrl.tableSelect == 'on_ice_shot_on_goal_stats_5v5'">
-                <div class="input-group-prepend w-65">
+                <div class="input-group-prepend">
                     <label class="input-group-text w-100 justify-content-center">Mindestens gespielte Eiszeit:</label>
                 </div>
                 <input class="form-control" type="text" data-ng-model="$parent.$parent.minTimeOnIceInMinutesFormatted" readonly />
@@ -271,7 +271,7 @@
 
             <!-- goaltender filters for minimum games played/time on ice -->
             <div class="input-group col-6" data-ng-if="ctrl.tableSelect == 'goalie_stats' || ctrl.tableSelect == 'goalie_against_avg_stats' || ctrl.tableSelect == 'goalie_stats_ev' || ctrl.tableSelect == 'goalie_stats_pp' || ctrl.tableSelect == 'goalie_stats_sh' || ctrl.tableSelect == 'goalie_zone_stats_far' || ctrl.tableSelect == 'goalie_zone_stats_near' || ctrl.tableSelect == 'goalie_shootout_stats'">
-                <div class="input-group-prepend w-65">
+                <div class="input-group-prepend">
                     <label class="input-group-text w-100 justify-content-center">Mindestens absolvierte Spiele:</label>
                 </div>
                 <input class="form-control" type="text" data-ng-model="$parent.$parent.minGoalieGamesPlayed" readonly />
@@ -279,7 +279,7 @@
             </div>
 
             <div class="input-group col-6 pl-0" data-ng-if="ctrl.tableSelect == 'goalie_stats' || ctrl.tableSelect == 'goalie_against_avg_stats' || ctrl.tableSelect == 'goalie_stats_ev' || ctrl.tableSelect == 'goalie_stats_pp' || ctrl.tableSelect == 'goalie_stats_sh' || ctrl.tableSelect == 'goalie_zone_stats_far' || ctrl.tableSelect == 'goalie_zone_stats_near' || ctrl.tableSelect == 'goalie_shootout_stats'">
-                <div class="input-group-prepend w-65">
+                <div class="input-group-prepend">
                     <label class="input-group-text w-100 justify-content-center">Mindestens gespielte Eiszeit:</label>
                 </div>
                 <input class="form-control" type="text" data-ng-model="$parent.$parent.minGoalieTimeOnIceInMinutesFormatted" readonly />
